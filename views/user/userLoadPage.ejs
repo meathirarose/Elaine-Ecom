@@ -1,0 +1,690 @@
+<%-include('../layout/header') -%>
+
+<div class="page-wrapper">
+    <header class="header header-6">
+        <div class="header-top">
+            <div class="container pt-1"></div>
+        </div>
+        <div class="header-middle">
+            <div class="container">
+                <div class="header-left">
+                    <div class="header-search header-search-extended header-search-visible d-none d-lg-block">
+                        <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
+                        <form action="#" method="get">
+                            <div class="header-search-wrapper search-wrapper-wide">
+                                <label for="q" class="sr-only">Search</label>
+                                <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+                                <input type="search" class="form-control" name="q" id="q"
+                                    placeholder="Search product ..." required>
+                            </div><!-- End .header-search-wrapper -->
+                        </form>
+                    </div><!-- End .header-search -->
+                </div>
+                <div class="header-center">
+                    <a href="index.html" class="logo">
+                        <h3 class="text-center font-weight-bolder text-uppercase">Elaine</h3>
+                    </a>
+                </div><!-- End .header-left -->
+
+                <div class="header-right">
+                    <a href="#" class="wishlist-link">
+                        <i class="icon-heart-o"></i>
+                        <span class="wishlist-txt">My Wishlist</span>
+                    </a>
+                    <div class="dropdown cart-dropdown">
+                        <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false" data-display="static">
+                            <i class="icon-shopping-cart"></i>
+                        </a>                          
+                    </div><!-- End .cart-dropdown -->
+                </div>
+            </div><!-- End .container -->
+        </div><!-- End .header-middle -->
+
+        <div class="header-bottom sticky-header">
+            <div class="container ">
+                <div class="header-left ">
+                    <nav class="main-nav p-1 ">
+                        <ul class="menu sf-arrows  ">
+                            <li class="megamenu-container ">
+                                <a href="#" class="sf ">Home</a>
+                            </li>
+                            <li>
+                                <a href="#" class="sf">Shop</a>
+                            </li>
+                            <li>
+                                <a href="#" class="sf">Product</a>
+                            </li>
+                            <li>
+                                <a href="#" class="sf">Pages</a>
+                            </li>
+                            <li>
+                                <a href="#" class="sf">Blog</a>
+                            </li>
+                            <li>
+                                <a href="#" class="sf">Elements</a>
+
+                            </li>
+                        </ul><!-- End .menu -->
+                    </nav><!-- End .main-nav -->
+
+                    <button class="mobile-menu-toggler">
+                        <span class="sr-only">Toggle mobile menu</span>
+                        <i class="icon-bars"></i>
+                    </button>
+                </div><!-- End .header-left -->
+
+                <div class="header-right">
+                    <ul class="top-menu top-link-menu ">
+                        <li>
+                            <ul>
+                                <li><a class="font-weight-bolder fs-5" href="userLogin"><i class="icon-user"></i>Login</a></li>
+                            </ul>
+                        </li>
+                    </ul><!-- End .top-menu --> 
+                </div>
+            </div><!-- End .container -->
+        </div><!-- End .header-bottom -->
+    </header><!-- End .header -->
+
+    <main class="main">
+        <div class="intro-slider-container">
+            <div class="intro-slider owl-carousel owl-simple owl-nav-inside owl-light" data-toggle="owl"
+                data-owl-options='{"nav":false, "dots": false, "loop": false}'>
+                <div class="intro-slide"
+                    style="background-image: url(assets/images/demos/demo-16/slider/slide-1.jpg);">
+                    <div class="container intro-content text-center">
+                        <h3 class="intro-subtitle">Want to know what's hot?</h3><!-- End .h3 intro-subtitle -->
+                        <h1 class="intro-title text-white">For Spring In The City</h1><!-- End .intro-title -->
+
+                        <a href="userLogin.ejs" class="btn btn-outline-white scroll-to">
+                            <span>Login to Start purchasing</span>
+                            <i class="icon-long-arrow-up"></i>
+                        </a>
+                    </div><!-- End .intro-content -->
+                </div><!-- End .intro-slide -->
+            </div><!-- End .intro-slider owl-carousel owl-simple -->
+
+            <span class="slider-loader text-white"></span><!-- End .slider-loader -->
+        </div><!-- End .intro-slider-container -->
+
+        <div class="container" id="scroll-to-content">
+            <div class="pt-7"></div><!-- End .pt-6 -->
+
+            <div class="row">
+                <div class="col-lg-3 col-sm-6">
+                    <div class="icon-box text-center">
+                        <span class="icon-box-icon text-dark">
+                            <i class="icon-truck"></i>
+                        </span>
+                        <div class="icon-box-content">
+                            <h3 class="icon-box-title">Payment & Delivery</h3><!-- End .icon-box-title -->
+                            <p>Free shipping for orders over $50</p>
+                        </div><!-- End .icon-box-content -->
+                    </div><!-- End .icon-box -->
+                </div><!-- End .col-lg-3 col-sm-6 -->
+
+                <div class="col-lg-3 col-sm-6">
+                    <div class="icon-box text-center">
+                        <span class="icon-box-icon text-dark">
+                            <i class="icon-rotate-left"></i>
+                        </span>
+                        <div class="icon-box-content">
+                            <h3 class="icon-box-title">Return & Refund</h3><!-- End .icon-box-title -->
+                            <p>Free 100% money back guarantee</p>
+                        </div><!-- End .icon-box-content -->
+                    </div><!-- End .icon-box -->
+                </div><!-- End .col-lg-3 col-sm-6 -->
+
+                <div class="col-lg-3 col-sm-6">
+                    <div class="icon-box text-center">
+                        <span class="icon-box-icon text-dark">
+                            <i class="la la-unlock"></i>
+                        </span>
+                        <div class="icon-box-content">
+                            <h3 class="icon-box-title">Secure Payment</h3><!-- End .icon-box-title -->
+                            <p>100% secure payment</p>
+                        </div><!-- End .icon-box-content -->
+                    </div><!-- End .icon-box -->
+                </div><!-- End .col-lg-3 col-sm-6 -->
+
+                <div class="col-lg-3 col-sm-6">
+                    <div class="icon-box text-center">
+                        <span class="icon-box-icon text-dark">
+                            <i class="icon-headphones"></i>
+                        </span>
+                        <div class="icon-box-content">
+                            <h3 class="icon-box-title">Quality Support</h3><!-- End .icon-box-title -->
+                            <p>Alway online feedback 24/7</p>
+                        </div><!-- End .icon-box-content -->
+                    </div><!-- End .icon-box -->
+                </div><!-- End .col-lg-3 col-sm-6 -->
+            </div><!-- End .row -->
+
+            <hr class="mt-2 mb-6">
+
+            <div class="products-display">
+                <div class="heading text-center">
+                    <h4 class="subtitle text-primary">Womens Clothing</h4><!-- End .subtitle -->
+                    <h2 class="title">Refresh Your Wardrobe</h2><!-- End .title -->
+                    <p class="title-desc">Discover this season’s latest trends with the newest additions to <br>our
+                        women’s clothing collection.</p><!-- End .title-desc -->
+                </div><!-- End .heading -->
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="banner banner-main banner-overlay">
+                            <a href="#">
+                                <img src="assets/images/demos/demo-16/banners/banner-1.jpg" alt="Banner">
+                            </a>
+
+                            <div class="banner-content left">
+                                <div class="banner-title"><a href="#">Dresses for all occasions.</a></div>
+                                <!-- End .banner-title -->
+
+                                <p>Nail your on and off duty style with our new season collection of women’s
+                                    dresses.</p>
+                                <a href="#" class="banner-link">Discover Now <i
+                                        class="icon-long-arrow-right"></i></a>
+                            </div><!-- End .banner-main -->
+                        </div><!-- End .banner banner-overlay -->
+                    </div><!-- End .col-lg-6 -->
+
+                    <div class="col-sm-4 col-lg-3 order-lg-first">
+                        <div class="display-products-col">
+                            <div class="product product-4 mb-7">
+                                <figure class="product-media">
+                                    <a href="#">
+                                        <img src="assets/images/demos/demo-16/products/product-1.jpg"
+                                            alt="Product image" class="product-image">
+                                        <img src="assets/images/demos/demo-16/products/product-1-2.jpg"
+                                            alt="Product image" class="product-image-hover">
+                                    </a>
+
+                                    <div class="product-action-vertical">
+                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add
+                                                to wishlist</span></a>
+                                        <a href="popup/quickView.html" class="btn-product-icon btn-quickview"
+                                            title="Quick view"><span>Quick view</span></a>
+                                        
+                                    </div><!-- End .product-action -->
+
+                                    <div class="product-action">
+                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                    </div><!-- End .product-action -->
+                                </figure><!-- End .product-media -->
+
+                                <div class="product-body">
+                                    <h3 class="product-title"><a href="#">Black ruched side slip
+                                            dress</a></h3><!-- End .product-title -->
+                                    <div class="product-price">
+                                        $76.00
+                                    </div><!-- End .product-price -->
+                                </div><!-- End .product-body -->
+                            </div><!-- End .product -->
+                        </div><!-- End .display-products-col -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
+
+                    <div class="col-sm-8 col-lg-3">
+                        <div class="display-products-col">
+                            <div class="row">
+                                <div class="col-6 col-lg-12">
+                                    <div class="product product-4 mb-7">
+                                        <figure class="product-media">
+                                            <a href="#">
+                                                <img src="assets/images/demos/demo-16/products/product-2.jpg"
+                                                    alt="Product image" class="product-image">
+                                                <img src="assets/images/demos/demo-16/products/product-2-2.jpg"
+                                                    alt="Product image" class="product-image-hover">
+                                            </a>
+
+                                            <div class="product-action-vertical">
+                                                <a href="#"
+                                                    class="btn-product-icon btn-wishlist btn-expandable"><span>add
+                                                        to wishlist</span></a>
+                                                <a href="popup/quickView.html"
+                                                    class="btn-product-icon btn-quickview"
+                                                    title="Quick view"><span>Quick view</span></a>
+                                                
+                                            </div><!-- End .product-action -->
+
+                                            <div class="product-action">
+                                                <a href="#" class="btn-product btn-cart"><span>add to
+                                                        cart</span></a>
+                                            </div><!-- End .product-action -->
+                                        </figure><!-- End .product-media -->
+
+                                        <div class="product-body">
+                                            <h3 class="product-title"><a href="#">Dark brown belted shirt
+                                                    dress</a></h3><!-- End .product-title -->
+                                            <div class="product-price">
+                                                $100.00
+                                            </div><!-- End .product-price -->
+                                        </div><!-- End .product-body -->
+                                    </div><!-- End .product -->
+                                </div><!-- End .col-sm-6 col-lg-12 -->
+
+                                <div class="col-6 col-lg-12">
+                                    <div class="product product-4 mb-7">
+                                        <figure class="product-media">
+                                            <a href="#">
+                                                <img src="assets/images/demos/demo-16/products/product-3.jpg"
+                                                    alt="Product image" class="product-image">
+                                                <img src="assets/images/demos/demo-16/products/product-3-2.jpg"
+                                                    alt="Product image" class="product-image-hover">
+                                            </a>
+
+                                            <div class="product-action-vertical">
+                                                <a href="#"
+                                                    class="btn-product-icon btn-wishlist btn-expandable"><span>add
+                                                        to wishlist</span></a>
+                                                <a href="popup/quickView.html"
+                                                    class="btn-product-icon btn-quickview"
+                                                    title="Quick view"><span>Quick view</span></a>
+                                                
+                                            </div><!-- End .product-action -->
+
+                                            <div class="product-action">
+                                                <a href="#" class="btn-product btn-cart"><span>add to
+                                                        cart</span></a>
+                                            </div><!-- End .product-action -->
+                                        </figure><!-- End .product-media -->
+
+                                        <div class="product-body">
+                                            <h3 class="product-title"><a href="#">Blue belted midi denim
+                                                    dress</a></h3><!-- End .product-title -->
+                                            <div class="product-price">
+                                                $110.00
+                                            </div><!-- End .product-price -->
+                                        </div><!-- End .product-body -->
+                                    </div><!-- End .product -->
+                                </div><!-- End .col-sm-6 col-lg-12 -->
+                            </div><!-- End .row -->
+                        </div><!-- End .display-products-col -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
+                </div><!-- End .row -->
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="banner banner-main banner-main-reverse banner-overlay">
+                            <a href="#">
+                                <img src="assets/images/demos/demo-16/banners/banner-2.jpg" alt="Banner">
+                            </a>
+
+                            <div class="banner-content right">
+                                <div class="banner-title"><a href="#">Coats & Jackets for effortless everyday
+                                        looks.</a></div><!-- End .banner-title -->
+
+                                <p>Whichever style you choose from our new season collection of women’s coats and
+                                    jackets, cosy chic vibes are guaranteed.</p>
+                                <a href="#" class="banner-link">Discover Now <i
+                                        class="icon-long-arrow-right"></i></a>
+                            </div><!-- End .banner-main -->
+                        </div><!-- End .banner banner-overlay -->
+                    </div><!-- End .col-lg-6 -->
+
+                    <div class="col-sm-8 col-lg-3 order-lg-first">
+                        <div class="display-products-col">
+                            <div class="row">
+                                <div class="col-6 col-lg-12">
+                                    <div class="product product-4">
+                                        <figure class="product-media">
+                                            <a href="#">
+                                                <img src="assets/images/demos/demo-16/products/product-4.jpg"
+                                                    alt="Product image" class="product-image">
+                                                <img src="assets/images/demos/demo-16/products/product-4-2.jpg"
+                                                    alt="Product image" class="product-image-hover">
+                                            </a>
+
+                                            <div class="product-action-vertical">
+                                                <a href="#"
+                                                    class="btn-product-icon btn-wishlist btn-expandable"><span>add
+                                                        to wishlist</span></a>
+                                                <a href="popup/quickView.html"
+                                                    class="btn-product-icon btn-quickview"
+                                                    title="Quick view"><span>Quick view</span></a>
+                                                
+                                            </div><!-- End .product-action -->
+
+                                            <div class="product-action">
+                                                <a href="#" class="btn-product btn-cart"><span>add to
+                                                        cart</span></a>
+                                            </div><!-- End .product-action -->
+                                        </figure><!-- End .product-media -->
+
+                                        <div class="product-body">
+                                            <h3 class="product-title"><a href="#">Dark yellow cropped
+                                                    denim jacket</a></h3><!-- End .product-title -->
+                                            <div class="product-price">
+                                                $96.00
+                                            </div><!-- End .product-price -->
+                                        </div><!-- End .product-body -->
+                                    </div><!-- End .product -->
+                                </div><!-- End .col-sm-6 col-lg-12 -->
+
+                                <div class="col-6 col-lg-12">
+                                    <div class="product product-4">
+                                        <figure class="product-media">
+                                            <a href="#">
+                                                <img src="assets/images/demos/demo-16/products/product-5.jpg"
+                                                    alt="Product image" class="product-image">
+                                                <img src="assets/images/demos/demo-16/products/product-5-2.jpg"
+                                                    alt="Product image" class="product-image-hover">
+                                            </a>
+
+                                            <div class="product-action-vertical">
+                                                <a href="#"
+                                                    class="btn-product-icon btn-wishlist btn-expandable"><span>add
+                                                        to wishlist</span></a>
+                                                <a href="popup/quickView.html"
+                                                    class="btn-product-icon btn-quickview"
+                                                    title="Quick view"><span>Quick view</span></a>
+                                               
+                                            </div><!-- End .product-action -->
+
+                                            <div class="product-action">
+                                                <a href="#" class="btn-product btn-cart"><span>add to
+                                                        cart</span></a>
+                                            </div><!-- End .product-action -->
+                                        </figure><!-- End .product-media -->
+
+                                        <div class="product-body">
+                                            <h3 class="product-title"><a href="#">Light brown faux suede
+                                                    biker jacket</a></h3><!-- End .product-title -->
+                                            <div class="product-price">
+                                                $358.00
+                                            </div><!-- End .product-price -->
+                                        </div><!-- End .product-body -->
+                                    </div><!-- End .product -->
+                                </div><!-- End .col-sm-6 col-lg-12 -->
+                            </div><!-- End .row -->
+                        </div><!-- End .display-products-col -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
+
+                    <div class="col-sm-4 col-lg-3">
+                        <div class="display-products-col">
+                            <div class="product product-4">
+                                <figure class="product-media">
+                                    <a href="#">
+                                        <img src="assets/images/demos/demo-16/products/product-6.jpg"
+                                            alt="Product image" class="product-image">
+                                        <img src="assets/images/demos/demo-16/products/product-6-2.jpg"
+                                            alt="Product image" class="product-image-hover">
+                                    </a>
+
+                                    <div class="product-action-vertical">
+                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add
+                                                to wishlist</span></a>
+                                        <a href="popup/quickView.html" class="btn-product-icon btn-quickview"
+                                            title="Quick view"><span>Quick view</span></a>
+                                        
+                                    </div><!-- End .product-action -->
+
+                                    <div class="product-action">
+                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                    </div><!-- End .product-action -->
+                                </figure><!-- End .product-media -->
+
+                                <div class="product-body">
+                                    <h3 class="product-title"><a href="product.html">Light brown check suedette
+                                            <br>trench coat</a></h3><!-- End .product-title -->
+                                    <div class="product-price">
+                                        $170.00
+                                    </div><!-- End .product-price -->
+                                </div><!-- End .product-body -->
+                            </div><!-- End .product -->
+                        </div><!-- End .display-products-col -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
+                </div><!-- End .row -->
+            </div><!-- End .products-display -->
+        </div><!-- End .container -->               
+        
+    </main><!-- End .main -->
+
+    <footer class="footer">
+        <div class="footer-middle">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="widget widget-about">
+                            <h4 class="widget-title">about molla</h4><!-- End .widget-title -->
+                            <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate
+                                magna eros eu erat. </p>
+
+                            <div class="social-icons">
+                                <a href="#" class="social-icon" title="Facebook" target="_blank"><i
+                                        class="icon-facebook-f"></i></a>
+                                <a href="#" class="social-icon" title="Twitter" target="_blank"><i
+                                        class="icon-twitter"></i></a>
+                                <a href="#" class="social-icon" title="Instagram" target="_blank"><i
+                                        class="icon-instagram"></i></a>
+                                <a href="#" class="social-icon" title="Youtube" target="_blank"><i
+                                        class="icon-youtube"></i></a>
+                            </div><!-- End .soial-icons -->
+                        </div><!-- End .widget about-widget -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="widget">
+                            <h4 class="widget-title">Useful Links</h4><!-- End .widget-title -->
+
+                            <ul class="widget-list">
+                                <li><a href="about.html">About Molla</a></li>
+                                <li><a href="#">How to shop on Molla</a></li>
+                                <li><a href="#">FAQ</a></li>
+                                <li><a href="contact.html">Contact us</a></li>
+                                <li><a href="login.html">Log in</a></li>
+                            </ul><!-- End .widget-list -->
+                        </div><!-- End .widget -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="widget">
+                            <h4 class="widget-title">Customer Service</h4><!-- End .widget-title -->
+
+                            <ul class="widget-list">
+                                <li><a href="#">Payment Methods</a></li>
+                                <li><a href="#">Money-back guarantee!</a></li>
+                                <li><a href="#">Returns</a></li>
+                                <li><a href="#">Shipping</a></li>
+                                <li><a href="#">Terms and conditions</a></li>
+                                <li><a href="#">Privacy Policy</a></li>
+                            </ul><!-- End .widget-list -->
+                        </div><!-- End .widget -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="widget">
+                            <h4 class="widget-title">My Account</h4><!-- End .widget-title -->
+
+                            <ul class="widget-list">
+                                <li><a href="#">Sign In</a></li>
+                                <li><a href="cart.html">View Cart</a></li>
+                                <li><a href="#">My Wishlist</a></li>
+                                <li><a href="#">Track My Order</a></li>
+                                <li><a href="#">Help</a></li>
+                            </ul><!-- End .widget-list -->
+                        </div><!-- End .widget -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
+                </div><!-- End .row -->
+            </div><!-- End .container -->
+        </div><!-- End .footer-middle -->
+
+        <div class="footer-bottom">
+            <div class="container">
+                <figure class="footer-payments">
+                    <img src="assets/images/payments.png" alt="Payment methods" width="272" height="20">
+                </figure><!-- End .footer-payments -->
+                <img src="assets/images/demos/demo-6/logo-footer.png" alt="Molla Logo" width="82" height="25">
+                <p class="footer-copyright">Copyright © 2019 Molla Store. All Rights Reserved.</p>
+                <!-- End .footer-copyright -->
+            </div><!-- End .container -->
+        </div><!-- End .footer-bottom -->
+    </footer><!-- End .footer -->
+</div><!-- End .page-wrapper -->
+<button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
+
+<div class="mobile-menu-container mobile-menu-light">
+    <div class="mobile-menu-wrapper">
+        <span class="mobile-menu-close"><i class="icon-close"></i></span>
+        <form action="#" method="get" class="mobile-search">
+            <label for="mobile-search" class="sr-only">Search</label>
+            <input type="search" class="form-control" name="mobile-search" id="mobile-search"
+                placeholder="Search in..." required>
+            <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+        </form>
+        <nav class="mobile-nav">
+            <ul class="mobile-menu">
+                <li class="active">
+                    <a href="#">Home</a>
+                    <ul>                  
+                        <li><a href="#">16 - lookbook 2</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Shop</a>
+                    <ul>
+                        <li><a href="#">Shop List</a></li>
+                        <li><a href="#">Shop Grid 2 Columns</a></li>
+                        <li><a href="#">Shop Grid 3 Columns</a></li>
+                        <li><a href="#">Shop Grid 4 Columns</a></li>
+                        <li><a href="#"><span>Shop Boxed No Sidebar<span
+                                        class="tip tip-hot">Hot</span></span></a></li>
+                        <li><a href="#">Shop Fullwidth No Sidebar</a></li>
+                        <li><a href="#">Product Category Boxed</a></li>
+                        <li><a href="#"><span>Product Category Fullwidth<span
+                                        class="tip tip-new">New</span></span></a></li>
+                        <li><a href="#">Cart</a></li>
+                        <li><a href="#">Checkout</a></li>
+                        <li><a href="#">Wishlist</a></li>
+                        <li><a href="#">Lookbook</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="sf-with-ul">Product</a>
+                    <ul>
+                        <li><a href="#">Default</a></li>
+                        <li><a href="#">Centered</a></li>
+                        <li><a href="#"><span>Extended Info<span
+                                        class="tip tip-new">New</span></span></a></li>
+                        <li><a href="#">Gallery</a></li>
+                        <li><a href="#">Sticky Info</a></li>
+                        <li><a href="#">Boxed With Sidebar</a></li>
+                        <li><a href="#">Full Width</a></li>
+                        <li><a href="#">Masonry Sticky Info</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Pages</a>
+                    <ul>
+                        <li>
+                            <a href="#">About</a>
+
+                            <ul>
+                                <li><a href="#">About 01</a></li>
+                                <li><a href="#">About 02</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Contact</a>
+
+                            <ul>
+                                <li><a href="#">Contact 01</a></li>
+                                <li><a href="#">Contact 02</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Login</a></li>
+                        <li><a href="#">FAQs</a></li>
+                        <li><a href="#">Error 404</a></li>
+                        <li><a href="#">Coming Soon</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Blog</a>
+
+                    <ul>
+                        <li><a href="#">Classic</a></li>
+                        <li><a href="#">Listing</a></li>
+                        <li>
+                            <a href="#">Grid</a>
+                            <ul>
+                                <li><a href="#">Grid 2 columns</a></li>
+                                <li><a href="#">Grid 3 columns</a></li>
+                                <li><a href="#">Grid 4 columns</a></li>
+                                <li><a href="#">Grid sidebar</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Masonry</a>
+                            <ul>
+                                <li><a href="#">Masonry 2 columns</a></li>
+                                <li><a href="#">Masonry 3 columns</a></li>
+                                <li><a href="#">Masonry 4 columns</a></li>
+                                <li><a href="#">Masonry sidebar</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Mask</a>
+                            <ul>
+                                <li><a href="#">Blog mask grid</a></li>
+                                <li><a href="#">Blog mask masonry</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Single Post</a>
+                            <ul>
+                                <li><a href="#">Default with sidebar</a></li>
+                                <li><a href="#">Fullwidth no sidebar</a></li>
+                                <li><a href="#">Fullwidth with sidebar</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Elements</a>
+                    <ul>
+                        <li><a href="#">Products</a></li>
+                        <li><a href="#">Typography</a></li>
+                        <li><a href="#">Titles</a></li>
+                        <li><a href="#">Banners</a></li>
+                        <li><a href="#">Product Category</a></li>
+                        <li><a href="#">Video Banners</a></li>
+                        <li><a href="#">Buttons</a></li>
+                        <li><a href="#">Accordions</a></li>
+                        <li><a href="#">Tabs</a></li>
+                        <li><a href="#">Testimonials</a></li>
+                        <li><a href="#">Blog Posts</a></li>
+                        <li><a href="#">Portfolio</a></li>
+                        <li><a href="#">Call to Action</a></li>
+                        <li><a href="#">Icon Boxes</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav><!-- End .mobile-nav -->
+
+        <div class="social-icons">
+            <a href="#" class="social-icon" target="_blank" title="Facebook"><i class="icon-facebook-f"></i></a>
+            <a href="#" class="social-icon" target="_blank" title="Twitter"><i class="icon-twitter"></i></a>
+            <a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
+            <a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
+        </div><!-- End .social-icons -->
+    </div><!-- End .mobile-menu-wrapper -->
+</div><!-- End .mobile-menu-container -->
+
+<!-- Plugins JS File -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/jquery.hoverIntent.min.js"></script>
+<script src="assets/js/jquery.waypoints.min.js"></script>
+<script src="assets/js/superfish.min.js"></script>
+<script src="assets/js/owl.carousel.min.js"></script>
+<script src="assets/js/jquery.magnific-popup.min.js"></script>
+<!-- Main JS File -->
+<script src="assets/js/main.js"></script>
+<script src="assets/js/demos/demo-16.js"></script>
+
+
+<%-include('../layout/footer') -%>

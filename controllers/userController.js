@@ -1,13 +1,28 @@
-const User = require('../models/userdbModel');
-const bcrypt = require('bcrypt');
+const User = require("../models/userdbModel");
+const bcrypt = require("bcrypt");
 
-// user login load
-const userLoginLoad = async (req,res) =>{
+//user load page
+const userLoadPage = async (req, res) => {
     try {
-        res.render("userLoginSignup");
+        
+        res.render("userLoadPage");
+
     } catch (error) {
         console.log(error);
     }
+}
+
+// user login load
+const userLoginLoad = async (req,res) =>{
+
+    try {
+
+        res.render("userLogin");
+
+    } catch (error) {
+        console.log(error);
+    }
+    
 }
 
 // verify login
@@ -15,18 +30,23 @@ const verifyLogin = async (req,res) =>{
     try {
         const email = req.body.email;
         const password = req.body.password; 
-        const userData = await User.findOne({email:email })
+        const userData = await User.findOne({email:email });
+
        if (userData) {
-        const passwordMatch = await bcrypt.compare(password,userData.password)
+
+        const passwordMatch = await bcrypt.compare(password, userData.password)
         if(passwordMatch){
+
             req.session.user_id = userData._id;
-            res.redirect("/userHome");
+            res.redirect("userHome");
+
         }else{
-            res.render("userLoginSignup");
-            console.log("password incorrect");
+
+            res.render("userLogin");
+
         }
        }else{
-            res.render("userLoginSignup");
+            res.render("userLogin");
        }
     } catch (error) {
         console.log(error);
@@ -38,6 +58,7 @@ const securePassword = async(password) => {
     try {
         
         const passwordHash = await bcrypt.hash(password,10);
+        
         return passwordHash;
 
     } catch (error) {
@@ -49,7 +70,7 @@ const securePassword = async(password) => {
 const userSignupLoad = async (req,res) => {
 
     try {
-        res.render("userLoginSignup");
+        res.render("userSignup");
     } catch (error) {
         console.log(error);
     }
@@ -68,45 +89,55 @@ const verifySignup = async (req,res) => {
                     const checkAlreadyMail = await User.findOne({email:req.body.email});
                     if(checkAlreadyMail){
 
-                        res.render("userLoginSignup");
-                        console.log("mail already exists");
+                        res.render("userSignup");
+                        }else{
 
-                    }else{
-
-                        const secPassword = securePassword(req.body.password);
+                        const secPassword =await securePassword(req.body.password);
+                       
                         const user = new User({
                             name: req.body.name,
                             email: req.body.email,
                             mobile: req.body.mobile,
-                            password: secPassword,
-                            is_admin: 0
-
+                            password: secPassword
+                            
                         });
 
                         const userData = await user.save();
                         if(userData){
-                            res.render("userHome");
-                            console.log("reg succ");
+                            res.redirect("/userLogin");
+                           
                         }else{
-                            res.render("userLoginSignup");
-                            console.log("reg error");
+                            res.render("userSignup");
+                            
                         }
                     }
                 }else{
-                    res.render("userLoginSignup");
-                    console.log("wrong number");
+                    res.render("userSignup");
                 }
             }else{
-                res.render("userLoginSignup");
-                console.log("wrong email");
+                res.render("userSignup");
+               
             }
         }else{
-            res.render("userLoginSignup");
-            console.log("wrong name");
+            res.render("userSignup");
+           
         }
     } catch (error) {
         console.log(error);
     }
+}
+
+// home load
+const userHomeLoad = async (req,res) =>{
+
+    try {
+
+        res.render("userHome");
+
+    } catch (error) {
+        console.log(error);
+    }
+
 }
 
 
@@ -120,8 +151,10 @@ const verifySignup = async (req,res) => {
 
 
 module.exports = {
+    userLoadPage,
     userLoginLoad,
     verifyLogin,
     userSignupLoad,
-    verifySignup
+    verifySignup,
+    userHomeLoad
 }

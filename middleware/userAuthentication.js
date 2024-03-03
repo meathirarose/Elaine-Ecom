@@ -1,4 +1,5 @@
-const isLogin = async (req,res,next) =>{
+
+const isLogin = async (req, res, next) =>{
     try {
         
         if(!req.session.user_id){
@@ -13,7 +14,7 @@ const isLogin = async (req,res,next) =>{
     }
 }
 
-const isLogout = async (req,res,next) =>{
+const isLogout = async (req, res, next) =>{
 
     try {
         

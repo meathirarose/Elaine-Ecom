@@ -24,9 +24,10 @@ const userSchema = new mongoose.Schema({
 
     is_admin:{
         type: Number,
-        required: true
+        required: true,
+        default: 0
     }
 
 });
 
-module.exports = mongoose.model('user',userSchema);
+module.exports = mongoose.model('User',userSchema);

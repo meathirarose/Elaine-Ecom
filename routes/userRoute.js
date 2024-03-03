@@ -19,14 +19,16 @@ user_route.set('views','./views/user');
 const userController = require('../controllers/userController');
 
 // user login route
-user_route.get("/", authentication.isLogout, userController.userLoginLoad);
-user_route.get("/userLoginSignup", authentication.isLogout, userController.userLoginLoad);
-
-user_route.post("/userLoginSignup", userController.verifyLogin)
+user_route.get("/userLogin", authentication.isLogout, userController.userLoginLoad);
+user_route.post("/userLogin", userController.verifyLogin)
 
 // user signUp route
-user_route.get("/userLoginSignup", authentication.isLogout, userController.userSignupLoad);
-user_route.post("/userHome", userController.verifySignup)
+user_route.get("/", authentication.isLogout, userController.userLoadPage);
+user_route.get("/userSignup", authentication.isLogout, userController.userSignupLoad);
+user_route.post("/userSignup", userController.verifySignup);
+
+// load home page
+user_route.get("/userHome", authentication.isLogin, userController.userHomeLoad);
 
 
 
