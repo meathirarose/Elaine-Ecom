@@ -1,6 +1,19 @@
 const User = require("../models/userdbModel");
 const bcrypt = require("bcrypt");
 
+// hashing password
+const securePassword = async(password) => {
+    try {
+        
+        const passwordHash = await bcrypt.hash(password,10);
+        
+        return passwordHash;
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 //user load page
 const userLoadPage = async (req, res) => {
     try {
@@ -53,19 +66,6 @@ const verifyLogin = async (req,res) =>{
     }
 }
 
-// hashing password
-const securePassword = async(password) => {
-    try {
-        
-        const passwordHash = await bcrypt.hash(password,10);
-        
-        return passwordHash;
-
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 // user signup load
 const userSignupLoad = async (req,res) => {
 
@@ -104,7 +104,7 @@ const verifySignup = async (req,res) => {
 
                         const userData = await user.save();
                         if(userData){
-                            res.redirect("/userLogin");
+                            res.redirect("/verifyOtp");
                            
                         }else{
                             res.render("userSignup");
@@ -126,6 +126,21 @@ const verifySignup = async (req,res) => {
         console.log(error);
     }
 }
+
+// load otp verification
+const verifyOtpLoad = async (req, res) =>{
+
+    try {
+        
+        res.render("verifyOtp");
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+
 
 // home load
 const userHomeLoad = async (req,res) =>{
@@ -156,5 +171,6 @@ module.exports = {
     verifyLogin,
     userSignupLoad,
     verifySignup,
+    verifyOtpLoad,
     userHomeLoad
 }
