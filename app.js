@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const nocache = require('nocache');
 const path = require('path');
+const logger = require("morgan");
+const bodyparser = require('body-parser');
 
 app.use(nocache());
 
@@ -10,7 +12,7 @@ mongoose.connect("mongodb://localhost:27017/elaineEcom");
 
 const PORT = process.env.PORT||3000;
 
-const bodyparser = require('body-parser');
+app.use(logger('dev'));
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended:true}));
 

@@ -29,6 +29,7 @@ user_route.post("/userSignup", userController.verifySignup);
 
 // verify otp load
 user_route.get("/verifyOtp", authentication.isLogout, userController.verifyOtpLoad)
+user_route.post("/verifyOtp", userController.verifyOtp);
 
 // load home page
 user_route.get("/userHome", authentication.isLogin, userController.userHomeLoad);
