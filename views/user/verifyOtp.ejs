@@ -7,7 +7,7 @@
           <form action="" method="post">
             <div class="card-body p-5 text-center">
               <h4>Verify</h4>
-              <p>Your code was sent to you via email</p>
+              <p>Your code was sent to you via email</p><br>
               
               <div class="d-flex justify-content-center message">
                 <% 
@@ -30,17 +30,55 @@
 
             <button class="btn btn-primary mb-3" type="submit">Verify</button>
 
-            <p class="resend text-muted mb-0">
-              Didn't receive code? <a href="/verifyOtp">Request again</a>
+            <!-- Display the counter -->
+            <div id="counterSection">
+              <p class="resend text-muted mb-0">
+                Request OTP in: <span id="counter">02:00</span>
+              </p>
+            </div>
+
+            <!-- Request again link -->
+            <p id="resendLink" style="display: none;"><br>
+            Didn't receive code? <a href="/resendOtp">Request again</a>
             </p>
+
           </div>
         </form>
         </div>
       </div>
     </div>
 
+
+
+
 <!-- Script JS -->
 <script src="user/assets/js/script.js"></script>
+<script>
+  
+  function updateCounter() {
+    
+        var counter = 120; 
+        var counterElement = document.getElementById('counter');
 
+        var interval = setInterval(function() {
+            counter--;
+            if (counter <= 0) {
+                clearInterval(interval);
+                // Remove the counter section from the DOM
+                document.getElementById('counterSection').style.display = 'none';
+                // Show the "Request again" link
+                document.getElementById('resendLink').style.display = 'inline';
+            } else {
+                // Update the counter display
+                var minutes = Math.floor(counter / 60);
+                var seconds = counter % 60;
+                counterElement.innerHTML = ('0' + minutes).slice(-2) + ':' + ('0' + seconds).slice(-2);
+            }
+        }, 1000);
+    }
+
+    window.onload = () => updateCounter();
+    
+</script>
 
 <%-include("../layout/footer")-%>

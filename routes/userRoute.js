@@ -15,7 +15,7 @@ const authentication = require("../middleware/userAuthentication");
 user_route.set('view engine','ejs');
 user_route.set('views','./views/user');
 
-// require user controller
+// requiring controllers
 const userController = require('../controllers/userController');
 const otpController = require("../controllers/otpController");
 
@@ -33,6 +33,9 @@ user_route.post("/userSignup", userController.verifySignup);
 // verify otp load route
 user_route.get("/verifyOtp", authentication.isLogout, otpController.verifyOtpLoad)
 user_route.post("/verifyOtp", otpController.verifyOtp);
+
+// resend otp route
+user_route.get("/resendOtp", authentication.isLogout, otpController.resendOtp);
 
 // load home page route
 user_route.get("/userHome", authentication.isLogin, userController.userHomeLoad);

@@ -1,6 +1,6 @@
 const User = require("../models/userdbModel");
 const bcrypt = require("bcrypt");
-const otpController = require("./otpController");
+const otpController = require("./otpController")
 
 // hashing password
 const securePassword = async(password) => {
@@ -87,9 +87,10 @@ const verifySignup = async (req,res) => {
                     if(checkAlreadyMail){
 
                         res.render("userSignup", {message:"Email already exists.!"});
-                        }else{
 
-                        const secPassword =await securePassword(req.body.password);
+                    }else{
+
+                        const secPassword = await securePassword(req.body.password);
                        
                         const user = new User({
                             name: req.body.name,
@@ -102,10 +103,10 @@ const verifySignup = async (req,res) => {
                         const userData = await user.save();
                         if(userData){
 
-                            otpController.sendOtpMail(req.body.name, req.body.email);
+                            await otpController.sendOtpMail(req.body.name, req.body.email);
 
                             req.session.email = req.body.email;
-                            req.session.user_id = req.body.userData_id;
+                            req.session.name = userData.name;
 
                             res.redirect("/verifyOtp");
                            
@@ -149,5 +150,5 @@ module.exports = {
     verifyLogin,
     userSignupLoad,
     verifySignup,
-    userHomeLoad
+    userHomeLoad,
 }
