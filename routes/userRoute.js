@@ -17,24 +17,25 @@ user_route.set('views','./views/user');
 
 // require user controller
 const userController = require('../controllers/userController');
+const otpController = require("../controllers/otpController");
+
+// user load page route
+user_route.get("/", authentication.isLogout, userController.userLoadPage);
 
 // user login route
 user_route.get("/userLogin", authentication.isLogout, userController.userLoginLoad);
 user_route.post("/userLogin", userController.verifyLogin)
 
 // user signUp route
-user_route.get("/", authentication.isLogout, userController.userLoadPage);
 user_route.get("/userSignup", authentication.isLogout, userController.userSignupLoad);
 user_route.post("/userSignup", userController.verifySignup);
 
-// verify otp load
-user_route.get("/verifyOtp", authentication.isLogout, userController.verifyOtpLoad)
-user_route.post("/verifyOtp", userController.verifyOtp);
+// verify otp load route
+user_route.get("/verifyOtp", authentication.isLogout, otpController.verifyOtpLoad)
+user_route.post("/verifyOtp", otpController.verifyOtp);
 
-// load home page
+// load home page route
 user_route.get("/userHome", authentication.isLogin, userController.userHomeLoad);
-
-
 
 
 

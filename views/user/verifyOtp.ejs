@@ -8,6 +8,7 @@
             <div class="card-body p-5 text-center">
               <h4>Verify</h4>
               <p>Your code was sent to you via email</p>
+              
               <div class="d-flex justify-content-center message">
                 <% 
                 if(typeof message !== 'undefined')
@@ -27,12 +28,10 @@
               <input type="number" name="otp6" disabled />
             </div>
 
-            <button class="btn btn-primary mb-3" type="submit">
-              Verify
-            </button>
+            <button class="btn btn-primary mb-3" type="submit">Verify</button>
 
             <p class="resend text-muted mb-0">
-              Didn't receive code? <a href="">Request again</a>
+              Didn't receive code? <a href="/verifyOtp">Request again</a>
             </p>
           </div>
         </form>
