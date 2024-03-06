@@ -1,12 +1,14 @@
 const express = require("express");
 const user_route = express();
 const session = require('express-session');
+require("dotenv").config();
+
 
 // session secret
-const config = require('../config/config');
+// const config = require('../config/config');
 
 // session
-user_route.use(session({secret:config.sessionSecret}));
+user_route.use(session({secret:process.env.SESSION_SECRET}));
 
 // middleware
 const authentication = require("../middleware/userAuthentication");
@@ -39,6 +41,9 @@ user_route.get("/resendOtp", authentication.isLogout, otpController.resendOtp);
 
 // load home page route
 user_route.get("/userHome", authentication.isLogin, userController.userHomeLoad);
+
+// user logout route
+user_route.get("/userLogout", authentication.isLogin, userController.userLogout);
 
 
 

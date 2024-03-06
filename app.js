@@ -4,11 +4,13 @@ const nocache = require('nocache');
 const path = require('path');
 const logger = require("morgan");
 const bodyparser = require('body-parser');
+require("dotenv").config();
+
 
 app.use(nocache());
 
 const mongoose = require('mongoose');
-mongoose.connect("mongodb://localhost:27017/elaineEcom");
+mongoose.connect(process.env.MONGO_LINK);
 
 const PORT = process.env.PORT||3000;
 

@@ -1,6 +1,7 @@
 const User = require("../models/userdbModel");
 const Otp = require("../models/otpdbModel");
 const nodemailer = require("nodemailer");
+require("dotenv").config();
 
 // for generate otp
 function generateOtp(){
@@ -21,6 +22,8 @@ function generateOtp(){
 const sendOtpMail = async (name, email) =>{
 
     try {
+        console.log(process.env.AUTHENTICATION_EMAIL);
+
         const otp = generateOtp();
         const createdAt = new Date();
         const expiredAt = new Date(Date.now() + (2 * 60 * 1000));
@@ -42,8 +45,8 @@ const sendOtpMail = async (name, email) =>{
             secure: false,
             requireTLS: true,
             auth:{
-                user: "meathirarosejohn@gmail.com",
-                pass: "eope wdql bgin qwuz"
+                user: process.env.AUTHENTICATION_EMAIL,
+                pass: process.env.AUTHENTICATION_PASS
             }
         });
 
@@ -82,6 +85,7 @@ const verifyOtp = async (req, res) =>{
         if(otpData && otpData.otp === parseInt(otpNo)){
 
             await User.updateOne({email:req.session.email},{is_verified: 1});
+            
             res.render("userLogin");
 
         }else{
@@ -117,12 +121,6 @@ const verifyOtpLoad = async (req, res) =>{
         console.log(error.message);
     }
 }
-
-
-
-
-
-
 
 
 module.exports = {

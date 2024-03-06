@@ -3,11 +3,11 @@ const bcrypt = require("bcrypt");
 const otpController = require("./otpController")
 
 // hashing password
-const securePassword = async(password) => {
+const securePassword = async (password) => {
     try {
-        
+
         const passwordHash = await bcrypt.hash(password, 10);
-        
+
         return passwordHash;
 
     } catch (error) {
@@ -18,7 +18,7 @@ const securePassword = async(password) => {
 //user load page
 const userLoadPage = async (req, res) => {
     try {
-        
+
         res.render("userLoadPage");
 
     } catch (error) {
@@ -27,44 +27,51 @@ const userLoadPage = async (req, res) => {
 }
 
 // user login load
-const userLoginLoad = async (req,res) =>{
+const userLoginLoad = async (req, res) => {
     try {
 
         res.render("userLogin");
 
     } catch (error) {
         console.log(error.message);
-    }  
+    }
 }
 
 // verify login
-const verifyLogin = async (req,res) =>{
+const verifyLogin = async (req, res) => {
     try {
         const email = req.body.email;
-        const password = req.body.password; 
-        const userData = await User.findOne({email:email });
+        const password = req.body.password;
+        const userData = await User.findOne({ email: email });
 
         if (userData) {
 
             const passwordMatch = await bcrypt.compare(password, userData.password)
 
-            if(passwordMatch){
-                req.session.user_id = userData._id;
-                res.redirect("/userHome");
-            }else{
-                res.render("userLogin", {message: "Incorrect Email and Password.!"});
+            if (passwordMatch) {
+                if (userData.is_verified === 0) {
+
+                    res.render("userLogin", { message: "Your account is not verified..!" });
+
+                } else {
+                    req.session.user_id = userData._id;
+                    res.redirect("/userHome");
+                }
+
+            } else {
+                res.render("userLogin", { message: "Incorrect Email and Password.!" });
             }
 
-       }else{
-            res.render("userLogin", {message: "Incorrect Email and Password.!"});
-       }
+        } else {
+            res.render("userLogin", { message: "Incorrect Email and Password.!" });
+        }
     } catch (error) {
         console.log(error.message);
     }
 }
 
 // user signup load
-const userSignupLoad = async (req,res) => {
+const userSignupLoad = async (req, res) => {
     try {
 
         res.render("userSignup");
@@ -75,33 +82,47 @@ const userSignupLoad = async (req,res) => {
 }
 
 // user signUp verification
-const verifySignup = async (req,res) => {
+const verifySignup = async (req, res) => {
     try {
-        if(/^[a-zA-Z][a-zA-Z\s]*$/.test(req.body.name)){
+        if (/^[a-zA-Z][a-zA-Z\s]*$/.test(req.body.name)) {
 
-            if(/^[a-zA-Z0-9._%+-]+@(?:gmail|yahoo).com$/.test(req.body.email)){
+            if (/^[a-zA-Z0-9._%+-]+@(?:gmail|yahoo).com$/.test(req.body.email)) {
 
-                if(/^\d{10}$/.test(req.body.mobile)){
+                if (/^\d{10}$/.test(req.body.mobile)) {
 
-                    const checkAlreadyMail = await User.findOne({email:req.body.email});
-                    if(checkAlreadyMail){
+                    const checkAlreadyMail = await User.findOne({ email: req.body.email });
 
-                        res.render("userSignup", {message:"Email already exists.!"});
+                    if (checkAlreadyMail) {
 
-                    }else{
+                        if (checkAlreadyMail.is_verified === 1) {
+
+                            res.render("userSignup", { message: "Email already exists.!" });
+
+                        }else{
+
+                            await otpController.sendOtpMail(req.body.name, req.body.email);
+
+                            req.session.email = req.body.email;
+                            req.session.name = checkAlreadyMail.name;
+
+                            res.redirect("/verifyOtp");
+
+                        }
+                    } else {
 
                         const secPassword = await securePassword(req.body.password);
-                       
+
                         const user = new User({
                             name: req.body.name,
                             email: req.body.email,
                             mobile: req.body.mobile,
                             password: secPassword,
-                            is_verified: 0                          
+                            is_verified: 0
                         });
 
                         const userData = await user.save();
-                        if(userData){
+
+                        if (userData) {
 
                             await otpController.sendOtpMail(req.body.name, req.body.email);
 
@@ -109,21 +130,21 @@ const verifySignup = async (req,res) => {
                             req.session.name = userData.name;
 
                             res.redirect("/verifyOtp");
-                           
-                        }else{
-                            res.render("userSignup", {message: "Registration failed.!"});
+
+                        } else {
+                            res.render("userSignup", { message: "Registration failed.!" });
                         }
                     }
-                }else{
-                    res.render("userSignup", {message: "Enter a valid mobile number.!"});
+                } else {
+                    res.render("userSignup", { message: "Enter a valid mobile number.!" });
                 }
-            }else{
-                res.render("userSignup", {message: "Enter a valid email.!"});
-               
+            } else {
+                res.render("userSignup", { message: "Enter a valid email.!" });
+
             }
-        }else{
-            res.render("userSignup", {message: "Enter a valid name.!"});
-           
+        } else {
+            res.render("userSignup", { message: "Enter a valid name.!" });
+
         }
     } catch (error) {
         console.log(error.message);
@@ -131,7 +152,7 @@ const verifySignup = async (req,res) => {
 }
 
 // home load
-const userHomeLoad = async (req,res) =>{
+const userHomeLoad = async (req, res) => {
     try {
 
         res.render("userHome");
@@ -141,7 +162,17 @@ const userHomeLoad = async (req,res) =>{
     }
 }
 
+// logout user
+const userLogout = async (req, res) => {
+    try {
 
+        req.session.destroy();
+        res.redirect("/");
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 
 module.exports = {
@@ -151,4 +182,5 @@ module.exports = {
     userSignupLoad,
     verifySignup,
     userHomeLoad,
+    userLogout
 }
