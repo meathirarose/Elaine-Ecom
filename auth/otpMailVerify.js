@@ -22,8 +22,7 @@ function generateOtp(){
 const sendOtpMail = async (name, email) =>{
 
     try {
-        console.log(process.env.AUTHENTICATION_EMAIL);
-
+       
         const otp = generateOtp();
         const createdAt = new Date();
         const expiredAt = new Date(Date.now() + (2 * 60 * 1000));
@@ -93,8 +92,10 @@ const verifyOtp = async (req, res) =>{
         }
 
     } catch (error) {
+
         console.log(error.message);
-        res.render("verifyOtp",{message: "An error occured"});      
+        res.render("verifyOtp",{message: "An error occured"});   
+           
     }
 }
 

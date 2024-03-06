@@ -1,6 +1,6 @@
 const User = require("../models/userdbModel");
 const bcrypt = require("bcrypt");
-const otpController = require("./otpController")
+const otpController = require("../auth/otpMailVerify")
 
 // hashing password
 const securePassword = async (password) => {
@@ -151,6 +151,50 @@ const verifySignup = async (req, res) => {
     }
 }
 
+// google authentication success
+const successGoogleLogin = async (req, res) =>{
+    try {
+
+        const name = req.user.displayName;
+        const email = req.user.emails[0].value;
+
+        const userData = await User.findOne({email:email});
+        if(userData){
+
+            req.session.user_id = userData._id;
+            res.redirect("/userHome");
+
+        }else{
+            
+            const user = new User({
+                name: name,
+                email: email
+                
+            });
+
+            const newUser = await user.save();
+            if(newUser){
+                req.session.user_id = newUser._id;
+                res.redirect("/userHome");
+            }
+        }     
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+// google authentication failed
+const failureGoogleLogin = async (req, res) =>{
+    try {
+
+        res.render("userLogin", {message: "errorr"});
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 // home load
 const userHomeLoad = async (req, res) => {
     try {
@@ -181,6 +225,8 @@ module.exports = {
     verifyLogin,
     userSignupLoad,
     verifySignup,
+    successGoogleLogin,
+    failureGoogleLogin,
     userHomeLoad,
     userLogout
 }

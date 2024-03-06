@@ -5,7 +5,8 @@ const path = require('path');
 const logger = require("morgan");
 const bodyparser = require('body-parser');
 require("dotenv").config();
-
+const passport = require("passport");
+require("./auth/passport");
 
 app.use(nocache());
 
