@@ -36,12 +36,12 @@ user_route.get("/userLogin", authentication.isLogout, userController.userLoginLo
 user_route.post("/userLogin", userController.verifyLogin);
 
 // google authentication
-user_route.get("/google", passport.authenticate("google", {
+user_route.get("/google", authentication.isLogout, passport.authenticate("google", {
     scope: ["email", "profile"]
 }));
 
 // google authentication callback
-user_route.get("/auth/google/callback", passport.authenticate("google", {
+user_route.get("/auth/google/callback", authentication.isLogout, passport.authenticate("google", {
     successRedirect: "/success",
     failureRedirect: "/failure"
 }));

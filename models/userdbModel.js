@@ -14,24 +14,30 @@ const userSchema = new mongoose.Schema({
 
     mobile:{
         type: String,
-        // required: true
+        default: " "
     },
 
     password:{
         type: String,
-        // required: true
+        default: " "
     },
 
     is_verified:{
         type: Number,
-        // required: true,
         default: 0
     },
 
     is_admin:{
         type: Number,
-        // required: true,
         default: 0
+    },
+    googleId:{
+        type: String,
+        default: " "
+    },
+    address: {
+        type: String,
+        default: " "
     }
 
 });

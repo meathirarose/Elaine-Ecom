@@ -59,11 +59,11 @@ const verifyLogin = async (req, res) => {
                 }
 
             } else {
-                res.render("userLogin", { message: "Incorrect Email and Password.!" });
+                res.render("userLogin", { message: "Please check your password" });
             }
 
         } else {
-            res.render("userLogin", { message: "Incorrect Email and Password.!" });
+            res.render("userLogin", { message: "Incorrect mail and passeword" });
         }
     } catch (error) {
         console.log(error.message);
@@ -157,7 +157,8 @@ const successGoogleLogin = async (req, res) =>{
 
         const name = req.user.displayName;
         const email = req.user.emails[0].value;
-
+        const googleId = req.user.id
+        
         const userData = await User.findOne({email:email});
         if(userData){
 
@@ -166,9 +167,13 @@ const successGoogleLogin = async (req, res) =>{
 
         }else{
             
+            const secPassword = await securePassword(googleId);
+            
             const user = new User({
                 name: name,
-                email: email
+                email: email,
+                googleId: secPassword,
+                is_verified: 1
                 
             });
 
