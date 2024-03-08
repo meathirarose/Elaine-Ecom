@@ -1,0 +1,71 @@
+
+<%-include("../layout/admin/header")-%>
+
+    <main>
+        <header class="main-header style-2 navbar">
+            <div class="header-center">
+                <a href="#" class="logo">
+                    <h3 class="text-center font-weight-bolder text-uppercase">Elaine</h3>
+                </a>
+            </div>
+            <div class="col-nav">
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <section class="content-main mt-80 mb-80">
+            <div class="card mx-auto card-login">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Sign in</h4>
+                    <form action="" method="post">
+
+                        <div class="d-flex justify-content-center message">
+                            <% 
+                            if(typeof message !== 'undefined')
+                            {
+                            %> 
+                            <p><%= message %></p>
+                            <%
+                            }
+                            %>
+                        </div>
+
+                        <div class="mb-3">
+                            <input class="form-control" placeholder="Username or email" type="text" name="email" />
+                        </div>
+                        
+                        <div class="mb-3">
+                            <input class="form-control" placeholder="Password" type="password" name="password"/>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-check">
+                                <input type="checkbox" class="form-check-input" checked="" />
+                                <span class="form-check-label">Remember</span>
+                            </label>
+                        </div>
+                        
+                        <div class="mb-4 ">
+                            <button type="submit" class="btn btn-primary w-100 justify-content-center ">Login</button>
+                        </div>
+                        
+                    </form>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+    <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
+
+
+
+    <%-include("../layout/admin/footer")-%>

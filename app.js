@@ -13,7 +13,7 @@ app.use(nocache());
 const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGO_LINK);
 
-const PORT = process.env.PORT||3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(logger('dev'));
 app.use(bodyparser.json());
@@ -26,8 +26,8 @@ const userRoute = require("./routes/userRoute");
 app.use('/',userRoute.user_route);
 
 // for admin route
-// const adminRoute = require("./routes/adminRoute");
-// app.use('/admin',adminRoute);
+const adminRoute = require("./routes/adminRoute");
+app.use('/admin',adminRoute.admin_route);
 
 app.listen(PORT, ()=>{
     console.log(`Listening to the port at http://localhost:${3000}`);
