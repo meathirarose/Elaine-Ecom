@@ -19,6 +19,7 @@ user_route.use(passport.session());
 
 // authentication middleware
 const authentication = require("../middleware/userAuthentication");
+const accessAuth = require("../middleware/accessAuthentication");
 
 // set view engine and view
 user_route.set('view engine','ejs');
@@ -64,7 +65,7 @@ user_route.post("/verifyOtp", otpController.verifyOtp);
 user_route.get("/resendOtp", authentication.isLogout, otpController.resendOtp);
 
 // load home page route
-user_route.get("/userHome", authentication.isLogin, userController.userHomeLoad);
+user_route.get("/userHome", authentication.isLogin, accessAuth.accessUser, userController.userHomeLoad);
 
 // user logout route
 user_route.get("/userLogout", authentication.isLogin, userController.userLogout);

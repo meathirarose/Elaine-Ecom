@@ -62,7 +62,7 @@ const verifyLogin = async (req, res) => {
                 res.render("userLogin", { message: "Please check your password" });
             }
         }else{
-            res.render("userLogin", {message: "Access Blocked"});
+            res.render("userLogin", {message: "Access Restricted"});
         }
         } else {
             res.render("userLogin", { message: "Incorrect mail and passeword" });

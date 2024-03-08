@@ -34,6 +34,9 @@ admin_route.get('/adminHome', adminAuthentication.isAdminLogin, adminController.
 // products list route
 admin_route.get('/productsList', adminAuthentication.isAdminLogin, adminController.productListLoad);
 
+// categories route
+admin_route.get('/categories', adminAuthentication.isAdminLogin, adminController.categoriesLoad);
+
 // orders route
 admin_route.get('/orders', adminAuthentication.isAdminLogin, adminController.ordersLoad);
 

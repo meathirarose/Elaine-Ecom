@@ -79,6 +79,19 @@ const productListLoad = async (req, res) => {
 
 }
 
+// categories load
+const categoriesLoad = async (req, res) => {
+
+    try {
+        
+        res.render("categories");
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
 // orders load
 const ordersLoad = async (req, res) => {
 
@@ -165,6 +178,7 @@ module.exports = {
     verifyAdminLogin,
     homeLoad,
     productListLoad,
+    categoriesLoad,
     ordersLoad,
     customerListLoad,
     blockUser,
