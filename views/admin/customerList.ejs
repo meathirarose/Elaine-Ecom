@@ -142,9 +142,23 @@
                                             </a>
                                         </td>
                                         <td><%= user.email %></td>
-                                        <td><span class="badge rounded-pill alert-success">Active</span></td>
-                                        <td class="text-end">
-                                            <a href="#" class="btn btn-sm btn-brand rounded font-sm mt-15">View details</a>
+                                        <td>
+                                            <% if(user.is_blocked === false) { %>
+                                            <span class="badge rounded-pill alert-success">Active</span>
+                                            <% } else { %>
+                                            <span class="badge rounded-pill alert-danger">Blocked</span>
+                                            <% } %>
+                                        </td>
+                                        <td class="text-end" >
+                                            <% if(user.is_blocked === false) { %>
+                                            <button class="btn btn-md rounded font-sm " type="submit" >
+                                                <a href="/admin/blockUser/<%=user._id%>" data-status="unblock" class="text-white">Block</a>
+                                            </button>
+                                            <% } else { %>
+                                            <button class="btn btn-md rounded font-sm " type="submit" >
+                                                <a href="/admin/unblockUser/<%=user._id%>" data-status="block" class="text-white">Unblock</a>
+                                            </button>
+                                            <% } %>
                                         </td>
                                     </tr>
                                 <% }); %>                                                                                                                                                                                                                              
@@ -189,6 +203,6 @@
     <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
     <!-- Main Script -->
     <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
-
-
+    
+   
 <%-include("../layout/admin/footer")-%>

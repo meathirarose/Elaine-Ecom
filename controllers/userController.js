@@ -44,8 +44,8 @@ const verifyLogin = async (req, res) => {
         const password = req.body.password;
         const userData = await User.findOne({ email: email });
 
-        if (userData) {
-
+        if (userData ) {
+            if(userData.is_blocked === false){
             const passwordMatch = await bcrypt.compare(password, userData.password)
 
             if (passwordMatch) {
@@ -61,7 +61,9 @@ const verifyLogin = async (req, res) => {
             } else {
                 res.render("userLogin", { message: "Please check your password" });
             }
-
+        }else{
+            res.render("userLogin", {message: "Access Blocked"});
+        }
         } else {
             res.render("userLogin", { message: "Incorrect mail and passeword" });
         }

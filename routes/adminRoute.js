@@ -39,6 +39,8 @@ admin_route.get('/orders', adminAuthentication.isAdminLogin, adminController.ord
 
 // customerlist route
 admin_route.get('/customerList', adminAuthentication.isAdminLogin, adminController.customerListLoad);
+admin_route.get('/blockUser/:userId', adminAuthentication.isAdminLogin, adminController.blockUser);
+admin_route.get('/unblockUser/:userId', adminAuthentication.isAdminLogin, adminController.unblockUser);
 
 // add product route
 admin_route.get('/addProduct', adminAuthentication.isAdminLogin, adminController.addProductLoad)

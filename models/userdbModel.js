@@ -27,14 +27,21 @@ const userSchema = new mongoose.Schema({
         default: 0
     },
 
+    is_blocked:{
+        type: Boolean,
+        default: false
+    },
+
     is_admin:{
         type: Number,
         default: 0
     },
+
     googleId:{
         type: String,
         default: " "
     },
+
     address: {
         type: String,
         default: " "

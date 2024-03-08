@@ -57,7 +57,7 @@ const verifyAdminLogin = async (req, res) => {
 const homeLoad = async (req, res) => {
 
     try {
-        
+
         res.render('adminHome');
 
     } catch (error) {
@@ -67,10 +67,10 @@ const homeLoad = async (req, res) => {
 }
 
 // product list load
-const productListLoad = async (req, res) =>{
+const productListLoad = async (req, res) => {
 
     try {
-       
+
         res.render("productsList");
 
     } catch (error) {
@@ -94,10 +94,39 @@ const ordersLoad = async (req, res) => {
 
 //customer List Load
 const customerListLoad = async (req, res) => {
-    
+
     try {
         const userData = await User.find({});
-        res.render("customerList", {userData});
+        res.render("customerList", { userData });
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+// blocking user
+const blockUser = async (req, res) => {
+    try {
+
+        const userId = req.params.userId;
+       
+        await User.findByIdAndUpdate(userId, { is_blocked: true} );
+        res.redirect("/admin/customerList");
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//unblocking user
+const unblockUser = async (req, res) => {
+
+    try {
+        const userId = req.params.userId;
+
+        await User.findByIdAndUpdate(userId, {is_blocked: false});
+        res.redirect("/admin/customerList");
 
     } catch (error) {
         console.log(error.message);
@@ -107,9 +136,9 @@ const customerListLoad = async (req, res) => {
 
 //customer List Load
 const addProductLoad = async (req, res) => {
-    
+
     try {
-        
+
         res.render("addProduct");
 
     } catch (error) {
@@ -138,7 +167,9 @@ module.exports = {
     productListLoad,
     ordersLoad,
     customerListLoad,
+    blockUser,
+    unblockUser,
     addProductLoad,
     adminLogout
-    
+
 }
