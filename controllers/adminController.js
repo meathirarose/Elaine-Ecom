@@ -79,12 +79,12 @@ const productListLoad = async (req, res) => {
 
 }
 
-// categories load
-const categoriesLoad = async (req, res) => {
+//add product Load
+const addProductLoad = async (req, res) => {
 
     try {
-        
-        res.render("categories");
+
+        res.render("addProduct");
 
     } catch (error) {
         console.log(error.message);
@@ -147,19 +147,6 @@ const unblockUser = async (req, res) => {
 
 }
 
-//customer List Load
-const addProductLoad = async (req, res) => {
-
-    try {
-
-        res.render("addProduct");
-
-    } catch (error) {
-        console.log(error.message);
-    }
-
-}
-
 const adminLogout = async (req, res) => {
 
     try {
@@ -174,11 +161,11 @@ const adminLogout = async (req, res) => {
 }
 
 module.exports = {
+
     adminLoad,
     verifyAdminLogin,
     homeLoad,
     productListLoad,
-    categoriesLoad,
     ordersLoad,
     customerListLoad,
     blockUser,

@@ -18,8 +18,9 @@ const adminAuthentication = require('../middleware/adminAuthentication');
 admin_route.set('view engine', 'ejs');
 admin_route.set('views','./views/admin');
 
-// access controller
+// access controllers
 const adminController = require("../controllers/adminController");
+const adminCateController = require("../controllers/adminCateController");
 
 // admin login
 admin_route.get('/', adminAuthentication.isAdminLogout ,adminController.adminLoad);
@@ -34,8 +35,14 @@ admin_route.get('/adminHome', adminAuthentication.isAdminLogin, adminController.
 // products list route
 admin_route.get('/productsList', adminAuthentication.isAdminLogin, adminController.productListLoad);
 
-// categories route
-admin_route.get('/categories', adminAuthentication.isAdminLogin, adminController.categoriesLoad);
+// add product route
+admin_route.get('/addProduct', adminAuthentication.isAdminLogin, adminController.addProductLoad)
+
+// add category route
+admin_route.get('/addCategory', adminAuthentication.isAdminLogin, adminCateController.addCategoryLoad);
+admin_route.post('/addCategory', adminCateController.verifyCategory);
+admin_route.get('/editCategory', adminAuthentication.isAdminLogin, adminCateController.editCategory);
+
 
 // orders route
 admin_route.get('/orders', adminAuthentication.isAdminLogin, adminController.ordersLoad);
@@ -45,16 +52,14 @@ admin_route.get('/customerList', adminAuthentication.isAdminLogin, adminControll
 admin_route.get('/blockUser/:userId', adminAuthentication.isAdminLogin, adminController.blockUser);
 admin_route.get('/unblockUser/:userId', adminAuthentication.isAdminLogin, adminController.unblockUser);
 
-// add product route
-admin_route.get('/addProduct', adminAuthentication.isAdminLogin, adminController.addProductLoad)
-
-
 // admin logout
 admin_route.get('/adminLogout', adminAuthentication.isAdminLogin, adminController.adminLogout);
+
 
 admin_route.get('*', (req,res) => {
     res.redirect("/admin");
 });
+
 
 module.exports = {
     admin_route

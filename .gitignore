@@ -1,0 +1,6 @@
+
+# for removing node modules
+node_modules
+
+# for removing env file
+env
