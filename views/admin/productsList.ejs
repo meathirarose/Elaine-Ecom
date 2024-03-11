@@ -99,56 +99,66 @@
                     </div>
                 </div>
                 <div class="card mb-4">
-                    <header class="card-header">
-                        <div class="row align-items-center">
-                            
-                            <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
-                                <select class="form-select">
-                                    <option selected>All category</option>
-                                    <option>Electronics</option>
-                                    <option>Clothes</option>
-                                    <option>Automobile</option>
-                                </select>
-                            </div>
-                            
-                            <div class="col-md-2 col-6">
-                                <select class="form-select">
-                                    <option selected>Status</option>
-                                    <option>Active</option>
-                                    <option>Disabled</option>
-                                    <option>Show all</option>
-                                </select>
-                            </div>
-                        </div>
-                    </header>
+                
                     <!-- card-header end// -->
                     <div class="card-body">
-                        <article class="itemlist">
-                            <div class="row align-items-center">
-                                
-                                <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
-                                    <a class="itemside" href="#">
-                                        <div class="left">
-                                            <img src="assets/imgs/items/1.jpg" class="img-sm img-thumbnail" alt="Item" />
-                                        </div>
-                                        <div class="info">
-                                            <h6 class="mb-0">Seeds of Change Organic Quinoa</h6>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="col-lg-2 col-sm-2 col-4 col-price"><span>$34.50</span></div>
-                                <div class="col-lg-2 col-sm-2 col-4 col-status">
-                                    <span class="badge rounded-pill alert-success">Active</span>
-                                </div>
-                                
-                                <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
-                                    <a href="#" class="btn btn-sm font-sm rounded btn-brand"> <i class="material-icons md-edit"></i> Edit </a>
-                                    <a href="#" class="btn btn-sm font-sm btn-light rounded"> <i class="material-icons md-delete_forever"></i> Delete </a>
-                                </div>
-                            </div>
-                            <!-- row .// -->
-                        </article>
-                        <!-- itemlist  .// -->                       
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Product Image</th>
+                                        <th>Product Name</th>
+                                        <th>Description</t>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Category</th>
+                                        <th>Status</th>
+                                        <th class="text-end">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% prdctData.forEach((prdct,index) => { %>
+                                        <tr>
+                                            <td><%= index+1 %></td>
+                                            <td width="15%">
+                                                    <div class="left">
+                                                        <img src="assets/imgs/people/avatar4.jpg" class="img-sm img-avatar " alt="Userpic" />
+                                                    </div>
+                                                </a>
+                                            </td>
+                                            <td ><%= prdct.prdctName %></td>
+                                            <td ><%= prdct.prdctDescription %></td>
+                                            <td class="text-center"><%= prdct.prdctPrice %></td>
+                                            <td class="text-center"><%= prdct.prdctQuantity %></td>
+                                            <td class="text-center"><%= prdct.prdctCategory %></td>
+                                            <td>
+                                                <% if(prdct.is_listed === false) { %>
+                                                <span class="badge rounded-pill alert-danger ">Unlisted</span>
+                                                <% } else { %>
+                                                <span class="badge rounded-pill alert-success">Listed</span>
+                                                <% } %>
+                                            </td>
+                                            <td class="text-end" >
+                                                <% if(prdct.is_listed === false) { %>
+                                                <button class="btn btn-md rounded font-sm " type="submit" >
+                                                    <a href="/admin/listProduct/<%=prdct._id%>" data-status="unblock" class="text-white">Listed</a>
+                                                </button>
+                                                <% } else { %>
+                                                <button class="btn btn-md rounded font-sm " type="submit" >
+                                                    <a href="/admin/unlistProduct/<%=prdct._id%>" data-status="block" class="text-white">Unlisted</a>
+                                                </button>
+                                                <% } %>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-md rounded font-sm " type="submit" ><a href="/admin/editProduct?prdctId=<%=prdct._id%>" class="text-white">Edit</button></a>
+                                            </td>
+                                        </tr>
+                                        <% }); %>                                                                                                                                                                                                                       
+                                </tbody>
+                            </table>
+                            <!-- table-responsive.// -->
+                        </div>
                     </div>
                     <!-- card-body end// -->
                 </div>

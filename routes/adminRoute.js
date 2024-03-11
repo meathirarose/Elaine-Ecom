@@ -21,23 +21,24 @@ admin_route.set('views','./views/admin');
 // access controllers
 const adminController = require("../controllers/adminController");
 
-// admin login
+// admin login routes
 admin_route.get('/', adminAuthentication.isAdminLogout ,adminController.adminLoad);
 admin_route.get('/admin', adminAuthentication.isAdminLogout, adminController.adminLoad);
-
-// admin login verification
 admin_route.post('/', adminController.verifyAdminLogin);
 
 // admin home/dashboard
 admin_route.get('/adminHome', adminAuthentication.isAdminLogin, adminController.homeLoad);
 
-// products list route
+// products routes
 admin_route.get('/productsList', adminAuthentication.isAdminLogin, adminController.productListLoad);
+admin_route.get('/addProduct', adminAuthentication.isAdminLogin, adminController.addProductLoad);
+admin_route.post('/addProduct', adminController.addProduct);
+admin_route.get('/listProduct/:prdctId', adminAuthentication.isAdminLogin, adminController.listProduct);
+admin_route.get('/unlistProduct/:prdctId', adminAuthentication.isAdminLogin, adminController.unlistProduct);
+admin_route.get('/editProduct', adminAuthentication.isAdminLogin, adminController.editProduct);
+admin_route.post('/editProduct', adminController.updateProduct);
 
-// add product route
-admin_route.get('/addProduct', adminAuthentication.isAdminLogin, adminController.addProductLoad)
-
-// add category route
+// category routes
 admin_route.get('/addCategory', adminAuthentication.isAdminLogin, adminController.categoryLoad);
 admin_route.get('/listCategory/:cateId', adminAuthentication.isAdminLogin, adminController.listCategory);
 admin_route.get('/unlistCategory/:cateId', adminAuthentication.isAdminLogin, adminController.unlistCategory);
@@ -48,7 +49,7 @@ admin_route.post('/editCategory', adminController.updateCategory);
 // orders route
 admin_route.get('/orders', adminAuthentication.isAdminLogin, adminController.ordersLoad);
 
-// customerlist route
+// customerlist routes
 admin_route.get('/customerList', adminAuthentication.isAdminLogin, adminController.customerListLoad);
 admin_route.get('/blockUser/:userId', adminAuthentication.isAdminLogin, adminController.blockUser);
 admin_route.get('/unblockUser/:userId', adminAuthentication.isAdminLogin, adminController.unblockUser);

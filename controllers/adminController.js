@@ -1,7 +1,9 @@
 const User = require("../models/userdbModel");
 const Category = require("../models/categorydbModel");
+const Product = require("../models/productdbModel");
 const bcrypt = require("bcrypt");
 
+//-------------------------------------------------admin-login-verification------------------------------------------------//
 // admin login
 const adminLoad = async (req, res) => {
 
@@ -66,13 +68,102 @@ const homeLoad = async (req, res) => {
     }
 
 }
-
+//-----------------------------------------------end-admin-login-verification----------------------------------------------//
+//---------------------------------------------------------products--------------------------------------------------------//
 // product list load
 const productListLoad = async (req, res) => {
 
     try {
 
-        res.render("productsList");
+        const prdctData = await Product.find({});
+        res.render("productsList", {prdctData});
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+// adding products
+const addProduct = async (req, res) => {
+
+    try {
+
+        const prdctName = req.body.prdctName.trim();
+        const prdctDescription = req.body.prdctDescription.trim();
+        const prdctPrice = req.body.prdctPrice;
+        const prdctQuantity = req.body.prdctQuantity;
+        // const cateId = req.params.cateId;
+
+        // checking valid product name / space check
+        if (!prdctName || /^\s*$/.test(prdctName)) {
+            const prdctData = await Product.find({});
+            return res.render("addProduct", { prdctData, message: "Enter a valid product name" });
+        }
+
+        // checking valid category description / space check
+        if (!prdctDescription || /^\s*$/.test(prdctDescription)) {
+            const prdctData = await Product.find({});
+            return res.render("addProduct", { prdctData, message: "Enter a valid product description" });
+        }
+
+        const parsedPrdctPrice = parseFloat(prdctPrice);
+        const parsedPrdctQuantity = parseInt(prdctQuantity);
+
+        // checking the price should not be less than 0
+        if (parsedPrdctPrice <= 0) {
+            const prdctData = await Product.find({});
+            return res.render("addProduct", { prdctData, message: "Price of the product should be greater than zero" });
+        }        
+
+        // checking the quantity should be atleast one
+        if (parsedPrdctQuantity < 1) {
+            const prdctData = await Product.find({});
+            return res.render("addProduct", { prdctData, message: "Quantity of the product should be at least one" });
+        }
+
+        const product = new Product({
+            prdctName: prdctName,
+            prdctDescription: prdctDescription,
+            prdctPrice: parsedPrdctPrice,
+            prdctQuantity: parsedPrdctQuantity
+        });
+
+        const prdctData = await product.save();
+
+        if(prdctData){
+            res.redirect("/admin/productsList");
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+// list product
+const listProduct = async (req, res) => {
+
+    try {
+
+        const prdctId = req.params.prdctId;
+        await Product.findByIdAndUpdate(prdctId, { is_listed: true });
+        res.redirect("/admin/productsList");   
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+// unlist product
+const unlistProduct = async (req, res) => {
+
+    try {
+
+        const prdctId = req.params.prdctId;
+        await Product.findByIdAndUpdate(prdctId, { is_listed: false });
+        res.redirect("/admin/productsList");   
 
     } catch (error) {
         console.log(error.message);
@@ -85,7 +176,8 @@ const addProductLoad = async (req, res) => {
 
     try {
 
-        res.render("addProduct");
+        const prdctData = await Product.find({});
+        res.render("addProduct", {prdctData});
 
     } catch (error) {
         console.log(error.message);
@@ -93,6 +185,75 @@ const addProductLoad = async (req, res) => {
 
 }
 
+// edit product 
+const editProduct = async (req, res) => {
+    try {
+
+        const prdctId = req.query.prdctId;
+        const prdctData = await Product.findById({ _id: prdctId });
+
+        if (prdctData) {
+            res.render("editProduct", { prdctData });
+        }
+        else {
+            res.redirect("/admin/productsList");
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+// update category
+const updateProduct = async (req, res) => {
+    try {
+
+        
+        const prdctId = req.body.prdctId;
+        const prdctData = await Category.findOne({ _id: prdctId });
+
+        const prdctName = req.body.prdctName.trim();
+        const prdctDescription = req.body.prdctDescription.trim();
+        const prdctPrice = req.body.prdctPrice;
+        const prdctQuantity = req.body.prdctQuantity;
+        //const cateId = req.body.cateId;
+
+        // checking valid product name / space check
+        if (!prdctName || /^\s*$/.test(prdctName)) {
+            return res.render("editProduct", { prdctData, message: "Enter a valid product name" });
+        }
+
+        // checking valid category description / space check
+        if (!prdctDescription || /^\s*$/.test(prdctDescription)) {
+            return res.render("editProduct", { prdctData, message: "Enter a valid product description" });
+        }
+
+        const parsedPrdctPrice = parseFloat(prdctPrice);
+        const parsedPrdctQuantity = parseInt(prdctQuantity);
+
+        // checking the price should not be less than 0
+        if (parsedPrdctPrice <= 0) {
+            const prdctData = await Product.find({});
+            return res.render("editProduct", { prdctData, message: "Price of the product should be greater than zero" });
+        }        
+
+        // checking the quantity should be atleast one
+        if (parsedPrdctQuantity < 1) {
+            const prdctData = await Product.find({});
+            return res.render("editProduct", { prdctData, message: "Quantity of the product should be at least one" });
+        }
+
+        await Product.findByIdAndUpdate({ _id: prdctId }, { $set: { prdctName: req.body.prdctName, prdctDescription: req.body.prdctDescription, prdctPrice: req.body.parsedPrdctPrice, prdctQuantity: req.body.parsedPrdctQuantity } });
+
+        res.redirect("/admin/productsList");
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+//--------------------------------------------------------end-products-----------------------------------------------------//
 //---------------------------------------------------------category--------------------------------------------------------//
 // load add category
 const categoryLoad = async (req, res) => {
@@ -163,6 +324,7 @@ const addCategory = async (req, res) => {
             const cateData = await Category.find({});
             return res.render("addCategory", { cateData, message: "Enter a valid category" });
         }
+
         const category = new Category({
             cateName: cateName,
             cateDescription: cateDescription,
@@ -313,6 +475,12 @@ module.exports = {
     verifyAdminLogin,
     homeLoad,
     productListLoad,
+    listProduct,
+    unlistProduct,
+    addProductLoad,
+    addProduct,
+    editProduct,
+    updateProduct,
     categoryLoad,
     listCategory,
     unlistCategory,
@@ -322,8 +490,7 @@ module.exports = {
     ordersLoad,
     customerListLoad,
     blockUser,
-    unblockUser,
-    addProductLoad,
+    unblockUser, 
     adminLogout
 
 }

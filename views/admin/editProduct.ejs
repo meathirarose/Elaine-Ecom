@@ -88,7 +88,7 @@
             <div class="row">
                 <div class="col-9">
                     <div class="content-header">
-                        <h2 class="content-title">Add New Product</h2>
+                        <h2 class="content-title">Edit Product</h2>
                     </div>
                 </div>
                 <div class="d-flex message m-3"> 
@@ -109,33 +109,34 @@
                             <form action="" method="post">
                                 <div class="mb-4">
                                     <label for="product_name" class="form-label" >Product title</label>
-                                    <input type="text" placeholder="Type here" name="prdctName" class="form-control" id="product_name" />
+                                    <input type="text" placeholder="Type here" name="prdctName" value="<%=prdctData.prdctName%>" class="form-control" id="product_name" />
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label">Full description</label>
-                                    <textarea placeholder="Type here" name="prdctDescription" class="form-control" rows="4"></textarea>
+                                    <input placeholder="Type here" name="prdctDescription" value="<%=prdctData.prdctDescription%>" class="form-control" rows="4">
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <div class="mb-4">
                                             <label class="form-label">Regular price</label>
                                             <div class="row gx-2">
-                                                <input placeholder="₹" type="text" name="prdctPrice" class="form-control" />
+                                                <input placeholder="₹" type="text" name="prdctPrice" value="<%= prdctData.prdctPrice %>" class="form-control" />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="mb-4">
                                             <label class="form-label">Quantity</label>
-                                            <input placeholder="1" type="text" name="prdctQuantity" class="form-control" />
+                                            <input placeholder="1" type="text" name="prdctQuantity" value="<%= prdctData.prdctQuantity %>" class="form-control" />
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <label class="form-label">Category</label>
-                                        <input placeholder="Type here" type="text" name="prdctCategory" class="form-control" />
+                                        <input placeholder="Type here" type="text" name="prdctCategory" value="<%= prdctData.prdctCategory %>" class="form-control" />
                                     </div>
                                     <div>
-                                        <button class="btn btn-md rounded font-sm hover-up" type="submit">Add</button>
+                                        <input type="hidden" required name="prdctId" value="<%= prdctData._id %>">
+                                        <button class="btn btn-md rounded font-sm hover-up" name="id" type="submit"><a href="/admin/updateProduct"></a>Submit</button>
                                     </div>
                                 </div>
                             </form>
