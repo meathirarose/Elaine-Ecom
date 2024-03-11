@@ -20,7 +20,6 @@ admin_route.set('views','./views/admin');
 
 // access controllers
 const adminController = require("../controllers/adminController");
-const adminCateController = require("../controllers/adminCateController");
 
 // admin login
 admin_route.get('/', adminAuthentication.isAdminLogout ,adminController.adminLoad);
@@ -39,10 +38,12 @@ admin_route.get('/productsList', adminAuthentication.isAdminLogin, adminControll
 admin_route.get('/addProduct', adminAuthentication.isAdminLogin, adminController.addProductLoad)
 
 // add category route
-admin_route.get('/addCategory', adminAuthentication.isAdminLogin, adminCateController.addCategoryLoad);
-admin_route.post('/addCategory', adminCateController.verifyCategory);
-admin_route.get('/editCategory', adminAuthentication.isAdminLogin, adminCateController.editCategory);
-
+admin_route.get('/addCategory', adminAuthentication.isAdminLogin, adminController.categoryLoad);
+admin_route.get('/listCategory/:cateId', adminAuthentication.isAdminLogin, adminController.listCategory);
+admin_route.get('/unlistCategory/:cateId', adminAuthentication.isAdminLogin, adminController.unlistCategory);
+admin_route.post('/addCategory', adminController.addCategory);
+admin_route.get('/editCategory', adminAuthentication.isAdminLogin, adminController.editCategory);
+admin_route.post('/editCategory', adminController.updateCategory);
 
 // orders route
 admin_route.get('/orders', adminAuthentication.isAdminLogin, adminController.ordersLoad);

@@ -34,17 +34,18 @@
                     </a>
                 </li>
                 <li class="menu-item p-2">
-                    <a class="menu-link" href="/admin/orders">
-                        <i class="icon material-icons md-shopping_cart"></i>
-                        <span class="text">Orders</span>
-                    </a>
-                </li>
-                <li class="menu-item p-2">
                     <a class="menu-link" href="/admin/customerList">
                         <i class="icon material-icons md-store"></i>
                         <span class="text">Customers</span>
                     </a>
                 </li>
+                <li class="menu-item p-2">
+                    <a class="menu-link" href="/admin/orders">
+                        <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                </li>
+
             </ul>
         </nav>
 
@@ -93,9 +94,19 @@
             <div class="content-header">
                 <div>
                     <h2 class="content-title card-title">Categories</h2>
-                    <p>Add, edit or delete a category</p>
+                    <p>Add, edit or list/unlist a category</p>
                 </div>
             </div>
+            <div class="d-flex justify-content-center message"> 
+                <%
+                if(typeof message !== 'undefined'){
+                    %>
+                    <p><br><%= message %></p>
+                    <%
+                }
+                %>
+            </div>
+            <br>
             <div class="card">
                 <div class="card-body">
                     <div class="row">
@@ -135,24 +146,24 @@
                                             <td><%= cate.cateDescription %> </td>
                                             <td>
                                                 <% if(cate.is_listed === false) { %>
-                                                <span class="badge rounded-pill alert-success">Listed</span>
+                                                <span class="badge rounded-pill alert-danger ">Unlisted</span>
                                                 <% } else { %>
-                                                <span class="badge rounded-pill alert-danger">Unlisted</span>
+                                                <span class="badge rounded-pill alert-success">Listed</span>
                                                 <% } %>
                                             </td>
                                             <td class="text-end" >
-                                                <% if(cate.is_blocked === false) { %>
+                                                <% if(cate.is_listed === false) { %>
                                                 <button class="btn btn-md rounded font-sm " type="submit" >
-                                                    <a href="/admin/listOrUnlistCategory/<%=cate._id%>" data-status="unblock" class="text-white">Listed</a>
+                                                    <a href="/admin/listCategory/<%=cate._id%>" data-status="unblock" class="text-white">Listed</a>
                                                 </button>
                                                 <% } else { %>
                                                 <button class="btn btn-md rounded font-sm " type="submit" >
-                                                    <a href="/admin/listOrUnlistCategory/<%=cate._id%>" data-status="block" class="text-white">Unlisted</a>
+                                                    <a href="/admin/unlistCategory/<%=cate._id%>" data-status="block" class="text-white">Unlisted</a>
                                                 </button>
                                                 <% } %>
                                             </td>
                                             <td>
-                                                <button class="btn btn-md rounded font-sm " type="submit" > <a href="/admin/editCategory" class="text-white">Edit</button></a>
+                                                <button class="btn btn-md rounded font-sm " type="submit" > <a href="/admin/editCategory?id=<%=cate._id%>" class="text-white">Edit</button></a>
                                             </td>
                                         </tr>
                                         <% }); %>  

@@ -1,4 +1,5 @@
 const User = require("../models/userdbModel");
+const Category = require("../models/categorydbModel");
 const bcrypt = require("bcrypt");
 
 // admin login
@@ -53,7 +54,7 @@ const verifyAdminLogin = async (req, res) => {
 
 }
 
-// load admin home/dashboard
+// load admin home
 const homeLoad = async (req, res) => {
 
     try {
@@ -92,6 +93,153 @@ const addProductLoad = async (req, res) => {
 
 }
 
+//---------------------------------------------------------category--------------------------------------------------------//
+// load add category
+const categoryLoad = async (req, res) => {
+    try {
+
+        const cateData = await Category.find({});
+        res.render("addCategory", { cateData });
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+// list category
+const listCategory = async (req, res) => {
+
+    try {
+
+        const cateId = req.params.cateId;
+
+        await Category.findByIdAndUpdate(cateId, { is_listed: true });
+        res.redirect("/admin/addCategory");
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+//unlisting category
+const unlistCategory = async (req, res) => {
+    try {
+        const cateId = req.params.cateId;
+
+        await Category.findByIdAndUpdate(cateId, { is_listed: false });
+        res.redirect("/admin/addCategory");
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+// add category
+const addCategory = async (req, res) => {
+
+    try {
+        const cateName = req.body.cateName.trim();
+        const cateDescription = req.body.cateDescription;
+        const is_listed = req.body.is_listed;
+        const lowerCase = cateName.toLowerCase();
+
+        // checking valid category name
+        if (!cateName || /^\s*$/.test(cateName)) {
+            const cateData = await Category.find({});
+            return res.render("addCategory", { cateData, message: "Enter a valid name" });
+        }
+
+        const regex = new RegExp("^" + lowerCase + "$", "i");
+        const existingCategory = await Category.findOne({ cateName: regex });
+
+        if (existingCategory) {
+            const cateData = await Category.find({});
+            return res.render("addCategory", { cateData, message: "Category already exist.!" });
+        }
+
+        // checking valid category description
+        if (!cateDescription || /^\s*$/.test(cateDescription)) {
+            const cateData = await Category.find({});
+            return res.render("addCategory", { cateData, message: "Enter a valid category" });
+        }
+        const category = new Category({
+            cateName: cateName,
+            cateDescription: cateDescription,
+            is_listed: is_listed
+        });
+
+        const cateData = await category.save();
+
+        if (cateData) {
+            const cateData = await Category.find({});
+            res.render("addCategory", { cateData, message: "category added successfully" });
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+// edit category load
+const editCategory = async (req, res) => {
+    try {
+
+        const id = req.query.id;
+        const cateData = await Category.findById({ _id: id });
+
+        if (cateData) {
+            res.render("editCategory", { cateData });
+        }
+        else {
+            res.redirect("/admin/addCategory");
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+// update category
+const updateCategory = async (req, res) => {
+    try {
+
+        const cateId = req.body.cateId;
+        const cateData = await Category.findOne({ _id: cateId });
+
+        const cateName = req.body.cateName.trim();
+        const cateDescription = req.body.cateDescription.trim();
+        const lowerCase = cateName.toLowerCase();
+
+        // checking valid category name
+        if (!cateName || /^\s*$/.test(cateName)) {
+            return res.render("editCategory", { cateData, message: "Enter a valid name" });
+        }
+
+        const regex = new RegExp("^" + lowerCase + "$", "i");
+        const existingCategory = await Category.findOne({ cateName: regex });
+
+        if (existingCategory && existingCategory._id.toString() !== cateId) {
+            return res.render("editCategory", { cateData, message: "Category already exist.!" });
+        }
+
+        // checking valid category description
+        if (!cateDescription || /^\s*$/.test(cateDescription)) {
+            const cateData = await Category.find({});
+            return res.render("editCategory", { cateData, message: "Enter a valid category" });
+        }
+
+        await Category.findByIdAndUpdate({ _id: cateId }, { $set: { cateName: req.body.cateName, cateDescription: req.body.cateDescription } })
+        res.redirect("/admin/addCategory");
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+//-------------------------------------------------------end-category------------------------------------------------------//
+//----------------------------------------------------------orders---------------------------------------------------------//
 // orders load
 const ordersLoad = async (req, res) => {
 
@@ -104,7 +252,8 @@ const ordersLoad = async (req, res) => {
     }
 
 }
-
+//--------------------------------------------------------end-orders-------------------------------------------------------//
+//---------------------------------------------------------customers-------------------------------------------------------//
 //customer List Load
 const customerListLoad = async (req, res) => {
 
@@ -123,8 +272,8 @@ const blockUser = async (req, res) => {
     try {
 
         const userId = req.params.userId;
-       
-        await User.findByIdAndUpdate(userId, { is_blocked: true} );
+
+        await User.findByIdAndUpdate(userId, { is_blocked: true });
         res.redirect("/admin/customerList");
 
     } catch (error) {
@@ -134,19 +283,17 @@ const blockUser = async (req, res) => {
 
 //unblocking user
 const unblockUser = async (req, res) => {
-
     try {
         const userId = req.params.userId;
 
-        await User.findByIdAndUpdate(userId, {is_blocked: false});
+        await User.findByIdAndUpdate(userId, { is_blocked: false });
         res.redirect("/admin/customerList");
 
     } catch (error) {
         console.log(error.message);
     }
-
 }
-
+//------------------------------------------------------end-customers------------------------------------------------------//
 const adminLogout = async (req, res) => {
 
     try {
@@ -166,6 +313,12 @@ module.exports = {
     verifyAdminLogin,
     homeLoad,
     productListLoad,
+    categoryLoad,
+    listCategory,
+    unlistCategory,
+    addCategory,
+    editCategory,
+    updateCategory,
     ordersLoad,
     customerListLoad,
     blockUser,

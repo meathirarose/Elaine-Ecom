@@ -34,17 +34,18 @@
                     </a>
                 </li>
                 <li class="menu-item p-2">
+                    <a class="menu-link" href="/admin/customerList">
+                        <i class="icon material-icons md-store"></i>
+                        <span class="text">Customers</span>
+                    </a>  
+                </li>
+                <li class="menu-item p-2">
                     <a class="menu-link" href="/admin/orders">
                         <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">Orders</span>
                     </a>  
                 </li>
-                <li class="menu-item p-2">
-                    <a class="menu-link" href="/admin/customerList">
-                        <i class="icon material-icons md-store"></i>
-                        <span class="text">Customers</span>
-                    </a>  
-                </li>                                               
+                                               
             </ul>                      
         </nav>
     
@@ -83,15 +84,7 @@
                 </ul>
             </div>
         </header>
-        <div class="d-flex justify-content-center message"> 
-            <%
-            if(typeof message !== 'undefined'){
-                %>
-                <p><br><%= message %></p>
-                <%
-            }
-            %>
-        </div>
+        
         <section class="content-main">
             <div class="row">
                 <div class="col-9">
@@ -99,25 +92,36 @@
                         <h2 class="content-title">Edit Category</h2>
                         
                     </div>
+                    <div class="d-flex message m-3"> 
+                        <%
+                        if(typeof message !== 'undefined'){
+                            %>
+                            <p><br><%= message %></p>
+                            <%
+                        }
+                        %>
+                    </div>
                 </div>
+                
+                
                 <div class="col-lg-6">
                     <div class="card mb-4">
                         <div class="card-header">
                             <h4>Basic</h4>
                         </div>
                         <div class="card-body">
-                            <form>
+                            <form action="" method="post">
                                 <div class="mb-4">
                                     <label for="product_name" class="form-label" >Product title</label>
-                                    <input type="text" placeholder="Type here" value="<%=categories.cateName%>" name="cateName" class="form-control" id="product_name" />
+                                    <input type="text" placeholder="Type here" value="<%=cateData.cateName%>" name="cateName" class="form-control" id="product_name" />
                                 </div>
                                 <div class="mb-4">
                                     <label class="form-label">Full description</label>
-                                    <textarea placeholder="Type here" value="<%= categories.cateDescription %>" name="cateDescription" class="form-control" rows="4"></textarea>
+                                    <input placeholder="Type here" value="<%= cateData.cateDescription %>" name="cateDescription" class="form-control" rows="4">
                                 </div>
                                 <div>
-                                    <input type="hidden" required name="id" value="<%= categories._id %>">
-                                    <button class="btn btn-md rounded font-sm hover-up" type="submit">Submit</button>
+                                    <input type="hidden" required name="cateId" value="<%= cateData._id %>">
+                                    <button class="btn btn-md rounded font-sm hover-up" name="id" type="submit"><a href="/admin/updateCategory"></a>Submit</button>
                                 </div>
                             </form>
                         </div>

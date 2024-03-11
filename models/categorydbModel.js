@@ -15,7 +15,7 @@ const categorySchema = new mongoose.Schema({
 
     is_listed: {
         type: Boolean,
-        default: false
+        default: true
     }
 
 });
