@@ -3,7 +3,7 @@ const Category = require("../models/categorydbModel");
 const Product = require("../models/productdbModel");
 const bcrypt = require("bcrypt");
 
-//-------------------------------------------------admin-login-verification------------------------------------------------//
+//-----------------------------------------------admin-login-and-verification----------------------------------------------//
 // admin login
 const adminLoad = async (req, res) => {
 
@@ -66,9 +66,9 @@ const homeLoad = async (req, res) => {
     } catch (error) {
         console.log(error.message);
     }
-
 }
-//-----------------------------------------------end-admin-login-verification----------------------------------------------//
+
+//---------------------------------------------end-admin-login-and-verification--------------------------------------------//
 //---------------------------------------------------------products--------------------------------------------------------//
 // product list load
 const productListLoad = async (req, res) => {
@@ -207,7 +207,6 @@ const editProduct = async (req, res) => {
 // update category
 const updateProduct = async (req, res) => {
     try {
-
         
         const prdctId = req.body.prdctId;
         const prdctData = await Category.findOne({ _id: prdctId });
@@ -455,6 +454,7 @@ const unblockUser = async (req, res) => {
         console.log(error.message);
     }
 }
+
 //------------------------------------------------------end-customers------------------------------------------------------//
 const adminLogout = async (req, res) => {
 
