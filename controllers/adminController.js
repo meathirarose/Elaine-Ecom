@@ -76,7 +76,7 @@ const productListLoad = async (req, res) => {
     try {
 
         const prdctData = await Product.find({});
-        res.render("productsList", {prdctData});
+        res.render("productsList", { prdctData });
 
     } catch (error) {
         console.log(error.message);
@@ -94,6 +94,7 @@ const addProduct = async (req, res) => {
         const prdctPrice = req.body.prdctPrice;
         const prdctQuantity = req.body.prdctQuantity;
         // const cateId = req.params.cateId;
+        const imgFiles = req.files;
 
         // checking valid product name / space check
         if (!prdctName || /^\s*$/.test(prdctName)) {
@@ -114,7 +115,7 @@ const addProduct = async (req, res) => {
         if (parsedPrdctPrice <= 0) {
             const prdctData = await Product.find({});
             return res.render("addProduct", { prdctData, message: "Price of the product should be greater than zero" });
-        }        
+        }
 
         // checking the quantity should be atleast one
         if (parsedPrdctQuantity < 1) {
@@ -122,16 +123,25 @@ const addProduct = async (req, res) => {
             return res.render("addProduct", { prdctData, message: "Quantity of the product should be at least one" });
         }
 
+        // checking if the image files are available
+        if (!imgFiles || imgFiles.length === 0) {
+            const prdctData = await Product.find({});
+            return res.render("addProduct", { prdctData, message: "Please enter the product image/images" });
+        }
+
+        const prdctImage = imgFiles.map(img => img.originalname);
+
         const product = new Product({
             prdctName: prdctName,
             prdctDescription: prdctDescription,
             prdctPrice: parsedPrdctPrice,
-            prdctQuantity: parsedPrdctQuantity
+            prdctQuantity: parsedPrdctQuantity,
+            prdctImage: prdctImage
         });
 
         const prdctData = await product.save();
 
-        if(prdctData){
+        if (prdctData) {
             res.redirect("/admin/productsList");
         }
 
@@ -148,7 +158,7 @@ const listProduct = async (req, res) => {
 
         const prdctId = req.params.prdctId;
         await Product.findByIdAndUpdate(prdctId, { is_listed: true });
-        res.redirect("/admin/productsList");   
+        res.redirect("/admin/productsList");
 
     } catch (error) {
         console.log(error.message);
@@ -163,7 +173,7 @@ const unlistProduct = async (req, res) => {
 
         const prdctId = req.params.prdctId;
         await Product.findByIdAndUpdate(prdctId, { is_listed: false });
-        res.redirect("/admin/productsList");   
+        res.redirect("/admin/productsList");
 
     } catch (error) {
         console.log(error.message);
@@ -177,7 +187,8 @@ const addProductLoad = async (req, res) => {
     try {
 
         const prdctData = await Product.find({});
-        res.render("addProduct", {prdctData});
+        const cateData = await Category.find({});
+        res.render("addProduct", { prdctData, cateData });
 
     } catch (error) {
         console.log(error.message);
@@ -207,7 +218,7 @@ const editProduct = async (req, res) => {
 // update category
 const updateProduct = async (req, res) => {
     try {
-        
+
         const prdctId = req.body.prdctId;
         const prdctData = await Category.findOne({ _id: prdctId });
 
@@ -216,6 +227,7 @@ const updateProduct = async (req, res) => {
         const prdctPrice = req.body.prdctPrice;
         const prdctQuantity = req.body.prdctQuantity;
         //const cateId = req.body.cateId;
+        const imgFiles = req.files;
 
         // checking valid product name / space check
         if (!prdctName || /^\s*$/.test(prdctName)) {
@@ -234,7 +246,7 @@ const updateProduct = async (req, res) => {
         if (parsedPrdctPrice <= 0) {
             const prdctData = await Product.find({});
             return res.render("editProduct", { prdctData, message: "Price of the product should be greater than zero" });
-        }        
+        }
 
         // checking the quantity should be atleast one
         if (parsedPrdctQuantity < 1) {
@@ -242,7 +254,15 @@ const updateProduct = async (req, res) => {
             return res.render("editProduct", { prdctData, message: "Quantity of the product should be at least one" });
         }
 
-        await Product.findByIdAndUpdate({ _id: prdctId }, { $set: { prdctName: req.body.prdctName, prdctDescription: req.body.prdctDescription, prdctPrice: req.body.parsedPrdctPrice, prdctQuantity: req.body.parsedPrdctQuantity } });
+        // checking if the image files are available
+        if (!imgFiles || imgFiles.length === 0) {
+            const prdctData = await Product.find({});
+            return res.render("addProduct", { prdctData, message: "Please enter the product image/images" });
+        }
+
+        const prdctImage = imgFiles.map(img => img.originalname);
+
+        await Product.findByIdAndUpdate({ _id: prdctId }, { $set: { prdctName: req.body.prdctName, prdctDescription: req.body.prdctDescription, prdctPrice: req.body.parsedPrdctPrice, prdctQuantity: req.body.parsedPrdctQuantity, prdctImage: prdctImage } });
 
         res.redirect("/admin/productsList");
 
@@ -490,7 +510,7 @@ module.exports = {
     ordersLoad,
     customerListLoad,
     blockUser,
-    unblockUser, 
+    unblockUser,
     adminLogout
 
 }

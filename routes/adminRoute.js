@@ -1,5 +1,6 @@
 const express = require("express");
 const admin_route = express();
+const path = require("path");
 
 const session = require("express-session");
 require("dotenv").config();
@@ -18,6 +19,22 @@ const adminAuthentication = require('../middleware/adminAuthentication');
 admin_route.set('view engine', 'ejs');
 admin_route.set('views','./views/admin');
 
+// for image
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, "../public/uploads"))
+    },
+    filename: (req, file, cb) => {
+        console.log(file);
+        const name = Date.now()+'-'+file.originalname;
+        cb(null, name);
+    }
+});
+
+const upload = multer({storage: storage});
+
 // access controllers
 const adminController = require("../controllers/adminController");
 
@@ -32,14 +49,14 @@ admin_route.get('/adminHome', adminAuthentication.isAdminLogin, adminController.
 // products routes
 admin_route.get('/productsList', adminAuthentication.isAdminLogin, adminController.productListLoad);
 admin_route.get('/addProduct', adminAuthentication.isAdminLogin, adminController.addProductLoad);
-admin_route.post('/addProduct', adminController.addProduct);
+admin_route.post('/addProduct', upload.array("prdctImage"), adminController.addProduct);
 admin_route.get('/listProduct/:prdctId', adminAuthentication.isAdminLogin, adminController.listProduct);
 admin_route.get('/unlistProduct/:prdctId', adminAuthentication.isAdminLogin, adminController.unlistProduct);
 admin_route.get('/editProduct', adminAuthentication.isAdminLogin, adminController.editProduct);
 admin_route.post('/editProduct', adminController.updateProduct);
 
 // category routes
-admin_route.get('/addCategory', adminAuthentication.isAdminLogin, adminController.categoryLoad);
+admin_route.get('/addCategory', adminAuthentication.isAdminLogin, adminController.categoryLoad); 
 admin_route.get('/listCategory/:cateId', adminAuthentication.isAdminLogin, adminController.listCategory);
 admin_route.get('/unlistCategory/:cateId', adminAuthentication.isAdminLogin, adminController.unlistCategory);
 admin_route.post('/addCategory', adminController.addCategory);

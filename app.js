@@ -20,6 +20,7 @@ app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({extended:true}));
 
 app.use(express.static(path.join(__dirname,'public')))
+app.use(express.static(path.join(__dirname,'uploads')))
 
 // for user route
 const userRoute = require("./routes/userRoute");

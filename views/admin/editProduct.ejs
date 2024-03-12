@@ -106,7 +106,7 @@
                             <h4>Basic</h4>
                         </div>
                         <div class="card-body">
-                            <form action="" method="post">
+                            <form action="/admin/editProduct" method="post" enctype="multipart/form-data">
                                 <div class="mb-4">
                                     <label for="product_name" class="form-label" >Product title</label>
                                     <input type="text" placeholder="Type here" name="prdctName" value="<%=prdctData.prdctName%>" class="form-control" id="product_name" />
@@ -139,7 +139,6 @@
                                         <button class="btn btn-md rounded font-sm hover-up" name="id" type="submit"><a href="/admin/updateProduct"></a>Submit</button>
                                     </div>
                                 </div>
-                            </form>
                         </div>
                     </div>
                     <!-- card end// -->
@@ -152,13 +151,13 @@
                         </div>
                         <div class="card-body">
                             <div class="input-upload">
-                                <img src="assets/imgs/theme/upload.svg" alt="" />
-                                <input class="form-control" type="file" />
+                                <input class="form-control" value="<%= prdctData.prdctImage %>" type="file" multiple />
                             </div>
                         </div>
                     </div>
                     <!-- card end// -->                   
                 </div>
+            </form>
             </div>
         </section>
         <!-- content-main end// -->

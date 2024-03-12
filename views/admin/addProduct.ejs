@@ -106,7 +106,7 @@
                             <h4>Basic</h4>
                         </div>
                         <div class="card-body">
-                            <form action="" method="post">
+                            <form action="/admin/addProduct" method="post" enctype="multipart/form-data">
                                 <div class="mb-4">
                                     <label for="product_name" class="form-label" >Product title</label>
                                     <input type="text" placeholder="Type here" name="prdctName" class="form-control" id="product_name" required/>
@@ -130,15 +130,22 @@
                                             <input placeholder="1" type="text" name="prdctQuantity" class="form-control" required/>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4">
-                                        <label class="form-label">Category</label>
-                                        <input placeholder="Type here" type="text" name="prdctCategory" class="form-control" required/>
-                                    </div>
+                                    
+                                            <div class="col-lg-4">
+                                                <label class="form-label">Category</label>
+                                                <select class="form-select">
+                                                    <% cateData.forEach(cate => { %>
+                                                        <% if(cate.is_listed === true){%>
+                                                            <option><%= cate.cateName %></option>
+                                                        <%}%>
+                                                    <% }) %>
+                                                </select>
+                                            </div>
+                                       
                                     <div>
                                         <button class="btn btn-md rounded font-sm hover-up" type="submit">Add</button>
                                     </div>
                                 </div>
-                            </form>
                         </div>
                     </div>
                     <!-- card end// -->
@@ -151,10 +158,11 @@
                         </div>
                         <div class="card-body">
                             <div class="input-upload">
-                                <img src="assets/imgs/theme/upload.svg" alt="" />
-                                <input class="form-control" type="file" />
+                                <!-- <img src="assets/imgs/theme/upload.svg" alt="" /> -->
+                                <input class="form-control" name="prdctImage" type="file" multiple />
                             </div>
                         </div>
+                        </form>
                     </div>
                     <!-- card end// -->                   
                 </div>
