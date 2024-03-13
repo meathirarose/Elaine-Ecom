@@ -74,9 +74,9 @@ const homeLoad = async (req, res) => {
 const productListLoad = async (req, res) => {
 
     try {
-
+        const cateData = await Category.find({});
         const prdctData = await Product.find({});
-        res.render("productsList", { prdctData });
+        res.render("productsList", { prdctData, cateData });
 
     } catch (error) {
         console.log(error.message);
@@ -128,6 +128,7 @@ const addProduct = async (req, res) => {
             const prdctData = await Product.find({});
             return res.render("addProduct", { prdctData, message: "Please enter the product image/images" });
         }
+        
         const prdctImage = imgFiles.map(img => img.filename);
 
         const product = new Product({

@@ -220,7 +220,31 @@ const allProductsListLoad = async (req, res) => {
     try {
         
         const productsData = await Product.find({});
-        res.render("allProductsList", {productsData});
+        res.render("userAllProductsList", {productsData});
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+// product details load
+const productDetailsLoad = async (req, res) => {
+
+    try {
+
+        const productId = req.query.productId;
+
+        //for getting the product data with the particular id
+        const productDatabyId = await Product.findById({ _id: productId });
+
+        // for getting product images only without id 
+        const productImagebyId = await Product.findById({ _id: productId },{prdctImage:1, _id:0});
+
+        // for getting the images only as an array
+        const productImagesArray = productImagebyId.prdctImage.map(image => `${image}`);
+
+        res.render("userProductDetails", {productDatabyId, productImagebyId, productImagesArray});
 
     } catch (error) {
         console.log(error.message);
@@ -251,5 +275,6 @@ module.exports = {
     failureGoogleLogin,
     userHomeLoad,
     allProductsListLoad,
+    productDetailsLoad,
     userLogout
 }

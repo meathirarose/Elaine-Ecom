@@ -123,7 +123,7 @@
                                             <td><%= index+1 %></td>
                                             <td width="15%">
                                                     <div class="left">
-                                                        <img src="<%= prdct.prdctImage[0] %>"  alt="Userpic" />
+                                                        <img src="/uploads/<%= prdct.prdctImage[0] %>"  alt="Userpic" style="height: 60px; width: 60px;"/>
                                                     </div>
                                                 </a>
                                             </td>
@@ -131,7 +131,7 @@
                                             <td ><%= prdct.prdctDescription %></td>
                                             <td class="text-center"><%= prdct.prdctPrice %></td>
                                             <td class="text-center"><%= prdct.prdctQuantity %></td>
-                                            <td class="text-center"><%= prdct.prdctCategory %></td>
+                                            <td class="text-center"><%= prdct.cateName %></td>
                                             <td>
                                                 <% if(prdct.is_listed === false) { %>
                                                 <span class="badge rounded-pill alert-danger ">Unlisted</span>
