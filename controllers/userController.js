@@ -220,7 +220,7 @@ const allProductsListLoad = async (req, res) => {
     try {
         
         const productsData = await Product.find({});
-        res.render("userAllProductsList", {productsData});
+        res.render("products", {productsData});
 
     } catch (error) {
         console.log(error.message);
@@ -244,7 +244,7 @@ const productDetailsLoad = async (req, res) => {
         // for getting the images only as an array
         const productImagesArray = productImagebyId.prdctImage.map(image => `${image}`);
 
-        res.render("userProductDetails", {productDatabyId, productImagebyId, productImagesArray});
+        res.render("productDetails", {productDatabyId, productImagebyId, productImagesArray});
 
     } catch (error) {
         console.log(error.message);

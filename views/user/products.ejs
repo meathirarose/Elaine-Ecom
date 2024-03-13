@@ -82,7 +82,7 @@
                                     </li>
 
                                     <li><!-- start of pages -->
-                                        <a href="/userAllProductsList" class="sf">Products</a>
+                                        <a href="/products" class="sf">Products</a>
                                     </li><!-- end of pages -->
 
                                     <li><!-- start of pages -->
@@ -151,7 +151,7 @@
                             <% productsData.forEach(product => { %>
                                 <div class="product product-4 text-center">
                                     <figure class="product-media">
-                                        <a href="userProductDetails?productId=<%=product._id%>">
+                                        <a href="productDetails?productId=<%=product._id%>">
 
                                             <img src="/uploads/<%= product.prdctImage[0] %>" alt="Product image" class="product-image">
                                         </a>
@@ -166,7 +166,7 @@
                                     </figure><!-- End .product-media -->
         
                                     <div class="product-body">
-                                        <h3 class="product-title"><a href="userAllProductsList"><%= product.prdctName %></a></h3><!-- End .product-title -->
+                                        <h3 class="product-title"><a href="products"><%= product.prdctName %></a></h3><!-- End .product-title -->
                                         <div class="product-price">
                                            <p>₹<%= product.prdctPrice %></p>
                                         </div><!-- End .product-price -->
