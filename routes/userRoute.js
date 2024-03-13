@@ -67,6 +67,9 @@ user_route.get("/resendOtp", authentication.isLogout, otpController.resendOtp);
 // load home page route
 user_route.get("/userHome", authentication.isLogin, accessAuth.accessUser, userController.userHomeLoad);
 
+// load product list route
+user_route.get("/allProductsList", authentication.isLogin, userController.allProductsListLoad);
+
 // user logout route
 user_route.get("/userLogout", authentication.isLogin, userController.userLogout);
 

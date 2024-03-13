@@ -128,8 +128,7 @@ const addProduct = async (req, res) => {
             const prdctData = await Product.find({});
             return res.render("addProduct", { prdctData, message: "Please enter the product image/images" });
         }
-
-        const prdctImage = imgFiles.map(img => img.originalname);
+        const prdctImage = imgFiles.map(img => img.filename);
 
         const product = new Product({
             prdctName: prdctName,
@@ -325,7 +324,7 @@ const addCategory = async (req, res) => {
         const lowerCase = cateName.toLowerCase();
 
         // checking valid category name
-        if (!cateName || /^\s*$/.test(cateName)) {
+        if (!cateName || /^[a-zA-Z][a-zA-Z\s]*[a-zA-Z]$/.test(cateName)) {
             const cateData = await Category.find({});
             return res.render("addCategory", { cateData, message: "Enter a valid name" });
         }

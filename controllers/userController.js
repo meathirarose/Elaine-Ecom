@@ -1,4 +1,5 @@
 const User = require("../models/userdbModel");
+const Product =require("../models/productdbModel");
 const bcrypt = require("bcrypt");
 const otpController = require("../auth/otpMailVerify")
 
@@ -213,6 +214,20 @@ const userHomeLoad = async (req, res) => {
     }
 }
 
+// all product list
+const allProductsListLoad = async (req, res) => {
+
+    try {
+        
+        const productsData = await Product.find({});
+        res.render("allProductsList", {productsData});
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
 // logout user
 const userLogout = async (req, res) => {
     try {
@@ -235,5 +250,6 @@ module.exports = {
     successGoogleLogin,
     failureGoogleLogin,
     userHomeLoad,
+    allProductsListLoad,
     userLogout
 }
