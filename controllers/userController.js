@@ -196,7 +196,7 @@ const successGoogleLogin = async (req, res) =>{
 const failureGoogleLogin = async (req, res) =>{
     try {
 
-        res.render("userLogin", {message: "errorr"});
+        res.render("userLogin", {message: "Some error occured..!"});
         
     } catch (error) {
         console.log(error.message);

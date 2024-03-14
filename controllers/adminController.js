@@ -201,15 +201,22 @@ const addProductLoad = async (req, res) => {
 const editProduct = async (req, res) => {
     try {
 
+        const cateData = await Category.find({});
+
         const prdctId = req.query.prdctId;
+
+        //for getting the product data with the particular id
         const prdctData = await Product.findById({ _id: prdctId });
-        console.log(prdctData);
+
+        // for getting product images only without id
         const productImagebyId = await Product.findById({ _id: prdctId },{prdctImage:1, _id: 0});
 
+        // for getting the images only as an array
         const productImagesArray = productImagebyId.prdctImage.map(image => `${image}`);
-        console.log(productImagesArray);
+
+
         if (prdctData) {
-            res.render("editProduct", { prdctData, productImagesArray });
+            res.render("editProduct", { prdctData, cateData, productImagesArray });
         }
         else {
             res.redirect("/admin/productsList");
@@ -223,25 +230,30 @@ const editProduct = async (req, res) => {
 // update category
 const updateProduct = async (req, res) => {
     try {
+        
+        const { prdctId, prdctName, prdctDescription, prdctPrice, prdctQuantity, imgFiles } = req.body;
 
-        const prdctId = req.body.prdctId;
-        const prdctData = await Category.findOne({ _id: prdctId });
+        // for getting product images only without id
+        const productImagebyId = await Product.findById({ _id: prdctId },{prdctImage:1, _id: 0});
 
-        const prdctName = req.body.prdctName;
-        const prdctDescription = req.body.prdctDescription;
-        const prdctPrice = req.body.prdctPrice;
-        const prdctQuantity = req.body.prdctQuantity;
-        //const cateId = req.body.cateId;
-        const imgFiles = req.files;
+        // for getting the images only as an array
+        const productImagesArray = productImagebyId.prdctImage.map(image => `${image}`);
+
+        //for getting the product data with the particular id
+        const prdctData = await Product.findOne({ _id: req.body.prdctId });
+        
+        if (!prdctData) {
+            return res.status(404).send("Product not found");
+        }
 
         // checking valid product name / space check
         if (!prdctName || /^\s*$/.test(prdctName)) {
-            return res.render("editProduct", { prdctData, message: "Enter a valid product name" });
+            return res.render("editProduct", { prdctData, productImagesArray, message: "Enter a valid product name" });
         }
 
         // checking valid category description / space check
         if (!prdctDescription || /^\s*$/.test(prdctDescription)) {
-            return res.render("editProduct", { prdctData, message: "Enter a valid product description" });
+            return res.render("editProduct", { prdctData, productImagesArray, message: "Enter a valid product description" });
         }
 
         const parsedPrdctPrice = parseFloat(prdctPrice);
@@ -250,31 +262,57 @@ const updateProduct = async (req, res) => {
         // checking the price should not be less than 0
         if (parsedPrdctPrice <= 0) {
             const prdctData = await Product.find({});
-            return res.render("editProduct", { prdctData, message: "Price of the product should be greater than zero" });
+            return res.render("editProduct", { prdctData, productImagesArray, message: "Price of the product should be greater than zero" });
         }
 
         // checking the quantity should be atleast one
         if (parsedPrdctQuantity < 1) {
             const prdctData = await Product.find({});
-            return res.render("editProduct", { prdctData, message: "Quantity of the product should be at least one" });
+            return res.render("editProduct", { prdctData, productImagesArray, message: "Quantity of the product should be at least one" });
         }
 
-        // checking if the image files are available
-        if (!imgFiles || imgFiles.length === 0 || imgFiles < 4) {
-            const prdctData = await Product.find({});
-            return res.render("addProduct", { prdctData, message: "Please enter the product image/images" });
-        }
 
-        const prdctImage = imgFiles.map(img => img.filename);
 
-        await Product.findByIdAndUpdate({ _id: prdctId }, { $set: { prdctName: req.body.prdctName, prdctDescription: req.body.prdctDescription, prdctPrice: req.body.parsedPrdctPrice, prdctQuantity: req.body.parsedPrdctQuantity, prdctImage: prdctImage } });
+   
 
+        const updatedProduct = await Product.findByIdAndUpdate(prdctId, {
+            prdctName,
+            prdctDescription,
+            prdctPrice: parsedPrdctPrice,
+            prdctQuantity: parsedPrdctQuantity,
+           
+        });
+        
         res.redirect("/admin/productsList");
 
     } catch (error) {
         console.log(error.message);
     }
 
+}
+
+// deleting product image
+const deleteProductImage = async (req, res) =>{
+    try {
+        
+        const imageId = req.query.imageId;
+        
+        const prdctData = await Product.findOne({prdctImage: imageId});
+        
+        // for getting product images only without id
+        const productImagebyId = await Product.findOne({prdctImage: imageId },{prdctImage:1, _id: 0});
+
+        // for getting the images only as an array
+        const productImagesArray = productImagebyId.prdctImage.map(image => `${image}`);
+
+        await Product.updateOne({prdctImage: imageId}, {$pull:{prdctImage:imageId} });
+        
+
+        res.render("editProduct", {prdctData, productImagesArray, message: "image deleted"});
+
+    } catch (error) {
+        console.log(error.message);
+    }
 }
 
 //--------------------------------------------------------end-products-----------------------------------------------------//
@@ -506,6 +544,7 @@ module.exports = {
     addProduct,
     editProduct,
     updateProduct,
+    deleteProductImage,
     categoryLoad,
     listCategory,
     unlistCategory,

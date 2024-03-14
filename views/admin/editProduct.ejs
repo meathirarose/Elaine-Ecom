@@ -47,17 +47,14 @@
                 </li>
                                                
             </ul>                      
-        </nav>
+        </nav> 
     
     </aside>
 
     <main class="main-wrap">
         <header class="main-header navbar">
             <div class="col-search">
-                <form class="searchform">
-                    <div class="input-group">
-                    </div>
-                </form>               
+                        
             </div>
             <div class="col-nav">
                 <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"><i class="material-icons md-apps"></i></button>
@@ -70,7 +67,7 @@
                     </li>
                     
                     <li class="dropdown nav-item">
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="assets/imgs/people/avatar-2.png" alt="User" /></a>
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/user/assets/imgs/people/avatar-2.png" alt="User" /></a>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
                             <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
                             <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
@@ -88,7 +85,7 @@
             <div class="row">
                 <div class="col-9">
                     <div class="content-header">
-                        <h2 class="content-title">Edit Product</h2>
+                        <h2 class="content-title">Edit & Update Product</h2>
                     </div>
                 </div>
                 <div class="d-flex message m-3"> 
@@ -102,82 +99,79 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="card mb-4">
-                        <div class="card-header">
-                            <h4>Basic</h4>
-                        </div>
+
                         <div class="card-body">
-                            <form action="/admin/editProduct" method="post" enctype="multipart/form-data">
+                            <form action="" method="post">
                                 <div class="mb-4">
-                                    <label for="product_name" class="form-label" >Product title</label>
-                                    <input type="text" placeholder="Type here" name="prdctName" value="<%=prdctData.prdctName%>" class="form-control" id="product_name" />
+                                    <label for="product_name" class="form-label">Product title</label>
+                                    <input type="text" placeholder="Type here" class="form-control" name="prdctName" id="product_name" value="<%= prdctData.prdctName %>" />
                                 </div>
                                 <div class="mb-4">
-                                    <label class="form-label">Full description</label>
-                                    <input placeholder="Type here" name="prdctDescription" value="<%=prdctData.prdctDescription%>" class="form-control" rows="4">
+                                    <label class="form-label">Product description</label>
+                                    <input placeholder="Type here" id="product_description" name="prdctDescription" value="<%= prdctData.prdctDescription %>" class="form-control" rows="4">
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <div class="mb-4">
                                             <label class="form-label">Regular price</label>
                                             <div class="row gx-2">
-                                                <input placeholder="₹" type="text" name="prdctPrice" value="<%= prdctData.prdctPrice %>" class="form-control" />
+                                                <input placeholder="₹" type="number" name="prdctPrice" value="<%= prdctData.prdctPrice %>" class="form-control" />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="mb-4">
                                             <label class="form-label">Quantity</label>
-                                            <input placeholder="1" type="text" name="prdctQuantity" value="<%= prdctData.prdctQuantity %>" class="form-control" />
+                                            <input placeholder="" type="number" name="prdctQuantity" value="<%= prdctData.prdctQuantity %>" class="form-control" />
                                         </div>
                                     </div>
-                                    <div class="col-lg-4">
-                                        <label class="form-label">Category</label>
-                                        <input placeholder="Type here" type="text" name="prdctCategory" value="<%= prdctData.prdctCategory %>" class="form-control" />
-                                    </div>
                                     
+                                        <div class="col-lg-4">
+                                            <label class="form-label">Category</label>
+                                        </div>
                                 </div>
+                                <input type="text" required name="prdctId" value="<%= prdctData._id %>" hidden>
+
+                                <button class="btn btn-md rounded font-sm hover-up" type="submit">submit</button>
+                            </form>
                         </div>
                     </div>
                     <!-- card end// -->
-                    
                 </div>
                 <div class="col-lg-3 ">
                     <div class="card mb-4 ">
                         <div class="card-header">
                             <h4>Media</h4>
                         </div>
-                        <% productImagesArray.forEach(images =>{%>
-                        <div class="d-flex">
-                            <div class="m-2 ">
-                                <img src="/uploads/<%= images %>"  alt="Userpic" style="height: 75px; width: 75px;"/>
+                        <% productImagesArray.forEach(images=>{%>
+                            <div class="d-flex">
+                                <div class="m-2 ">
+                                    <img src="/uploads/<%= images %>" alt="Userpic" style="height: 75px; width: 75px;" />
+                                </div>
+            
+                                <div class="card-body">
+                                    <div class="input-upload">
+                                        <a href="/admin/deleteProductImage?imageId=<%=images%>">Delete</a>
+                                    </div>
+                                </div>
                             </div>
-                           
-                        <div class="card-body">
-                            <div class="input-upload">
-                                <button class="btn btn-md rounded font-sm hover-up">Delete</button>
-                            </div>
-                        </div>
-                    </div>
-                        <%});%>
-                    </div><!-- card end// -->                   
+                            <%});%>
+                    </div><!-- card end// -->
                 </div>
-                <div>
-                    <input type="hidden" required name="prdctId" value="<%= prdctData._id %>">
-                    <button class="btn btn-md rounded font-sm hover-up mt-1" name="id" type="submit"><a href="/admin/updateProduct"></a>Submit</button>
                 </div>
-            </form>
             </div>
         </section>
         <!-- content-main end// -->
         
     </main>
-    <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
-    <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/vendors/select2.min.js"></script>
-    <script src="assets/js/vendors/perfect-scrollbar.js"></script>
-    <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
+   
+    <script src="/user/assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/user/assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/user/assets/js/vendors/select2.min.js"></script>
+    <script src="/user/assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/user/assets/js/vendors/jquery.fullscreen.min.js"></script>
     <!-- Main Script -->
-    <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
+    <script src="/user/assets/js/main.js?v=1.1" type="text/javascript"></script>
 
 
 <%-include("../layout/admin/footer")-%>
