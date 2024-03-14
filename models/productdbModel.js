@@ -21,6 +21,12 @@ const productSchema = mongoose.Schema({
         default: 1
     },
 
+    categoryId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Category",
+        default: " "
+    },
+
     prdctImage: {
         type: Array,
         default: " "

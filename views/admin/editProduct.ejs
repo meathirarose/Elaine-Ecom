@@ -134,28 +134,36 @@
                                         <label class="form-label">Category</label>
                                         <input placeholder="Type here" type="text" name="prdctCategory" value="<%= prdctData.prdctCategory %>" class="form-control" />
                                     </div>
-                                    <div>
-                                        <input type="hidden" required name="prdctId" value="<%= prdctData._id %>">
-                                        <button class="btn btn-md rounded font-sm hover-up" name="id" type="submit"><a href="/admin/updateProduct"></a>Submit</button>
-                                    </div>
+                                    
                                 </div>
                         </div>
                     </div>
                     <!-- card end// -->
                     
                 </div>
-                <div class="col-lg-3">
-                    <div class="card mb-4">
+                <div class="col-lg-3 ">
+                    <div class="card mb-4 ">
                         <div class="card-header">
                             <h4>Media</h4>
                         </div>
+                        <% productImagesArray.forEach(images =>{%>
+                        <div class="d-flex">
+                            <div class="m-2 ">
+                                <img src="/uploads/<%= images %>"  alt="Userpic" style="height: 75px; width: 75px;"/>
+                            </div>
+                           
                         <div class="card-body">
                             <div class="input-upload">
-                                <input class="form-control" value="<%= prdctData.prdctImage %>" type="file" multiple />
+                                <button class="btn btn-md rounded font-sm hover-up">Delete</button>
                             </div>
                         </div>
                     </div>
-                    <!-- card end// -->                   
+                        <%});%>
+                    </div><!-- card end// -->                   
+                </div>
+                <div>
+                    <input type="hidden" required name="prdctId" value="<%= prdctData._id %>">
+                    <button class="btn btn-md rounded font-sm hover-up mt-1" name="id" type="submit"><a href="/admin/updateProduct"></a>Submit</button>
                 </div>
             </form>
             </div>
