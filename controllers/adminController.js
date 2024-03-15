@@ -74,8 +74,10 @@ const homeLoad = async (req, res) => {
 const productListLoad = async (req, res) => {
 
     try {
+
+        const prdctData = await Product.find({}).populate('categoryId');
+
         const cateData = await Category.find({});
-        const prdctData = await Product.find({});
         res.render("productsList", { prdctData, cateData });
 
     } catch (error) {
@@ -89,23 +91,25 @@ const addProduct = async (req, res) => {
 
     try {
 
+        const cateData = await Category.find({});
+
         const prdctName = req.body.prdctName.trim();
         const prdctDescription = req.body.prdctDescription.trim();
         const prdctPrice = req.body.prdctPrice;
         const prdctQuantity = req.body.prdctQuantity;
         const imgFiles = req.files;
-        //const cateId = req.params.cateId;
+        // const cateId = req.query.categoryId;
 
         // checking valid product name / space check
         if (!prdctName || /^\s*$/.test(prdctName)) {
             const prdctData = await Product.find({});
-            return res.render("addProduct", { prdctData, message: "Enter a valid product name" });
+            return res.render("addProduct", { prdctData, cateData, message: "Enter a valid product name" });
         }
 
         // checking valid category description / space check
         if (!prdctDescription || /^\s*$/.test(prdctDescription)) {
             const prdctData = await Product.find({});
-            return res.render("addProduct", { prdctData, message: "Enter a valid product description" });
+            return res.render("addProduct", { prdctData, cateData, message: "Enter a valid product description" });
         }
 
         const parsedPrdctPrice = parseFloat(prdctPrice);
@@ -114,19 +118,19 @@ const addProduct = async (req, res) => {
         // checking the price should not be less than 0
         if (parsedPrdctPrice <= 0) {
             const prdctData = await Product.find({});
-            return res.render("addProduct", { prdctData, message: "Price of the product should be greater than zero" });
+            return res.render("addProduct", { prdctData, cateData, message: "Price of the product should be greater than zero" });
         }
 
         // checking the quantity should be atleast one
         if (parsedPrdctQuantity < 1) {
             const prdctData = await Product.find({});
-            return res.render("addProduct", { prdctData, message: "Quantity of the product should be at least one" });
+            return res.render("addProduct", { prdctData, cateData, message: "Quantity of the product should be at least one" });
         }
 
         // checking if the image files are available
         if (!imgFiles || imgFiles.length === 0 || imgFiles.length < 4) {
             const prdctData = await Product.find({});
-            return res.render("addProduct", { prdctData, message: "Please enter the product image/images" });
+            return res.render("addProduct", { prdctData, cateData, message: "Please enter atleast 4 images" });
         }
          
         const prdctImage = imgFiles.map(img => img.filename);
@@ -136,7 +140,7 @@ const addProduct = async (req, res) => {
             prdctDescription: prdctDescription,
             prdctPrice: parsedPrdctPrice,
             prdctQuantity: parsedPrdctQuantity,
-            //prdctCategory: prdctCategory,
+            // categoryId: cateId,
             prdctImage: prdctImage
         });
 
@@ -231,6 +235,8 @@ const editProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
     try {
         
+        const cateData = await Category.find({});
+
         const { prdctId, prdctName, prdctDescription, prdctPrice, prdctQuantity, imgFiles } = req.body;
 
         // for getting product images only without id
@@ -248,12 +254,13 @@ const updateProduct = async (req, res) => {
 
         // checking valid product name / space check
         if (!prdctName || /^\s*$/.test(prdctName)) {
-            return res.render("editProduct", { prdctData, productImagesArray, message: "Enter a valid product name" });
+
+            return res.render("editProduct", { prdctData, productImagesArray, cateData, message: "Enter a valid product name" });
         }
 
         // checking valid category description / space check
         if (!prdctDescription || /^\s*$/.test(prdctDescription)) {
-            return res.render("editProduct", { prdctData, productImagesArray, message: "Enter a valid product description" });
+            return res.render("editProduct", { prdctData, productImagesArray, cateData, message: "Enter a valid product description" });
         }
 
         const parsedPrdctPrice = parseFloat(prdctPrice);
@@ -262,21 +269,29 @@ const updateProduct = async (req, res) => {
         // checking the price should not be less than 0
         if (parsedPrdctPrice <= 0) {
             const prdctData = await Product.find({});
-            return res.render("editProduct", { prdctData, productImagesArray, message: "Price of the product should be greater than zero" });
+            return res.render("editProduct", { prdctData, productImagesArray, cateData, message: "Price of the product should be greater than zero" });
         }
 
         // checking the quantity should be atleast one
         if (parsedPrdctQuantity < 1) {
             const prdctData = await Product.find({});
-            return res.render("editProduct", { prdctData, productImagesArray, message: "Quantity of the product should be at least one" });
+            return res.render("editProduct", { prdctData, productImagesArray, cateData, message: "Quantity of the product should be at least one" });
         } 
+
+        // // checking if the image files are available
+        // if (!imgFiles || imgFiles.length === 0 || imgFiles.length < 4) {
+        //     const prdctData = await Product.find({});
+        //     return res.render("editProduct", { prdctData, productImagesArray, cateData, message: "Please enter atleast 4 images" });
+        // }
+                 
+        // const prdctImage = imgFiles.map(img => img.filename);
 
         const updatedProduct = await Product.findByIdAndUpdate(prdctId, {
             prdctName,
             prdctDescription,
             prdctPrice: parsedPrdctPrice,
             prdctQuantity: parsedPrdctQuantity,
-           
+            // prdctImage: prdctImage
         });
         
         res.redirect("/admin/productsList");
@@ -291,6 +306,8 @@ const updateProduct = async (req, res) => {
 const deleteProductImage = async (req, res) =>{
     try {
         
+        const cateData = await Category.find({});
+
         const imageId = req.query.imageId;
         
         const prdctData = await Product.findOne({prdctImage: imageId});
@@ -301,10 +318,9 @@ const deleteProductImage = async (req, res) =>{
         // for getting the images only as an array
         const productImagesArray = productImagebyId.prdctImage.map(image => `${image}`);
 
-        await Product.updateOne({prdctImage: imageId}, {$pull:{prdctImage:imageId} });
+        await Product.updateOne({prdctImage: imageId}, {$pull:{prdctImage: imageId}});
         
-
-        res.render("editProduct", {prdctData, productImagesArray, message: "image deleted"});
+        res.render("editProduct", {prdctData, productImagesArray, cateData, message: "image deleted"});
 
     } catch (error) {
         console.log(error.message);
@@ -364,11 +380,10 @@ const addCategory = async (req, res) => {
         const lowerCase = cateName.toLowerCase();
 
         // checking valid category name
-        if (!cateName || /^[a-zA-Z][a-zA-Z\s]*[a-zA-Z]$/.test(cateName)) {
+        if (!cateName || /^\s*$/.test(cateName)) {
             const cateData = await Category.find({});
             return res.render("addCategory", { cateData, message: "Enter a valid name" });
         }
-
         const regex = new RegExp("^" + lowerCase + "$", "i");
         const existingCategory = await Category.findOne({ cateName: regex });
 
@@ -393,7 +408,7 @@ const addCategory = async (req, res) => {
 
         if (cateData) {
             const cateData = await Category.find({});
-            res.render("addCategory", { cateData, message: "category added successfully" });
+            res.render("addCategory", { cateData, message: "Category added successfully" });
         }
 
     } catch (error) {

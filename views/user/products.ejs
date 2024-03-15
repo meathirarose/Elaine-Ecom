@@ -149,10 +149,11 @@
                             }'>
     
                             <% productsData.forEach(product => { %>
+                                <% if(product.is_listed === true){%>
                                 <div class="product product-4 text-center">
                                     <figure class="product-media">
                                         <a href="productDetails?productId=<%=product._id%>">
-
+                                            
                                             <img src="/uploads/<%= product.prdctImage[0] %>" alt="Product image" class="product-image">
                                         </a>
         
@@ -173,6 +174,7 @@
                                     </div><!-- End .product-body -->
                                     
                                 </div><!-- End .product -->
+                                <%} %>
                                 <% }) %>
                               
                         </div><!-- End owl-carousel -->

@@ -25,7 +25,7 @@ const sendOtpMail = async (name, email) =>{
        
         const otp = generateOtp();
         const createdAt = new Date();
-        const expiredAt = new Date(Date.now() + (2 * 60 * 1000));
+        const expiredAt = new Date(Date.now() + (1 * 60 * 1000));
 
         await Otp.deleteOne({email:email});
                
@@ -94,7 +94,7 @@ const verifyOtp = async (req, res) =>{
     } catch (error) {
 
         console.log(error.message);
-        res.render("verifyOtp",{message: "An error occured"});   
+        res.render("verifyOtp",{ message: "An error occured"});   
            
     }
 }
@@ -111,6 +111,35 @@ const resendOtp = async (req, res) =>{
     }
 }
 
+// verify resend OTP
+const verifyResendOtp = async (req, res) => {
+
+    try {
+        
+        const {otp1,otp2,otp3,otp4,otp5,otp6} = req.body;
+
+        const otpNo = `${otp1}${otp2}${otp3}${otp4}${otp5}${otp6}`
+        
+        const otpData = await Otp.findOne({email: req.session.email});
+
+        if(otpData && otpData.otp === parseInt(otpNo)){
+
+            await User.updateOne({email:req.session.email},{is_verified: 1});
+            
+            res.render("userLogin");
+
+        }else{
+            res.render("verifyOtp", {message: "Invalid Otp"});
+        }
+
+    } catch (error) {
+
+        console.log(error.message);
+        res.render("verifyOtp",{message: "An error occured"});   
+           
+    }
+
+}
 
 // load otp page 
 const verifyOtpLoad = async (req, res) =>{
@@ -128,5 +157,6 @@ module.exports = {
     verifyOtpLoad,
     verifyOtp,
     sendOtpMail,
-    resendOtp   
+    resendOtp,
+    verifyResendOtp   
 }

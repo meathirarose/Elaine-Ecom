@@ -62,21 +62,22 @@ user_route.post("/verifyOtp", otpController.verifyOtp);
 
 // resend otp route
 user_route.get("/resendOtp", authentication.isLogout, otpController.resendOtp);
+user_route.post("/verifyResendOtp", otpController.verifyResendOtp);
 
 // load home page route
 user_route.get("/userHome", authentication.isLogin, accessAuth.accessUser, userController.userHomeLoad);
 
 // load product list route
-user_route.get("/products", authentication.isLogin, userController.allProductsListLoad);
+user_route.get("/products", authentication.isLogin, accessAuth.accessUser, userController.allProductsListLoad);
 
 // load product details
-user_route.get("/productDetails", authentication.isLogin, userController.productDetailsLoad);
+user_route.get("/productDetails", authentication.isLogin, accessAuth.accessUser, userController.productDetailsLoad);
 
 // load contact us
-user_route.get("/contactUs", authentication.isLogin, userController.contactUsLoad);
+user_route.get("/contactUs", authentication.isLogin, accessAuth.accessUser,  userController.contactUsLoad);
 
 // load my account
-user_route.get("/myAccount", authentication.isLogin, userController.myAccountLoad);
+user_route.get("/myAccount", authentication.isLogin, accessAuth.accessUser, userController.myAccountLoad);
 
 // user logout route
 user_route.get("/userLogout", authentication.isLogin, userController.userLogout);

@@ -162,17 +162,26 @@
                                 <div class="product-price">
                                     <p class="font-weight-bold">₹<%= productDatabyId.prdctPrice %></p>
                                 </div><!-- End .product-price -->
-                                <br>
+                                
                                 <div class="product-content">
                                     <p><%= productDatabyId.prdctDescription %></p>
                                 </div><!-- End .product-content -->
-
-                                <br>
+                                <div >
+                                    <% if(productDatabyId.prdctQuantity > 0){%>
+                                        <p class=" btn-product float-left">In Stock</p>
+                                        <% } else {%>
+                                        <p class=" btn-product float-left">Out Of Stock</p>
+                                        <% }  %>
+                                   </div>
+                                   <br>
+                                   <br>
+                                   <br>
                                 <div class="details-filter-row details-row-size">
                                     <label for="qty">Qty:</label>
                                     <div class="product-details-quantity">
                                         <input type="number" id="qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
                                     </div><!-- End .product-details-quantity -->
+                                    
                                 </div><!-- End .details-filter-row -->
                                 <br>
                                 <div class="product-details-action">

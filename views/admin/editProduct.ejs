@@ -128,6 +128,13 @@
                                     
                                         <div class="col-lg-4">
                                             <label class="form-label">Category</label>
+                                            <select class="form-select">
+                                                    <% cateData.forEach(cate => { %>
+                                                        <% if(cate.is_listed === true){%>
+                                                            <option ><%= cate.cateName %></option>
+                                                        <%}%>
+                                                    <% }) %>
+                                                </select>
                                         </div>
                                 </div>
                                 <input type="text" required name="prdctId" value="<%= prdctData._id %>" hidden>
@@ -158,6 +165,7 @@
                             <%});%>
                     </div><!-- card end// -->
                 </div>
+
                 </div>
             </div>
         </section>

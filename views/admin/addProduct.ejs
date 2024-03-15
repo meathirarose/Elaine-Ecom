@@ -136,7 +136,7 @@
                                                 <select class="form-select">
                                                     <% cateData.forEach(cate => { %>
                                                         <% if(cate.is_listed === true){%>
-                                                            <option ><%= cate.cateName %></option>
+                                                            <option><%= cate.cateName %></option>
                                                         <%}%>
                                                     <% }) %>
                                                 </select>
@@ -159,13 +159,12 @@
                         <div class="card-body">
                             <div class="input-upload">
                                 <!-- <img src="assets/imgs/theme/upload.svg" alt="" /> -->
-                                <input class="form-control" name="prdctImage" type="file" multiple />
+                                <input class="form-control" name="prdctImage" type="file" accept="image/*" multiple />
                             </div>
                         </div>
                         </form>
                     </div>
                     <!-- card end// -->                   
-              
                     </div>
             </div>
 
