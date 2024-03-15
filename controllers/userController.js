@@ -252,6 +252,32 @@ const productDetailsLoad = async (req, res) => {
 
 }
 
+// contact us page load
+const contactUsLoad = async (req, res) => {
+
+    try {
+        
+        res.render("contactUs");
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+// my account load
+const myAccountLoad = async (req, res) => {
+
+    try {
+        
+        res.render("myAccount");
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
 // logout user
 const userLogout = async (req, res) => {
     try {
@@ -276,5 +302,7 @@ module.exports = {
     userHomeLoad,
     allProductsListLoad,
     productDetailsLoad,
+    contactUsLoad,
+    myAccountLoad,
     userLogout
 }

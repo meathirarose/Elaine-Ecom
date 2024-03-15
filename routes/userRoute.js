@@ -5,7 +5,6 @@ require("dotenv").config();
 const passport = require("passport");
 require("../auth/passport");
 
-
 // session
 user_route.use(session({
     resave: false,
@@ -72,6 +71,12 @@ user_route.get("/products", authentication.isLogin, userController.allProductsLi
 
 // load product details
 user_route.get("/productDetails", authentication.isLogin, userController.productDetailsLoad);
+
+// load contact us
+user_route.get("/contactUs", authentication.isLogin, userController.contactUsLoad);
+
+// load my account
+user_route.get("/myAccount", authentication.isLogin, userController.myAccountLoad);
 
 // user logout route
 user_route.get("/userLogout", authentication.isLogin, userController.userLogout);

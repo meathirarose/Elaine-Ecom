@@ -269,11 +269,7 @@ const updateProduct = async (req, res) => {
         if (parsedPrdctQuantity < 1) {
             const prdctData = await Product.find({});
             return res.render("editProduct", { prdctData, productImagesArray, message: "Quantity of the product should be at least one" });
-        }
-
-
-
-   
+        } 
 
         const updatedProduct = await Product.findByIdAndUpdate(prdctId, {
             prdctName,
