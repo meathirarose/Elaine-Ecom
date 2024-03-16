@@ -54,7 +54,7 @@ admin_route.get('/listProduct/:prdctId', adminAuthentication.isAdminLogin, admin
 admin_route.get('/unlistProduct/:prdctId', adminAuthentication.isAdminLogin, adminController.unlistProduct);
 admin_route.get('/editProduct', adminAuthentication.isAdminLogin, adminController.editProduct);
 admin_route.post('/editProduct', adminController.updateProduct);
-admin_route.get('/deleteProductImage', adminAuthentication.isAdminLogin, adminController.deleteProductImage);
+admin_route.delete('/deleteProductImage', adminAuthentication.isAdminLogin, adminController.deleteProductImage);
 
 // category routes
 admin_route.get('/addCategory', adminAuthentication.isAdminLogin, adminController.categoryLoad); 
