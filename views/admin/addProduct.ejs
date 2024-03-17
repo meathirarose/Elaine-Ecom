@@ -133,10 +133,10 @@
                                     
                                             <div class="col-lg-4">
                                                 <label class="form-label">Category</label>
-                                                <select class="form-select">
+                                                <select class="form-select" name="cateId">
                                                     <% cateData.forEach(cate => { %>
                                                         <% if(cate.is_listed === true){%>
-                                                            <option><%= cate.cateName %></option>
+                                                            <option value="<%= cate._id%>"><%= cate.cateName %></option>
                                                         <%}%>
                                                     <% }) %>
                                                 </select>

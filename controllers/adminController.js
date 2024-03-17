@@ -75,8 +75,7 @@ const productListLoad = async (req, res) => {
 
     try {
 
-        const prdctData = await Product.find({}).populate('categoryId');
-
+        const prdctData = await Product.find();
         const cateData = await Category.find({});
         res.render("productsList", { prdctData, cateData });
 
@@ -98,7 +97,7 @@ const addProduct = async (req, res) => {
         const prdctPrice = req.body.prdctPrice;
         const prdctQuantity = req.body.prdctQuantity;
         const imgFiles = req.files;
-        // const cateId = req.query.categoryId;
+        const cateName = req.body.cateId;
 
         // checking valid product name / space check
         if (!prdctName || /^\s*$/.test(prdctName)) {
@@ -140,7 +139,7 @@ const addProduct = async (req, res) => {
             prdctDescription: prdctDescription,
             prdctPrice: parsedPrdctPrice,
             prdctQuantity: parsedPrdctQuantity,
-            // categoryId: cateId,
+            categoryId: cateName,
             prdctImage: prdctImage
         });
 

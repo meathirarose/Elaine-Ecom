@@ -112,7 +112,7 @@
                                         <th>Description</t>
                                         <th>Price</th>
                                         <th>Quantity</th>
-                                        <!-- <th>Category</th> -->
+                                        <th>Category</th>
                                         <th>Status</th>
                                         <th class="text-end">Action</th>
                                     </tr>
@@ -131,7 +131,7 @@
                                             <td ><%= prdct.prdctDescription %></td>
                                             <td class="text-center"><%= prdct.prdctPrice %></td>
                                             <td class="text-center"><%= prdct.prdctQuantity %></td>
-                                            <!-- <td class="text-center"><%= prdct.cateId %></td> -->
+                                            <td class="text-center"><%= prdct.categoryId.cateName %></td>
                                             <td>
                                                 <% if(prdct.is_listed === false) { %>
                                                 <span class="badge rounded-pill alert-danger ">Unlisted</span>
