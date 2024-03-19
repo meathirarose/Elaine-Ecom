@@ -75,7 +75,7 @@ const productListLoad = async (req, res) => {
 
     try {
 
-        const prdctData = await Product.find();
+        const prdctData = await Product.find().populate('categoryId');
         const cateData = await Category.find({});
         res.render("productsList", { prdctData, cateData });
 
@@ -209,7 +209,7 @@ const editProduct = async (req, res) => {
         const prdctId = req.query.prdctId;
 
         //for getting the product data with the particular id
-        const prdctData = await Product.findById({ _id: prdctId });
+        const prdctData = await Product.findById({ _id: prdctId }).populate('categoryId');
 
         // for getting product images only without id
         const productImagebyId = await Product.findById({ _id: prdctId },{prdctImage:1, _id: 0});
@@ -234,6 +234,8 @@ const editProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
     try {
         
+        const cateName = req.body.cateName;
+
         const cateData = await Category.find({});
 
         const { prdctId, prdctName, prdctDescription, prdctPrice, prdctQuantity, imgFiles } = req.body;
@@ -291,6 +293,7 @@ const updateProduct = async (req, res) => {
             prdctPrice: parsedPrdctPrice,
             prdctQuantity: parsedPrdctQuantity,
             // prdctImage: prdctImage
+            categoryId: cateName
         });
         
         res.redirect("/admin/productsList");

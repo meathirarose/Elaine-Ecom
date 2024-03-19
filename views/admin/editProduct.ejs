@@ -127,14 +127,8 @@
                                     </div>
                                     
                                         <div class="col-lg-4">
-                                            <label class="form-label">Category</label>
-                                            <select class="form-select">
-                                                    <% cateData.forEach(cate => { %>
-                                                        <% if(cate.is_listed === true){%>
-                                                            <option ><%= cate.cateName %></option>
-                                                        <%}%>
-                                                    <% }) %>
-                                                </select>
+                                            <label class="form-label" >Category</label>
+                                            <input type="text" name="cateName" value="<%= prdctData.categoryId.cateName %>" class="form-control">
                                         </div>
                                 </div>
                                 <input type="text" required name="prdctId" value="<%= prdctData._id %>" hidden>

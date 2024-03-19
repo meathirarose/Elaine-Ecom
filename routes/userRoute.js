@@ -69,9 +69,11 @@ user_route.get("/userHome", authentication.isLogin, accessAuth.accessUser, userC
 
 // load product list route
 user_route.get("/products", authentication.isLogin, accessAuth.accessUser, userController.allProductsListLoad);
-
-// load product details
 user_route.get("/productDetails", authentication.isLogin, accessAuth.accessUser, userController.productDetailsLoad);
+user_route.get("/addProductsToCart", authentication.isLogin, accessAuth.accessUser, userController.addProductsToCart);
+
+// load cart
+user_route.get("/cart", authentication.isLogin, accessAuth.accessUser, userController.cartLoad);
 
 // load contact us
 user_route.get("/contactUs", authentication.isLogin, accessAuth.accessUser,  userController.contactUsLoad);

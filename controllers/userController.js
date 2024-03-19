@@ -1,5 +1,6 @@
 const User = require("../models/userdbModel");
 const Product =require("../models/productdbModel");
+const Cart = require("../models/cartdbModel");
 const bcrypt = require("bcrypt");
 const otpController = require("../auth/otpMailVerify")
 
@@ -278,6 +279,91 @@ const myAccountLoad = async (req, res) => {
 
 }
 
+// cart load
+const cartLoad = async (req, res) => {
+    try {
+        console.log(req.session.user_id);
+        const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
+        console.log(cartData);
+
+        const productsData = await Product.find({});
+
+    res.render("cart" ,{productsData, cartData:cartData.products});
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+// add products to cart
+const addProductsToCart = async (req, res) => {
+
+    try {
+
+        const productId = req.query.productId;
+        
+        //for getting the product data with the particular id
+        const productDatabyId = await Product.findById({ _id: productId });
+
+        // for getting product images only without id 
+        const productImagebyId = await Product.findById({ _id: productId },{prdctImage:1, _id:0});
+
+        // for getting the images only as an array
+        const productImagesArray = productImagebyId.prdctImage.map(image => `${image}`);
+
+        const productsData = await Product.find({});
+
+        const cartData = await Cart.findOne({userId: req.session.user_id});
+        console.log(cartData);
+        if (cartData) {
+            const AlreadyExist = cartData.products.find((pro) => pro.productId.toString() == productId);
+            if (AlreadyExist) {
+                // If the product already exists in the cart, update its quantity
+                await Cart.findOneAndUpdate({
+                    userId: req.session.user_id,
+                    "products.productId": productId
+                }, {
+                    $inc: { "products.$.quantity": 1 } // Increment quantity by 1
+                });
+            } else {
+                // If the product doesn't exist in the cart, add it
+                await Cart.findOneAndUpdate({
+                    userId: req.session.user_id
+                }, {
+                    $push: {
+                        products: {
+                            productId: productId,
+                            quantity: 1, // Assuming initial quantity is 1
+                            productPrice: productDatabyId.price,
+                            totalPrice: productDatabyId.price // Assuming initial total price is equal to product price
+                        }
+                    }
+                });
+            }
+        } else {
+            // If the user doesn't have a cart yet, create a new cart and add the product to it
+            const newCart = new Cart({
+                userId: req.session.user_id,
+                products: [{
+                    productId: productId,
+                    quantity: 1, // Assuming initial quantity is 1
+                    productPrice: productDatabyId.price,
+                    totalPrice: productDatabyId.price // Assuming initial total price is equal to product price
+                }]
+            });
+
+            await newCart.save();
+        }      
+
+        res.render("cart",{productsData, cartData} )
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
 // logout user
 const userLogout = async (req, res) => {
     try {
@@ -302,7 +388,9 @@ module.exports = {
     userHomeLoad,
     allProductsListLoad,
     productDetailsLoad,
+    addProductsToCart,
     contactUsLoad,
     myAccountLoad,
+    cartLoad,
     userLogout
 }
