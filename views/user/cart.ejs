@@ -134,21 +134,17 @@
                                     <tbody>
                                         <tr>
                                             <% cartData.forEach(product=> { %>
-
                                                 <td class="product-col">
-
                                                     <div class="product">
                                                         <figure class="product-media">
-                                                            <a href="#">
-                                                                <img src="/uploads/<%= product.productId.prdctImage[0] %>"
+                                                            <a href="#"><img
+                                                                    src="/uploads/<%= product.productId.prdctImage[0] %>"
                                                                     alt="Product image">
                                                             </a>
                                                         </figure>
-
                                                         <a href="#">
                                                             <%= product.productId.prdctName %>
                                                         </a>
-                                                        </h3><!-- End .product-title -->
                                                     </div><!-- End .product -->
                                                 </td>
                                                 <td class="price-col">
@@ -157,18 +153,21 @@
                                                 <td class="quantity-col">
                                                     <div class="cart-product-quantity">
 
-                                                        <input type="number" class="quantity" value="1" min="1" max="10"
-                                                            step="1" data-decimals="0" required>
+                                                        <input type="number" class="quantity"
+                                                            data-product-id="<%= product.productId._id %>" value="1"
+                                                            min="1" max="10" step="1" data-decimals="0" required>
 
                                                     </div><!-- End .cart-product-quantity -->
-                                                   
+
                                                 </td>
                                                 <td class="total-col">$84.00</td>
-                                                <td class="remove-col"><button class="btn-remove"><i
-                                                            class="icon-close"></i></button></td>
+                                                <td class="remove-col"><button class="btn-remove"
+                                                        data-product-id="<%= product.productId._id %>">
+                                                        <i class="icon-close"></i>
+                                                    </button>
+                                                </td>
                                         </tr>
                                         <% }); %>
-
                                     </tbody>
                                 </table><!-- End .table table-wishlist -->
 
@@ -385,6 +384,7 @@
         </div><!-- End .mobile-menu-wrapper -->
     </div><!-- End .mobile-menu-container -->
 
+
     <!-- Plugins JS File -->
     <script src="/user/assets/js/jquery.min.js"></script>
     <script src="/user/assets/js/bootstrap.bundle.min.js"></script>
@@ -395,6 +395,35 @@
     <script src="/user/assets/js/bootstrap-input-spinner.js"></script>
     <!-- Main JS File -->
     <script src="/user/assets/js/main.js"></script>
+    <script>
 
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const removeButtons = document.querySelectorAll(".btn-remove");
+            removeButtons.forEach(button => {
+                button.addEventListener("click", function () {
+                    const productId = this.dataset.productId; // Assuming you have a data attribute with product ID
+                    // Send AJAX request to delete product
+                    fetch(`/deleteCartItem/${productId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                // Remove the product row from the cart display
+                                this.closest('tr').remove();
+                            } else {
+                                console.error('Failed to delete product');
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                });
+            });
+        });
+
+    </script>
+    
 
     <%-include("../layout/user/header")-%>

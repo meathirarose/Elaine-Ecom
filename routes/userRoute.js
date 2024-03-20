@@ -70,7 +70,9 @@ user_route.get("/userHome", authentication.isLogin, accessAuth.accessUser, userC
 // load product list route
 user_route.get("/products", authentication.isLogin, accessAuth.accessUser, userController.allProductsListLoad);
 user_route.get("/productDetails", authentication.isLogin, accessAuth.accessUser, userController.productDetailsLoad);
-user_route.get("/addProductsToCart", authentication.isLogin, accessAuth.accessUser, userController.addProductsToCart);
+user_route.post("/addProductsToCart", authentication.isLogin, accessAuth.accessUser, userController.addProductsToCart);
+user_route.delete("/deleteCartItem/:productId", authentication.isLogin, accessAuth.accessUser, userController.deleteCartItem);
+user_route.put("/updateCartQuantity/:productId", authentication.isLogin, accessAuth.accessUser, userController.updateCartQuantity);
 
 // load cart
 user_route.get("/cart", authentication.isLogin, accessAuth.accessUser, userController.cartLoad);

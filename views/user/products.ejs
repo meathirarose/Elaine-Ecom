@@ -161,8 +161,6 @@
                                                             </div><!-- End .product-action-vertical -->
 
                                                             <div class="product-action">
-                                                                <input type="text" required name="prdctId"
-                                                                    value="<%= product._id %>" hidden>
 
                                                                 <a href="addProductsToCart?productId=<%= product._id %>"
                                                                     class="btn-product btn-cart"><span>add to
@@ -424,8 +422,23 @@
             </div><!-- End .mobile-menu-wrapper -->
         </div><!-- End .mobile-menu-container -->
 
-
-
+        <!-- Add to Cart Modal -->
+        <div class="modal fade" id="addToCartModal" tabindex="-1" role="dialog" aria-labelledby="addToCartModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addToCartModalLabel">Add to Cart</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="addToCartMessage"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Plugins JS File -->
         <script src="/user/assets/js/jquery.min.js"></script>
@@ -440,5 +453,10 @@
         <script src="/user/assets/js/jquery.magnific-popup.min.js"></script>
         <script src="/user/assets/js/nouislider.min.js"></script>
         <!-- Main JS File -->
+        <script src="/user/assets/js/main.js"></script>
+
+        <!-- Sweet alert -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
         <%-include("../layout/user/footer")-%>

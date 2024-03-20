@@ -14,7 +14,12 @@ products: [{
         default: 0
     },
 
-    totalAmount: {
+    productPrice: {
+        type: Number,
+        default: 0
+    },
+
+    totalPrice: {
         type: Number,
         default: 0
     }

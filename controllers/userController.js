@@ -282,13 +282,15 @@ const myAccountLoad = async (req, res) => {
 // cart load
 const cartLoad = async (req, res) => {
     try {
-        console.log(req.session.user_id);
-        const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
-        console.log(cartData);
 
-        const productsData = await Product.find({});
 
-    res.render("cart" ,{productsData, cartData:cartData.products});
+            const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
+
+            const productsData = await Product.find({});
+    
+            res.render("cart" ,{productsData, cartData:cartData.products});
+        
+
 
     } catch (error) {
         console.log(error.message);
@@ -317,14 +319,17 @@ const addProductsToCart = async (req, res) => {
         const cartData = await Cart.findOne({userId: req.session.user_id});
         console.log(cartData);
         if (cartData) {
-            const AlreadyExist = cartData.products.find((pro) => pro.productId.toString() == productId);
-            if (AlreadyExist) {
+            const alreadyExist = cartData.products.find((pro) => pro.productId.toString() == productId);
+            if (alreadyExist) {
                 // If the product already exists in the cart, update its quantity
                 await Cart.findOneAndUpdate({
                     userId: req.session.user_id,
                     "products.productId": productId
-                }, {
-                    $inc: { "products.$.quantity": 1 } // Increment quantity by 1
+                },{
+                    $inc: {
+                        "products.$.quantity": productquantity,
+                        "products.$.totalPrice": productquantity * alreadyExist.productPrice
+                    }
                 });
             } else {
                 // If the product doesn't exist in the cart, add it
@@ -356,8 +361,58 @@ const addProductsToCart = async (req, res) => {
             await newCart.save();
         }      
 
-        res.render("cart",{productsData, cartData} )
+        res.redirect("/cart"); 
 
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+// update cart quantity
+const updateCartQuantity = async (req, res) =>{
+
+    try {
+        
+        const productId = req.params.productId;
+        console.log(productId);
+        const productQuantity = req.body.productQuantity;
+        console.log(productQuantity);
+        await Product.findByIdAndUpdate(productId, { productQuantity: productQuantity });
+
+        res.json({success: true});
+
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+// delete cart elements
+const deleteCartItem = async (req, res) => {
+
+    try {
+        
+        const userId = req.session.user_id;
+        const productId = req.params.productId;
+
+        const cartData = await Cart.findOne({userId: userId});
+
+        if(cartData){
+
+            await Cart.findOneAndUpdate(
+                {
+                    userId: userId
+                },
+                {
+                    $pull:  { products:{productId:productId}}
+                });
+
+        }
+
+        res.json({success: true})
+        
     } catch (error) {
         console.log(error.message);
     }
@@ -389,6 +444,8 @@ module.exports = {
     allProductsListLoad,
     productDetailsLoad,
     addProductsToCart,
+    updateCartQuantity,
+    deleteCartItem,
     contactUsLoad,
     myAccountLoad,
     cartLoad,
