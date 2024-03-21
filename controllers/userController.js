@@ -283,14 +283,11 @@ const myAccountLoad = async (req, res) => {
 const cartLoad = async (req, res) => {
     try {
 
-
             const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
 
             const productsData = await Product.find({});
     
             res.render("cart" ,{productsData, cartData:cartData.products});
-        
-
 
     } catch (error) {
         console.log(error.message);
@@ -339,9 +336,9 @@ const addProductsToCart = async (req, res) => {
                     $push: {
                         products: {
                             productId: productId,
-                            quantity: 1, // Assuming initial quantity is 1
+                            quantity: 1, 
                             productPrice: productDatabyId.price,
-                            totalPrice: productDatabyId.price // Assuming initial total price is equal to product price
+                            totalPrice: productDatabyId.price 
                         }
                     }
                 });
@@ -352,16 +349,15 @@ const addProductsToCart = async (req, res) => {
                 userId: req.session.user_id,
                 products: [{
                     productId: productId,
-                    quantity: 1, // Assuming initial quantity is 1
+                    quantity: 1, 
                     productPrice: productDatabyId.price,
-                    totalPrice: productDatabyId.price // Assuming initial total price is equal to product price
+                    totalPrice: productDatabyId.price 
                 }]
             });
 
             await newCart.save();
         }      
-
-        res.redirect("/cart"); 
+        res.redirect("/products");
 
     } catch (error) {
         console.log(error.message);
@@ -375,9 +371,7 @@ const updateCartQuantity = async (req, res) =>{
     try {
         
         const productId = req.params.productId;
-        console.log(productId);
         const productQuantity = req.body.productQuantity;
-        console.log(productQuantity);
         await Product.findByIdAndUpdate(productId, { productQuantity: productQuantity });
 
         res.json({success: true});
