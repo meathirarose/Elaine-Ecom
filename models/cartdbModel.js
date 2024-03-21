@@ -9,19 +9,16 @@ products: [{
         ref: "Product"
     },
 
-    productQuantity: {
-        type: Number,
-        default: 0
+    quantity: {
+        type: Number
     },
 
     productPrice: {
-        type: Number,
-        default: 0
+        type: Number
     },
 
     totalPrice: {
-        type: Number,
-        default: 0
+        type: Number
     }
 
 }],
@@ -32,8 +29,7 @@ userId: {
 },
 
 totalCost: {
-    type: Number,
-    default: 0
+    type: Number
 }
 
 

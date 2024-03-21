@@ -271,7 +271,24 @@ const myAccountLoad = async (req, res) => {
 
     try {
         
-        res.render("myAccount");
+        const userId = req.session.user_id;
+        const userData = await User.findById(userId);
+        res.render("myAccount", {userData});
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+// load and manage address
+const manageAndLoadAddress = async (req, res) => {
+
+    try {
+
+        const userId = req.session.user_id;
+        const userData = await User.findById(userId);
+        res.render("manageAddress", {userData});
 
     } catch (error) {
         console.log(error.message);
@@ -304,30 +321,27 @@ const addProductsToCart = async (req, res) => {
         
         //for getting the product data with the particular id
         const productDatabyId = await Product.findById({ _id: productId });
-
+        
         // for getting product images only without id 
         const productImagebyId = await Product.findById({ _id: productId },{prdctImage:1, _id:0});
 
         // for getting the images only as an array
         const productImagesArray = productImagebyId.prdctImage.map(image => `${image}`);
 
-        const productsData = await Product.find({});
-
         const cartData = await Cart.findOne({userId: req.session.user_id});
-        console.log(cartData);
         if (cartData) {
             const alreadyExist = cartData.products.find((pro) => pro.productId.toString() == productId);
             if (alreadyExist) {
-                // If the product already exists in the cart, update its quantity
-                await Cart.findOneAndUpdate({
-                    userId: req.session.user_id,
-                    "products.productId": productId
-                },{
-                    $inc: {
-                        "products.$.quantity": productquantity,
-                        "products.$.totalPrice": productquantity * alreadyExist.productPrice
-                    }
-                });
+                // If the product already exists in the cart, set the price
+                // await Cart.findOneAndUpdate({
+                //     userId: req.session.user_id,
+                //     "products.productId": productId
+                // },{
+                //     $inc: {
+                //     "products.$.quantity": quantity,
+                //     }
+                // });
+                console.log("product is already in the cart");
             } else {
                 // If the product doesn't exist in the cart, add it
                 await Cart.findOneAndUpdate({
@@ -337,8 +351,8 @@ const addProductsToCart = async (req, res) => {
                         products: {
                             productId: productId,
                             quantity: 1, 
-                            productPrice: productDatabyId.price,
-                            totalPrice: productDatabyId.price 
+                            productPrice: productDatabyId.prdctPrice,
+                            totalPrice: productDatabyId.prdctPrice 
                         }
                     }
                 });
@@ -346,13 +360,13 @@ const addProductsToCart = async (req, res) => {
         } else {
             // If the user doesn't have a cart yet, create a new cart and add the product to it
             const newCart = new Cart({
-                userId: req.session.user_id,
                 products: [{
                     productId: productId,
                     quantity: 1, 
-                    productPrice: productDatabyId.price,
-                    totalPrice: productDatabyId.price 
-                }]
+                    productPrice: productDatabyId.prdctPrice,
+                    totalPrice: productDatabyId.prdctPrice
+                }],
+                userId: req.session.user_id
             });
 
             await newCart.save();
@@ -371,10 +385,37 @@ const updateCartQuantity = async (req, res) =>{
     try {
         
         const productId = req.params.productId;
-        const productQuantity = req.body.productQuantity;
-        await Product.findByIdAndUpdate(productId, { productQuantity: productQuantity });
 
-        res.json({success: true});
+        const productDatabyId = await Product.findById({ _id: productId });
+
+        const quantity = req.body.quantity;
+        const cartData = await Cart.findOneAndUpdate(
+            { 
+                userId: req.session.user_id,
+                "products.productId": productId 
+            }, 
+            {$set: 
+                { "products.$.quantity": quantity,
+                  "products.$.productPrice" : productDatabyId.prdctPrice,
+                  "products.$.totalPrice" : quantity * productDatabyId.prdctPrice
+            }
+        });
+       
+        const updatedCartData = await Cart.findOne(
+            { 
+                userId: req.session.user_id,
+                "products.productId": productId 
+            }
+        )
+        console.log(updatedCartData)
+        const totalPrice =  updatedCartData.products.find(product=> {
+           if(product.productId == productId){
+            return product.totalPrice
+           }
+        })
+        console.log(totalPrice);
+
+        res.json({success: true, updatedTotalPrice:totalPrice});
 
 
     } catch (error) {
@@ -402,7 +443,6 @@ const deleteCartItem = async (req, res) => {
                 {
                     $pull:  { products:{productId:productId}}
                 });
-
         }
 
         res.json({success: true})
@@ -442,6 +482,7 @@ module.exports = {
     deleteCartItem,
     contactUsLoad,
     myAccountLoad,
+    manageAndLoadAddress,
     cartLoad,
     userLogout
 }
