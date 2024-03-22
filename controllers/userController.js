@@ -273,6 +273,8 @@ const myAccountLoad = async (req, res) => {
         
         const userId = req.session.user_id;
         const userData = await User.findById(userId);
+        console.log("=========================================myAccountLoad=================================================");
+        console.log("=========================================myAccountLoad=================================================");
         res.render("myAccount", {userData});
 
     } catch (error) {
@@ -281,14 +283,37 @@ const myAccountLoad = async (req, res) => {
 
 }
 
-// load and manage address
-const manageAndLoadAddress = async (req, res) => {
+// add and save address
+const saveAddress = async (req, res) => {
 
     try {
 
-        const userId = req.session.user_id;
-        const userData = await User.findById(userId);
-        res.render("manageAddress", {userData});
+        const {
+            fullname,
+            addressline, 
+            city,
+            state,
+            pincode,
+            phone
+            
+        } = req.body;
+
+        await User.findByIdAndUpdate(
+            { 
+                _id:req.session.user_id 
+            },
+            {
+                $push:{
+                    address:{
+                        fullname: fullname,
+                        addressline: addressline,
+                        city: city,
+                        state: state,
+                        pincode: pincode,
+                        phone: phone
+                    }
+                }
+            });
 
     } catch (error) {
         console.log(error.message);
@@ -482,7 +507,7 @@ module.exports = {
     deleteCartItem,
     contactUsLoad,
     myAccountLoad,
-    manageAndLoadAddress,
+    saveAddress,
     cartLoad,
     userLogout
 }
