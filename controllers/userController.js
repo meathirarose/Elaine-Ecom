@@ -315,7 +315,7 @@ const saveAddress = async (req, res) => {
                 }
             });
 
-            res.redirect("/myAccount");
+            res.json({success:true});
 
     } catch (error) {
         console.log(error.message);
@@ -323,9 +323,51 @@ const saveAddress = async (req, res) => {
 
 }
 
+// edit address
+const editAddress = async (req, res) => {
+    try {
+        const editAddressId = req.body.editAddressId;
+        const userId = req.session.user_id;
+        console.log(editAddressId);
+        const {
+            fullname,
+            addressline, 
+            city,
+            state,
+            email,
+            pincode,
+            phone
+            
+        } = req.body;
+
+        const editUserData = await User.findOneAndUpdate(
+            {
+                _id: userId,
+                "address._id": editAddressId
+            },
+            {
+                $set:{
+                    "address.$.fullname": fullname,
+                    "address.$.addressline": addressline,
+                    "address.$.city": city,
+                    "address.$.state": state,
+                    "address.$.email": email,
+                    "address.$.pincode": pincode,
+                    "address.$.phone": phone
+                }
+            });
+
+            console.log("======================================editUserData================================");
+            console.log(editUserData);
+            res.json({success: true})
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 // remove Address
 const removeAddress = async (req, res) => {
-console.log("=========================================================hello from removemaddress");
     try {
         
         const addressId = req.body.addressId;
@@ -534,6 +576,7 @@ module.exports = {
     contactUsLoad,
     myAccountLoad,
     saveAddress,
+    editAddress,
     removeAddress,
     cartLoad,
     userLogout
