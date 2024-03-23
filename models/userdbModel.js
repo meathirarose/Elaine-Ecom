@@ -59,6 +59,10 @@ const userSchema = new mongoose.Schema({
             state:{
                 type:String
             },
+
+            email:{
+                type:String
+            },
             
             pincode:{
                 type:Number

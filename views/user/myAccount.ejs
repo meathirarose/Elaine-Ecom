@@ -1,475 +1,509 @@
 <%-include("../layout/user/header")-%>
 
-    <div class="page-wrapper">
-        <div class="page-wrapper">
-            <header class="header header-6">
-                <div class="header-top">
-                    <div class="container pt-1">
-                        <div class="header-right">
-                            <div class="social-icons social-icons-color">
-                                <a href="#" class="social-icon social-facebook" title="Facebook" target="_blank"><i
-                                        class="icon-facebook-f"></i></a>
-                                <a href="#" class="social-icon social-twitter" title="Twitter" target="_blank"><i
-                                        class="icon-twitter"></i></a>
-                                <a href="#" class="social-icon social-pinterest" title="Instagram" target="_blank"><i
-                                        class="icon-pinterest-p"></i></a>
-                                <a href="#" class="social-icon social-instagram" title="Pinterest" target="_blank"><i
-                                        class="icon-instagram"></i></a>
-                            </div><!-- End .soial-icons -->
-                            <ul class="top-menu top-link-menu">
-                                <li>
-                                    <ul>
-                                        <li><a href="/userLogout"><i class="icon-user"></i>Logout</a></li>
-                                    </ul>
-                                </li>
-                            </ul><!-- End .top-menu -->
-                        </div><!-- End .header-right -->
-                    </div>
+<div class="page-wrapper">
+    <header class="header header-6">
+        <div class="header-top">
+            <div class="container pt-1">
+                <div class="header-right">
+                    <div class="social-icons social-icons-color">
+                        <a href="#" class="social-icon social-facebook" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
+                        <a href="#" class="social-icon social-twitter" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
+                        <a href="#" class="social-icon social-pinterest" title="Instagram" target="_blank"><i class="icon-pinterest-p"></i></a>
+                        <a href="#" class="social-icon social-instagram" title="Pinterest" target="_blank"><i class="icon-instagram"></i></a>
+                    </div><!-- End .soial-icons -->
+                    <ul class="top-menu top-link-menu">
+                        <li>
+                            <ul>
+                                <li><a href="/userLogout"><i class="icon-user"></i>Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul><!-- End .top-menu -->                  
+                </div><!-- End .header-right -->
+            </div>
+        </div>
+        
+        <div class="header-middle">
+            <div class="container">
+                <div class="header-left">
+                    <div class="header-search header-search-extended header-search-visible d-none d-lg-block">
+                        <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
+                        <form action="#" method="get">
+                            <div class="header-search-wrapper search-wrapper-wide">
+                                <label for="q" class="sr-only">Search</label>
+                                <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+                                <input type="search" class="form-control" name="q" id="q" placeholder="Search product ..." required>
+                            </div><!-- End .header-search-wrapper -->
+                        </form>
+                    </div><!-- End .header-search -->
                 </div>
+                <div class="header-center">
+                    <a href="userHome" class="logo">
+                        <h3 class="text-center font-weight-bolder text-uppercase">Elaine</h3>
+                    </a>
+                </div><!-- End .header-left -->
 
-                <div class="header-middle">
-                    <div class="container">
-                        <div class="header-left">
-                            <div class="header-search header-search-extended header-search-visible d-none d-lg-block">
-                                <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
-                                <form action="#" method="get">
-                                    <div class="header-search-wrapper search-wrapper-wide">
-                                        <label for="q" class="sr-only">Search</label>
-                                        <button class="btn btn-primary" type="submit"><i
-                                                class="icon-search"></i></button>
-                                        <input type="search" class="form-control" name="q" id="q"
-                                            placeholder="Search product ..." required>
-                                    </div><!-- End .header-search-wrapper -->
-                                </form>
-                            </div><!-- End .header-search -->
-                        </div>
-                        <div class="header-center">
-                            <a href="userHome" class="logo">
-                                <h3 class="text-center font-weight-bolder text-uppercase">Elaine</h3>
-                            </a>
-                        </div><!-- End .header-left -->
+                <div class="header-right">
+                    <a href="#" class="wishlist-link">
+                        <i class="icon-heart-o"></i>
+                        <span class="wishlist-txt">My Wishlist</span>
+                    </a>
+                    <div class="dropdown cart-dropdown">
+                        <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                            <i class="icon-shopping-cart"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right">                 
+                            <div class="dropdown-cart-action">
+                                <a href="cart.html" class="btn btn-primary">View Cart</a>
+                                <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
+                            </div><!-- End .dropdown-cart-total -->
+                        </div><!-- End .dropdown-menu -->
+                    </div><!-- End .cart-dropdown -->
+                </div>
+            </div><!-- End .container -->
+        </div><!-- End .header-middle -->
 
-                        <div class="header-right">
-                            <a href="#" class="wishlist-link">
-                                <i class="icon-heart-o"></i>
-                                <span class="wishlist-txt">My Wishlist</span>
-                            </a>
-                            <div class="dropdown cart-dropdown">
-                                <a href="cart" class="dropdown-toggle" role="button" aria-haspopup="true"
-                                    aria-expanded="false" data-display="static">
-                                    <i class="icon-shopping-cart"></i>
-                                </a>
-                            </div><!-- End .cart-dropdown -->
-                        </div>
-                    </div><!-- End .container -->
-                </div><!-- End .header-middle -->
+        <div class="header-bottom sticky-header">
+            <div class="container">
+                <div class="header-left">
+                    <nav class="main-nav">
+                        <ul class="menu sf-arrows">
+                            <li class="megamenu-container active">
+                                <a href="userHome">Home</a>                                 
+                            </li>
 
-                <div class="header-bottom sticky-header">
-                    <div class="container">
-                        <div class="header-left">
-                            <nav class="main-nav">
-                                <ul class="menu sf-arrows">
-                                    <li class="megamenu-container active">
-                                        <a href="userHome">Home</a>
-                                    </li>
+                            <li><!-- start of pages -->
+                                <a href="products" class="sf">Products</a>
+                            </li><!-- end of pages -->
 
-                                    <li><!-- start of pages -->
-                                        <a href="products" class="sf">Products</a>
-                                    </li><!-- end of pages -->
+                            <li><!-- start of pages -->
+                                <a href="#" class="sf">Contact</a>
+                            </li><!-- end of pages -->
+                            
+                            <li>
+                                <a href="#" class="sf">About Us</a>
+                            </li>
 
-                                    <li><!-- start of pages -->
-                                        <a href="contactUs" class="sf">Contact</a>
-                                    </li><!-- end of pages -->
+                            <li>
+                                <a href="#" class="sf">My Account</a>
+                            </li>
+                        </ul><!-- End .menu -->
+                    </nav><!-- End .main-nav -->
 
-                                    <li>
-                                        <a href="#" class="sf">About Us</a>
-                                    </li>
+                    <button class="mobile-menu-toggler">
+                        <span class="sr-only">Toggle mobile menu</span>
+                        <i class="icon-bars"></i>
+                    </button>
+                </div><!-- End .header-left -->                   
+            </div><!-- End .container -->
+        </div><!-- End .header-bottom -->
+    </header><!-- End .header -->
 
-                                    <li>
-                                        <a href="myAccount" class="sf">My Account</a>
-                                    </li>
-                                </ul><!-- End .menu -->
-                            </nav><!-- End .main-nav -->
+    <main class="main">
+        <div class="page-header text-center" style="background-image: url('/user/assets/images/page-header-bg.jpg')">
+            <div class="container">
+                <h1 class="page-title">My Account<span>Shop</span></h1>
+            </div><!-- End .container -->
+        </div><!-- End .page-header -->
+        <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+            <div class="container">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">My Account</li>
+                </ol>
+            </div><!-- End .container -->
+        </nav><!-- End .breadcrumb-nav -->
 
-                            <button class="mobile-menu-toggler">
-                                <span class="sr-only">Toggle mobile menu</span>
-                                <i class="icon-bars"></i>
-                            </button>
-                        </div><!-- End .header-left -->
-                    </div><!-- End .container -->
-                </div><!-- End .header-bottom -->
-            </header><!-- End .header -->
+        <div class="page-content">
+            <div class="dashboard">
+                <div class="container">
+                    <div class="row">
+                        <aside class="col-md-4 col-lg-3">
+                            <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab" aria-controls="tab-dashboard" aria-selected="true">Dashboard</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders" role="tab" aria-controls="tab-orders" aria-selected="false">Orders</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tab-downloads-link" data-toggle="tab" href="#tab-downloads" role="tab" aria-controls="tab-downloads" aria-selected="false">Downloads</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address" role="tab" aria-controls="tab-address" aria-selected="false">Adresses</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tab-account-link" data-toggle="tab" href="#tab-account" role="tab" aria-controls="tab-account" aria-selected="false">Account Details</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Sign Out</a>
+                                </li>
+                            </ul>
+                        </aside><!-- End .col-lg-3 -->
 
-            <main class="main">
-                <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
-                    <div class="container">
-                        <h1 class="page-title">My Account<span>Shop</span></h1>
-                    </div><!-- End .container -->
-                </div><!-- End .page-header -->
-                <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
-                    <div class="container">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="userHome">Home</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">My Account</li>
-                        </ol>
-                    </div><!-- End .container -->
-                </nav><!-- End .breadcrumb-nav -->
+                        <div class="col-md-8 col-lg-9">
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
+                                    <p>Hello <span class="font-weight-normal text-dark">User</span> (not <span class="font-weight-normal text-dark">User</span>? <a href="#">Log out</a>) 
+                                    <br>
+                                    From your account dashboard you can view your <a href="#tab-orders" class="tab-trigger-link link-underline">recent orders</a>, manage your <a href="#tab-address" class="tab-trigger-link">shipping and billing addresses</a>, and <a href="#tab-account" class="tab-trigger-link">edit your password and account details</a>.</p>
+                                </div><!-- .End .tab-pane -->
 
-                <div class="page-content">
-                    <div class="dashboard">
-                        <div class="container">
-                            <div class="row">
-                                <aside class="col-md-4 col-lg-3">
-                                    <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
-                                        <li class="nav-item">
-                                            <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab"
-                                                href="#tab-dashboard" role="tab" aria-controls="tab-dashboard"
-                                                aria-selected="true">Dashboard</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" id="tab-orders-link" data-toggle="tab"
-                                                href="#tab-orders" role="tab" aria-controls="tab-orders"
-                                                aria-selected="false">Orders</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" id="tab-downloads-link" data-toggle="tab"
-                                                href="#tab-downloads" role="tab" aria-controls="tab-downloads"
-                                                aria-selected="false">Downloads</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" id="tab-address-link" data-toggle="tab"
-                                                href="#tab-address" role="tab" aria-controls="tab-address"
-                                                aria-selected="false">Adresses</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" id="tab-account-link" data-toggle="tab"
-                                                href="#tab-account" role="tab" aria-controls="tab-account"
-                                                aria-selected="false">Account Details</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#">Sign Out</a>
-                                        </li>
-                                    </ul>
-                                </aside><!-- End .col-lg-3 -->
+                                <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
+                                    <p>No order has been made yet.</p>
+                                    <a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
+                                </div><!-- .End .tab-pane -->
 
-                                <div class="col-md-8 col-lg-9">
-                                    <div class="tab-content">
-                                        <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"
-                                            aria-labelledby="tab-dashboard-link">
-                                            <p>Hello <span class="font-weight-normal text-dark">
-                                                    <%= userData.name %>
-                                                </span> (not <span class="font-weight-normal text-dark">
-                                                    <%= userData.name %>
-                                                </span>? <a href="/userLogout">Log out</a>)
-                                                <br>
-                                                From your account dashboard you can view your <a href="#tab-orders"
-                                                    class="tab-trigger-link link-underline">recent orders</a>, manage
-                                                your <a href="#tab-address" class="tab-trigger-link">shipping and
-                                                    billing
-                                                    addresses</a>, and <a href="#tab-account"
-                                                    class="tab-trigger-link">edit your
-                                                    password and account details</a>.
-                                            </p>
-                                        </div><!-- .End .tab-pane -->
+                                <div class="tab-pane fade" id="tab-downloads" role="tabpanel" aria-labelledby="tab-downloads-link">
+                                    <p>No downloads available yet.</p>
+                                    <a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
+                                </div><!-- .End .tab-pane -->
 
-                                        <div class="tab-pane fade" id="tab-orders" role="tabpanel"
-                                            aria-labelledby="tab-orders-link">
-                                            <p>No order has been made yet.</p>
-                                            <a href="category.html" class="btn btn-outline-primary-2"><span>GO
-                                                    SHOP</span><i class="icon-long-arrow-right"></i></a>
-                                        </div><!-- .End .tab-pane -->
-
-                                        <div class="tab-pane fade" id="tab-downloads" role="tabpanel"
-                                            aria-labelledby="tab-downloads-link">
-                                            <p>No downloads available yet.</p>
-                                            <a href="category.html" class="btn btn-outline-primary-2"><span>GO
-                                                    SHOP</span><i class="icon-long-arrow-right"></i></a>
-                                        </div><!-- .End .tab-pane -->
-
-<!-- -------------------------------------------------this is for adding address-------------------------------------------------- -->
-
-                            <div class="tab-pane fade d-flex" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
-
-                                <% if (userData.address && userData.address.length > 0) { %>
-                                    <% userData.address.forEach(element => { %>
-
-                                    <div class="col-lg-6 ">
-                                        <div class="card card-dashboard ">
-                                            <div class="card-body ">
-                                                <h3 class="card-title">Billing Address</h3><!-- End .card-title -->
-                                                <p >
-                                                    <%= element.fullname %><br>
-                                                    <%= element.addressline %><br>
-                                                    <%= element.city %>, 
-                                                    <%= element.state %> 
-                                                    <%= element.pincode %><br>
-                                                    <%= element.phone %><br>
-                                                    <a href="#">Edit <i class="icon-edit"></i></a>
-                                                </p>
-                                            </div><!-- End .card-body -->
-                                        </div><!-- End .card-dashboard -->
-                                    </div><!-- End .col-lg-6 -->
-                                    <% }); %>
-
-                                <% } else { %>
-                                        <div class="tab-pane fade" id="tab-address" role="tabpanel"
-                                            aria-labelledby="tab-address-link">
-                                            <p>The following addresses will be used on the checkout page by default.</p>
-                                            <div class="row">
+                                <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
+                                    <p>The following addresses will be used on the checkout page by default.</p>
+                                    <div class="row">
+                                        <% if(!userData.address || userData.address.length === 0) { %>
+                                            <div class="col-lg-6">
+                                                <div class="card card-dashboard">
+                                                    <div class="card-body">
+                                                        <h3 class="card-title">Billing Address</h3><!-- End .card-title -->
+                                                        <p>You have not set up this type of address yet.<br>
+                                                        <a href="#" class="showAddAddress">Add address <i class="icon-edit"></i></a></p>
+                                                    </div><!-- End .card-body -->
+                                                </div><!-- End .card-dashboard -->
+                                            </div><!-- End .col-lg-6 -->
+                                        <% } else { %>
+                                            <% userData.address.forEach(element => { %>
                                                 <div class="col-lg-6">
                                                     <div class="card card-dashboard" id="cardDashboard">
                                                         <div class="card-body">
-                                                            <h3 class="card-title">Billing Address</h3>
-                                                            <!-- End .card-title -->
-                                                            <p>You have not set up this type of address yet.<br>
-                                                                <a href="#" id="showAddAddress"
-                                                                    aria-controls="addAddress" aria-selected="false">Add
-                                                                    address <i class="icon-edit"></i></a>
-                                                            </p>
+                                                            <h3 class="card-title">Billing Address</h3><!-- End .card-title -->
+                                                            <p>
+                                                                <%= element.fullname %><br>
+                                                                <%= element.addressline %><br>
+                                                                <%= element.city %>,
+                                                                <%= element.state %><br>
+                                                                <%= element.email %><br>
+                                                                <%= element.pincode %><br>
+                                                                <%= element.phone %><br><br>
+                                                                <a href="#">Edit <i class="icon-edit"></i></a>&nbsp;&nbsp;
+                                                                <a href="#" class="remove-address" data-address-id="<%= element._id %>">Delete</a>
                                                             </p>
                                                         </div><!-- End .card-body -->
                                                     </div><!-- End .card-dashboard -->
                                                 </div><!-- End .col-lg-6 -->
-                                            </div><!-- End .row -->
+                                            <% }); %>
+                                        <% } %>
 
-                                            <div class="row m-4" id="addAddress" style="display: none;">
-                                                <form id="addressForm" method="post" action="/saveAddress">
-                                                    <div class="form-group">
-                                                        <label for="name">Full Name:</label>
-                                                        <input type="text" class="form-control" id="fullname"
-                                                            name="fullname" required>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label for="addressline">House Address/Building Name: </label>
-                                                        <input type="text" class="form-control" id="addressline"
-                                                            name="addressline" required>
-                                                    </div>
-                                                    <div class="form-row">
-                                                        <div class="form-group col-md-6">
-                                                            <label for="city">City:</label>
-                                                            <input type="text" class="form-control" id="city"
-                                                                name="city" required>
-                                                        </div>
-                                                        <div class="form-group col-md-6">
-                                                            <label for="state">State:</label>
-                                                            <input type="text" class="form-control" id="state"
-                                                                name="state" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-row">
-                                                        <div class="form-group col-md-6">
-                                                            <label for="pincode">Pincode:</label>
-                                                            <input type="number" class="form-control" id="pincode"
-                                                                name="pincode" required>
-                                                        </div>
-                                                        <div class="form-group col-md-6">
-                                                            <label for="phone">Phone:</label>
-                                                            <input type="tel" class="form-control" id="phone"
-                                                                name="phone" required>
-                                                        </div>
-                                                    </div>
-                                                    <button type="submit" class="btn btn-primary">Save</button>
-                                                </form>
-                                            </div>
-                                        </div><!-- .End .tab-pane -->
-                                    <% } %>
-                            </div>
-<!-- ------------------------------------------------end this is for adding address------------------------------------------------ -->
-
-                                        <div class="tab-pane fade" id="tab-account" role="tabpanel"
-                                            aria-labelledby="tab-account-link">
-                                            <form action="#">
-                                                <div class="row">
-                                                    <div class="col-sm-6">
-                                                        <label>First Name *</label>
-                                                        <input type="text" class="form-control" required>
-                                                    </div><!-- End .col-sm-6 -->
-
-                                                    <div class="col-sm-6">
-                                                        <label>Last Name *</label>
-                                                        <input type="text" class="form-control" required>
-                                                    </div><!-- End .col-sm-6 -->
-                                                </div><!-- End .row -->
-
-                                                <label>Display Name *</label>
-                                                <input type="text" class="form-control" required>
-                                                <small class="form-text">This will be how your name will be displayed in
-                                                    the
-                                                    account section and in reviews</small>
-
-                                                <label>Email address *</label>
-                                                <input type="email" class="form-control" required>
-
-                                                <label>Current password (leave blank to leave unchanged)</label>
-                                                <input type="password" class="form-control">
-
-                                                <label>New password (leave blank to leave unchanged)</label>
-                                                <input type="password" class="form-control">
-
-                                                <label>Confirm new password</label>
-                                                <input type="password" class="form-control mb-2">
-
-                                                <button type="submit" class="btn btn-outline-primary-2">
-                                                    <span>SAVE CHANGES</span>
-                                                    <i class="icon-long-arrow-right"></i>
-                                                </button>
-                                            </form>
-                                        </div><!-- .End .tab-pane -->
+                                    </div><!-- End .row -->
+                                    <div class="col-lg-6">
+                                        <button id="addNewAddressBtn" class="btn btn-primary showAddAddress">
+                                            Add a new address <i class="icon-plus"></i>
+                                        </button>
                                     </div>
-                                </div><!-- End .col-lg-9 -->
-                            </div><!-- End .row -->
-                        </div><!-- End .container -->
-                    </div><!-- End .dashboard -->
-                </div><!-- End .page-content -->
-            </main><!-- End .main -->
-            <footer class="footer">
-                <div class="footer-middle border-0">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-sm-6 col-lg-3">
-                                <div class="widget widget-about">
-                                    <img src="user/assets/images/elaine_final_logo_white.png" class="footer-logo"
-                                        alt="Footer Logo" width="105" height="25">
-                                    <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu
-                                        vulputate magna eros eu erat. </p>
+                                </div><!-- .End .tab-pane -->
 
-                                    <div class="social-icons">
-                                        <a href="#" class="social-icon" target="_blank" title="Facebook"><i
-                                                class="icon-facebook-f"></i></a>
-                                        <a href="#" class="social-icon" target="_blank" title="Twitter"><i
-                                                class="icon-twitter"></i></a>
-                                        <a href="#" class="social-icon" target="_blank" title="Instagram"><i
-                                                class="icon-instagram"></i></a>
-                                        <a href="#" class="social-icon" target="_blank" title="Youtube"><i
-                                                class="icon-youtube"></i></a>
-                                        <a href="#" class="social-icon" target="_blank" title="Pinterest"><i
-                                                class="icon-pinterest"></i></a>
-                                    </div><!-- End .soial-icons -->
-                                </div><!-- End .widget about-widget -->
-                            </div><!-- End .col-sm-6 col-lg-3 -->
+                    
+                    <!-- address form -->
 
-                            <div class="col-sm-6 col-lg-3">
-                                <div class="widget">
-                                    <h4 class="widget-title">Useful Links</h4><!-- End .widget-title -->
+                            <div class="addAddress" style="display: none;">
+                                <form id="addressForm" method="post" action="/saveAddress">
+                                    <div class="form-group">
+                                        <label for="name">Full Name:</label>
+                                        <input type="text" class="form-control" id="fullname" name="fullname" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="addressline">House Address/Building Name: </label>
+                                        <input type="text" class="form-control" id="addressline" name="addressline" required>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="city">City:</label>
+                                            <input type="text" class="form-control" id="city" name="city" required>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="state">State:</label>
+                                            <input type="text" class="form-control" id="state" name="state" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email id: </label>
+                                        <input type="email" class="form-control" id="email" name="email" required>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="pincode">Pincode:</label>
+                                            <input type="number" class="form-control" id="pincode" name="pincode" required>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="phone">Phone:</label>
+                                            <input type="tel" class="form-control" id="phone" name="phone" required>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                </form>
+                            </div>
 
-                                    <ul class="widget-list">
-                                        <li><a href="about.html">About Molla</a></li>
-                                        <li><a href="#">How to shop on Molla</a></li>
-                                        <li><a href="#">FAQ</a></li>
-                                        <li><a href="contact.html">Contact us</a></li>
-                                        <li><a href="login.html">Log in</a></li>
-                                    </ul><!-- End .widget-list -->
-                                </div><!-- End .widget -->
-                            </div><!-- End .col-sm-6 col-lg-3 -->
+                    <!-- end address form -->
 
-                            <div class="col-sm-6 col-lg-3">
-                                <div class="widget">
-                                    <h4 class="widget-title">Customer Service</h4><!-- End .widget-title -->
+                                <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
+                                    <form action="#">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <label>First Name *</label>
+                                                <input type="text" class="form-control" required>
+                                            </div><!-- End .col-sm-6 -->
 
-                                    <ul class="widget-list">
-                                        <li><a href="#">Payment Methods</a></li>
-                                        <li><a href="#">Money-back guarantee!</a></li>
-                                        <li><a href="#">Returns</a></li>
-                                        <li><a href="#">Shipping</a></li>
-                                        <li><a href="#">Terms and conditions</a></li>
-                                        <li><a href="#">Privacy Policy</a></li>
-                                    </ul><!-- End .widget-list -->
-                                </div><!-- End .widget -->
-                            </div><!-- End .col-sm-6 col-lg-3 -->
+                                            <div class="col-sm-6">
+                                                <label>Last Name *</label>
+                                                <input type="text" class="form-control" required>
+                                            </div><!-- End .col-sm-6 -->
+                                        </div><!-- End .row -->
 
-                            <div class="col-sm-6 col-lg-3">
-                                <div class="widget">
-                                    <h4 class="widget-title">My Account</h4><!-- End .widget-title -->
+                                        <label>Display Name *</label>
+                                        <input type="text" class="form-control" required>
+                                        <small class="form-text">This will be how your name will be displayed in the account section and in reviews</small>
 
-                                    <ul class="widget-list">
-                                        <li><a href="#">Sign In</a></li>
-                                        <li><a href="cart.html">View Cart</a></li>
-                                        <li><a href="#">My Wishlist</a></li>
-                                        <li><a href="#">Track My Order</a></li>
-                                        <li><a href="#">Help</a></li>
-                                    </ul><!-- End .widget-list -->
-                                </div><!-- End .widget -->
-                            </div><!-- End .col-sm-6 col-lg-3 -->
-                        </div><!-- End .row -->
-                    </div><!-- End .container -->
-                </div><!-- End .footer-middle -->
-            </footer><!-- End .footer -->
+                                        <label>Email address *</label>
+                                        <input type="email" class="form-control" required>
 
-        </div><!-- End .page-wrapper -->
-        <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+                                        <label>Current password (leave blank to leave unchanged)</label>
+                                        <input type="password" class="form-control">
 
-        <!-- Mobile Menu -->
-        <div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
+                                        <label>New password (leave blank to leave unchanged)</label>
+                                        <input type="password" class="form-control">
 
-        <div class="mobile-menu-container">
-            <div class="mobile-menu-wrapper">
-                <span class="mobile-menu-close"><i class="icon-close"></i></span>
+                                        <label>Confirm new password</label>
+                                        <input type="password" class="form-control mb-2">
 
-                <form action="#" method="get" class="mobile-search">
-                    <label for="mobile-search" class="sr-only">Search</label>
-                    <input type="search" class="form-control" name="mobile-search" id="mobile-search"
-                        placeholder="Search in..." required>
-                    <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
-                </form>
+                                        <button type="submit" class="btn btn-outline-primary-2">
+                                            <span>SAVE CHANGES</span>
+                                            <i class="icon-long-arrow-right"></i>
+                                        </button>
+                                    </form>
+                                </div><!-- .End .tab-pane -->
+                            </div>
+                        </div><!-- End .col-lg-9 -->
+                    </div><!-- End .row -->
+                </div><!-- End .container -->
+            </div><!-- End .dashboard -->
+        </div><!-- End .page-content -->
+    </main><!-- End .main -->
 
-                <nav class="mobile-nav">
+    <footer class="footer">
+        <div class="footer-middle">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="widget widget-about">
+                            <img src="/user/assets/images/elaine_final_logo_white.png" class="footer-logo" alt="Footer Logo" width="105" height="25">
+                            <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. </p>
 
-                    <ul class="mobile-menu">
-                        <li class="active">
-                            <a href="userHome">Home</a>
-                        </li>
-                        <li>
-                            <a href="#" class="sf">Products</a>
-                        </li>
-                        <li>
-                            <a href="#" class="sf">Contact</a>
-                        </li>
-                        <li>
-                            <a href="#" class="sf">About Us</a>
-                        </li>
-                        <li>
-                            <a href="#" class="sf">My Account</a>
-                        </li>
-                    </ul>
+                            <div class="social-icons">
+                                <a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
+                                <a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
+                                <a href="#" class="social-icon" target="_blank" title="Pinterest"><i class="icon-pinterest"></i></a>
+                            </div><!-- End .soial-icons -->
+                        </div><!-- End .widget about-widget -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
 
-                </nav><!-- End .mobile-nav -->
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="widget">
+                            <h4 class="widget-title">Useful Links</h4><!-- End .widget-title -->
 
-                <div class="social-icons">
-                    <a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
-                    <a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
-                </div><!-- End .social-icons -->
-            </div><!-- End .mobile-menu-wrapper -->
-        </div><!-- End .mobile-menu-container -->
+                            <ul class="widget-list">
+                                <li><a href="about.html">About Molla</a></li>
+                                <li><a href="#">How to shop on Molla</a></li>
+                                <li><a href="#">FAQ</a></li>
+                                <li><a href="contact.html">Contact us</a></li>
+                                <li><a href="login.html">Log in</a></li>
+                            </ul><!-- End .widget-list -->
+                        </div><!-- End .widget -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
 
-        <!-- Plugins JS File -->
-        <script src="/user/assets/js/jquery.min.js"></script>
-        <script src="/user/assets/js/bootstrap.bundle.min.js"></script>
-        <script src="/user/assets/js/jquery.hoverIntent.min.js"></script>
-        <script src="/user/assets/js/jquery.waypoints.min.js"></script>
-        <script src="/user/assets/js/superfish.min.js"></script>
-        <script src="/user/assets/js/owl.carousel.min.js"></script>
-        <script src="/user/assets/js/bootstrap-input-spinner.js"></script>
-        <script src="user/assets/js/bootstrap-input-spinner.js"></script>
-        <script src="user/assets/js/jquery.magnific-popup.min.js"></script>
-        <script src="user/assets/js/jquery.countdown.min.js"></script>
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="widget">
+                            <h4 class="widget-title">Customer Service</h4><!-- End .widget-title -->
+
+                            <ul class="widget-list">
+                                <li><a href="#">Payment Methods</a></li>
+                                <li><a href="#">Money-back guarantee!</a></li>
+                                <li><a href="#">Returns</a></li>
+                                <li><a href="#">Shipping</a></li>
+                                <li><a href="#">Terms and conditions</a></li>
+                                <li><a href="#">Privacy Policy</a></li>
+                            </ul><!-- End .widget-list -->
+                        </div><!-- End .widget -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="widget">
+                            <h4 class="widget-title">My Account</h4><!-- End .widget-title -->
+
+                            <ul class="widget-list">
+                                <li><a href="#">Sign In</a></li>
+                                <li><a href="cart.html">View Cart</a></li>
+                                <li><a href="#">My Wishlist</a></li>
+                                <li><a href="#">Track My Order</a></li>
+                                <li><a href="#">Help</a></li>
+                            </ul><!-- End .widget-list -->
+                        </div><!-- End .widget -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
+                </div><!-- End .row -->
+            </div><!-- End .container -->
+        </div><!-- End .footer-middle -->
 
 
-        <!-- Main JS File -->
-        <script src="/user/assets/js/main.js"></script>
-        <script src="user/assets/js/demos/demo-6.js"></script>
-        <script src="user/assets/js/demos/demo-16.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </footer><!-- End .footer -->
+</div><!-- End .page-wrapper -->
+<button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
 
-        <script>
-            $(document).ready(function () {
-                $('#showAddAddress').click(function (e) {
-                    e.preventDefault();
-                    $('#cardDashboard').hide();
-                    $('#addAddress').show();
-                    console.log(hello);
+<!-- Mobile Menu -->
+<div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
+
+<div class="mobile-menu-container">
+    <div class="mobile-menu-wrapper">
+        <span class="mobile-menu-close"><i class="icon-close"></i></span>
+
+        <form action="#" method="get" class="mobile-search">
+            <label for="mobile-search" class="sr-only">Search</label>
+            <input type="search" class="form-control" name="mobile-search" id="mobile-search"
+                placeholder="Search in..." required>
+            <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+        </form>
+
+        <nav class="mobile-nav">
+
+            <ul class="mobile-menu">
+                <li class="active">
+                    <a href="userHome">Home</a>
+                </li>
+                <li>
+                    <a href="#" class="sf">Products</a>
+                </li>
+                <li>
+                    <a href="#" class="sf">Contact</a>
+                </li>
+                <li>
+                    <a href="#" class="sf">About Us</a>
+                </li>
+                <li>
+                    <a href="#" class="sf">My Account</a>
+                </li>
+            </ul>
+
+        </nav><!-- End .mobile-nav -->
+
+        <div class="social-icons">
+            <a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
+            <a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
+        </div><!-- End .social-icons -->
+    </div><!-- End .mobile-menu-wrapper -->
+</div><!-- End .mobile-menu-container -->
+
+
+
+<!-- Plugins JS File -->
+<script src="/user/assets/js/jquery.min.js"></script>
+<script src="/user/assets/js/bootstrap.bundle.min.js"></script>
+<script src="/user/assets/js/jquery.hoverIntent.min.js"></script>
+<script src="/user/assets/js/jquery.waypoints.min.js"></script>
+<script src="/user/assets/js/superfish.min.js"></script>
+<script src="/user/assets/js/owl.carousel.min.js"></script>
+<script src="/user/assets/js/bootstrap-input-spinner.js"></script>
+<script src="/user/assets/js/bootstrap-input-spinner.js"></script>
+<script src="/user/assets/js/jquery.magnific-popup.min.js"></script>
+<script src="/user/assets/js/jquery.countdown.min.js"></script>
+
+
+<!-- Main JS File -->
+<script src="/user/assets/js/main.js"></script>
+<script src="/user/assets/js/demos/demo-6.js"></script>
+<script src="/user/assets/js/demos/demo-16.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+
+<script>
+
+    $(document).ready(function () {
+        $('.showAddAddress').click(function (e) {
+            e.preventDefault();
+            $('.card-dashboard').hide();
+            $('.addAddress').show();
+            console.log("hello");
+        });
+    });
+
+</script>
+
+<script>
+    
+    $('#addressForm').submit(function (e) {
+        e.preventDefault(); 
+
+        var formData = $(this).serialize();
+
+        $.ajax({
+            type: 'POST', 
+            url: '/saveAddress', 
+            data: formData, 
+            success: function (response) {
+                
+                console.log('Address saved successfully:', response);
+
+                location.reload();
+
+            },
+            error: function (xhr, status, error) {
+                
+                console.error(error); 
+            }
+        });
+    });
+
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.remove-address').forEach(function (removeBtn) {
+            removeBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const addressId = this.getAttribute('data-address-id');
+                const addressElement = document.querySelector(`[data-address-id="${addressId}"]`);
+
+                addressElement.style.transition = 'height 0.5s ease';
+                addressElement.style.height = '0';
+                addressElement.style.padding = '0';
+                addressElement.style.margin = '0';
+                addressElement.style.overflow = 'hidden';
+
+                fetch('/removeAddress', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ addressId: addressId })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Address removed successfully:', data);
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                 });
             });
-        </script>
+        });
+    });
+</script>
 
 
-        <%-include("../layout/user/footer")-%>
+
+<%-include("../layout/user/footer")-%>

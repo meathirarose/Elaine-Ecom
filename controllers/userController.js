@@ -273,8 +273,6 @@ const myAccountLoad = async (req, res) => {
         
         const userId = req.session.user_id;
         const userData = await User.findById(userId);
-        console.log("=========================================myAccountLoad=================================================");
-        console.log("=========================================myAccountLoad=================================================");
         res.render("myAccount", {userData});
 
     } catch (error) {
@@ -293,6 +291,7 @@ const saveAddress = async (req, res) => {
             addressline, 
             city,
             state,
+            email,
             pincode,
             phone
             
@@ -309,11 +308,14 @@ const saveAddress = async (req, res) => {
                         addressline: addressline,
                         city: city,
                         state: state,
+                        email: email,
                         pincode: pincode,
                         phone: phone
                     }
                 }
             });
+
+            res.redirect("/myAccount");
 
     } catch (error) {
         console.log(error.message);
@@ -321,15 +323,39 @@ const saveAddress = async (req, res) => {
 
 }
 
+// remove Address
+const removeAddress = async (req, res) => {
+console.log("=========================================================hello from removemaddress");
+    try {
+        
+        const addressId = req.body.addressId;
+        console.log(addressId);
+        const userData = await User.findOneAndUpdate(
+            {"address._id": addressId},
+            {$pull:{address:{_id:addressId}}}
+        );
+        if (!userData) {
+            return res.json({ message: 'User not found' });
+        }
+        res.json({ message: 'Address removed successfully' });
+
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+
 // cart load
 const cartLoad = async (req, res) => {
     try {
 
-            const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
 
-            const productsData = await Product.find({});
-    
-            res.render("cart" ,{productsData, cartData:cartData.products});
+            const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
+            
+
+            res.render("cart" ,{cartData:cartData});
 
     } catch (error) {
         console.log(error.message);
@@ -508,6 +534,7 @@ module.exports = {
     contactUsLoad,
     myAccountLoad,
     saveAddress,
+    removeAddress,
     cartLoad,
     userLogout
 }

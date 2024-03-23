@@ -83,6 +83,7 @@ user_route.get("/contactUs", authentication.isLogin, accessAuth.accessUser,  use
 // load my account
 user_route.get("/myAccount", authentication.isLogin, accessAuth.accessUser, userController.myAccountLoad);
 user_route.post("/saveAddress", authentication.isLogin, accessAuth.accessUser, userController.saveAddress);
+user_route.post("/removeAddress", authentication.isLogin, accessAuth.accessUser, userController.removeAddress);
 
 // user logout route
 user_route.get("/userLogout", authentication.isLogin, userController.userLogout);
