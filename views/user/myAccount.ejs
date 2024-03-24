@@ -220,12 +220,13 @@
                                                         </div><!-- End .card-body -->
                                                     </div><!-- End .card-dashboard -->
                                                 </div><!-- End .col-lg-6 -->
-                                                <!--edit address form -->
+
+        <!-- ------------------------ edit address form ---------------------------- -->
 
                                                 <div id="editAddress<%=element._id%>" style="display: none;">
                                                     
-                                                    <form id="editAddressForm" method="post" action="/editAddress">
-                                                        <input type="hidden" id="editAddressId" name="editAddressId" value="<%= userData.address._id %>">
+                                                    <form id="editAddressForm" class="edit-address-form" method="post" action="/editAddress">
+                                                        <input type="hidden" id="editAddressId" name="editAddressId" value="<%= element._id %>">
                                                         
                                                         <div class="form-group">
                                                             <label for="name">Full Name:</label>
@@ -271,11 +272,12 @@
                                                     </form>
                                                 </div>
 
-                                                <!-- end address form -->
+        <!-- ----------------------------------- end address form --------------------------------- -->
                                                 <% }); %>
                                             <% } %>
 
                                         </div><!-- End .row -->
+
                                         <div class="col-lg-6">
                                             <button id="addNewAddressBtn" class="btn btn-primary showAddAddress">
                                                 Add a new address <i class="icon-plus"></i>
@@ -283,7 +285,7 @@
                                         </div>
                                     </div><!-- .End .tab-pane -->
 
-                                    <!-- address form -->
+        <!-- ------------------------------ new address form --------------------------------------- -->
 
                                     <div class="addAddress" style="display: none;">
                                         <form id="addressForm" method="post" action="/saveAddress">
@@ -323,7 +325,7 @@
                                         </form>
                                     </div>
 
-                                    <!-- end address form -->
+        <!-- ------------------------------------- end address form ---------------------------------------- -->
 
                                     <div class="tab-pane fade" id="tab-account" role="tabpanel"
                                         aria-labelledby="tab-account-link">
@@ -553,7 +555,6 @@
     <script>
         function editAddressShow(id) {
 
-
             $(`#edit-address${id}`).click(function (e) {
                 e.preventDefault();
                 $('.card-dashboard').hide();
@@ -564,8 +565,47 @@
         }
 
     </script>
+    <script>
+        
+        $(document).ready(function () {
+        // edit button click
+            $('.edit-address').click(function (e) {
+                e.preventDefault();
+                var editId = $(this).data('edit-id');
+                $(`#editAddress${editId}`).show();
+            });
+        // edit address form
+            $('#editAddressForm').submit(function (e) {
+                e.preventDefault();
+                var editId = $(this).find('#editAddressId').val(); 
+                var formData = $(this).serialize(); 
+
+                fetch('/editAddress/' + editId, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Address updated successfully:', data);
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+
+        });
 
 
+    </script>
     <!-- removing address -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -589,19 +629,19 @@
                         },
                         body: JSON.stringify({ addressId: addressId })
                     })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            console.log('Address removed successfully:', data);
-                            location.reload();
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                        });
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Address removed successfully:', data);
+                        location.reload();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
                 });
             });
         });

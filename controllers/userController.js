@@ -326,9 +326,11 @@ const saveAddress = async (req, res) => {
 // edit address
 const editAddress = async (req, res) => {
     try {
-        const editAddressId = req.body.editAddressId;
+        const editAddressId = req.params.id;
         const userId = req.session.user_id;
+        console.log(userId);
         console.log(editAddressId);
+        console.log("aammm herre edit address");
         const {
             fullname,
             addressline, 
