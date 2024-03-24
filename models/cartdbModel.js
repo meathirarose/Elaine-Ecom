@@ -29,7 +29,8 @@ userId: {
 },
 
 totalCost: {
-    type: Number
+    type: Number,
+    default: 0
 }
 
 

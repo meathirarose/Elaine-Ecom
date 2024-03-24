@@ -64,19 +64,26 @@
             counter--;
             if (counter <= 0) {
                 clearInterval(interval);
-                // Remove the counter section from the DOM
+                
                 document.getElementById('counterSection').style.display = 'none';
-                // Show the "Request again" link
+                
                 document.getElementById('resendLink').style.display = 'inline';
             } else {
-                // Update the counter display
+
                 var minutes = Math.floor(counter / 60);
                 var seconds = counter % 60;
                 counterElement.innerHTML = ('0' + minutes).slice(-2) + ':' + ('0' + seconds).slice(-2);
+                sessionStorage.setItem('otpCounter', counter); 
+
             }
         }, 1000);
     }
 
+    var isOtpSent = sessionStorage.getItem('isOtpSent');
+    if (!isOtpSent) {
+      updateCounter(); // Start the timer if OTP hasn't been sent
+      sessionStorage.setItem('isOtpSent', true); // Set isOtpSent flag to true
+    }
     window.onload = () => updateCounter();
     
 </script>

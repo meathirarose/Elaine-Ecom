@@ -128,9 +128,22 @@
                                         <th></th>
                                     </tr>
                                 </thead>
+                                
                                 <tbody>
+                                    
                                     <tr>
-                                        <% if(cartData.products.length > 0){%> 
+                                        <% if( !cartData || cartData.products.length < 0 ){%> 
+
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col" style="margin-left: 320px;">
+                                                        <p class="font-weight-bolder">Your cart is empty!</p><br><br>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        <%} else{%> 
+
                                         <% cartData.products.forEach(product=> { %>
                                             <td class="product-col">
                                                 <div class="product">
@@ -145,7 +158,7 @@
                                                 </div><!-- End .product -->
                                             </td>
                                             <td class="price-col">
-                                                ₹<%= product.productId.prdctPrice %>
+                                                Rs. <%= product.productId.prdctPrice %>
                                             </td>
                                             <td class="quantity-col" >
                                                 <div class="cart-product-quantity"  onclick="getQuantity(this)" >
@@ -157,7 +170,7 @@
                                                 </div><!-- End .cart-product-quantity -->
 
                                             </td>
-                                            <td class="total-col"><%= product.totalPrice %></td>
+                                            <td class="total-col">Rs. <%= product.totalPrice %></td>
                                             <td class="remove-col"><button class="btn-remove"
                                                     data-product-id="<%= product.productId._id %>">
                                                     <i class="icon-close"></i>
@@ -165,10 +178,6 @@
                                             </td>
                                     </tr>
                                     <% }); %>
-                                    <%} else{%>
-                                
-                                        <p>Your cart is empty!</p>
-                                
                                     <%} %>
                                 </tbody>
                             </table><!-- End .table table-wishlist -->
@@ -194,10 +203,18 @@
 
                                 <table class="table table-summary">
                                     <tbody>
-                                        <tr class="summary-subtotal">
-                                            <td>Subtotal:</td>
-                                            <td>$160.00</td>
-                                        </tr><!-- End .summary-subtotal -->
+                                        <% if(!cartData || cartData.products.length < 0) {%>
+                                            <tr class="summary-subtotal">
+                                                <td>Subtotal:</td>
+                                                <td>Rs. 0.00</td>
+                                            </tr><!-- End .summary-subtotal -->
+                                        <%}else{%>
+                                           
+                                            <tr class="summary-subtotal">
+                                                <td>Subtotal:</td>
+                                                <td>Rs. <%= cartData.totalCost %></td>
+                                            </tr><!-- End .summary-subtotal -->
+                                        <%}%>
                                         <tr class="summary-shipping">
                                             <td>Shipping:</td>
                                             <td>&nbsp;</td>
@@ -212,7 +229,7 @@
                                                         Shipping</label>
                                                 </div><!-- End .custom-control -->
                                             </td>
-                                            <td>$0.00</td>
+                                            <td>Rs. 0.00</td>
                                         </tr><!-- End .summary-shipping-row -->
 
                                         <tr class="summary-shipping-row">
@@ -224,7 +241,7 @@
                                                         for="standart-shipping">Standart:</label>
                                                 </div><!-- End .custom-control -->
                                             </td>
-                                            <td>$10.00</td>
+                                            <td>Rs. 0.00</td>
                                         </tr><!-- End .summary-shipping-row -->
 
                                         <tr class="summary-shipping-row">
@@ -236,7 +253,7 @@
                                                         for="express-shipping">Express:</label>
                                                 </div><!-- End .custom-control -->
                                             </td>
-                                            <td>$20.00</td>
+                                            <td>Rs. 0.00</td>
                                         </tr><!-- End .summary-shipping-row -->
 
                                         <tr class="summary-shipping-estimate">
@@ -245,18 +262,27 @@
                                             <td>&nbsp;</td>
                                         </tr><!-- End .summary-shipping-estimate -->
 
-                                        <tr class="summary-total">
-                                            <td>Total:</td>
-                                            <td>$160.00</td>
-                                        </tr><!-- End .summary-total -->
+                                        <% if(!cartData || cartData.products.length < 0) {%>
+                                            <tr class="summary-subtotal">
+                                                <td>Total:</td>
+                                                <td>Rs. 0.00</td>
+                                            </tr><!-- End .summary-total -->
+                                            <%}else{%>
+                                                
+                                                <tr class="summary-subtotal">
+                                                    <td>Total:</td>
+                                                    <td>Rs. <%= cartData.totalCost %></td>
+                                                </tr><!-- End .summary-total -->
+                                            <%}%>
+
                                     </tbody>
                                 </table><!-- End .table table-summary -->
 
-                                <a href="checkout.html" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO
+                                <a href="checkout" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO
                                     CHECKOUT</a>
                             </div><!-- End .summary -->
 
-                            <a href="category.html" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE
+                            <a href="products" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE
                                     SHOPPING</span><i class="icon-refresh"></i></a>
                         </aside><!-- End .col-lg-3 -->
                     </div><!-- End .row -->
@@ -466,11 +492,14 @@
                     return response.json()
                 })
                 .then(data => {
-                    console.log(data)
+                    
                     const totalValue = element.querySelector(".total-col");
-                    console.log("this is totat;;value elem", totalValue)
-                    console.log("this is priice", data.updatedTotalPrice.totalPrice)
+                    
                     totalValue.innerHTML = data.updatedTotalPrice.totalPrice;
+                })
+                .then(data =>{
+                    const totalCost = element.querySelector(".summary-subtotal");
+                    totalCost.innerHTML = data.totalCost.totalCost;
                 })
                 .catch(error => console.error('Error:', error));
         }

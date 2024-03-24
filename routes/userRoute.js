@@ -62,7 +62,7 @@ user_route.post("/verifyOtp", otpController.verifyOtp);
 
 // resend otp route
 user_route.get("/resendOtp", authentication.isLogout, otpController.resendOtp);
-user_route.post("/verifyResendOtp", otpController.verifyResendOtp);
+user_route.post("/resendOtp", otpController.verifyResendOtp);
 
 // load home page route
 user_route.get("/userHome", authentication.isLogin, accessAuth.accessUser, userController.userHomeLoad);
@@ -76,6 +76,9 @@ user_route.put("/updateCartItemQuantity/:productId", authentication.isLogin, acc
 
 // load cart
 user_route.get("/cart", authentication.isLogin, accessAuth.accessUser, userController.cartLoad);
+
+// load checkout
+user_route.get("/checkout", authentication.isLogin, accessAuth.accessUser, userController.checkoutLoad);
 
 // load contact us
 user_route.get("/contactUs", authentication.isLogin, accessAuth.accessUser,  userController.contactUsLoad);

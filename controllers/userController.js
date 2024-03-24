@@ -105,7 +105,7 @@ const verifySignup = async (req, res) => {
                         }else{
 
                             await otpController.sendOtpMail(req.body.name, req.body.email);
-
+                            await otpController.resendOtpMail(req.body.name, req.body.email);
                             req.session.email = req.body.email;
                             req.session.name = checkAlreadyMail.name;
 
@@ -129,6 +129,7 @@ const verifySignup = async (req, res) => {
                         if (userData) {
 
                             await otpController.sendOtpMail(req.body.name, req.body.email);
+                            await otpController.resendOtpMail(req.body.name, req.body.email);
 
                             req.session.email = req.body.email;
                             req.session.name = userData.name;
@@ -289,6 +290,7 @@ const saveAddress = async (req, res) => {
         const {
             fullname,
             addressline, 
+            addressline2,
             city,
             state,
             email,
@@ -306,6 +308,7 @@ const saveAddress = async (req, res) => {
                     address:{
                         fullname: fullname,
                         addressline: addressline,
+                        addressline2: addressline2,
                         city: city,
                         state: state,
                         email: email,
@@ -328,12 +331,11 @@ const editAddress = async (req, res) => {
     try {
         const editAddressId = req.params.id;
         const userId = req.session.user_id;
-        console.log(userId);
-        console.log(editAddressId);
-        console.log("aammm herre edit address");
+        
         const {
             fullname,
             addressline, 
+            addressline2,
             city,
             state,
             email,
@@ -342,7 +344,7 @@ const editAddress = async (req, res) => {
             
         } = req.body;
 
-        const editUserData = await User.findOneAndUpdate(
+        await User.findOneAndUpdate(
             {
                 _id: userId,
                 "address._id": editAddressId
@@ -351,6 +353,7 @@ const editAddress = async (req, res) => {
                 $set:{
                     "address.$.fullname": fullname,
                     "address.$.addressline": addressline,
+                    "address.$.addressline": addressline2,
                     "address.$.city": city,
                     "address.$.state": state,
                     "address.$.email": email,
@@ -359,8 +362,6 @@ const editAddress = async (req, res) => {
                 }
             });
 
-            console.log("======================================editUserData================================");
-            console.log(editUserData);
             res.json({success: true})
 
     } catch (error) {
@@ -373,14 +374,16 @@ const removeAddress = async (req, res) => {
     try {
         
         const addressId = req.body.addressId;
-        console.log(addressId);
+        
         const userData = await User.findOneAndUpdate(
             {"address._id": addressId},
             {$pull:{address:{_id:addressId}}}
         );
+
         if (!userData) {
             return res.json({ message: 'User not found' });
         }
+
         res.json({ message: 'Address removed successfully' });
 
 
@@ -424,7 +427,9 @@ const addProductsToCart = async (req, res) => {
         const productImagesArray = productImagebyId.prdctImage.map(image => `${image}`);
 
         const cartData = await Cart.findOne({userId: req.session.user_id});
+        
         if (cartData) {
+            
             const alreadyExist = cartData.products.find((pro) => pro.productId.toString() == productId);
             if (alreadyExist) {
                 // If the product already exists in the cart, set the price
@@ -484,7 +489,7 @@ const updateCartQuantity = async (req, res) =>{
         const productDatabyId = await Product.findById({ _id: productId });
 
         const quantity = req.body.quantity;
-        const cartData = await Cart.findOneAndUpdate(
+        await Cart.findOneAndUpdate(
             { 
                 userId: req.session.user_id,
                 "products.productId": productId 
@@ -502,15 +507,16 @@ const updateCartQuantity = async (req, res) =>{
                 "products.productId": productId 
             }
         )
-        console.log(updatedCartData)
+
         const totalPrice =  updatedCartData.products.find(product=> {
+
            if(product.productId == productId){
             return product.totalPrice
            }
-        })
-        console.log(totalPrice);
 
-        res.json({success: true, updatedTotalPrice:totalPrice});
+        });
+
+        res.json({success: true, updatedTotalPrice:totalPrice, totalCost: totalCost});
 
 
     } catch (error) {
@@ -542,6 +548,25 @@ const deleteCartItem = async (req, res) => {
 
         res.json({success: true})
         
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+// load checkout page
+const checkoutLoad = async (req, res) => {
+
+    try {
+        
+        const userDataCheckout = await User.findById(
+            {
+                _id: req.session.user_id
+            }
+        );
+
+        res.render("checkout", userDataCheckout);
+
     } catch (error) {
         console.log(error.message);
     }
@@ -581,5 +606,6 @@ module.exports = {
     editAddress,
     removeAddress,
     cartLoad,
+    checkoutLoad,
     userLogout
 }

@@ -111,6 +111,58 @@ const resendOtp = async (req, res) =>{
     }
 }
 
+// resend otp mail
+const resendOtpMail = async (name, email) =>{
+
+    try {
+       
+        const otp = generateOtp();
+        const createdAt = new Date();
+        const expiredAt = new Date(Date.now() + (1 * 60 * 1000));
+
+        await Otp.deleteOne({email:email});
+               
+        const otpData = new Otp({
+            email: email,
+            otp: otp,
+            createdAt: createdAt,
+            expiredAt: expiredAt
+        });
+        await otpData.save();
+        
+        const transporter = await nodemailer.createTransport({
+        
+            host: "smtp.gmail.com",
+            port: 587,
+            secure: false,
+            requireTLS: true,
+            auth:{
+                user: process.env.AUTHENTICATION_EMAIL,
+                pass: process.env.AUTHENTICATION_PASS
+            }
+        });
+
+        const mailOptions = {
+            from: "meathirarosejohn@gmail.com",
+            to: email,
+            subject: "Verify your mail using OTP",
+            text: `Hi ${name}, 
+                    Please verify your mail using this otp ${otp}.`
+        }
+
+        transporter.sendMail(mailOptions, (error,info) =>{
+            if(error){
+                console.log(error);
+            }else{
+                console.log("Email has been sent:-"+info.response);
+            }
+        });
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 // verify resend OTP
 const verifyResendOtp = async (req, res) => {
 
@@ -157,6 +209,7 @@ module.exports = {
     verifyOtpLoad,
     verifyOtp,
     sendOtpMail,
+    resendOtpMail,
     resendOtp,
     verifyResendOtp   
 }
