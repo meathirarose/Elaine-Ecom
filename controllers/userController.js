@@ -565,7 +565,7 @@ const checkoutLoad = async (req, res) => {
             }
         );
 
-        res.render("checkout", userDataCheckout);
+        res.render("checkout", {userDataCheckout});
 
     } catch (error) {
         console.log(error.message);

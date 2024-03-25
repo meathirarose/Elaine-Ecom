@@ -543,13 +543,13 @@ b {
   font-size: 24px;
 }
 
-.menu-aside .menu-item.active .icon {
+/* .menu-aside .menu-item.active .icon {
   color: #3BB77E;
-}
+} */
 
-.menu-aside .menu-item.active .menu-link {
+/* .menu-aside .menu-item.active .menu-link {
   background-color: rgba(59, 183, 126, 0.2);
-}
+} */
 
 .menu-aside .menu-item.active .submenu a.active {
   color: #3BB77E !important;

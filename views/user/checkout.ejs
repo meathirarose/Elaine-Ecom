@@ -124,46 +124,76 @@
                             <label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
                         </form>
                     </div><!-- End .checkout-discount -->
-                    <form action="#">
+                    
+                    
                         <div class="row">
-                            <div class="col-lg-9">
-                                <h2 class="checkout-title">Billing Details</h2><!-- End .checkout-title -->
-                                    
-                                <div class="form-group">
-                                    <label for="name">Full Name </label>
-                                    <input type="text" class="form-control" id="fullname" name="fullname" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="addressline">Street address *</label>
-                                    <input type="text" class="form-control" id="addressline" name="addressline" required>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="city">Town / City *</label>
-                                        <input type="text" class="form-control" id="city" name="city" required>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="state">State / County *</label>
-                                        <input type="text" class="form-control" id="state" name="state" required>
-                                    </div>
-                                </div>
-                                
-                                <div class="form-row">
-                                    <div class="form-group col-md-6">
-                                        <label for="pincode">Postcode / ZIP *</label>
-                                        <input type="number" class="form-control" id="pincode" name="pincode" required>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="phone">Phone *</label>
-                                        <input type="tel" class="form-control" id="phone" name="phone" required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">Email Address </label>
-                                    <input type="email" class="form-control" id="email" name="email" required>
-                                </div>
 
-                            </div><!-- End .col-lg-9 -->
+                            <div class="col-lg-9">
+                                <% if ( !userDataCheckout.address || userDataCheckout.address.length===0) { %>
+                                    <h2 class="checkout-title">Billing Details</h2><!-- End .checkout-title -->
+                                    <form action="#" method="post">
+                                    <div class="form-group">
+                                        <label for="name">Full Name </label>
+                                        <input type="text" class="form-control" id="fullname" name="fullname" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="addressline">Street address *</label>
+                                        <input type="text" class="form-control" id="addressline" name="addressline" required>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="city">Town / City *</label>
+                                            <input type="text" class="form-control" id="city" name="city" required>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="state">State / County *</label>
+                                            <input type="text" class="form-control" id="state" name="state" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="pincode">Postcode / ZIP *</label>
+                                            <input type="number" class="form-control" id="pincode" name="pincode" required>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="phone">Phone *</label>
+                                            <input type="tel" class="form-control" id="phone" name="phone" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email Address </label>
+                                        <input type="email" class="form-control" id="email" name="email" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Save</button>
+
+                                <% } else{%>
+                                    <% userDataCheckout.address.forEach(element=> { %>
+                                        <div class="col-lg-6">
+                                            <div class="card card-dashboard" id="cardDashboard">
+                                                <div class="card-body">
+                                                    <h3 class="card-title">Billing Address</h3>
+                                                    <!-- End .card-title -->
+                                                    <p>
+                                                        <%= element.fullname %><br>
+                                                        <%= element.addressline %><br>
+                                                        <%= element.city %>,
+                                                        <%= element.state %><br>
+                                                        <%= element.pincode %><br>
+                                                        <%= element.phone %><br>
+                                                        <%= element.email %><br>
+                                                        <br>
+                                                    </p>
+                                                </div><!-- End .card-body -->
+                                            </div><!-- End .card-dashboard -->
+                                        </div><!-- End .col-lg-6 -->
+                                    <% }); %>
+                                    <%} %> 
+                                </form>
+                                </div><!-- End .col-lg-9 -->
+                                                              
+                            
+
                             <aside class="col-lg-3">
                                 <div class="summary">
                                     <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
@@ -284,7 +314,7 @@
                                 </div><!-- End .summary -->
                             </aside><!-- End .col-lg-3 -->
                         </div><!-- End .row -->
-                    </form>
+                    
                 </div><!-- End .container -->
             </div><!-- End .checkout -->
         </div><!-- End .page-content -->
