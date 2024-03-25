@@ -53,17 +53,10 @@
                             <span class="wishlist-txt">My Wishlist</span>
                         </a>
                         <div class="dropdown cart-dropdown">
-                            <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false" data-display="static">
+                            <a href="cart" class="dropdown-toggle" role="button" aria-haspopup="true"
+                                aria-expanded="false" data-display="static">
                                 <i class="icon-shopping-cart"></i>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <div class="dropdown-cart-action">
-                                    <a href="cart.html" class="btn btn-primary">View Cart</a>
-                                    <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i
-                                            class="icon-long-arrow-right"></i></a>
-                                </div><!-- End .dropdown-cart-total -->
-                            </div><!-- End .dropdown-menu -->
                         </div><!-- End .cart-dropdown -->
                     </div>
                 </div><!-- End .container -->
@@ -191,7 +184,7 @@
                                                             <h3 class="card-title">Billing Address</h3>
                                                             <!-- End .card-title -->
                                                             <p>You have not set up this type of address yet.<br>
-                                                                <a href="#" class="showAddAddress">Add address <i class="icon-edit"></i></a>
+                                                                <!-- <a href="#" class="showAddAddress">Add address <i class="icon-edit"></i></a> -->
                                                             </p>
                                                         </div><!-- End .card-body -->
                                                     </div><!-- End .card-dashboard -->
@@ -568,42 +561,42 @@
     </script>
     <script>
         
-        $(document).ready(function () {
-        // edit button click
-            $('.edit-address').click(function (e) {
-                e.preventDefault();
-                var editId = $(this).data('edit-id');
-                $(`#editAddress${editId}`).show();
-            });
-        // edit address form
-            $('#editAddressForm').submit(function (e) {
-                e.preventDefault();
-                var editId = $(this).find('#editAddressId').val(); 
-                var formData = $(this).serialize(); 
-
-                fetch('/editAddress/' + editId, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: formData
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Address updated successfully:', data);
-                    location.reload();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-            });
-
+    $(document).ready(function () {
+        // Edit button click
+        $('.edit-address').click(function (e) {
+            e.preventDefault();
+            var editId = $(this).data('edit-id');
+            $('#editAddressForm' + editId).submit(); 
         });
+
+        // Edit address form submission
+        $('.edit-address-form').submit(function (e) {
+            e.preventDefault();
+            var editId = $(this).find('#editAddressId').val();
+            var formData = $(this).serialize();
+
+            fetch('/editAddress/' + editId, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Address updated successfully:', data);
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
 
 
     </script>
@@ -616,12 +609,6 @@
 
                     const addressId = this.getAttribute('data-address-id');
                     const addressElement = document.querySelector(`[data-address-id="${addressId}"]`);
-
-                    addressElement.style.transition = 'height 0.5s ease';
-                    addressElement.style.height = '0';
-                    addressElement.style.padding = '0';
-                    addressElement.style.margin = '0';
-                    addressElement.style.overflow = 'hidden';
 
                     fetch('/removeAddress', {
                         method: 'POST',

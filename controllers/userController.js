@@ -335,7 +335,6 @@ const editAddress = async (req, res) => {
         const {
             fullname,
             addressline, 
-            addressline2,
             city,
             state,
             email,
@@ -353,7 +352,6 @@ const editAddress = async (req, res) => {
                 $set:{
                     "address.$.fullname": fullname,
                     "address.$.addressline": addressline,
-                    "address.$.addressline": addressline2,
                     "address.$.city": city,
                     "address.$.state": state,
                     "address.$.email": email,
@@ -400,8 +398,7 @@ const cartLoad = async (req, res) => {
 
 
             const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
-            
-
+           
             res.render("cart" ,{cartData:cartData});
 
     } catch (error) {
@@ -416,7 +413,7 @@ const addProductsToCart = async (req, res) => {
     try {
 
         const productId = req.query.productId;
-        
+        console.log(productId);
         //for getting the product data with the particular id
         const productDatabyId = await Product.findById({ _id: productId });
         
@@ -466,7 +463,8 @@ const addProductsToCart = async (req, res) => {
                     productPrice: productDatabyId.prdctPrice,
                     totalPrice: productDatabyId.prdctPrice
                 }],
-                userId: req.session.user_id
+                userId: req.session.user_id,
+                totalCost: 0
             });
 
             await newCart.save();
@@ -497,7 +495,8 @@ const updateCartQuantity = async (req, res) =>{
             {$set: 
                 { "products.$.quantity": quantity,
                   "products.$.productPrice" : productDatabyId.prdctPrice,
-                  "products.$.totalPrice" : quantity * productDatabyId.prdctPrice
+                  "products.$.totalPrice" : quantity * productDatabyId.prdctPrice,
+                  "products.$.totalCost" : 0
             }
         });
        
@@ -516,8 +515,16 @@ const updateCartQuantity = async (req, res) =>{
 
         });
 
-        res.json({success: true, updatedTotalPrice:totalPrice, totalCost: totalCost});
+        const totalCost = updatedCartData.products.reduce((accumulator, product) => {
 
+            return accumulator + product.totalPrice;
+
+        }, 0);
+
+        updatedCartData.totalCost = totalCost;
+        await updatedCartData.save();
+
+        res.json({success: true, updatedTotalPrice:totalPrice, totalCost: totalCost});
 
     } catch (error) {
         console.log(error.message);
@@ -564,8 +571,10 @@ const checkoutLoad = async (req, res) => {
                 _id: req.session.user_id
             }
         );
+        const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
+        console.log(cartData);
 
-        res.render("checkout", {userDataCheckout});
+        res.render("checkout", {userDataCheckout, cartData});
 
     } catch (error) {
         console.log(error.message);

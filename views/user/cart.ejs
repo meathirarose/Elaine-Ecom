@@ -132,7 +132,7 @@
                                 <tbody>
                                     
                                     <tr>
-                                        <% if( !cartData || cartData.products.length < 0 ){%> 
+                                        <% if( !cartData && cartData.products.length < 0 ){%> 
 
                                             <div class="container">
                                                 <div class="row">
@@ -161,7 +161,7 @@
                                                 Rs. <%= product.productId.prdctPrice %>
                                             </td>
                                             <td class="quantity-col" >
-                                                <div class="cart-product-quantity"  onclick="getQuantity(this)" >
+                                                <div class="cart-product-quantity"  onchange="getQuantity(this)" >
                                                  
                                                     <input  type="number" class="quantity"
                                                         data-product-id="<%= product.productId._id %>" value="1" min="1"
@@ -171,6 +171,7 @@
 
                                             </td>
                                             <td class="total-col">Rs. <%= product.totalPrice %></td>
+
                                             <td class="remove-col"><button class="btn-remove"
                                                     data-product-id="<%= product.productId._id %>">
                                                     <i class="icon-close"></i>
@@ -203,17 +204,17 @@
 
                                 <table class="table table-summary">
                                     <tbody>
-                                        <% if(!cartData || cartData.products.length < 0) {%>
+                                        <% if(cartData.products && cartData.products.length > 0) {%>
                                             <tr class="summary-subtotal">
                                                 <td>Subtotal:</td>
-                                                <td>Rs. 0.00</td>
+                                                <td class="totalCost">Rs. <%= cartData.totalCost %></td>
                                             </tr><!-- End .summary-subtotal -->
-                                        <%}else{%>
+                                            <%}else{%>
+                                                <tr class="summary-subtotal">
+                                                    <td>Subtotal:</td>
+                                                    <td class="totalCost">Rs. 0.00</td>
+                                                </tr><!-- End .summary-subtotal -->
                                            
-                                            <tr class="summary-subtotal">
-                                                <td>Subtotal:</td>
-                                                <td>Rs. <%= cartData.totalCost %></td>
-                                            </tr><!-- End .summary-subtotal -->
                                         <%}%>
                                         <tr class="summary-shipping">
                                             <td>Shipping:</td>
@@ -262,24 +263,25 @@
                                             <td>&nbsp;</td>
                                         </tr><!-- End .summary-shipping-estimate -->
 
-                                        <% if(!cartData || cartData.products.length < 0) {%>
+                                        <% if(cartData && cartData.products.length > 0) {%>
                                             <tr class="summary-subtotal">
                                                 <td>Total:</td>
-                                                <td>Rs. 0.00</td>
+                                                <td class="totalCost">Rs. <%= cartData.totalCost %></td>
                                             </tr><!-- End .summary-total -->
                                             <%}else{%>
                                                 
                                                 <tr class="summary-subtotal">
                                                     <td>Total:</td>
-                                                    <td>Rs. <%= cartData.totalCost %></td>
+                                                    <td class="totalCost">Rs. 0.00</td>
                                                 </tr><!-- End .summary-total -->
-                                            <%}%>
-
+                                                <%}%>
+                                                
                                     </tbody>
                                 </table><!-- End .table table-summary -->
-
+                                <% if(cartData && cartData.products.length > 0) {%>
                                 <a href="checkout" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO
                                     CHECKOUT</a>
+                                <%}%>
                             </div><!-- End .summary -->
 
                             <a href="products" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE
@@ -461,6 +463,8 @@
                 })
                     .then(response => {
                         if (response.ok) {
+                            window.location.reload();
+
                             this.closest('tr').remove();
                         } else {
                         console.error('Failed to delete product');
@@ -476,32 +480,29 @@
     <script>
 
         function getQuantity(element) {
-
+console.log("dd")
             const productId = element.querySelector('.quantity').getAttribute('data-product-id');
             const quantity = element.querySelector('.quantity').value;
 
             fetch(`/updateCartItemQuantity/${productId}`, {
-                method: 'PUT',
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ quantity: quantity })
             })
                 .then(response => {
-                    console.log(response)
+                    location.reload();
                     return response.json()
                 })
                 .then(data => {
-                    
                     const totalValue = element.querySelector(".total-col");
-                    
                     totalValue.innerHTML = data.updatedTotalPrice.totalPrice;
+                    console.log(data)
+                    console.log(totalValue);
                 })
-                .then(data =>{
-                    const totalCost = element.querySelector(".summary-subtotal");
-                    totalCost.innerHTML = data.totalCost.totalCost;
-                })
-                .catch(error => console.error('Error:', error));
+
+            .catch(error => console.error('Error:', error));
         }
 
     </script>
