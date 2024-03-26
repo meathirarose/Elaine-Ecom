@@ -19,7 +19,7 @@ function generateOtp(){
 }
 
 // for sending mail
-const sendOtpMail = async (name, email) =>{
+const sendOtpMail = async (email) =>{
 
     try {
        
@@ -53,7 +53,7 @@ const sendOtpMail = async (name, email) =>{
             from: "meathirarosejohn@gmail.com",
             to: email,
             subject: "Verify your mail using OTP",
-            text: `Hi ${name}, 
+            text: `Hi , 
                     Please verify your mail using this otp ${otp}.`
         }
 
@@ -103,7 +103,7 @@ const verifyOtp = async (req, res) =>{
 const resendOtp = async (req, res) =>{
     try {
         
-        await sendOtpMail(req.session.name, req.session.email );
+        await sendOtpMail(req.session.email );
         res.render("verifyOtp");
       
     } catch (error) {
@@ -112,7 +112,7 @@ const resendOtp = async (req, res) =>{
 }
 
 // resend otp mail
-const resendOtpMail = async (name, email) =>{
+const resendOtpMail = async (email) =>{
 
     try {
        
@@ -146,7 +146,7 @@ const resendOtpMail = async (name, email) =>{
             from: "meathirarosejohn@gmail.com",
             to: email,
             subject: "Verify your mail using OTP",
-            text: `Hi ${name}, 
+            text: `Hi, 
                     Please verify your mail using this otp ${otp}.`
         }
 

@@ -27,6 +27,7 @@ user_route.set('views','./views/user');
 // requiring controllers
 const userController = require('../controllers/userController');
 const otpController = require("../auth/otpMailVerify");
+const forgotPasswordController = require("../auth/forgotPassword");
 
 // user load page route
 user_route.get("/", authentication.isLogout, userController.userLoadPage);
@@ -34,6 +35,14 @@ user_route.get("/", authentication.isLogout, userController.userLoadPage);
 // user login route
 user_route.get("/userLogin", authentication.isLogout, userController.userLoginLoad);
 user_route.post("/userLogin", userController.verifyLogin);
+
+// forgot password
+user_route.get("/forgotPasswordEmail", authentication.isLogout, forgotPasswordController.forgotPasswordEmailLoad);
+user_route.post("/forgotPasswordEmail", forgotPasswordController.verifyForgotEmail);
+user_route.get("/verifyOtpForgot", authentication.isLogout, forgotPasswordController.verifyOtpForgotLoad);
+user_route.post("/verifyOtpForgot", forgotPasswordController.verifyOtpForgot);
+user_route.get("/forgotPassword", authentication.isLogout, forgotPasswordController.forgotPasswordLoad);
+user_route.post("/forgotPassword", forgotPasswordController.updatePassword);
 
 // google authentication
 user_route.get("/google", authentication.isLogout, passport.authenticate("google", {

@@ -74,6 +74,7 @@ const verifyLogin = async (req, res) => {
     }
 }
 
+
 // user signup load
 const userSignupLoad = async (req, res) => {
     try {
@@ -104,8 +105,8 @@ const verifySignup = async (req, res) => {
 
                         }else{
 
-                            await otpController.sendOtpMail(req.body.name, req.body.email);
-                            await otpController.resendOtpMail(req.body.name, req.body.email);
+                            await otpController.sendOtpMail( req.body.email);
+                            await otpController.resendOtpMail( req.body.email);
                             req.session.email = req.body.email;
                             req.session.name = checkAlreadyMail.name;
 
@@ -128,8 +129,8 @@ const verifySignup = async (req, res) => {
 
                         if (userData) {
 
-                            await otpController.sendOtpMail(req.body.name, req.body.email);
-                            await otpController.resendOtpMail(req.body.name, req.body.email);
+                            await otpController.sendOtpMail(req.body.email);
+                            await otpController.resendOtpMail( req.body.email);
 
                             req.session.email = req.body.email;
                             req.session.name = userData.name;
@@ -593,6 +594,7 @@ const placeOrderLoad = async (req, res) => {
             }
         );
         const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
+        
 
         res.render("placeOrder", {userDataCheckout, cartData});
 
