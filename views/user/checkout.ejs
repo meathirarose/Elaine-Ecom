@@ -268,7 +268,7 @@
                                                     alt="Product image" style="height: 55px; width: 45px;"></a></td>
 
                                                 <td><a href="#"><%= product.productId.prdctName %></a></td>
-                                                <td>Rs. <%= product.productId.prdctPrice %></td>
+                                                <td>Rs. <%= product.totalPrice %></td>
                                             </tr>
                                             <% });%>
                                             <% if(cartData.products && cartData.products.length > 0) {%>
@@ -377,10 +377,9 @@
                                         </div><!-- End .card -->
                                     </div><!-- End .accordion -->
 
-                                    <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
+                                    <a href="placeOrder"><button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
                                         <span class="btn-text">Place Order</span>
-                                        <span class="btn-hover-text">Proceed to Checkout</span>
-                                    </button>
+                                    </button></a>
                                 </div><!-- End .summary -->
                             </aside><!-- End .col-lg-3 -->
                         </div><!-- End .row -->

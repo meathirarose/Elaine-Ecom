@@ -582,6 +582,47 @@ const checkoutLoad = async (req, res) => {
 
 }
 
+// load place order
+const placeOrderLoad = async (req, res) => {
+
+    try {
+        
+        const userDataCheckout = await User.findById(
+            {
+                _id: req.session.user_id
+            }
+        );
+        const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
+
+        res.render("placeOrder", {userDataCheckout, cartData});
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+// const order details load
+const orderDetailsLoad = async (req, res) => {
+
+    try {
+        
+        const userDataCheckout = await User.findById(
+            {
+                _id: req.session.user_id
+            }
+        );
+        const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
+
+        res.render("orderDetails", {userDataCheckout, cartData});
+
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
 // logout user
 const userLogout = async (req, res) => {
     try {
@@ -616,5 +657,7 @@ module.exports = {
     removeAddress,
     cartLoad,
     checkoutLoad,
+    placeOrderLoad,
+    orderDetailsLoad,
     userLogout
 }

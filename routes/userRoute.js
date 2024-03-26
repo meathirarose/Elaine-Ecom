@@ -80,6 +80,12 @@ user_route.get("/cart", authentication.isLogin, accessAuth.accessUser, userContr
 // load checkout
 user_route.get("/checkout", authentication.isLogin, accessAuth.accessUser, userController.checkoutLoad);
 
+// load place order
+user_route.get("/placeOrder", authentication.isLogin, accessAuth.accessUser, userController.placeOrderLoad);
+
+// load order details
+user_route.get("/orderDetails", authentication.isLogin, accessAuth.accessUser, userController.orderDetailsLoad);
+
 // load contact us
 user_route.get("/contactUs", authentication.isLogin, accessAuth.accessUser,  userController.contactUsLoad);
 

@@ -1,4 +1,3 @@
-
 <%-include("../layout/user/header")-%>
 
 <div class="page-wrapper">
@@ -91,85 +90,130 @@
                                 </li>
                             </ul><!-- End .menu -->
                         </nav><!-- End .main-nav -->
-                    <button class="mobile-menu-toggler">
-                        <span class="sr-only">Toggle mobile menu</span>
-                        <i class="icon-bars"></i>
-                    </button>
-                </div><!-- End .header-left -->                   
-            </div><!-- End .container -->
-        </div><!-- End .header-bottom -->
+    <button class="mobile-menu-toggler">
+        <span class="sr-only">Toggle mobile menu</span>
+        <i class="icon-bars"></i>
+    </button>
+    </div><!-- End .header-left -->
+    </div><!-- End .container -->
+    </div><!-- End .header-bottom -->
     </header><!-- End .header -->
 
-        <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17" style="background-image: url('user/assets/images/backgrounds/login-bg.jpg')">
-            <div class="container">
-                <div class="form-box">
-                    <div class="form-tab">
-                        <ul class="nav nav-pills nav-fill" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active font-weight-bold" id="register-tab-2" data-toggle="tab" href="#signin-2" role="tab" aria-controls="register-2" aria-selected="true">Sign In</a>
-                            </li>
-                        </ul>
-                        <div class="tab-content">
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-12 ">
+        <form action="/">
+        <div class="page-content"> 
+            <div class="container-fluid">
+               
+                <% cartData.products.forEach((product) => { %>
+                <div class="row d-flex justify-content-center mt-3">
+              
+                    
+                    <div class="col-xl-6 mt-5">
+                        <div class="card border shadow mb-3" style="border-radius: 0 !important;">
+
                             
-                            <div class="tab-pane fade show active" id="signin-2" role="tabpanel" aria-labelledby="register-tab-2">
-                                
-                                <form action="/userLogin" method="post">
-
-                                    <div class="d-flex justify-content-center message">
-                                        <% 
-                                        if(typeof message !== 'undefined')
-                                        {
-                                        %> 
-                                        <p><%= message %></p>
-                                        <%
-                                        }
-                                        %>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="register-email">Your email address *</label>
-                                        <input type="email" class="form-control" id="register-email-2" name="email" required>
-                                    </div><!-- End .form-group -->							    
-
-                                    <div class="form-group">
-                                        <label for="register-password">Password *</label>
-                                        <input type="password" class="form-control" id="register-password-2" name="password" required>
-                                    </div><!-- End .form-group -->
-
-                                    <div class="form-footer">
-                                        <button type="submit" class="btn btn-outline-primary-2">
-                                            <span>SIGN IN</span>
-                                            <i class="icon-long-arrow-right"></i>
-                                        </button>
-
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="register-policy-2" required>
-                                            <label class="custom-control-label" for="register-policy-2">I agree to the <a href="#">privacy policy</a> *</label>
-                                            
-                                        </div><!-- End .custom-checkbox -->
-                                        <br><br><p class="font-weight-bolder"> Don’t have an account? <a href="userSignup">  SignUp </a>   here</p>
-                                    </div><!-- End .form-footer -->
-                                </form>
-                                <div class="form-choice">
-                                    <p class="text-center">or sign in with</p>
-                                    <div class="row d-flex justify-content-center">
+                            <div class="card-body">
+                                <article class="itemlist ">
+                                    <div class="row align-items-center">
                                         
-                                        <div class="col-sm-6">
-                                            <a href="/google" class="btn btn-login btn-g">
-                                                <i class="icon-google"></i>
-                                                Login With Google
+                                        
+                                        <div class="col-lg-6 col-sm-4 col-8 flex-grow-5 col-name " style="width:auto;">
+                                            <a class="itemside" href="#">
+                                                <div class="left">
+                                                    <img src="/uploads/<%= product.productId.prdctImage[0] %>" class="img-sm img-thumbnail" style="width: 150px;" alt="Item" />
+                                                    
+                                                </div> 
+                                                <div class="info">
+                                                    <h6 class="mb-0"><%= element.productId.name %></h6>     
+                                                    <h6 class="mb-0">Rs.<%= element.totalAmount %>.00</h6>     
+                                                    <h6 class="mb-0">QTY:<%= element.quantity%></h6>     
+                                                    <!-- <h6 class="mb-0">neme</h6>      -->
+                                                </div>
                                             </a>
-                                        </div><!-- End .col-6 -->
+                                        </div>
+                                        
+                                        <div class="col-lg-2 col-sm-2 col-4 col-price">
+                                            <h6 class="mb-0"><%= orderDetails.addressId.address %></h6>     
+                                            <h6 class="mb-0"><%= orderDetails.addressId.city %></h6> 
+                                            <h6 class="mb-0"><%= orderDetails.addressId.district %></h6> 
+                                            <h6 class="mb-0"><%= orderDetails.addressId.state %></h6> 
+                                            <h6 class="mb-0"><%= orderDetails.addressId.pincode %></h6> 
 
-                                    </div><!-- End .row -->
-                                </div><!-- End .form-choice -->
-                            </div><!-- .End .tab-pane -->
-                        </div><!-- End .tab-content -->
-                    </div><!-- End .form-tab -->
-                </div><!-- End .form-box -->
-            </div><!-- End .container -->
-        </div><!-- End .login-page section-bg -->
-    </main><!-- End .main -->
+                                        </div>
+                                       
+        
+                                        <div class="col-lg-4 col-sm-3 col-4 col-status">
+                                            <h6 class="mb-0">Shipped on March 16,2024</h6>  
+                                            <h6 class="mb-0">Your item has been canceled</h6>  
+                                          
+
+                                        </div>
+                                        <div class="col-lg-1 col-sm-2 col-4 col-date">
+                                             <span class="badge rounded-pill alert-success">cod</span>
+                                        </div>
+                                       
+                                    </div>
+                                    <!-- row .// -->
+                                </article>
+                                <!-- itemlist  .// -->
+                               
+                                <!-- itemlist  .// -->
+                            </div>
+                        </div>
+                    </div>
+                    
+
+                    <div class="col-xl-10">
+                        <div class="card border shadow mb-3" style="border-radius: 0 !important;">
+                            <div class="card-body">
+                                <div class="row d-flex justify-content-center py-3 align-items-center">
+                               
+                               <div class="col-md-8 d-flex justify-content-center mt-3 align-items-center">
+                                
+                                <!-- <div class="row  ">	 -->
+                                    <div class=" col-md-2 order-tracking completed">
+                                        <span class="is-complete"></span>
+                                        <p>Ordered<br><span>Mon, June 24</span></p>
+                                    </div>
+                                    <div class=" col-md-2 order-tracking completed ">
+                                        <span class="is-complete"></span>
+                                        <p>Shipped<br><span>Tue, June 25</span></p>
+                                    </div>
+                                    <div class=" col-md-2 order-tracking completed">
+                                        <span class="is-complete"></span>
+                                        <p>Out for delivery<br><span>Fri, June 28</span></p>
+                                    </div>
+                                    <div class=" col-md-2 order-tracking">
+                                    <span class="is-complete"></span>
+                                    <p>Delivered<br><span>Fri, June 28</span></p>
+                                </div>				  
+                                     
+                              <!-- </div> -->
+
+
+                               </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <!-- end card -->
+                </div>
+            
+                <% }); %>
+                
+            </div>
+        </div>
+    </form>
+          </div>
+
+
+
+
+
+
+
+
 
     <footer class="footer">
         <div class="footer-middle border-0">
@@ -301,8 +345,4 @@
         <script src="user/assets/js/demos/demo-6.js"></script>
         <script src="user/assets/js/demos/demo-16.js"></script>
 
-
-
-
-
-<%-include("../layout/user/footer")-%>
+    <%-include("../layout/user/footer")-%>
