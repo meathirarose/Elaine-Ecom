@@ -304,7 +304,6 @@ const saveAddress = async (req, res) => {
         const {
             fullname,
             addressline, 
-            addressline2,
             city,
             state,
             email,
@@ -312,6 +311,8 @@ const saveAddress = async (req, res) => {
             phone
             
         } = req.body;
+
+
 
         await User.findByIdAndUpdate(
             { 
@@ -322,7 +323,6 @@ const saveAddress = async (req, res) => {
                     address:{
                         fullname: fullname,
                         addressline: addressline,
-                        addressline2: addressline2,
                         city: city,
                         state: state,
                         email: email,
@@ -332,7 +332,7 @@ const saveAddress = async (req, res) => {
                 }
             });
 
-            res.json({success:true});
+            res.json({message:'Address saved successfully:'});
 
     } catch (error) {
         console.log(error.message);
@@ -450,9 +450,9 @@ const cartLoad = async (req, res) => {
     try {
 
 
-            const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
-           
-            res.render("cart" ,{cartData:cartData});
+        const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
+        
+        res.render("cart" ,{cartData:cartData});
 
     } catch (error) {
         console.log(error.message);

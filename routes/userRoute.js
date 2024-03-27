@@ -107,9 +107,5 @@ user_route.get("/userLogout", authentication.isLogin, userController.userLogout)
 // page not found
 user_route.get("/pageNotFound", authentication.isLogin, userController.pageNotFound);
 
-user_route.get('*', (req,res) => {
-    res.redirect("/pageNotFound");
-});
-
 module.exports = { 
     user_route}
