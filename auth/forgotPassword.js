@@ -54,7 +54,9 @@ const verifyForgotEmail = async (req, res) => {
 const verifyOtpForgotLoad = async (req, res) => {
 
     try {
+
         res.render("verifyOtpForgot");
+        
     } catch (error) {
         console.log(error.message);
     }

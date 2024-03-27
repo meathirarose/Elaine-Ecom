@@ -52,9 +52,12 @@ const sendOtpMail = async (email) =>{
         const mailOptions = {
             from: "meathirarosejohn@gmail.com",
             to: email,
-            subject: "Verify your mail using OTP",
-            text: `Hi , 
-                    Please verify your mail using this otp ${otp}.`
+            subject: "Elaine Ecom signup verification OTP",
+            text: `Hi, 
+
+            Please verify your Elaine Ecom account using OTP.
+
+            Your OTP for verification : ${otp}.`
         }
 
         transporter.sendMail(mailOptions, (error,info) =>{
@@ -99,11 +102,22 @@ const verifyOtp = async (req, res) =>{
     }
 }
 
+// load otp page 
+const verifyOtpLoad = async (req, res) =>{
+    try {
+
+        res.render("verifyOtp");
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 // resend otp
-const resendOtp = async (req, res) =>{
+const resendOtpLoad = async (req, res) =>{
     try {
         
-        await sendOtpMail(req.session.email );
+        await resendOtpMail(req.session.email );
         res.render("verifyOtp");
       
     } catch (error) {
@@ -145,9 +159,12 @@ const resendOtpMail = async (email) =>{
         const mailOptions = {
             from: "meathirarosejohn@gmail.com",
             to: email,
-            subject: "Verify your mail using OTP",
+            subject: "Elaine Ecom signup verification OTP",
             text: `Hi, 
-                    Please verify your mail using this otp ${otp}.`
+
+            Please verify your Elaine Ecom account using OTP.
+
+            Your OTP for verification : ${otp}.`
         }
 
         transporter.sendMail(mailOptions, (error,info) =>{
@@ -193,16 +210,7 @@ const verifyResendOtp = async (req, res) => {
 
 }
 
-// load otp page 
-const verifyOtpLoad = async (req, res) =>{
-    try {
 
-        res.render("verifyOtp");
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
 
 
 module.exports = {
@@ -210,6 +218,6 @@ module.exports = {
     verifyOtp,
     sendOtpMail,
     resendOtpMail,
-    resendOtp,
+    resendOtpLoad,
     verifyResendOtp   
 }

@@ -267,6 +267,7 @@ const contactUsLoad = async (req, res) => {
     }
 
 }
+// -------------------------------------- my account starts here ---------------------------------------------------//
 
 // my account load
 const myAccountLoad = async (req, res) => {
@@ -392,7 +393,42 @@ const removeAddress = async (req, res) => {
 
 }
 
+// change password
+const changePassword = async (req, res) => {
 
+    try {
+        
+        const currentPassword = req.body.currentPassword;
+        const newPassword = req.body.newPassword;
+        const confirmPassword = req.body.confirmPassword;
+
+        const userData = await User.findById({_id: req.session.user_id});
+        //current and new are same
+        if(currentPassword === newPassword){
+
+            res.render("myAccount", {userData});
+
+        }else{
+            if(newPassword === confirmPassword){
+
+                const secPassword = await securePassword(confirmPassword);
+                await User.updateOne({_id: req.session.user_id}, {password: secPassword});
+                res.render("myAccount", {userData});
+
+            }else{
+
+                res.render("myAccount",{userData});
+                
+            }
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+// -------------------------------------- my account starts here ---------------------------------------------------//
+// ---------------------------------------- cart starts here -----------------------------------------------------//
 // cart load
 const cartLoad = async (req, res) => {
     try {
@@ -561,6 +597,7 @@ const deleteCartItem = async (req, res) => {
     }
 
 }
+// ---------------------------------------- cart ends here -----------------------------------------------------//
 
 // load checkout page
 const checkoutLoad = async (req, res) => {
@@ -657,6 +694,7 @@ module.exports = {
     saveAddress,
     editAddress,
     removeAddress,
+    changePassword,
     cartLoad,
     checkoutLoad,
     placeOrderLoad,

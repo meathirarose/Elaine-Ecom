@@ -70,7 +70,7 @@ user_route.get("/verifyOtp", authentication.isLogout, otpController.verifyOtpLoa
 user_route.post("/verifyOtp", otpController.verifyOtp);
 
 // resend otp route
-user_route.get("/resendOtp", authentication.isLogout, otpController.resendOtp);
+user_route.get("/resendOtp", authentication.isLogout, otpController.resendOtpLoad);
 user_route.post("/resendOtp", otpController.verifyResendOtp);
 
 // load home page route
@@ -103,6 +103,7 @@ user_route.get("/myAccount", authentication.isLogin, accessAuth.accessUser, user
 user_route.post("/saveAddress", authentication.isLogin, accessAuth.accessUser, userController.saveAddress);
 user_route.post("/removeAddress", authentication.isLogin, accessAuth.accessUser, userController.removeAddress);
 user_route.put("/editAddress/:id", authentication.isLogin, accessAuth.accessUser, userController.editAddress);
+user_route.post("/changePassword", authentication.isLogin, accessAuth.accessUser, userController.changePassword);
 
 // user logout route
 user_route.get("/userLogout", authentication.isLogin, userController.userLogout);
