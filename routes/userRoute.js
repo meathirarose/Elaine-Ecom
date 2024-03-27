@@ -83,16 +83,12 @@ user_route.get("/addProductsToCart", authentication.isLogin, accessAuth.accessUs
 user_route.delete("/deleteCartItem/:productId", authentication.isLogin, accessAuth.accessUser, userController.deleteCartItem);
 user_route.post("/updateCartItemQuantity/:productId", authentication.isLogin, accessAuth.accessUser, userController.updateCartQuantity);
 
-// load cart
+// load cart & checkout
 user_route.get("/cart", authentication.isLogin, accessAuth.accessUser, userController.cartLoad);
-
-// load checkout
 user_route.get("/checkout", authentication.isLogin, accessAuth.accessUser, userController.checkoutLoad);
 
-// load place order
+// load place order & orderDetails
 user_route.get("/placeOrder", authentication.isLogin, accessAuth.accessUser, userController.placeOrderLoad);
-
-// load order details
 user_route.get("/orderDetails", authentication.isLogin, accessAuth.accessUser, userController.orderDetailsLoad);
 
 // load contact us
@@ -101,14 +97,19 @@ user_route.get("/contactUs", authentication.isLogin, accessAuth.accessUser,  use
 // load my account
 user_route.get("/myAccount", authentication.isLogin, accessAuth.accessUser, userController.myAccountLoad);
 user_route.post("/saveAddress", authentication.isLogin, accessAuth.accessUser, userController.saveAddress);
-user_route.post("/removeAddress", authentication.isLogin, accessAuth.accessUser, userController.removeAddress);
+user_route.delete("/removeAddress", authentication.isLogin, accessAuth.accessUser, userController.removeAddress);
 user_route.put("/editAddress/:id", authentication.isLogin, accessAuth.accessUser, userController.editAddress);
-user_route.post("/changePassword", authentication.isLogin, accessAuth.accessUser, userController.changePassword);
+user_route.put("/changePassword", authentication.isLogin, accessAuth.accessUser, userController.changePassword);
 
 // user logout route
 user_route.get("/userLogout", authentication.isLogin, userController.userLogout);
 
+// page not found
+user_route.get("/pageNotFound", authentication.isLogin, userController.pageNotFound);
 
+user_route.get('*', (req,res) => {
+    res.redirect("/pageNotFound");
+});
 
 module.exports = { 
     user_route}

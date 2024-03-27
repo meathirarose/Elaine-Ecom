@@ -14,6 +14,7 @@ const securePassword = async (password) => {
 
     } catch (error) {
         console.log(error.message);
+        res.render("404");
     }
 }
 
@@ -25,6 +26,7 @@ const userLoadPage = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.render("404");
     }
 }
 
@@ -36,6 +38,7 @@ const userLoginLoad = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.render("404");
     }
 }
 
@@ -71,6 +74,7 @@ const verifyLogin = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.render("404");
     }
 }
 
@@ -83,6 +87,7 @@ const userSignupLoad = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.render("404");
     }
 }
 
@@ -154,6 +159,7 @@ const verifySignup = async (req, res) => {
         }
     } catch (error) {
         console.log(error.message);
+        res.render("404");
     }
 }
 
@@ -192,6 +198,7 @@ const successGoogleLogin = async (req, res) =>{
         
     } catch (error) {
         console.log(error.message);
+        res.render("404");
     }
 }
 
@@ -214,6 +221,7 @@ const userHomeLoad = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.render("404");
     }
 }
 
@@ -227,6 +235,7 @@ const allProductsListLoad = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.render("404");
     }
 
 }
@@ -251,6 +260,7 @@ const productDetailsLoad = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.render("404");
     }
 
 }
@@ -264,6 +274,7 @@ const contactUsLoad = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.render("404");
     }
 
 }
@@ -280,6 +291,7 @@ const myAccountLoad = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.render("404");
     }
 
 }
@@ -324,6 +336,7 @@ const saveAddress = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.render("404");
     }
 
 }
@@ -366,6 +379,7 @@ const editAddress = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.render("404");
     }
 }
 
@@ -389,6 +403,7 @@ const removeAddress = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.render("404");
     }
 
 }
@@ -402,28 +417,29 @@ const changePassword = async (req, res) => {
         const newPassword = req.body.newPassword;
         const confirmPassword = req.body.confirmPassword;
 
-        const userData = await User.findById({_id: req.session.user_id});
         //current and new are same
         if(currentPassword === newPassword){
 
-            res.render("myAccount", {userData});
+            return res.json({ message: "New password cannot be the same as current password." });
 
         }else{
             if(newPassword === confirmPassword){
 
                 const secPassword = await securePassword(confirmPassword);
                 await User.updateOne({_id: req.session.user_id}, {password: secPassword});
-                res.render("myAccount", {userData});
+                res.json({message: 'Password saved successfully'});
+                location.reload();
 
             }else{
 
-                res.render("myAccount",{userData});
-                
+                return res.json({ message: "Current or new password is incorrect."});
+
             }
         }
 
     } catch (error) {
         console.log(error.message);
+        res.render("404");
     }
 
 }
@@ -440,6 +456,7 @@ const cartLoad = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.render("404");
     }
 
 }
@@ -510,6 +527,7 @@ const addProductsToCart = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.render("404");
     }
 
 }
@@ -565,6 +583,7 @@ const updateCartQuantity = async (req, res) =>{
 
     } catch (error) {
         console.log(error.message);
+        res.render("404");
     }
 
 }
@@ -594,6 +613,7 @@ const deleteCartItem = async (req, res) => {
         
     } catch (error) {
         console.log(error.message);
+        res.render("404");
     }
 
 }
@@ -616,6 +636,7 @@ const checkoutLoad = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.render("404");
     }
 
 }
@@ -637,6 +658,7 @@ const placeOrderLoad = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.render("404");
     }
 
 }
@@ -658,6 +680,7 @@ const orderDetailsLoad = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.render("404");
     }
 
 }
@@ -674,6 +697,18 @@ const userLogout = async (req, res) => {
     }
 }
 
+// page not found
+const pageNotFound = async (req, res) => {
+
+    try {
+        
+        res.render("404");
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
 
 module.exports = {
     userLoadPage,
@@ -699,5 +734,6 @@ module.exports = {
     checkoutLoad,
     placeOrderLoad,
     orderDetailsLoad,
+    pageNotFound,
     userLogout
 }
