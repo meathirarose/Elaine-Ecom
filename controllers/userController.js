@@ -496,10 +496,14 @@ const cartLoad = async (req, res) => {
 
 
         const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
-        console.log(cartData, "---------------------------------------------cartData------------------------------------------------");
-        cartData.products.forEach(product => {
+        
+
+       cartData.products.forEach(product => {
             product.updatedTotalPrice = product.quantity * product.productPrice;
         });
+        const totalCost = cartData.products.reduce((total, product) => total + product.totalPrice, 0);
+        cartData.totalCost = totalCost;
+        await cartData.save();
 
         res.render("cart" ,{cartData:cartData});
 
@@ -516,10 +520,10 @@ const addProductsToCart = async (req, res) => {
     try {
 
         const productId = req.query.productId;
-        console.log(productId);
+
         //for getting the product data with the particular id
         const productDatabyId = await Product.findById({ _id: productId });
-        console.log(productDatabyId, "---------------------------------------productDatabyId--------------------------------------------");
+
         // for getting product images only without id 
         const productImagebyId = await Product.findById({ _id: productId },{prdctImage:1, _id:0});
 
@@ -567,7 +571,6 @@ const addProductsToCart = async (req, res) => {
                     totalPrice: productDatabyId.prdctPrice
                 }],
                 userId: req.session.user_id,
-                totalCost: 0
             });
 
             await newCart.save();
