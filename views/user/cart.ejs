@@ -150,23 +150,20 @@
                                             <td class="price-col">
                                                 Rs. <%= product.productId.prdctPrice %>
                                             </td>
-                                            <td class="quantity-col" >
-                                                <div class="cart-product-quantity"  onchange="getQuantity(this)" >
-                                                 
-                                                    <input  type="number" class="quantity"
-                                                        data-product-id="<%= product.productId._id %>" value="1" min="1"
-                                                        max="5" step="1" data-decimals="0" required>
-
+                                            <td class="quantity-col">
+                                                <div class="cart-product-quantity">
+                                                    <input type="number" class="quantity" data-product-id="<%= product.productId._id %>" value="1" min="1" max="5" step="1" data-decimals="0" onchange="updateCartItem(this)" required>
                                                 </div><!-- End .cart-product-quantity -->
-
                                             </td>
-                                            <td class="total-col">Rs. <%= product.totalPrice %></td>
+                                            
+                                            <td class="total-col">Rs. <%= product.updatedTotalPrice %></td>
 
                                             <td class="remove-col"><button class="btn-remove"
-                                                    data-product-id="<%= product.productId._id %>">
-                                                    <i class="icon-close"></i>
-                                                </button>
+                                                data-product-id="<%= product.productId._id %>">
+                                                <i class="icon-close"></i>
+                                            </button>
                                             </td>
+                                            
                                     </tr>
                                     <% }); %>
                                     <%} %>
@@ -248,23 +245,23 @@
                                         </tr><!-- End .summary-shipping-row -->
 
                                         <tr class="summary-shipping-estimate">
-                                            <td>Estimate for Your Country<br> <a href="dashboard.html">Change
+                                            <td>Estimate for Your Country<br> <a href="#">Change
                                                     address</a></td>
                                             <td>&nbsp;</td>
                                         </tr><!-- End .summary-shipping-estimate -->
 
-                                        <% if(cartData && cartData.products.length > 0) {%>
-                                            <tr class="summary-subtotal">
+                                        <% if(cartData.products && cartData.products.length > 0) {%>
+                                            <tr class="allTotal">
                                                 <td>Total:</td>
-                                                <td class="totalCost">Rs. <%= cartData.totalCost %></td>
-                                            </tr><!-- End .summary-total -->
+                                                <td class="total">Rs. <%= cartData.totalCost %></td>
+                                            </tr><!-- End .summary-subtotal -->
                                             <%}else{%>
-                                                
                                                 <tr class="summary-subtotal">
                                                     <td>Total:</td>
                                                     <td class="totalCost">Rs. 0.00</td>
-                                                </tr><!-- End .summary-total -->
-                                                <%}%>
+                                                </tr><!-- End .summary-subtotal -->
+                                           
+                                        <%}%>
                                                 
                                     </tbody>
                                 </table><!-- End .table table-summary -->
@@ -411,89 +408,93 @@
     <script src="user/assets/js/demos/demo-6.js"></script>
     <script src="user/assets/js/demos/demo-16.js"></script>
         
-    <script>
+<script>
+    function updateCartItem(element) {
+        const productId = element.dataset.productId;
+        const quantity = element.value;
 
-        document.addEventListener("DOMContentLoaded", function () {
-            const getQuantityFromLocalStorage = (productId) => {
-                const storedQuantity = localStorage.getItem(`quantity_${productId}`);
-                return storedQuantity ? parseInt(storedQuantity) : 1;
-            };
+        fetch(`/updateCartItemQuantity/${productId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ quantity: quantity })
+        })
+        .then(response => response.json())
+        .then(data => {
 
-            const setQuantityInLocalStorage = (productId, quantity) => {
-                localStorage.setItem(`quantity_${productId}`, quantity);
-            };
+            const totalValue = element.closest('tr').querySelector(".total-col");
+            totalValue.innerHTML = `Rs. ${data.updatedTotalPrice}`;
+            
+            const subtotalElement = document.querySelector(".summary-subtotal .totalCost");
+            if (subtotalElement) {
+                subtotalElement.textContent = `Rs. ${data.totalCost}`;
+            }
+            const totalElement = document.querySelector(".allTotal .total");
+            if (totalElement) {
+                totalElement.textContent = `Rs. ${data.totalCost}`;
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>
+    
 
-            const removeQuantityFromLocalStorage = (productId) => {
-                localStorage.removeItem(`quantity_${productId}`);
-            };
+<script>
 
-            const quantityInputs = document.querySelectorAll(".quantity");
-            quantityInputs.forEach(input => {
-                const productId = input.dataset.productId;
-                input.value = getQuantityFromLocalStorage(productId);
+    document.addEventListener("DOMContentLoaded", function () {
+        const getQuantityFromLocalStorage = (productId) => {
+            const storedQuantity = localStorage.getItem(`quantity_${productId}`);
+            return storedQuantity ? parseInt(storedQuantity) : 1;
+        };
 
-                input.addEventListener("change", function () {
-                    const quantity = parseInt(this.value);
-                    setQuantityInLocalStorage(productId, quantity);
-                });
-            });
+        const setQuantityInLocalStorage = (productId, quantity) => {
+            localStorage.setItem(`quantity_${productId}`, quantity);
+        };
 
-            const removeButtons = document.querySelectorAll(".btn-remove");
-            removeButtons.forEach(button => {
-                button.addEventListener("click", function () {
-                    const productId = this.dataset.productId;
+        const removeQuantityFromLocalStorage = (productId) => {
+            localStorage.removeItem(`quantity_${productId}`);
+        };
 
-                    removeQuantityFromLocalStorage(productId);
+        const quantityInputs = document.querySelectorAll(".quantity");
+        quantityInputs.forEach(input => {
+            const productId = input.dataset.productId;
+            input.value = getQuantityFromLocalStorage(productId);
 
-                    fetch(`/deleteCartItem/${productId}`, {
-                        method: 'DELETE',
-                        headers: {
-                        'Content-Type': 'application/json'
-                    },
-                })
-                    .then(response => {
-                        if (response.ok) {
-
-                            this.closest('tr').remove();
-                        } else {
-                        console.error('Failed to delete product');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-                });
+            input.addEventListener("change", function () {
+                const quantity = parseInt(this.value);
+                setQuantityInLocalStorage(productId, quantity);
             });
         });
 
-    </script>
-        
-    <script>
+        const removeButtons = document.querySelectorAll(".btn-remove");
+        removeButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                const productId = this.dataset.productId;
 
-        function getQuantity(element) {
-console.log("dd")
-            const productId = element.querySelector('.quantity').getAttribute('data-product-id');
-            const quantity = element.querySelector('.quantity').value;
+                removeQuantityFromLocalStorage(productId);
 
-            fetch(`/updateCartItemQuantity/${productId}`, {
-                method: 'POST',
-                headers: {
+                fetch(`/deleteCartItem/${productId}`, {
+                    method: 'DELETE',
+                    headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ quantity: quantity })
             })
                 .then(response => {
-                    return response.json()
-                })
-                .then(data => {
-                    const totalValue = element.querySelector(".total-col");
-                    totalValue.innerHTML = data.updatedTotalPrice.totalPrice;
-                    console.log(data)
-                    console.log(totalValue);
-                })
+                    if (response.ok) {
 
+                        this.closest('tr').remove();
+                    } else {
+                    console.error('Failed to delete product');
+                }
+            })
             .catch(error => console.error('Error:', error));
-        }
+            });
+        });
+    });
 
-    </script>
+</script>
+
         
         
 <%-include("../layout/user/footer")-%>

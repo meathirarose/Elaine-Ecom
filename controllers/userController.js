@@ -298,48 +298,71 @@ const myAccountLoad = async (req, res) => {
 
 // add and save address
 const saveAddress = async (req, res) => {
-
     try {
-
         const {
             fullname,
-            addressline, 
+            addressline,
             city,
             state,
             email,
             pincode,
             phone
-            
         } = req.body;
 
+        const errors = [];
 
+        if (!fullname || !/^[a-zA-Z][a-zA-Z\s]*$/.test(fullname)) {
+            errors.push("Enter a valid Name");
+        }
+        if (!addressline || !/^[a-zA-Z][a-zA-Z\s]*$/.test(addressline)) {
+            errors.push("Enter a valid Address");
+        }
+        if (!city || !/^[a-zA-Z][a-zA-Z\s]*$/.test(city)) {
+            errors.push("Enter a valid City");
+        }
+        if (!state || !/^[a-zA-Z][a-zA-Z\s]*$/.test(state)) {
+            errors.push("Enter a valid State");
+        }
+        if (!email || !/^[a-zA-Z0-9._%+-]+@(?:gmail|yahoo).com$/.test(email)) {
+            errors.push("Enter a valid Email");
+        }
+        if (!pincode || !/^\d{6}$/.test(pincode)) {
+            errors.push("Enter a valid Pincode");
+        }
+        if (!phone || !/^\d{10}$/.test(phone)) {
+            errors.push("Enter a valid Mobile Number");
+        }
 
-        await User.findByIdAndUpdate(
-            { 
-                _id:req.session.user_id 
-            },
-            {
-                $push:{
-                    address:{
-                        fullname: fullname,
-                        addressline: addressline,
-                        city: city,
-                        state: state,
-                        email: email,
-                        pincode: pincode,
-                        phone: phone
+        if (errors.length > 0) {
+            res.status(400).json({ errors: errors }); // Sending 400 status for validation errors
+        } else {
+            await User.findByIdAndUpdate(
+                {
+                    _id: req.session.user_id
+                },
+                {
+                    $push: {
+                        address: {
+                            fullname: fullname,
+                            addressline: addressline,
+                            city: city,
+                            state: state,
+                            email: email,
+                            pincode: pincode,
+                            phone: phone
+                        }
                     }
                 }
-            });
+            );
 
-            res.json({message:'Address saved successfully:'});
-
+            res.json({ message: 'Address saved successfully' });
+        }
     } catch (error) {
         console.log(error.message);
         res.render("404");
     }
-
 }
+
 
 // edit address
 const editAddress = async (req, res) => {
@@ -357,6 +380,28 @@ const editAddress = async (req, res) => {
             phone
             
         } = req.body;
+
+        if(!/^[a-zA-Z][a-zA-Z\s]*$/.test(fullname)){
+            res.json({message:"Enter a valid Name"});
+        }
+        if(!/^[a-zA-Z][a-zA-Z\s]*$/.test(addressline)){
+            res.json({message: "Enter a valid Address"});
+        }
+        if(!/^[a-zA-Z][a-zA-Z\s]*$/.test(city)){
+            res.json({message: "Enter a valid City"});
+        }
+        if(!/^[a-zA-Z][a-zA-Z\s]*$/.test(state)){
+            res.json({message: "Enter a valid State"});
+        }
+        if(!/^[a-zA-Z0-9._%+-]+@(?:gmail|yahoo).com$/.test(email)){
+            res.json({message: "Enter a valid Email"});
+        }
+        if(!/^\d{6}$/.test(pincode)){
+            res.json({message: "Enter a valid Pincode"});
+        }
+        if(!/^\d{10}$/.test(phone)){
+            res.json({message: "Enter a valid Mobile Number"});
+        }
 
         await User.findOneAndUpdate(
             {
@@ -451,7 +496,11 @@ const cartLoad = async (req, res) => {
 
 
         const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
-        
+        console.log(cartData, "---------------------------------------------cartData------------------------------------------------");
+        cartData.products.forEach(product => {
+            product.updatedTotalPrice = product.quantity * product.productPrice;
+        });
+
         res.render("cart" ,{cartData:cartData});
 
     } catch (error) {
@@ -470,7 +519,7 @@ const addProductsToCart = async (req, res) => {
         console.log(productId);
         //for getting the product data with the particular id
         const productDatabyId = await Product.findById({ _id: productId });
-        
+        console.log(productDatabyId, "---------------------------------------productDatabyId--------------------------------------------");
         // for getting product images only without id 
         const productImagebyId = await Product.findById({ _id: productId },{prdctImage:1, _id:0});
 
@@ -538,49 +587,44 @@ const updateCartQuantity = async (req, res) =>{
     try {
         
         const productId = req.params.productId;
+        const { quantity } = req.body;
 
-        const productDatabyId = await Product.findById({ _id: productId });
+        const productDataById = await Product.findById(productId);
 
-        const quantity = req.body.quantity;
         await Cart.findOneAndUpdate(
             { 
                 userId: req.session.user_id,
                 "products.productId": productId 
             }, 
-            {$set: 
-                { "products.$.quantity": quantity,
-                  "products.$.productPrice" : productDatabyId.prdctPrice,
-                  "products.$.totalPrice" : quantity * productDatabyId.prdctPrice,
-                  "products.$.totalCost" : 0
+            { 
+                $set: { 
+                    "products.$.quantity": quantity,
+                    "products.$.productPrice": productDataById.prdctPrice,
+                    "products.$.totalPrice": quantity * productDataById.prdctPrice
+                }
             }
-        });
-       
+        );
+
         const updatedCartData = await Cart.findOne(
             { 
                 userId: req.session.user_id,
                 "products.productId": productId 
             }
-        )
-
-        const totalPrice =  updatedCartData.products.find(product=> {
-
-           if(product.productId == productId){
-            return product.totalPrice
-           }
-
-        });
+        );
 
         const totalCost = updatedCartData.products.reduce((accumulator, product) => {
-
             return accumulator + product.totalPrice;
-
         }, 0);
 
         updatedCartData.totalCost = totalCost;
         await updatedCartData.save();
 
-        res.json({success: true, updatedTotalPrice:totalPrice, totalCost: totalCost});
-
+        const updatedProduct = updatedCartData.products.find(product => product.productId == productId);
+            res.json({ 
+            success: true, 
+            updatedTotalPrice: updatedProduct.totalPrice,
+            totalCost: totalCost 
+        });
     } catch (error) {
         console.log(error.message);
         res.render("404");
@@ -630,7 +674,6 @@ const checkoutLoad = async (req, res) => {
             }
         );
         const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
-        console.log(cartData);
 
         res.render("checkout", {userDataCheckout, cartData});
 
@@ -662,6 +705,26 @@ const placeOrderLoad = async (req, res) => {
     }
 
 }
+
+// Place order
+const placeOrder = async (req, res) => {
+    try {
+        // Retrieve selected address ID from request body
+        const selectedAddressId = req.body.selectedAddressId; // Adjust this line if necessary
+        console.log(selectedAddressId, "-------------------------------------------selectedAddressId----------------------------------------------");
+        // Retrieve other order details from request body
+        //const { /* other order details */ } = req.body;
+
+        // Use the selected address ID and other order details to place the order
+        // Example logic to place the order...
+
+        res.status(200).json({ message: 'Order placed successfully' });
+    } catch (error) {
+        console.log(error.message);
+        res.render("404");
+    }
+}
+
 
 // const order details load
 const orderDetailsLoad = async (req, res) => {
@@ -733,6 +796,7 @@ module.exports = {
     cartLoad,
     checkoutLoad,
     placeOrderLoad,
+    placeOrder,
     orderDetailsLoad,
     pageNotFound,
     userLogout

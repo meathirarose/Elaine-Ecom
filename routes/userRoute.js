@@ -89,6 +89,7 @@ user_route.get("/checkout", authentication.isLogin, accessAuth.accessUser, userC
 
 // load place order & orderDetails
 user_route.get("/placeOrder", authentication.isLogin, accessAuth.accessUser, userController.placeOrderLoad);
+user_route.post("/placeOrder", userController.placeOrder);
 user_route.get("/orderDetails", authentication.isLogin, accessAuth.accessUser, userController.orderDetailsLoad);
 
 // load contact us

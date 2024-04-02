@@ -267,7 +267,9 @@
 
                                     <div class="addAddress" style="display: none;">
                                         <form id="addressForm" method="post" action="/saveAddress">
-                
+                                            <div>
+                                                <p class="text-danger" id="saveAddressId"></p>
+                                            </div>
                                             <div class="form-group">
                                                 <label for="name">Full Name </label>
                                                 <input type="text" class="form-control" id="fullname" name="fullname" required>
@@ -516,7 +518,6 @@
     </script>
 
     <script>
-
         $('#addressForm').submit(function (e) {
             e.preventDefault();
 
@@ -527,20 +528,25 @@
                 url: '/saveAddress',
                 data: formData,
                 success: function (response) {
-
-                    console.log('Address saved successfully:', response);
-
-                    location.reload();
-
+                    if (response.message) {
+                        const changeId = document.getElementById("saveAddressId");
+                        changeId.innerHTML = response.message;
+                        $('#addressForm')[0].reset();
+                    } else if (response.errors) {
+                        // Handle validation errors
+                        // For example, display each error message
+                        response.errors.forEach(function(error) {
+                            console.error(error);
+                        });
+                    }
                 },
                 error: function (xhr, status, error) {
-
                     console.error(error);
                 }
             });
         });
-
     </script>
+
     <!-- end for adding address -->
     <!-- editing address -->
     <script>

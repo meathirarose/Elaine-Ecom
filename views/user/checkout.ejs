@@ -164,7 +164,7 @@
                                             <div class="card card-dashboard" id="cardDashboard">
 
                                                 <div class="card-body">
-                                                    <input type="radio" id="billingAddress<%= index %>" name="billingAddress" value="<%= index %>" />
+                                                    <input type="radio" id="billingAddress<%= index %>" name="billingAddress" value="<%= element._id %>" />
 
                                                     <h3 class="card-title">Billing Address</h3>
                                                     <!-- End .card-title -->
@@ -254,11 +254,9 @@
                                             <tr>
                                             <% cartData.products.forEach(product=> { %>
 
-                                                <td><a href="#"><img src="/uploads/<%= product.productId.prdctImage[0] %>"
-                                                    alt="Product image" style="height: 55px; width: 45px;"></a></td>
-
                                                 <td><a href="#"><%= product.productId.prdctName %></a></td>
                                                 <td>Rs. <%= product.totalPrice %></td>
+                                                
                                             </tr>
                                             <% });%>
                                             <% if(cartData.products && cartData.products.length > 0) {%>
@@ -313,9 +311,10 @@
                         
                                     </div><!-- End .accordion -->
 
-                                    <a href="placeOrder"><button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
+                                    <a href="placeOrder"><a href="#" id="placeOrderBtn" class="btn btn-outline-primary-2 btn-order btn-block">
                                         <span class="btn-text">Place Order</span>
-                                    </button></a>
+                                    </a>
+                                    </a>
                                 </div><!-- End .summary -->
                             </aside><!-- End .col-lg-3 -->
                         </div><!-- End .row -->
@@ -538,6 +537,48 @@
         });
     });
 
+    </script>
+
+    <script>
+        document.getElementById('placeOrderBtn').addEventListener('click', function (e) {
+        e.preventDefault();
+
+        var selectedAddressId = document.querySelector('input[name="billingAddress"]:checked').value;
+
+        // Get the selected address details using the ID
+        var selectedAddress = userDataCheckout.address.find(address => address._id === selectedAddressId);
+
+        // Get the products in the cart
+        var cartProducts = cartData.products;
+
+        // Prepare the data to send to the server
+        var orderData = {
+            address: selectedAddress,
+            products: cartProducts
+        };
+
+        // Send the order data to the server using Fetch API
+        fetch('/placeOrder', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(orderData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Order placed successfully:', data);
+            // Optionally, redirect the user to a confirmation page or perform any other action
+        })
+        .catch(error => {
+            console.error('Error placing order:', error);
+        });
+    });
 
     </script>
 <%- include("../layout/user/footer") -%>
