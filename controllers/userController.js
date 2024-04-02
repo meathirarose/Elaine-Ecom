@@ -634,33 +634,32 @@ const updateCartQuantity = async (req, res) =>{
 
 // delete cart elements
 const deleteCartItem = async (req, res) => {
-
     try {
-        
-        const userId = req.session.user_id;
         const productId = req.params.productId;
 
-        const cartData = await Cart.findOne({userId: userId});
+        await Cart.findOneAndUpdate(
+            {
+                userId: req.session.user_id
+            },
+            {
+                $pull: { products: { productId: productId } }
+            }
+        );
 
-        if(cartData){
+        const updatedCartData = await Cart.findOne({ userId: req.session.user_id });
+        const totalCost = updatedCartData.products.reduce((accumulator, product) => {
+            return accumulator + product.totalPrice;
+        }, 0);
 
-            await Cart.findOneAndUpdate(
-                {
-                    userId: userId
-                },
-                {
-                    $pull:  { products:{productId:productId}}
-                });
-        }
+        updatedCartData.totalCost = totalCost;
+        await updatedCartData.save();
 
-        res.json({success: true})
-        
+        res.json({ success: true, totalCost: totalCost });
     } catch (error) {
         console.log(error.message);
         res.render("404");
     }
-
-}
+};
 // ---------------------------------------- cart ends here -----------------------------------------------------//
 
 // load checkout page
@@ -695,7 +694,6 @@ const placeOrderLoad = async (req, res) => {
             }
         );
         const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
-        
 
         res.render("placeOrder", {userDataCheckout, cartData});
 

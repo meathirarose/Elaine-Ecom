@@ -533,8 +533,7 @@
                         changeId.innerHTML = response.message;
                         $('#addressForm')[0].reset();
                     } else if (response.errors) {
-                        // Handle validation errors
-                        // For example, display each error message
+                        
                         response.errors.forEach(function(error) {
                             console.error(error);
                         });

@@ -116,12 +116,20 @@
                     </div><!-- End .checkout-discount -->
                     
                     <h2 class="checkout-title">Billing Details</h2><!-- End .checkout-title -->
-
+            
                         <div class="row ">
 
                             <div class="col-lg-9 ">
-                                <% if ( !userDataCheckout.address || userDataCheckout.address.length===0) { %>
-                                    <form id="addressForm" method="post" action="/saveAddress">
+
+                               <br>
+
+                            <!-- ------------------------------ new address form --------------------------------------- -->
+
+                            <div class="addAddress" style="display: none;">
+                                <form id="addressForm" method="post" action="/saveAddress">
+                                    <div>
+                                        <p class="text-danger" id="saveAddressId"></p>
+                                    </div>
                                     <div class="form-group">
                                         <label for="name">Full Name </label>
                                         <input type="text" class="form-control" id="fullname" name="fullname" required>
@@ -156,8 +164,20 @@
                                         <input type="email" class="form-control" id="email" name="email" required>
                                     </div>
                                     <button type="submit" class="btn btn-primary">Save</button>
+                                    
                                 </form>
-                                <% } else{%>
+                            </div>
+
+                            <!-- ------------------------------------- end address form ---------------------------------------- -->
+                            <br>     
+                            <!-- --------------------------------- add new address button ----------------------------- -->
+
+                                        <button id="addNewAddressBtn" class="btn btn-primary showAddAddress">
+                                            Add a new address <i class="icon-plus"></i>
+                                        </button> <br>
+                            <!-- --------------------------------- end new address button ------------------------------ -->
+                            <br>
+                                <% if ( userDataCheckout.address || userDataCheckout.address.length > 0) {%>
                                     <% userDataCheckout.address.forEach((element, index) => { %>
                                         <div class="col-lg-6 ">
 
@@ -183,6 +203,7 @@
                                                 </div><!-- End .card-body -->
                                             </div><!-- End .card-dashboard -->
                                         </div><!-- End .col-lg-6 -->
+
                                         <div id="editAddress<%=element._id%>" style="display: none;">
                                                     
                                             <form id="editAddressForm" class="edit-address-form" method="post" action="/editAddress">
@@ -237,7 +258,7 @@
                                 
                                 </div><!-- End .col-lg-9 -->
                                                               
-                          
+                         
                             <aside class="col-lg-3">
                                 <div class="summary">
                                     <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
@@ -318,7 +339,7 @@
                                 </div><!-- End .summary -->
                             </aside><!-- End .col-lg-3 -->
                         </div><!-- End .row -->
-                    
+                                                    
                 </div><!-- End .container -->
             </div><!-- End .checkout -->
         </div><!-- End .page-content -->
@@ -456,18 +477,15 @@
 <script src="user/assets/js/demos/demo-16.js"></script>
 
 
-
 <script>
-    function editAddressShow(id) {
 
-        $(`#edit-address${id}`).click(function (e) {
-            e.preventDefault();
-            $('.card-dashboard').hide();
-            $('.showAddAddress').hide();
-            $(`#editAddress${id}`).show();
-        });
-
-    }
+$(document).ready(function () {
+    $('.showAddAddress').click(function (e) {
+        e.preventDefault();
+        $('.addAddress').toggle(); 
+        $('.card-dashboard').hide(); 
+    });
+});
 
 </script>
 
@@ -498,46 +516,62 @@
 
 </script>
 
+<!-- end for adding address -->
+<!-- editing address -->
 <script>
-        
-    $(document).ready(function () {
-        // Edit button click
-        $('.edit-address').click(function (e) {
+    function editAddressShow(id) {
+
+        $(`#edit-address${id}`).click(function (e) {
             e.preventDefault();
-            var editId = $(this).data('edit-id');
-            $('#editAddressForm' + editId).submit(); 
+            $('.card-dashboard').hide();
+            $('.showAddAddress').hide();
+            $(`#editAddress${id}`).show();
         });
 
-        // Edit address form submission
-        $('.edit-address-form').submit(function (e) {
-            e.preventDefault();
-            var editId = $(this).find('#editAddressId').val();
-            var formData = $(this).serialize();
+    }
 
-            fetch('/editAddress/' + editId, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: formData
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Address updated successfully:', data);
-                location.reload();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
+</script>
+<script>
+    
+$(document).ready(function () {
+    // Edit button click
+    $('.edit-address').click(function (e) {
+        e.preventDefault();
+        var editId = $(this).data('edit-id');
+        $('#editAddressForm' + editId).submit(); 
     });
 
-    </script>
+    // Edit address form submission
+    $('.edit-address-form').submit(function (e) {
+        e.preventDefault();
+        var editId = $(this).find('#editAddressId').val();
+        var formData = $(this).serialize();
+
+        fetch('/editAddress/' + editId, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Address updated successfully:', data);
+            location.reload();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+});
+
+
+</script>
 
     <script>
         document.getElementById('placeOrderBtn').addEventListener('click', function (e) {
@@ -545,19 +579,15 @@
 
         var selectedAddressId = document.querySelector('input[name="billingAddress"]:checked').value;
 
-        // Get the selected address details using the ID
         var selectedAddress = userDataCheckout.address.find(address => address._id === selectedAddressId);
 
-        // Get the products in the cart
         var cartProducts = cartData.products;
 
-        // Prepare the data to send to the server
         var orderData = {
             address: selectedAddress,
             products: cartProducts
         };
 
-        // Send the order data to the server using Fetch API
         fetch('/placeOrder', {
             method: 'POST',
             headers: {
@@ -573,12 +603,12 @@
         })
         .then(data => {
             console.log('Order placed successfully:', data);
-            // Optionally, redirect the user to a confirmation page or perform any other action
         })
         .catch(error => {
             console.error('Error placing order:', error);
         });
     });
 
-    </script>
+</script>
+
 <%- include("../layout/user/footer") -%>

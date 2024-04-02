@@ -135,6 +135,7 @@
                                         <%} else{%> 
 
                                         <% cartData.products.forEach(product=> { %>
+                                        
                                             <td class="product-col">
                                                 <div class="product">
                                                     <figure class="product-media">
@@ -266,8 +267,8 @@
                                     </tbody>
                                 </table><!-- End .table table-summary -->
                                 <% if(cartData && cartData.products.length > 0) {%>
-                                <a href="checkout" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO
-                                    CHECKOUT</a>
+                                    <a href="checkout" id="checkoutBtn" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
+
                                 <%}%>
                             </div><!-- End .summary -->
 
@@ -407,6 +408,10 @@
     <script src="/user/assets/js/main.js"></script>
     <script src="user/assets/js/demos/demo-6.js"></script>
     <script src="user/assets/js/demos/demo-16.js"></script>
+    
+    <!--Sweet Alert  -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
         
 <script>
     function updateCartItem(element) {
@@ -484,6 +489,8 @@
                     if (response.ok) {
 
                         this.closest('tr').remove();
+                        window.location.reload();
+
                     } else {
                     console.error('Failed to delete product');
                 }
@@ -495,6 +502,33 @@
 
 </script>
 
-        
+<script>
+    const cartData = <%- JSON.stringify(cartData)%>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById('checkoutBtn').addEventListener('click', function(event) {
+            event.preventDefault(); 
+            
+            const outOfStockProducts = [];
+            cartData.products.forEach(product => {
+                if (product.productId.prdctQuantity <= 0) {
+                    outOfStockProducts.push(product.productId.prdctName);
+                }
+            });
+
+            if (outOfStockProducts.length > 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    html: 'The following products are out of stock:<br>' + outOfStockProducts.join('<br>'),
+                    showConfirmButton: true,
+                });
+                
+            } else {
+                window.location.href = this.href;
+            }
+        });
+    });
+</script>
+    
         
 <%-include("../layout/user/footer")-%>
