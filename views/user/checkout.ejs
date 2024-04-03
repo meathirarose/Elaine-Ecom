@@ -127,9 +127,7 @@
 
                             <div class="addAddress" style="display: none;">
                                 <form id="addressForm" method="post" action="/saveAddress">
-                                    <div>
-                                        <p class="text-danger" id="saveAddressId"></p>
-                                    </div>
+
                                     <div class="form-group">
                                         <label for="name">Full Name </label>
                                         <input type="text" class="form-control" id="fullname" name="fullname" required>
@@ -314,28 +312,20 @@
                                     
 
 
-                                        <div class="card">
-                                            <div class="card-header" id="heading-3">
-                                                <h2 class="card-title">
-                                                    <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
-                                                        Cash on delivery
-                                                    </a>
-                                                </h2>
-                                            </div><!-- End .card-header -->
-                                            <div id="collapse-3" class="collapse" aria-labelledby="heading-3" data-parent="#accordion-payment">
-                                                <div class="card-body">Quisque volutpat mattis eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. 
-                                                </div><!-- End .card-body -->
-                                            </div><!-- End .collapse -->
-                                        </div><!-- End .card -->
+                                        <div class="form-group">
+                                            <label for="paymentMode">Payment Mode:</label><br>
+                                            <input type="radio" id="cashOnDelivery" name="paymentMode" value="cashOnDelivery" required>
+                                            <label for="cashOnDelivery">Cash on Delivery</label><br>
+                                        </div>
 
 
                         
                                     </div><!-- End .accordion -->
 
-                                    <a href="placeOrder"><a href="#" id="placeOrderBtn" class="btn btn-outline-primary-2 btn-order btn-block">
-                                        <span class="btn-text">Place Order</span>
+                                    <a href="#" id="placeOrderBtn" class="btn btn-outline-primary-2 btn-order btn-block">Place Order
                                     </a>
-                                    </a>
+                                    
+                                    
                                 </div><!-- End .summary -->
                             </aside><!-- End .col-lg-3 -->
                         </div><!-- End .row -->
@@ -478,6 +468,9 @@
 
 <!--Sweet Alert  -->
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<!-- Axios CDN -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 
 <script>
@@ -628,31 +621,42 @@ $(document).ready(function () {
         });
     });
 
-
-
 </script>
 
 <script>
-    document.getElementById('placeOrderBtn').addEventListener('click', function (e) {
+    $('#placeOrderBtn').click(function (e) {
         e.preventDefault();
+        var addressId = $("input[name='billingAddress']:checked").val();
+        var paymentMode = $("input[name='paymentMode']:checked").val();
+        var products = []; 
 
-        var selectedAddressId = document.querySelector('input[name="billingAddress"]:checked').value;
-
-        var selectedAddress = userDataCheckout.address.find(address => address._id === selectedAddressId);
-
-        var cartProducts = cartData.products;
-
-        var orderData = {
-            address: selectedAddress,
-            products: cartProducts
-        };
+        if (!addressId) {
+            swal({
+                title: "Error!",
+                text: "Please select an address.",
+                icon: "error",
+                timer: 1500,
+                buttons: false
+            });
+            return;
+        }
+        if (!paymentMode) {
+            swal({
+                title: "Error!",
+                text: "Please select the payment mode.",
+                icon: "error",
+                timer: 1500,
+                buttons: false
+            });
+            return;
+        }
 
         fetch('/placeOrder', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(orderData)
+            body: JSON.stringify({ addressId, paymentMode, products })
         })
         .then(response => {
             if (!response.ok) {
@@ -661,13 +665,26 @@ $(document).ready(function () {
             return response.json();
         })
         .then(data => {
-            console.log('Order placed successfully:', data);
+            swal({
+                title: "Success!",
+                text: "Your order has been placed successfully.",
+                icon: "success",
+                timer: 1500,
+                buttons: false
+            });
+           
         })
         .catch(error => {
-            console.error('Error placing order:', error);
+            console.error('Error:', error);
+            swal({
+                title: "Error!",
+                text: "Something went wrong. Please try again later.",
+                icon: "error",
+                timer: 1500,
+                buttons: false
+            });
         });
     });
-
 </script>
 
 <%- include("../layout/user/footer") -%>

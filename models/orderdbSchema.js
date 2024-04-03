@@ -20,7 +20,8 @@ const orderSchema = new mongoose.Schema({
     },
 
     date:{
-        type:String,
+        type:Date,
+        default: Date.now
     },
 
     payment:{
@@ -32,7 +33,9 @@ const orderSchema = new mongoose.Schema({
             productId: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Product',
-
+            },
+            productName:{
+                type: String
             },
             quantity: {
                 type: Number,
@@ -47,7 +50,7 @@ const orderSchema = new mongoose.Schema({
             },
             status: {
                 type: String,
-                default: "placed"
+                default: "Order Placed"
             }
         }]
 

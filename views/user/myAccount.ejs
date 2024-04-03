@@ -150,12 +150,45 @@
                                                 your password and account details</a>.
                                         </p>
                                     </div><!-- .End .tab-pane -->
-
+                                    <% if(!orderData || orderData.length === 0){%>
                                     <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
+                                        
                                         <p>No order has been made yet.</p>
                                         <a href="products" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
+                                         
                                     </div><!-- .End .tab-pane -->
+                                    <%}else{%>
+                                    <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
+                                        <p class="text-center font-weight-bolder"><b>Order Details</b></p>
 
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Product Name</th>
+                                                    <th scope="col">Quantity</th>
+                                                    <th scope="col">Total Amount</th>
+                                                    <th scope="col">Status</th>
+                                                    <th scope="col">Order Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% orderData.forEach(order => { %>
+                                                    <% order.products.forEach(product => { %>
+                                                        <tr>
+                                                            <td><%= product.productName %></td>
+                                                            <td><%= product.quantity %></td>
+                                                            <td><%= product.totalPrice %></td>
+                                                            <td><span class="badge rounded-pill alert-warning"><%= product.status %></span></td>
+                                                            <td><%= order.date.toDateString() %></td>
+                                                        </tr>
+                                                    <% }); %>
+                                                <% }); %>
+                                            </tbody>
+                                        </table>
+                                        
+                                    </div><!-- .End .tab-pane -->
+                                    
+                                    <% } %>
             <!-- ------------------------ Show available address ---------------------------- -->
 
                                     <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
@@ -659,34 +692,46 @@
             document.querySelectorAll('.remove-address').forEach(function (removeBtn) {
                 removeBtn.addEventListener('click', function (e) {
                     e.preventDefault();
-
+    
                     const addressId = this.getAttribute('data-address-id');
                     const addressElement = document.querySelector(`[data-address-id="${addressId}"]`);
-
-                    fetch('/removeAddress', {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ addressId: addressId })
+    
+                    swal({
+                        title: "Are you sure?",
+                        text: "Once deleted, you will not be able to recover this address!",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
                     })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log('Address removed successfully:', data);
-                        location.reload();
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            fetch('/removeAddress', {
+                                method: 'DELETE',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ addressId: addressId })
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                console.log('Address removed successfully:', data);
+                                location.reload();
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
+                        } 
                     });
                 });
             });
         });
     </script>
+    
     <!-- end removing address -->
     <script>
 

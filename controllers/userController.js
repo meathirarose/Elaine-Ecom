@@ -1,6 +1,7 @@
 const User = require("../models/userdbModel");
 const Product =require("../models/productdbModel");
 const Cart = require("../models/cartdbModel");
+const Order = require("../models/orderdbSchema");
 const bcrypt = require("bcrypt");
 const otpController = require("../auth/otpMailVerify")
 
@@ -287,7 +288,9 @@ const myAccountLoad = async (req, res) => {
         
         const userId = req.session.user_id;
         const userData = await User.findById(userId);
-        res.render("myAccount", {userData});
+        const orderData = await Order.find();
+        console.log(orderData);
+        res.render("myAccount", {userData, orderData});
 
     } catch (error) {
         console.log(error.message);
@@ -674,45 +677,55 @@ const checkoutLoad = async (req, res) => {
 }
 
 // load place order
-const placeOrderLoad = async (req, res) => {
-
-    try {
-        
-        const userDataCheckout = await User.findById(
-            {
-                _id: req.session.user_id
-            }
-        );
-        const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
-
-        res.render("placeOrder", {userDataCheckout, cartData});
-
-    } catch (error) {
-        console.log(error.message);
-        res.render("404");
-    }
-
-}
-
-// Place order
 const placeOrder = async (req, res) => {
     try {
-        // Retrieve selected address ID from request body
-        const selectedAddressId = req.body.selectedAddressId; // Adjust this line if necessary
-        console.log(selectedAddressId, "-------------------------------------------selectedAddressId----------------------------------------------");
-        // Retrieve other order details from request body
-        //const { /* other order details */ } = req.body;
+        const { addressId, paymentMode, products } = req.body;
 
-        // Use the selected address ID and other order details to place the order
-        // Example logic to place the order...
+        if (!addressId || !paymentMode || !products) {
+            throw new Error('Required data missing');
+        }
 
-        res.status(200).json({ message: 'Order placed successfully' });
+        const cartData = await Cart.findOne({ userId: req.session.user_id }).populate('products.productId');
+        console.log(cartData, "-------------------------------------cartData--------------------------------------------");
+        const userData = await User.findOne({ _id: req.session.user_id }, {_id: 1, name: 1});
+        console.log(userData, "------------------------------------------userData---------------------------------------");
+         
+        const newOrder = new Order({
+            userId: userData._id,
+            deliveryAddress: addressId,
+            userName: userData.name,
+            totalAmount: cartData.totalCost,
+            date: new Date(),
+            payment: paymentMode,
+            products: cartData.products.map(product => ({
+                productId: product.productId,
+                productName: product.productId.prdctName,
+                quantity: product.quantity,
+                productPrice: product.productPrice,
+                totalPrice: product.totalPrice
+              }))
+             
+        })
+        console.log(newOrder, "--------------------------------------newOrder-------------------------------------------");
+
+        await newOrder.save();
+
+        for (const product of cartData.products) {
+            await Product.updateOne(
+                { _id: product.productId },
+                { $inc: { prdctQuantity: -product.quantity } } 
+            );
+        }
+        
+        cartData.products = [];
+        await cartData.save();
+
+        res.json({ message: "Your order has been placed successfully." });
     } catch (error) {
-        console.log(error.message);
-        res.render("404");
+        console.error('Error:', error);
+        res.status(500).json({ error: "Something went wrong. Please try again later." });
     }
 }
-
 
 // const order details load
 const orderDetailsLoad = async (req, res) => {
@@ -783,7 +796,6 @@ module.exports = {
     changePassword,
     cartLoad,
     checkoutLoad,
-    placeOrderLoad,
     placeOrder,
     orderDetailsLoad,
     pageNotFound,
