@@ -267,9 +267,6 @@
 
                                     <div class="addAddress" style="display: none;">
                                         <form id="addressForm" method="post" action="/saveAddress">
-                                            <div>
-                                                <p class="text-danger" id="saveAddressId"></p>
-                                            </div>
                                             <div class="form-group">
                                                 <label for="name">Full Name </label>
                                                 <input type="text" class="form-control" id="fullname" name="fullname" required>
@@ -502,7 +499,9 @@
     <script src="/user/assets/js/demos/demo-6.js"></script>
     <script src="/user/assets/js/demos/demo-16.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <!--Sweet Alert  -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <!-- for adding address -->
     <script>
@@ -510,40 +509,68 @@
         $(document).ready(function () {
             $('.showAddAddress').click(function (e) {
                 e.preventDefault();
-                $('.card-dashboard').hide();
-                $('.addAddress').show();
+                $('.addAddress').toggle(); 
+                $('.card-dashboard').hide(); 
             });
         });
 
     </script>
 
     <script>
-        $('#addressForm').submit(function (e) {
-            e.preventDefault();
 
-            var formData = $(this).serialize();
+    $('#addressForm').submit(function (e) {
+        e.preventDefault();
 
-            $.ajax({
-                type: 'POST',
-                url: '/saveAddress',
-                data: formData,
-                success: function (response) {
-                    if (response.message) {
-                        const changeId = document.getElementById("saveAddressId");
-                        changeId.innerHTML = response.message;
-                        $('#addressForm')[0].reset();
-                    } else if (response.errors) {
-                        
-                        response.errors.forEach(function(error) {
-                            console.error(error);
-                        });
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error(error);
-                }
+        var formData = $(this).serialize();
+
+        fetch('/saveAddress', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if(data.message === "Address saved successfully"){
+                swal({
+                    title: "Success!",
+                    text: data.message,
+                    icon: "success",
+                    timer: 1500,
+                    buttons: false
+                });
+                setTimeout(function() {
+                    location.reload();
+                }, 1500);
+            }else{
+                swal({
+                    title: "Error!",
+                    text: data.message,
+                    icon: "error",
+                    timer: 1500,
+                    buttons: false
+                });
+            }
+        })
+        .catch(error => {
+            var errorMessage = error.message || "Something went wrong";
+            swal({
+                title: "Error!",
+                text: errorMessage,
+                icon: "error",
+                timer: 1000,
+                buttons: false
             });
         });
+    });
+
+
     </script>
 
     <!-- end for adding address -->
@@ -591,15 +618,39 @@
                 return response.json();
             })
             .then(data => {
-                console.log('Address updated successfully:', data);
-                location.reload();
+                if(data.message === "Address updated successfully"){
+                swal({
+                    title: "Success!",
+                    text: data.message,
+                    icon: "success",
+                    timer: 1500,
+                    buttons: false
+                });
+                setTimeout(function() {
+                    location.reload();
+                }, 1500);
+            }else{
+                swal({
+                    title: "Error!",
+                    text: data.message,
+                    icon: "error",
+                    timer: 1500,
+                    buttons: false
+                });
+            }
             })
             .catch(error => {
-                console.error('Error:', error);
+            var errorMessage = error.message || "Something went wrong";
+            swal({
+                title: "Error!",
+                text: errorMessage,
+                icon: "error",
+                timer: 1000,
+                buttons: false
             });
         });
+        });
     });
-
 
     </script>
     <!-- removing address -->

@@ -297,6 +297,7 @@ const myAccountLoad = async (req, res) => {
 }
 
 // add and save address
+
 const saveAddress = async (req, res) => {
     try {
         const {
@@ -309,54 +310,49 @@ const saveAddress = async (req, res) => {
             phone
         } = req.body;
 
-        const errors = [];
-
         if (!fullname || !/^[a-zA-Z][a-zA-Z\s]*$/.test(fullname)) {
-            errors.push("Enter a valid Name");
+            return res.json({message: "Enter a valid Name"});
         }
         if (!addressline || !/^[a-zA-Z][a-zA-Z\s]*$/.test(addressline)) {
-            errors.push("Enter a valid Address");
+            return res.json({message: "Enter a valid Street Address"});
         }
         if (!city || !/^[a-zA-Z][a-zA-Z\s]*$/.test(city)) {
-            errors.push("Enter a valid City");
+            return res.json({message: "Enter a valid City Name"});
         }
         if (!state || !/^[a-zA-Z][a-zA-Z\s]*$/.test(state)) {
-            errors.push("Enter a valid State");
+            return res.json({message: "Enter a valid State Name"});
         }
         if (!email || !/^[a-zA-Z0-9._%+-]+@(?:gmail|yahoo).com$/.test(email)) {
-            errors.push("Enter a valid Email");
+            return res.json({message: "Enter a valid Email"});
         }
         if (!pincode || !/^\d{6}$/.test(pincode)) {
-            errors.push("Enter a valid Pincode");
+            return res.json({message: "Enter a valid Pincode"});
         }
         if (!phone || !/^\d{10}$/.test(phone)) {
-            errors.push("Enter a valid Mobile Number");
+            return res.json({message: "Enter a valid Mobile Number"});
         }
 
-        if (errors.length > 0) {
-            res.status(400).json({ errors: errors }); // Sending 400 status for validation errors
-        } else {
-            await User.findByIdAndUpdate(
-                {
-                    _id: req.session.user_id
-                },
-                {
-                    $push: {
-                        address: {
-                            fullname: fullname,
-                            addressline: addressline,
-                            city: city,
-                            state: state,
-                            email: email,
-                            pincode: pincode,
-                            phone: phone
-                        }
+        await User.findByIdAndUpdate(
+            {
+                _id: req.session.user_id
+            },
+            {
+                $push: {
+                    address: {
+                        fullname: fullname,
+                        addressline: addressline,
+                        city: city,
+                        state: state,
+                        email: email,
+                        pincode: pincode,
+                        phone: phone
                     }
                 }
-            );
+            }
+        );
 
-            res.json({ message: 'Address saved successfully' });
-        }
+        return res.json({ message: 'Address saved successfully' });
+        
     } catch (error) {
         console.log(error.message);
         res.render("404");
@@ -382,25 +378,25 @@ const editAddress = async (req, res) => {
         } = req.body;
 
         if(!/^[a-zA-Z][a-zA-Z\s]*$/.test(fullname)){
-            res.json({message:"Enter a valid Name"});
+            return res.json({message:"Enter a valid Name"});
         }
         if(!/^[a-zA-Z][a-zA-Z\s]*$/.test(addressline)){
-            res.json({message: "Enter a valid Address"});
+            return res.json({message: "Enter a valid Street Address"});
         }
         if(!/^[a-zA-Z][a-zA-Z\s]*$/.test(city)){
-            res.json({message: "Enter a valid City"});
+            return res.json({message: "Enter a valid City"});
         }
         if(!/^[a-zA-Z][a-zA-Z\s]*$/.test(state)){
-            res.json({message: "Enter a valid State"});
+            return res.json({message: "Enter a valid State"});
         }
         if(!/^[a-zA-Z0-9._%+-]+@(?:gmail|yahoo).com$/.test(email)){
-            res.json({message: "Enter a valid Email"});
+            return res.json({message: "Enter a valid Email"});
         }
         if(!/^\d{6}$/.test(pincode)){
-            res.json({message: "Enter a valid Pincode"});
+            return res.json({message: "Enter a valid Pincode"});
         }
         if(!/^\d{10}$/.test(phone)){
-            res.json({message: "Enter a valid Mobile Number"});
+            return res.json({message: "Enter a valid Mobile Number"});
         }
 
         await User.findOneAndUpdate(
@@ -420,7 +416,7 @@ const editAddress = async (req, res) => {
                 }
             });
 
-            res.json({success: true})
+            return res.json({ message: 'Address updated successfully' });
 
     } catch (error) {
         console.log(error.message);
@@ -524,28 +520,15 @@ const addProductsToCart = async (req, res) => {
         //for getting the product data with the particular id
         const productDatabyId = await Product.findById({ _id: productId });
 
-        // for getting product images only without id 
-        const productImagebyId = await Product.findById({ _id: productId },{prdctImage:1, _id:0});
-
-        // for getting the images only as an array
-        const productImagesArray = productImagebyId.prdctImage.map(image => `${image}`);
-
         const cartData = await Cart.findOne({userId: req.session.user_id});
         
         if (cartData) {
             
             const alreadyExist = cartData.products.find((pro) => pro.productId.toString() == productId);
             if (alreadyExist) {
-                // If the product already exists in the cart, set the price
-                // await Cart.findOneAndUpdate({
-                //     userId: req.session.user_id,
-                //     "products.productId": productId
-                // },{
-                //     $inc: {
-                //     "products.$.quantity": quantity,
-                //     }
-                // });
-                console.log("product is already in the cart");
+
+                return res.json({ message: "Item is already in the cart" });
+
             } else {
                 // If the product doesn't exist in the cart, add it
                 await Cart.findOneAndUpdate({
@@ -560,6 +543,8 @@ const addProductsToCart = async (req, res) => {
                         }
                     }
                 });
+                return res.json({ message: "Item added to cart" });
+
             }
         } else {
             // If the user doesn't have a cart yet, create a new cart and add the product to it
@@ -574,8 +559,10 @@ const addProductsToCart = async (req, res) => {
             });
 
             await newCart.save();
+            return res.json({ message: "Item added to cart" });
+
         }      
-        res.redirect("/products");
+        //res.redirect("/products");
 
     } catch (error) {
         console.log(error.message);
