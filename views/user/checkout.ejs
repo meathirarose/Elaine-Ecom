@@ -33,6 +33,7 @@
                         </form>
                     </div><!-- End .header-search -->
                 </div>
+                
                 <div class="header-center">
                     <a href="userHome" class="logo">
                         <h3 class="text-center font-weight-bolder text-uppercase">Elaine</h3>
@@ -628,8 +629,7 @@ $(document).ready(function () {
         e.preventDefault();
         var addressId = $("input[name='billingAddress']:checked").val();
         var paymentMode = $("input[name='paymentMode']:checked").val();
-        var products = []; 
-
+        
         if (!addressId) {
             swal({
                 title: "Error!",
@@ -656,23 +656,45 @@ $(document).ready(function () {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ addressId, paymentMode, products })
+            body: JSON.stringify({ addressId, paymentMode })
         })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
+            setTimeout(function() {
+                    location.reload();
+            }, 1500);
             return response.json();
         })
         .then(data => {
-            swal({
+            if(data.message === "Please add products to the cart"){
+                swal({
+                    title: "Error",
+                    text: data.message,
+                    icon: "error",
+                    timer: 1500,
+                    buttons: false
+                })
+            }
+            if(data.message === "Sorry!, This product is out of Stock!"){
+                swal({
+                    title: "Error",
+                    text: data.message,
+                    icon: "error",
+                    timer: 1500,
+                    buttons: false
+                })
+            }
+            if(data.message === "Your order has been placed successfully."){
+                swal({
                 title: "Success!",
-                text: "Your order has been placed successfully.",
+                text: data.message,
                 icon: "success",
                 timer: 1500,
                 buttons: false
             });
-           
+            }
         })
         .catch(error => {
             console.error('Error:', error);

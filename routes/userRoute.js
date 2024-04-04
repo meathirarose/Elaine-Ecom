@@ -82,13 +82,13 @@ user_route.get("/productDetails", authentication.isLogin, accessAuth.accessUser,
 user_route.get("/addProductsToCart", authentication.isLogin, accessAuth.accessUser, userController.addProductsToCart);
 user_route.delete("/deleteCartItem/:productId", authentication.isLogin, accessAuth.accessUser, userController.deleteCartItem);
 user_route.post("/updateCartItemQuantity/:productId", authentication.isLogin, accessAuth.accessUser, userController.updateCartQuantity);
+user_route.get("/sortProducts", authentication.isLogin, accessAuth.accessUser, userController.sortProducts);
 
 // load cart & checkout
 user_route.get("/cart", authentication.isLogin, accessAuth.accessUser, userController.cartLoad);
 user_route.get("/checkout", authentication.isLogin, accessAuth.accessUser, userController.checkoutLoad);
 
 // load place order & orderDetails
-//user_route.get("/placeOrder", authentication.isLogin, accessAuth.accessUser, userController.placeOrderLoad);
 user_route.post("/placeOrder", userController.placeOrder);
 user_route.get("/orderDetails", authentication.isLogin, accessAuth.accessUser, userController.orderDetailsLoad);
 

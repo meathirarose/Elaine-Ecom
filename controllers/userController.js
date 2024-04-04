@@ -232,13 +232,48 @@ const allProductsListLoad = async (req, res) => {
     try {
         
         const productsData = await Product.find({});
-        res.render("products", {productsData});
+        res.render("products", { productsData: productsData });
 
     } catch (error) {
         console.log(error.message);
         res.render("404");
     }
 
+}
+
+// sorting products 
+const sortProducts = async (req, res) => {
+    try {
+        
+        const productsData = await Product.find({});
+
+        const sortOption = req.query.sortOption;
+
+        let sortedProducts;
+    
+        switch (sortOption) {
+            case 'priceLowToHigh':
+                sortedProducts = productsData.sort((a, b) => a.prdctPrice - b.prdctPrice);
+                break;
+            case 'priceHighToLow':
+                sortedProducts = productsData.sort((a, b) => b.prdctPrice - a.prdctPrice);
+                break;
+            case 'nameAZ':
+                sortedProducts = productsData.sort((a, b) => a.prdctName.localeCompare(b.prdctName));
+                break;
+            case 'nameZA':
+                sortedProducts = productsData.sort((a, b) => b.prdctName.localeCompare(a.prdctName));
+                break;
+            default:
+                sortedProducts = productsData;
+        }
+
+        res.json(sortedProducts);
+
+    } catch (error) {
+        console.log(error.message);
+        res.render("404");
+    }
 }
 
 // product details load
@@ -495,9 +530,10 @@ const cartLoad = async (req, res) => {
 
 
         const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
-        
+        console.log(cartData, "--------------------------------------cartData from cart------------------------------------------");
+        console.log(cartData.products.quantity, "--------------------------------------cartData.products.quantity------------------------------------------");
 
-       cartData.products.forEach(product => {
+        cartData.products.forEach(product => {
             product.updatedTotalPrice = product.quantity * product.productPrice;
         });
         const totalCost = cartData.products.reduce((total, product) => total + product.totalPrice, 0);
@@ -618,6 +654,7 @@ const updateCartQuantity = async (req, res) =>{
             updatedTotalPrice: updatedProduct.totalPrice,
             totalCost: totalCost 
         });
+        
     } catch (error) {
         console.log(error.message);
         res.render("404");
@@ -679,17 +716,19 @@ const checkoutLoad = async (req, res) => {
 // load place order
 const placeOrder = async (req, res) => {
     try {
-        const { addressId, paymentMode, products } = req.body;
+        const { addressId, paymentMode } = req.body;
 
-        if (!addressId || !paymentMode || !products) {
+        if (!addressId || !paymentMode) {
             throw new Error('Required data missing');
         }
 
         const cartData = await Cart.findOne({ userId: req.session.user_id }).populate('products.productId');
-        console.log(cartData, "-------------------------------------cartData--------------------------------------------");
         const userData = await User.findOne({ _id: req.session.user_id }, {_id: 1, name: 1});
-        console.log(userData, "------------------------------------------userData---------------------------------------");
-         
+
+        if(cartData.products.length === 0){
+            return res.json({message: "Please add products to the cart"});
+        }
+
         const newOrder = new Order({
             userId: userData._id,
             deliveryAddress: addressId,
@@ -706,7 +745,6 @@ const placeOrder = async (req, res) => {
               }))
              
         })
-        console.log(newOrder, "--------------------------------------newOrder-------------------------------------------");
 
         await newOrder.save();
 
@@ -717,10 +755,17 @@ const placeOrder = async (req, res) => {
             );
         }
         
+        cartData.products.map(product => {
+            if(product.productId.prdctQuantity <= 0){
+                return res.json({message: "This product is out of Stock!"});
+            }
+        });
+
         cartData.products = [];
         await cartData.save();
 
         res.json({ message: "Your order has been placed successfully." });
+
     } catch (error) {
         console.error('Error:', error);
         res.status(500).json({ error: "Something went wrong. Please try again later." });
@@ -784,6 +829,7 @@ module.exports = {
     failureGoogleLogin,
     userHomeLoad,
     allProductsListLoad,
+    sortProducts,
     productDetailsLoad,
     addProductsToCart,
     updateCartQuantity,

@@ -167,9 +167,8 @@
                                 </div><!-- End .details-filter-row -->
                                 <br>
                                 <div class="product-details-action">
-                                    <a href="addProductsToCart?productId=<%= productDatabyId._id %>"
-                                        class="btn-product btn-cart"><span>add to
-                                            cart</span></a>                                    
+                                    <a href="#" class="btn-product btn-cart" onclick="addToCart('<%= productDatabyId._id %>')"><span>Add to cart</span></a>
+                                   
                                     <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
 
                                 </div><!-- End .product-details-action -->
@@ -373,23 +372,72 @@
     </div><!-- End .mobile-menu-wrapper -->
     </div><!-- End .mobile-menu-container --> 
     
-        <!-- Plugins JS File -->
-        <script src="/user/assets/js/jquery.min.js"></script>
-        <script src="/user/assets/js/bootstrap.bundle.min.js"></script>
-        <script src="/user/assets/js/jquery.hoverIntent.min.js"></script>
-        <script src="/user/assets/js/jquery.waypoints.min.js"></script>
-        <script src="/user/assets/js/superfish.min.js"></script>
-        <script src="/user/assets/js/owl.carousel.min.js"></script>
-        <script src="/user/assets/js/bootstrap-input-spinner.js"></script>
-        <script src="user/assets/js/bootstrap-input-spinner.js"></script>
-        <script src="user/assets/js/jquery.magnific-popup.min.js"></script>
-        <script src="user/assets/js/jquery.countdown.min.js"></script>
-    
-    
-        <!-- Main JS File -->
-        <script src="/user/assets/js/main.js"></script>
-        <script src="user/assets/js/demos/demo-6.js"></script>
-        <script src="user/assets/js/demos/demo-16.js"></script>
+    <!-- Plugins JS File -->
+    <script src="/user/assets/js/jquery.min.js"></script>
+    <script src="/user/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/user/assets/js/jquery.hoverIntent.min.js"></script>
+    <script src="/user/assets/js/jquery.waypoints.min.js"></script>
+    <script src="/user/assets/js/superfish.min.js"></script>
+    <script src="/user/assets/js/owl.carousel.min.js"></script>
+    <script src="/user/assets/js/bootstrap-input-spinner.js"></script>
+    <script src="user/assets/js/bootstrap-input-spinner.js"></script>
+    <script src="user/assets/js/jquery.magnific-popup.min.js"></script>
+    <script src="user/assets/js/jquery.countdown.min.js"></script>
 
+
+    <!-- Main JS File -->
+    <script src="/user/assets/js/main.js"></script>
+    <script src="user/assets/js/demos/demo-6.js"></script>
+    <script src="user/assets/js/demos/demo-16.js"></script>
+
+    <!--Sweet Alert  -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script>
+        function addToCart(productId) {
+            fetch(`/addProductsToCart?productId=${productId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message === "Item added to cart") {
+                        swal({
+                            title: "Success!",
+                            text: "Item added to cart",
+                            icon: "success",
+                            timer: 1000, 
+                            buttons: false, 
+                            
+                        });
+                    } else if (data.message === "Item is already in the cart") {
+                        swal({
+                            text: "This item is already in your cart",
+                            icon: "info",
+                            timer: 1000, 
+                            buttons: false, 
+                            
+                        });
+                    } else {
+                        swal({
+                            title: "Error!",
+                            text: "Something went wrong",
+                            icon: "error",
+                            timer: 1000, 
+                            buttons: false, 
+                            
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    swal({
+                        title: "Error!",
+                        text: "Something went wrong",
+                        icon: "error",
+                        timer: 800, 
+                        buttons: false, 
+                        
+                    });
+                });
+        }
+    </script>
 
 <%-include("../layout/user/footer")-%>

@@ -16,7 +16,7 @@
                     </div><!-- End .header-right -->
                 </div>
             </div>
-
+    
             <div class="header-middle">
                 <div class="container">
                     <div class="header-left">
@@ -33,12 +33,13 @@
                             </form>
                         </div><!-- End .header-search -->
                     </div>
+                    
                     <div class="header-center">
                         <a href="userHome" class="logo">
                             <h3 class="text-center font-weight-bolder text-uppercase">Elaine</h3>
                         </a>
                     </div><!-- End .header-left -->
-
+    
                     <div class="header-right">
                         <a href="#" class="wishlist-link">
                             <i class="icon-heart-o"></i>
@@ -53,7 +54,7 @@
                     </div>
                 </div><!-- End .container -->
             </div><!-- End .header-middle -->
-
+    
             <div class="header-bottom sticky-header">
                 <div class="container">
                     <div class="header-left">
@@ -62,53 +63,56 @@
                                 <li class="megamenu-container active">
                                     <a href="userHome">Home</a>
                                 </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
+    
                                 <li><!-- start of pages -->
                                     <a href="products" class="sf">Products</a>
                                 </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<!-- end of pages -->
-
+    
                                 <li><!-- start of pages -->
                                     <a href="contactUs" class="sf">Contact</a>
                                 </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<!-- end of pages -->
-
+    
                                 <li>
                                     <a href="#" class="sf">About Us</a>
                                 </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
+    
                                 <li>
                                     <a href="myAccount" class="sf">My Account</a>
-                                </li>
+                                </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             </ul><!-- End .menu -->
                         </nav><!-- End .main-nav -->
-    <button class="mobile-menu-toggler">
-        <span class="sr-only">Toggle mobile menu</span>
-        <i class="icon-bars"></i>
-    </button>
-    </div><!-- End .header-left -->
-    </div><!-- End .container -->
-    </div><!-- End .header-bottom -->
-    </header><!-- End .header -->
-    <main class="main">
+    
+                        <button class="mobile-menu-toggler">
+                            <span class="sr-only">Toggle mobile menu</span>
+                            <i class="icon-bars"></i>
+                        </button>
+                    </div><!-- End .header-left -->
+                </div><!-- End .container -->
+            </div><!-- End .header-bottom -->
+        </header><!-- End .header -->
+        <main class="main">
+            <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+                <div class="container">
+                    <h1 class="page-title">All Products Here<span>Shop</span></h1>
+                </div><!-- End .container -->
+            </div><!-- End .page-header -->
+            <nav aria-label="breadcrumb" class="breadcrumb-nav breadcrumb-with-filter">
+                <div class="container">
+                	<a href="#" class="sidebar-toggler"><i class="icon-bars"></i>Filters</a>
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="userHome">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Products</li>
+                    </ol>
+                </div><!-- End .container -->
+            </nav><!-- End .breadcrumb-nav -->
 
-        <div class="page-header text-center" style="background-image: url('/user/assets/images/page-header-bg.jpg')">
-            <div class="container">
-                <h1 class="page-title">All Products Here<span>Shop</span></h1>
-            </div><!-- End .container -->
-        </div><!-- End .page-header -->
-        <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
-            <div class="container">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="userHome">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">All Products</li>
-                </ol>
-            </div><!-- End .container -->
-        </nav><!-- End .breadcrumb-nav -->
 
         <div class="page-content">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-9">
-                        <div class="toolbox">
+            <div class="categories-page">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="toolbox toolbox-right">
                             <div class="toolbox-left">
                                 <div class="toolbox-info">
                                     Showing <span>9 of 56</span> Products
@@ -122,7 +126,12 @@
                                         <select name="sortby" id="sortby" class="form-control">
                                             <option value="popularity" selected="selected">Most Popular</option>
                                             <option value="rating">Most Rated</option>
-                                            <option value="date">Date</option>
+                                            <option value="priceLowToHigh">Price: low to high</option>
+                                            <option value="priceHighToLow">Price : high to low</option>
+                                            <option value="date">Featured</option>
+                                            <option value="date">New arrivals</option>
+                                            <option value="nameAZ">aA - zZ</option>
+                                            <option value="nameZA">zZ - aA </option>
                                         </select>
                                     </div>
                                 </div><!-- End .toolbox-sort -->
@@ -180,104 +189,49 @@
                                             <% }) %>
                             </div><!-- End .row -->
                         </div><!-- End .products -->
+            <div class="sidebar-filter-overlay"></div><!-- End .sidebar-filter-overlay -->
+            <aside class="sidebar-shop sidebar-filter sidebar-filter-banner">
+                <div class="sidebar-filter-wrapper">
+                    <div class="widget widget-clean">
+                        <label><i class="icon-close"></i>Filters</label>
+                        <a href="#" class="sidebar-filter-clear">Clean All</a>
+                    </div>
+                    <div class="widget">
+                        <h3 class="widget-title">
+                            Browse Category
+                        </h3><!-- End .widget-title -->
 
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination justify-content-center">
-                                <li class="page-item disabled">
-                                    <a class="page-link page-link-prev" href="#" aria-label="Previous" tabindex="-1"
-                                        aria-disabled="true">
-                                        <span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
-                                    </a>
-                                </li>
-                                <li class="page-item active" aria-current="page"><a class="page-link" href="#">1</a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item-total">of 6</li>
-                                <li class="page-item">
-                                    <a class="page-link page-link-next" href="#" aria-label="Next">
-                                        Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div><!-- End .col-lg-9 -->
-                    <aside class="col-lg-3 order-lg-first">
-                        <div class="sidebar sidebar-shop">
-                            <div class="widget widget-clean">
-                                <label>Filters:</label>
-                                <a href="#" class="sidebar-filter-clear">Clean All</a>
-                            </div><!-- End .widget widget-clean -->
+                        <div class="widget-body">
+                            <div class="filter-items filter-items-count">
+                                <div class="filter-item">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="cat-1">
+                                        <label class="custom-control-label" for="cat-1">Women</label>
+                                    </div><!-- End .custom-checkbox -->
+                                    <span class="item-count">3</span>
+                                </div><!-- End .filter-item -->
 
-                            <div class="widget widget-collapsible">
-                                <h3 class="widget-title">
-                                    <a data-toggle="collapse" href="#widget-1" role="button" aria-expanded="true"
-                                        aria-controls="widget-1">
-                                        Category
-                                    </a>
-                                </h3><!-- End .widget-title -->
+                                <div class="filter-item">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="cat-2">
+                                        <label class="custom-control-label" for="cat-2">Men</label>
+                                    </div><!-- End .custom-checkbox -->
+                                    <span class="item-count">0</span>
+                                </div><!-- End .filter-item -->
 
-                                <div class="collapse show" id="widget-1">
-                                    <div class="widget-body">
-                                        <div class="filter-items filter-items-count">
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="cat-1">
-                                                    <label class="custom-control-label" for="cat-1">Dresses</label>
-                                                </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">3</span>
-                                            </div><!-- End .filter-item -->
+                                <div class="filter-item">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="cat-3">
+                                        <label class="custom-control-label" for="cat-3">Kids</label>
+                                    </div><!-- End .custom-checkbox -->
+                                    <span class="item-count">0</span>
+                                </div><!-- End .filter-item -->
 
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="cat-2">
-                                                    <label class="custom-control-label" for="cat-2">T-shirts</label>
-                                                </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">0</span>
-                                            </div><!-- End .filter-item -->
-
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="cat-4">
-                                                    <label class="custom-control-label" for="cat-4">Jackets</label>
-                                                </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">2</span>
-                                            </div><!-- End .filter-item -->
-
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="cat-6">
-                                                    <label class="custom-control-label" for="cat-6">Jumpers</label>
-                                                </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">1</span>
-                                            </div><!-- End .filter-item -->
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="cat-7">
-                                                    <label class="custom-control-label" for="cat-7">Jeans</label>
-                                                </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">1</span>
-                                            </div><!-- End .filter-item -->
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="cat-8">
-                                                    <label class="custom-control-label" for="cat-8">Sportwear</label>
-                                                </div><!-- End .custom-checkbox -->
-                                                <span class="item-count">0</span>
-                                            </div><!-- End .filter-item -->
-                                        </div><!-- End .filter-items -->
-                                    </div><!-- End .widget-body -->
-                                </div><!-- End .collapse -->
-                            </div><!-- End .widget -->
-
-                        </div><!-- End .sidebar sidebar-shop -->
-                    </aside><!-- End .col-lg-3 -->
-                </div><!-- End .row -->
-            </div><!-- End .container -->
+                            </div><!-- End .filter-items -->
+                        </div><!-- End .widget-body -->
+                    </div><!-- End .widget -->
+                </div><!-- End .sidebar-filter-wrapper -->
+            </aside><!-- End .sidebar-filter -->
         </div><!-- End .page-content -->
     </main><!-- End .main -->
 
@@ -392,72 +346,155 @@
         </div><!-- End .social-icons -->
     </div><!-- End .mobile-menu-wrapper -->
     </div><!-- End .mobile-menu-container --> 
-    
-    <!-- Plugins JS File -->
-    <script src="/user/assets/js/jquery.min.js"></script>
-    <script src="/user/assets/js/bootstrap.bundle.min.js"></script>
-    <script src="/user/assets/js/jquery.hoverIntent.min.js"></script>
-    <script src="/user/assets/js/jquery.waypoints.min.js"></script>
-    <script src="/user/assets/js/superfish.min.js"></script>
-    <script src="/user/assets/js/owl.carousel.min.js"></script>
-    <script src="/user/assets/js/bootstrap-input-spinner.js"></script>
-    <script src="user/assets/js/bootstrap-input-spinner.js"></script>
-    <script src="user/assets/js/jquery.magnific-popup.min.js"></script>
-    <script src="user/assets/js/jquery.countdown.min.js"></script>
+
+<!-- Plugins JS File -->
+<script src="/user/assets/js/jquery.min.js"></script>
+<script src="/user/assets/js/bootstrap.bundle.min.js"></script>
+<script src="/user/assets/js/jquery.hoverIntent.min.js"></script>
+<script src="/user/assets/js/jquery.waypoints.min.js"></script>
+<script src="/user/assets/js/superfish.min.js"></script>
+<script src="/user/assets/js/owl.carousel.min.js"></script>
+<script src="/user/assets/js/bootstrap-input-spinner.js"></script>
+<script src="user/assets/js/bootstrap-input-spinner.js"></script>
+<script src="user/assets/js/jquery.magnific-popup.min.js"></script>
+<script src="user/assets/js/jquery.countdown.min.js"></script>
 
 
-    <!-- Main JS File -->
-    <script src="/user/assets/js/main.js"></script>
-    <script src="user/assets/js/demos/demo-6.js"></script>
-    <script src="user/assets/js/demos/demo-16.js"></script>
+<!-- Main JS File -->
+<script src="/user/assets/js/main.js"></script>
+<script src="user/assets/js/demos/demo-6.js"></script>
+<script src="user/assets/js/demos/demo-16.js"></script>
    
-    <!--Sweet Alert  -->
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<!--Sweet Alert  -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-    <script>
-    function addToCart(productId) {
-        fetch(`/addProductsToCart?productId=${productId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.message === "Item added to cart") {
-                    swal({
-                        title: "Success!",
-                        text: "Item added to cart",
-                        icon: "success",
-                        timer: 1000, 
-                        buttons: false, 
-                        
-                    });
-                } else if (data.message === "Item is already in the cart") {
-                    swal({
-                        text: "This item is already in your cart",
-                        icon: "info",
-                        timer: 1000, 
-                        buttons: false, 
-                        
-                    });
-                } else {
-                    swal({
-                        title: "Error!",
-                        text: "Something went wrong",
-                        icon: "error",
-                        timer: 1000, 
-                        buttons: false, 
-                        
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
+<script>
+function addToCart(productId) {
+    fetch(`/addProductsToCart?productId=${productId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === "Item added to cart") {
+                swal({
+                    title: "Success!",
+                    text: "Item added to cart",
+                    icon: "success",
+                    timer: 1000, 
+                    buttons: false, 
+                    
+                });
+            } else if (data.message === "Item is already in the cart") {
+                swal({
+                    text: "This item is already in your cart",
+                    icon: "info",
+                    timer: 1000, 
+                    buttons: false, 
+                    
+                });
+            } else {
                 swal({
                     title: "Error!",
                     text: "Something went wrong",
                     icon: "error",
-                    timer: 800, 
+                    timer: 1000, 
                     buttons: false, 
                     
                 });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            swal({
+                title: "Error!",
+                text: "Something went wrong",
+                icon: "error",
+                timer: 800, 
+                buttons: false, 
+                
             });
-    }
+        });
+}
 </script>
+
+<script>
+
+function sortAndRenderProducts(sortOption) {
+    fetch(`/sortProducts?sortOption=${sortOption}`)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Failed to fetch sorted products');
+            }
+        })
+        .then(sortedProducts => {
+            const productListContainer = document.querySelector('.products .row');
+
+            productListContainer.innerHTML = '';
+
+            sortedProducts.forEach(product => {
+                 if(product.is_listed===true){
+
+                    const productHTML = `
+                    <div class="col-6 col-md-4 col-lg-4">
+
+                        <div class="product product-7 text-center">
+                            <figure class="product-media">
+                                <a href="productDetails?productId=${product._id}">
+                                    <img src="/uploads/${product.prdctImage[0]}"
+                                        alt="Product image" class="product-image">
+                                </a>
+
+                                <div class="product-action-vertical">
+                                    <a href="#"
+                                        class="btn-product-icon btn-wishlist btn-expandable"><span>add
+                                            to wishlist</span></a>
+                                </div><!-- End .product-action-vertical -->
+
+                                <div class="product-action">
+
+                                    <a href="#" class="btn-product btn-cart" onclick="addToCart('${product._id}')"><span>Add to cart</span></a>
+
+                                </div><!-- End .product-action -->
+
+                            </figure><!-- End .product-media -->
+
+                            <div class="product-body">
+                                <h3 class="product-title"><a href="products">
+                                       ${product.prdctName}
+                                    </a></h3><!-- End .product-title -->
+                                <div class="product-price">
+                                    <p>₹${product.prdctPrice} 
+                                    </p>
+                                </div><!-- End .product-price -->
+                                <div class="ratings-container">
+                                    <div class="ratings">
+                                        <div class="ratings-val" style="width: 20%;"></div>
+                                        <!-- End .ratings-val -->
+                                    </div><!-- End .ratings -->
+                                    <span class="ratings-text">( 2 Reviews )</span>
+                                </div><!-- End .rating-container -->
+
+                            </div><!-- End .product-body -->
+                        </div><!-- End .product -->
+
+                    </div><!-- End .col-sm-6 col-lg-4 -->
+                    `;
+
+                    productListContainer.innerHTML += productHTML;
+                 }
+            });
+        })
+        .catch(error => {
+            console.error('Error sorting products:', error);
+        });
+}
+
+document.getElementById('sortby').addEventListener('change', function() {
+    const selectedSortOption = this.value;
+
+    sortAndRenderProducts(selectedSortOption);
+});
+
+</script>
+
 <%-include("../layout/user/footer")-%>
