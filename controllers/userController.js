@@ -790,16 +790,12 @@ const orderDetailsLoad = async (req, res) => {
 
         const orderId = req.query.orderId;        
 
-        const userId = req.session.user_id
-
+        const userId = req.session.user_id;
 
         const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
 
         const orderData = await Order.find({ userId, _id: orderId });
-        console.log('====================================================================================')
-        console.log(orderData,"--------------------------------------------------------------------------");
-        console.log('====================================================================================')
-
+1
         const productDataPromises = orderData.map(async order => {
             const products = order.products.map(async product => {
 

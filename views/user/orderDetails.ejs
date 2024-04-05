@@ -182,38 +182,69 @@ z-index: 0
                                     <div class="col-md-2">
                                       <p class="text-muted mb-0 small">Track Order</p>
                                     </div>
+                                    
                                     <div class="col-md-10">
                                         <div class="d-flex flex-row justify-content-between align-items-center align-content-center">
                                             <span class="dot"></span>
-                                            <% if(product.status == "Order Placed"){%> 
+                                            <% if(product.status == "Order Placed") { %>
+                                                <hr class="flex-fill track-line"><span class="dot"></span>
+                                            <% } else if(product.status == "Order Shipped") { %>
+                                                <hr class="flex-fill track-line"><span class="dot"></span>
 
-                                            <hr class="flex-fill track-line"><span class="dot"></span>
-                                            <%}%><% if(product.status == "Order Placed"){%> 
-                                            <hr class="flex-fill "><span class="dot"></span>
-                                            <%}else if(product.status == "Order Shipped"){ %>
+                                                <hr class="flex-fill track-line "><span class="dot"></span>
+                                            <% } else if(product.status == "Order Delivered") { %>
+                                                <hr class="flex-fill track-line"><span class="dot"></span>
 
-                                            <%}else if(product.status == "Order Delivered"){%>
-
-                                            <hr class="flex-fill "><span class="dot"></span>
-                                            <%}%>
-
-                                            <hr class="flex-fill "><span
-                                              class="d-flex justify-content-center align-items-center big-dot dot">
-                                              <i class="fa fa-check text-white"></i></span>
-                                          </div>
-                                          <div class="d-flex flex-row justify-content-between align-items-center">
-                                            <% if(product.status == "Order Placed"){%> 
-                                                <div class="d-flex flex-column small align-items-start"><span><%= order.date.toDateString() %></span><span>Order placed</span>
-                                                </div>                     
+                                                <hr class="flex-fill track-line "><span class="dot"></span>
+                                                <hr class="flex-fill track-line"><span class="dot"></span>
+                                            <% } %>
+                                            <hr class="flex-fill track-line"><span class="d-flex justify-content-center align-items-center big-dot dot">
+                                                <i class="fa fa-check text-white"></i>
+                                            </span>
+                                        </div>
+                                        <div class="d-flex flex-row justify-content-between align-items-center">
+                                            <% if(product.status == "Order Placed") { %>
+                                                <div class="d-flex flex-column small align-items-start">
+                                                    <span><%= order.date.toDateString() %></span>
+                                                    <span>Order placed</span>
+                                                    
+                                                </div>
                                                 
-                                            <%}else if(product.status == "Order Shipped"){ %>
-
-                                            <div class="d-flex flex-column small justify-content-center align-items-center"><span></span><span>Order Shipped</span></div>
-                                            <%}else if(product.status == "Order Delivered"){%>
-                                            <div class="d-flex flex-column small align-items-end"><span></span><span>Delivered</span></div>
-                                            <%}%>
-                                          </div>
+                                            <% } else if(product.status == "Order Shipped") { %>
+                                                <div class="d-flex flex-column small align-items-start">
+                                                    <span><%= order.date.toDateString() %></span>
+                                                    <span>Order placed</span>
+                                                </div>
+                                                 <div class="d-flex flex-column small align-items-start">
+                                                    <span><%= order.date.toDateString() %></span>
+                                                    <span>Order placed</span>
+                                                </div>
+                                                <div class="d-flex flex-column small justify-content-center align-items-center">
+                                                    <span><%= order.date.toDateString() %></span>
+                                                    <span>Order Shipped</span>
+                                                </div>
+                                            <% } else if(product.status == "Order Delivered") { %>
+                                                <div class="d-flex flex-column small align-items-start">
+                                                    <span><%= order.date.toDateString() %></span>
+                                                    <span>Order placed</span>
+                                                </div>
+                                                <div class="d-flex flex-column small align-items-start">
+                                                    <span><%= order.date.toDateString() %></span>
+                                                    <span>Order placed</span>
+                                                </div>
+                                                <div class="d-flex flex-column small justify-content-center align-items-center">
+                                                    <span><%= order.date.toDateString() %></span>
+                                                    <span>Order Shipped</span>
+                                                </div>
+                                                <div class="d-flex flex-column small align-items-end">
+                                                    <span><%= order.date.toDateString() %></span>
+                                                    <span>Order Delivered</span>
+                                                </div>
+                                            <% } %>
+                                        </div>
                                     </div>
+                                    
+
                                   </div>
                                 </div>
                               </div>

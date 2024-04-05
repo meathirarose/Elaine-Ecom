@@ -66,6 +66,8 @@ admin_route.post('/editCategory', adminController.updateCategory);
 
 // orders route
 admin_route.get('/orders', adminAuthentication.isAdminLogin, adminController.ordersLoad);
+admin_route.post('/shippedStatusChange/:orderId', adminController.shippedStatusChange);
+admin_route.post('/deliveredStatusChange/:orderId', adminController.deliveredStatusChange);
 
 // customerlist routes
 admin_route.get('/customerList', adminAuthentication.isAdminLogin, adminController.customerListLoad);

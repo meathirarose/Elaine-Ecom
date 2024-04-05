@@ -129,15 +129,16 @@
                                     <td class="text-end">
                                         <a href="#" class="btn btn-md rounded font-sm">Detail</a>
                                         <div class="dropdown">
-                                            <a href="#" data-bs-toggle="dropdown"
-                                                class="btn btn-light rounded btn-sm font-sm"> <i
-                                                    class="material-icons md-more_horiz"></i> </a>
+                                            <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm">
+                                                <i class="material-icons md-more_horiz"></i>
+                                            </a>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">Shipped</a>
-                                                <a class="dropdown-item" href="#">Delivered</a>
+                                                <a class="dropdown-item" href="#" onclick="handleShippedStatusChange('<%= order._id %>', 'Shipped')">Shipped</a>
+                                                <a class="dropdown-item" href="#" onclick="handleDeliveredStatusChange('<%= order._id %>', 'Delivered')">Delivered</a>
                                                 <a class="dropdown-item" href="#">Cancel</a>
                                             </div>
                                         </div>
+                                        
                                         <!-- dropdown //end -->
                                     </td>
                                 </tr>
@@ -177,6 +178,106 @@
     <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
     <!-- Main Script -->
     <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
+
+    <!--Sweet Alert  -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script>
+
+// handle status change  - shipped
+async function handleShippedStatusChange(orderId, newStatus) {
+    try {
+        const response = await fetch(`/admin/shippedStatusChange/${orderId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ newStatus })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update order status');
+        }
+
+        const responseData = await response.json();
+
+        if (responseData.message) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: responseData.message
+            });
+            setTimeout(function() {
+                    location.reload();
+                }, 1500);
+        } else if (responseData.error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: responseData.error
+            });
+        }
+    } catch (error) {
+        console.error('Error:', error.message);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to update order status'
+        });
+    }
+}
+
+
+</script>
+
+<script>
+
+// handle status change  - delivered
+async function handleDeliveredStatusChange(orderId, newStatus) {
+    try {
+        const response = await fetch(`/admin/deliveredStatusChange/${orderId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ newStatus })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update order status');
+        }
+
+        const responseData = await response.json();
+
+        if (responseData.message) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: responseData.message
+            });
+            setTimeout(function() {
+                    location.reload();
+                }, 1500);
+        } else if (responseData.error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: responseData.error
+            });
+        }
+    } catch (error) {
+        console.error('Error:', error.message);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to update order status'
+        });
+    }
+}
+
+
+</script>
+
 
 
 
