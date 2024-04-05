@@ -139,7 +139,7 @@
                                 </ul>
                             </aside><!-- End .col-lg-3 -->
 
-                            <div class="col-md-8 col-lg-9">
+                            <div class="col-md-8 col-lg-9 ">
                                 <div class="tab-content">
                                     <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
                                         <p>Hello <span class="font-weight-normal text-dark"><%= userData.name %>,<br>
@@ -158,29 +158,40 @@
                                          
                                     </div><!-- .End .tab-pane -->
                                     <%}else{%>
-                                    <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
+                                    <div class="tab-pane fade ml-5" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
                                         <p class="text-center font-weight-bolder"><b>Order Details</b></p>
 
                                         <table class="table table-hover">
                                             <thead>
                                                 <tr>
+                                                    <th scope="col">Product Image</th>
                                                     <th scope="col">Product Name</th>
                                                     <th scope="col">Quantity</th>
                                                     <th scope="col">Total Amount</th>
                                                     <th scope="col">Status</th>
-                                                    <th scope="col">Order Date</th>
+                                                    <th scope="col">Order Details</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <% orderData.forEach(order => { %>
-                                                    <% order.products.forEach(product => { %>
+                                                <% orderData.forEach((order, orderIndex) => { %>
+                                                    <% order.products.forEach((product, productIndex) => { %>
+                                                        
                                                         <tr>
-                                                            <td><%= product.productName %></td>
+                                                            <td class="product-col">
+                                                                <div class="product">
+                                                                    <figure class="product-media">
+                                                                        <a href="#"><img src="/uploads/<%= productsData[orderIndex][productIndex].productData.prdctImage[0] %>" alt="Product image"></a>
+                                                                    </figure>
+                                                                </div><!-- End .product -->
+                                                            </td> 
+                                                            <td><a href="#"><%= productsData[orderIndex][productIndex].productData.prdctName %></a></td>                                                           
                                                             <td><%= product.quantity %></td>
                                                             <td><%= product.totalPrice %></td>
-                                                            <td><span class="badge rounded-pill alert-warning"><%= product.status %></span></td>
-                                                            <td><%= order.date.toDateString() %></td>
+                                                            <td><span class="badge rounded-pill alert-success"><%= product.status %></span></td>
+                                                            <td><button class="btn btn-primary order-details-btn" type="submit"><a href="/orderDetails?orderId=<%=order._id%>" class="text-white">Order Details</a></button>
+                                                            </td>
                                                         </tr>
+
                                                     <% }); %>
                                                 <% }); %>
                                             </tbody>
@@ -423,11 +434,11 @@
                                 <h4 class="widget-title">Useful Links</h4><!-- End .widget-title -->
 
                                 <ul class="widget-list">
-                                    <li><a href="about.html">About Molla</a></li>
-                                    <li><a href="#">How to shop on Molla</a></li>
+                                    <li><a href="#">About Us</a></li>
+                                    <li><a href="#">How to shop on Elaine</a></li>
                                     <li><a href="#">FAQ</a></li>
-                                    <li><a href="contact.html">Contact us</a></li>
-                                    <li><a href="login.html">Log in</a></li>
+                                    <li><a href="contactUs">Contact us</a></li>
+                                    <li><a href="userLogin">Log in</a></li>
                                 </ul><!-- End .widget-list -->
                             </div><!-- End .widget -->
                         </div><!-- End .col-sm-6 col-lg-3 -->
@@ -452,8 +463,8 @@
                                 <h4 class="widget-title">My Account</h4><!-- End .widget-title -->
 
                                 <ul class="widget-list">
-                                    <li><a href="#">Sign In</a></li>
-                                    <li><a href="cart.html">View Cart</a></li>
+                                    <li><a href="userSignup">Sign Up</a></li>
+                                    <li><a href="cart">View Cart</a></li>
                                     <li><a href="#">My Wishlist</a></li>
                                     <li><a href="#">Track My Order</a></li>
                                     <li><a href="#">Help</a></li>
@@ -609,6 +620,7 @@
     <!-- end for adding address -->
     <!-- editing address -->
     <script>
+
         function editAddressShow(id) {
 
             $(`#edit-address${id}`).click(function (e) {
@@ -624,14 +636,12 @@
     <script>
         
     $(document).ready(function () {
-        // Edit button click
         $('.edit-address').click(function (e) {
             e.preventDefault();
             var editId = $(this).data('edit-id');
             $('#editAddressForm' + editId).submit(); 
         });
 
-        // Edit address form submission
         $('.edit-address-form').submit(function (e) {
             e.preventDefault();
             var editId = $(this).find('#editAddressId').val();
@@ -761,8 +771,6 @@
         });
 
     </script>
-
-    
 
 
     <%-include("../layout/user/footer")-%>

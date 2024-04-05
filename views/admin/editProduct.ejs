@@ -67,7 +67,7 @@
                     </li>
                     
                     <li class="dropdown nav-item">
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/user/assets/imgs/people/avatar-2.png" alt="User" /></a>
+                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="assets/imgs/people/avatar-2.png" alt="User" /></a>
                         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
                             <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
                             <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
@@ -126,18 +126,16 @@
                                         </div>
                                     </div>
                                     
-                                        <div class="col-lg-4">
-                                            <label class="form-label" >Category</label>
-                                            <input type="text" name="cateName" value="<%= prdctData.categoryId.cateName %>" class="form-control">
-                                        </div>
+                                    <div class="col-lg-4">
+                                        <label class="form-label">Category</label>
+                                        <input type="text" name="cateName" value="<%= prdctData.categoryId ? prdctData.categoryId.cateName : '' %>" class="form-control">
+                                    </div>
+
                                 </div>
                                 <input type="text" required name="prdctId" value="<%= prdctData._id %>" hidden>
 
-                                <button class="btn btn-md rounded font-sm hover-up" type="submit">submit</button>
-                            </form>
                         </div>
                     </div>
-                    <!-- card end// -->
                 </div>
                 <div class="col-lg-3 ">
                     <div class="card mb-4 ">
@@ -147,51 +145,32 @@
                         <% productImagesArray.forEach(images=>{%>
                             <div class="d-flex">
                                 <div class="m-2 ">
-                                    <img src="/uploads/<%= images %>" alt="Userpic" style="height: 75px; width: 75px;" />
+                                    <img src="/uploads/<%= images %>" alt="Userpic" style="height: 85px; width: 75px;" />
                                 </div>
             
                                 <div class="card-body">
                                     <div class="input-upload">
-                                        <a href="" onclick="deleteImage('<%=images%>')">Delete</a>
+                                        <a href="#" onclick="deleteImage('<%=images%>')">Delete</a>
                                     </div>
                                 </div>
+
+
                             </div>
                             <%});%>
                     </div><!-- card end// -->
                 </div>
+
                 </div>
+                <button class="btn btn-md rounded font-sm hover-up" type="button" onclick="handleSubmit()">Submit</button>
+
+            </form>
             </div>
         </section>
         <!-- content-main end// -->
         
     </main>
    
-    <script>
-        
-        async function deleteImage(imageId){
 
-            const confirmDelete = confirm("Are you sure want to delete the image?");
-
-            if(confirmDelete){
-                try {
-                    const response = await fetch(`/admin/deleteProductImage?imageId=${imageId}`,{
-                        method: 'DELETE',
-                        headers: {
-                            'Content-type':'application/json'
-                        },
-                    });
-                    if(!response.ok){
-                        window.location.reload();
-                    }else{
-                        console.error("Error in handling");
-                    }
-                } catch (error) {
-                    console.error("Error", error);
-                }
-            }
-        }
-        
-    </script>
 
     <script src="/user/assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="/user/assets/js/vendors/bootstrap.bundle.min.js"></script>
@@ -200,6 +179,116 @@
     <script src="/user/assets/js/vendors/jquery.fullscreen.min.js"></script>
     <!-- Main Script -->
     <script src="/user/assets/js/main.js?v=1.1" type="text/javascript"></script>
+
+    <!--Sweet Alert  -->
+    <!-- Include SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+    
+<script>
+    async function deleteImage(imageId) {
+        const confirmDelete = await Swal.fire({
+            title: 'Are you sure?',
+                    text: "You want to delete this image?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, remove it!'
+        });
+
+        if (confirmDelete.isConfirmed) {
+            try {
+                const response = await fetch(`/admin/deleteProductImage?imageId=${imageId}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+
+                        window.location.reload();
+                    
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Failed to delete the image.',
+                        icon: 'error'
+                    });
+                }
+            } catch (error) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'An error occurred while deleting the image.',
+                    icon: 'error'
+                });
+                console.error("Error:", error);
+            }
+        }
+    }
+</script>
+
+<script>
+    // Function to handle form submission
+    const handleSubmit = async (event) => {
+        event.preventDefault(); // Prevent default form submission
+
+        // Get form data
+        const formData = new FormData(event.target);
+
+        try {
+            // Send form data to server using fetch
+            const response = await fetch('/admin/updateProduct', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+
+                // Check if product update was successful
+                if (data.success) {
+                    // Product updated successfully, show success message
+                    Swal.fire({
+                        title: 'Success!',
+                        text: data.message,
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        // Redirect to products list page
+                        window.location.href = "/admin/productsList";
+                    });
+                } else {
+                    // Product update failed, show error message
+                    Swal.fire({
+                        title: 'Error!',
+                        text: data.message,
+                        icon: 'error'
+                    });
+                }
+            } else {
+                // Error occurred while updating product, show error message
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to update product.',
+                    icon: 'error'
+                });
+            }
+        } catch (error) {
+            // An error occurred, show error message
+            Swal.fire({
+                title: 'Error!',
+                text: 'An error occurred while updating product.',
+                icon: 'error'
+            });
+            console.error("Error:", error);
+        }
+    };
+
+    // Add form submit event listener
+    document.querySelector('form').addEventListener('submit', handleSubmit);
+</script>
+
 
 
 <%-include("../layout/admin/footer")-%>

@@ -5,12 +5,10 @@ const categorySchema = new mongoose.Schema({
     cateName: {
         type: String,
         unique: true,
-        default: " "
     },
 
     cateDescription: {
         type: String,
-        default: " "
     },
 
     is_listed: {

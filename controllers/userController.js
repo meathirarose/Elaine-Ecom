@@ -2,6 +2,7 @@ const User = require("../models/userdbModel");
 const Product =require("../models/productdbModel");
 const Cart = require("../models/cartdbModel");
 const Order = require("../models/orderdbSchema");
+const Category = require("../models/categorydbModel");
 const bcrypt = require("bcrypt");
 const otpController = require("../auth/otpMailVerify")
 
@@ -322,10 +323,21 @@ const myAccountLoad = async (req, res) => {
     try {
         
         const userId = req.session.user_id;
+
         const userData = await User.findById(userId);
-        const orderData = await Order.find();
-        console.log(orderData);
-        res.render("myAccount", {userData, orderData});
+        const orderData = await Order.find({ userId });
+        
+        const productDataPromises = orderData.map(async order => {
+            const products = order.products.map(async product => {
+                const productData = await Product.findById(product.productId);
+                return { ...product.toObject(), productData };
+            });
+            return Promise.all(products);
+        });
+
+        const productsData = await Promise.all(productDataPromises);
+
+        res.render("myAccount", { userData, orderData, productsData });
 
     } catch (error) {
         console.log(error.message);
@@ -530,8 +542,6 @@ const cartLoad = async (req, res) => {
 
 
         const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
-        console.log(cartData, "--------------------------------------cartData from cart------------------------------------------");
-        console.log(cartData.products.quantity, "--------------------------------------cartData.products.quantity------------------------------------------");
 
         cartData.products.forEach(product => {
             product.updatedTotalPrice = product.quantity * product.productPrice;
@@ -723,7 +733,7 @@ const placeOrder = async (req, res) => {
         }
 
         const cartData = await Cart.findOne({ userId: req.session.user_id }).populate('products.productId');
-        const userData = await User.findOne({ _id: req.session.user_id }, {_id: 1, name: 1});
+        const userData = await User.findOne({ _id: req.session.user_id }, {_id: 1, name: 1, email:1});
 
         if(cartData.products.length === 0){
             return res.json({message: "Please add products to the cart"});
@@ -733,6 +743,7 @@ const placeOrder = async (req, res) => {
             userId: userData._id,
             deliveryAddress: addressId,
             userName: userData.name,
+            email: userData.email,
             totalAmount: cartData.totalCost,
             date: new Date(),
             payment: paymentMode,
@@ -776,20 +787,46 @@ const placeOrder = async (req, res) => {
 const orderDetailsLoad = async (req, res) => {
 
     try {
-        
-        const userDataCheckout = await User.findById(
-            {
-                _id: req.session.user_id
-            }
-        );
+
+        const orderId = req.query.orderId;        
+
+        const userId = req.session.user_id
+
+
         const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
 
-        res.render("orderDetails", {userDataCheckout, cartData});
+        const orderData = await Order.find({ userId, _id: orderId });
+        console.log('====================================================================================')
+        console.log(orderData,"--------------------------------------------------------------------------");
+        console.log('====================================================================================')
+
+        const productDataPromises = orderData.map(async order => {
+            const products = order.products.map(async product => {
+
+                const productData = await Product.findById(product.productId);
+                const categoryData = await Category.findById(productData.categoryId);
+                const cateName = categoryData.cateName;
+
+                return { ...product.toObject(), productData, cateName };
+            });
+            return Promise.all(products);
+        });
+
+        const productsData = await Promise.all(productDataPromises);
+
+        for (const order of orderData) {
+            const addressId = order.deliveryAddress; 
+            const user = await User.findById(userId); 
+        
+            var address = user.address.find(address => address._id == addressId);
+        }
+
+        res.render("orderDetails",{ cartData, orderData, productsData, address });
 
 
     } catch (error) {
         console.log(error.message);
-        res.render("404");
+        //res.render("404");
     }
 
 }

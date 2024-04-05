@@ -15,6 +15,10 @@ const orderSchema = new mongoose.Schema({
         type: String
     },
 
+    email: {
+        type: String
+    },
+
     totalAmount:{
         type:Number,
     },

@@ -1,4 +1,41 @@
 <%-include("../layout/user/header")-%>
+<style>
+.track-line {
+height: 2px !important;
+background-color: #488978;
+opacity: 1;
+}
+
+.dot {
+height: 10px;
+width: 10px;
+margin-left: 3px;
+margin-right: 3px;
+margin-top: 0px;
+background-color: #488978;
+border-radius: 50%;
+display: inline-block
+}
+
+.big-dot {
+height: 15px;
+width: 15px;
+margin-left: 0px;
+margin-right: 0px;
+margin-top: 0px;
+background-color: #488978;
+border-radius: 50%;
+display: inline-block;
+}
+
+.big-dot i {
+font-size: 12px;
+}
+
+.card-stepper {
+z-index: 0
+}
+</style>
 
 <div class="page-wrapper">
     <div class="page-wrapper">
@@ -89,121 +126,143 @@
     </div><!-- End .header-bottom -->
     </header><!-- End .header -->
 
+    <main class="main">
+        <div class="page-header text-center"
+            style="background-image: url('/user/assets/images/page-header-bg.jpg')">
+            <div class="container">
+                <h1 class="page-title">Order Details<span>Orders</span></h1>
+            </div><!-- End .container -->
+        </div><!-- End .page-header -->
 
-    <div class="col-lg-12 col-md-12 col-sm-12 col-12 ">
-        <form action="/">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
         <div class="page-content"> 
-            <div class="container-fluid">
-               
-                <% cartData.products.forEach((product) => { %>
-                <div class="row d-flex justify-content-center mt-3">
-              
-                    
-                    <div class="col-xl-6 mt-5">
-                        <div class="card border shadow mb-3" style="border-radius: 0 !important;">
+            <div class="container-fluid"> 
 
+                <section class=" gradient-custom">
+                    <div class="container py-5 ">
+                      <div class="row d-flex justify-content-center align-items-center h-100">
+                        
+                        <div class="col-lg-12 col-xl-10">
+                          <div class="card" style="border-radius: 10px;">
+
+                            <div class="card-header px-4 py-5">
+                              <h5 class="text-muted mb-0">Thanks for your Order, <span style="color: #dc945a;"><%= orderData[0].userName%></span>!</h5>
+                            </div>
                             
-                            <div class="card-body">
-                                <article class="itemlist ">
-                                    <div class="row align-items-center">
-                                        
-                                        
-                                        <div class="col-lg-6 col-sm-4 col-8 flex-grow-5 col-name " style="width:auto;">
-                                            <a class="itemside" href="#">
-                                                <div class="left">
-                                                    <img src="/uploads/<%= product.productId.prdctImage[0] %>" class="img-sm img-thumbnail" style="width: 150px;" alt="Item" />
-                                                    
-                                                </div> 
-                                                <div class="info">
-                                                    <h6 class="mb-0"><%= element.productId.name %></h6>     
-                                                    <h6 class="mb-0">Rs.<%= element.totalAmount %>.00</h6>     
-                                                    <h6 class="mb-0">QTY:<%= element.quantity%></h6>     
-                                                    <!-- <h6 class="mb-0">neme</h6>      -->
-                                                </div>
-                                            </a>
-                                        </div>
-                                        
-                                        <div class="col-lg-2 col-sm-2 col-4 col-price">
-                                            <h6 class="mb-0"><%= orderDetails.addressId.address %></h6>     
-                                            <h6 class="mb-0"><%= orderDetails.addressId.city %></h6> 
-                                            <h6 class="mb-0"><%= orderDetails.addressId.district %></h6> 
-                                            <h6 class="mb-0"><%= orderDetails.addressId.state %></h6> 
-                                            <h6 class="mb-0"><%= orderDetails.addressId.pincode %></h6> 
-
-                                        </div>
-                                       
-        
-                                        <div class="col-lg-4 col-sm-3 col-4 col-status">
-                                            <h6 class="mb-0">Shipped on March 16,2024</h6>  
-                                            <h6 class="mb-0">Your item has been canceled</h6>  
-                                          
-
-                                        </div>
-                                        <div class="col-lg-1 col-sm-2 col-4 col-date">
-                                             <span class="badge rounded-pill alert-success">cod</span>
-                                        </div>
-                                       
+                            <div class="card-body p-4">
+                              <div class="d-flex justify-content-between align-items-center mb-4">
+                                <p class="lead fw-normal mb-0" style="color: #dc945a;">Receipt</p>
+                              </div>
+                              <% orderData.forEach((order, orderIndex) => { %>
+                                <% order.products.forEach((product, productIndex) => { %>
+                              <div class="card shadow-0 border mb-4">
+                                <div class="card-body">
+                                  <div class="row">
+                                    <div class="col-md-2 my-3">
+                                        <img src="/uploads/<%= productsData[orderIndex][productIndex].productData.prdctImage[0] %>" alt="Product image">
                                     </div>
-                                    <!-- row .// -->
-                                </article>
-                                <!-- itemlist  .// -->
-                               
-                                <!-- itemlist  .// -->
+                                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                      <p class="text-muted mb-0"><%= productsData[orderIndex][productIndex].productData.prdctName %></p>
+                                    </div>
+                                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                      <p class="text-muted mb-0 "><%= productsData[orderIndex][productIndex].cateName %></p>
+                                    </div>
+                                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                      <p class="text-muted mb-0 "><%= order.date.toDateString() %></p>
+                                    </div>
+                                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                      <p class="text-muted mb-0 ">Qty: <%= product.quantity %></p>
+                                    </div>
+                                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                      <p class="text-muted mb-0 ">₹<%= product.totalPrice %></p>
+                                    </div>
+                                  </div>
+                                  <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
+                                  <div class="row d-flex align-items-center">
+                                    <div class="col-md-2">
+                                      <p class="text-muted mb-0 small">Track Order</p>
+                                    </div>
+                                    <div class="col-md-10">
+                                        <div class="d-flex flex-row justify-content-between align-items-center align-content-center">
+                                            <span class="dot"></span>
+                                            <% if(product.status == "Order Placed"){%> 
+
+                                            <hr class="flex-fill track-line"><span class="dot"></span>
+                                            <%}%><% if(product.status == "Order Placed"){%> 
+                                            <hr class="flex-fill "><span class="dot"></span>
+                                            <%}else if(product.status == "Order Shipped"){ %>
+
+                                            <%}else if(product.status == "Order Delivered"){%>
+
+                                            <hr class="flex-fill "><span class="dot"></span>
+                                            <%}%>
+
+                                            <hr class="flex-fill "><span
+                                              class="d-flex justify-content-center align-items-center big-dot dot">
+                                              <i class="fa fa-check text-white"></i></span>
+                                          </div>
+                                          <div class="d-flex flex-row justify-content-between align-items-center">
+                                            <% if(product.status == "Order Placed"){%> 
+                                                <div class="d-flex flex-column small align-items-start"><span><%= order.date.toDateString() %></span><span>Order placed</span>
+                                                </div>                     
+                                                
+                                            <%}else if(product.status == "Order Shipped"){ %>
+
+                                            <div class="d-flex flex-column small justify-content-center align-items-center"><span></span><span>Order Shipped</span></div>
+                                            <%}else if(product.status == "Order Delivered"){%>
+                                            <div class="d-flex flex-column small align-items-end"><span></span><span>Delivered</span></div>
+                                            <%}%>
+                                          </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              
+                              <% }); %>
+                              <% }); %>
+                              <div class="d-flex justify-content-between pt-2">
+                                <p class="fw-bold mb-0">Order Details</p>
+                                <p class="text-muted mb-0"><span class="fw-bold me-4">Total:</span> ₹<%= orderData[0].totalAmount %>.00</p>
+                              </div>
+                  
+                              <div class="d-flex justify-content-between pt-2">
+                                <p class="text-muted mb-0">Payment Mode: &nbsp; <%= orderData[0].payment %></p>
+                                <p class="text-muted mb-0"><span class="fw-bold me-4"></span></p>
+                              </div>
+                            <br>
+                            <div class="card " style="max-width: 30rem;">
+                                <div class="card-header  text-dark"><b>Delivery Address</b></div>
+                                <div class="card-body">
+                                  <p class="card-text"><%= address.fullname %></p>
+                                  <p class="card-text"><%= address.addressline %>, <%= address.city %>, <%= address.state %>, pin: <%= address.pincode %></p>
+                                  <p class="card-text"> <%= address.email %></p>
+                                  <p class="card-text">Phone:</span> <%= address.phone %></p>
+                                </div>
+                              </div>
+                              
+                              
+                  
+                              <div class="d-flex justify-content-between mb-5">
+                                <p class="text-muted mb-0"></p>
+                                <p class="text-muted mb-0"><span class="fw-bold text-dark me-4">Delivery Charges:</span> ₹0.00</p>
+                              </div>
                             </div>
-                        </div>
-                    </div>
-                    
-
-                    <div class="col-xl-10">
-                        <div class="card border shadow mb-3" style="border-radius: 0 !important;">
-                            <div class="card-body">
-                                <div class="row d-flex justify-content-center py-3 align-items-center">
-                               
-                               <div class="col-md-8 d-flex justify-content-center mt-3 align-items-center">
-                                
-                                <!-- <div class="row  ">	 -->
-                                    <div class=" col-md-2 order-tracking completed">
-                                        <span class="is-complete"></span>
-                                        <p>Ordered<br><span>Mon, June 24</span></p>
-                                    </div>
-                                    <div class=" col-md-2 order-tracking completed ">
-                                        <span class="is-complete"></span>
-                                        <p>Shipped<br><span>Tue, June 25</span></p>
-                                    </div>
-                                    <div class=" col-md-2 order-tracking completed">
-                                        <span class="is-complete"></span>
-                                        <p>Out for delivery<br><span>Fri, June 28</span></p>
-                                    </div>
-                                    <div class=" col-md-2 order-tracking">
-                                    <span class="is-complete"></span>
-                                    <p>Delivered<br><span>Fri, June 28</span></p>
-                                </div>				  
-                                     
-                              <!-- </div> -->
-
-
-                               </div>
+                            
+                            <div class="card-footer border-0 px-4 py-5"
+                              style=" border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+                              <h5 class="d-flex align-items-center justify-content-end text-dark text-uppercase mb-0">Total
+                                paid: <span class="h2 mb-0 ms-2">&nbsp;&nbsp;₹<%= orderData[0].totalAmount %></span></h5>
                             </div>
+                          </div>
                         </div>
-                        </div>
+                      </div>
                     </div>
-                    <!-- end card -->
-                </div>
-            
-                <% }); %>
-                
+                  </section>                               
+                            
             </div>
         </div>
-    </form>
-          </div>
-
-
-
-
-
-
-
-
+    </div>
+    </main>     
 
     <footer class="footer">
         <div class="footer-middle border-0">

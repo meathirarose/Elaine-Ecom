@@ -105,43 +105,27 @@
                                     <th>#ID</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Email</th>
+                                    <th scope="col">Quantity</th>
                                     <th scope="col">Total</th>
                                     <th scope="col">Status</th>
-                                    <th scope="col">Date</th>
-                                    <th scope="col" class="text-end">Action</th>
+                                    <th scope="col">Order Placed Date</th>
+                                    <th scope="col">Payment Method</th>
+                                    <th scope="col" class="text-end">Change Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>0901</td>
-                                    <td><b>Marvin McKinney</b></td>
-                                    <td>marvin@example.com</td>
-                                    <td>$9.00</td>
-                                    <td><span class="badge rounded-pill alert-warning">Pending</span></td>
-                                    <td>03.12.2020</td>
-                                    <td class="text-end">
-                                        <a href="#" class="btn btn-md rounded font-sm">Detail</a>
-                                        <div class="dropdown">
-                                            <a href="#" data-bs-toggle="dropdown"
-                                                class="btn btn-light rounded btn-sm font-sm"> <i
-                                                    class="material-icons md-more_horiz"></i> </a>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">View detail</a>
-                                                <a class="dropdown-item" href="#">Edit info</a>
-                                                <a class="dropdown-item text-danger" href="#">Delete</a>
-                                            </div>
-                                        </div>
-                                        <!-- dropdown //end -->
-                                    </td>
-                                </tr>
+                                <% orderData.forEach((order,index) => { %>
+                                    <% order.products.forEach((product) => { %>
 
                                 <tr>
-                                    <td>2327</td>
-                                    <td><b>Darrell Steward</b></td>
-                                    <td>darrel@example.com</td>
-                                    <td>$406.27</td>
-                                    <td><span class="badge rounded-pill alert-success">Received</span></td>
-                                    <td>14.07.2020</td>
+                                    <td><%= index+1001%></td>
+                                    <td><b><%= order.userName %></b></td>
+                                    <td><%= order.email %></td>
+                                    <td><%= product.quantity %></td>
+                                    <td><%= product.totalPrice %></td>
+                                    <td><span class="badge rounded-pill alert-warning"><%= product.status %></span></td>
+                                    <td><%= order.date.toDateString() %></td>
+                                    <td><%= order.payment %></td>
                                     <td class="text-end">
                                         <a href="#" class="btn btn-md rounded font-sm">Detail</a>
                                         <div class="dropdown">
@@ -149,58 +133,16 @@
                                                 class="btn btn-light rounded btn-sm font-sm"> <i
                                                     class="material-icons md-more_horiz"></i> </a>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">View detail</a>
-                                                <a class="dropdown-item" href="#">Edit info</a>
-                                                <a class="dropdown-item text-danger" href="#">Delete</a>
+                                                <a class="dropdown-item" href="#">Shipped</a>
+                                                <a class="dropdown-item" href="#">Delivered</a>
+                                                <a class="dropdown-item" href="#">Cancel</a>
                                             </div>
                                         </div>
                                         <!-- dropdown //end -->
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>2328</td>
-                                    <td><b>Jane Cooper</b></td>
-                                    <td>jane@example.com</td>
-                                    <td>$601.13</td>
-                                    <td><span class="badge rounded-pill alert-success">Received</span></td>
-                                    <td>18.03.2020</td>
-                                    <td class="text-end">
-                                        <a href="#" class="btn btn-md rounded font-sm">Detail</a>
-                                        <div class="dropdown">
-                                            <a href="#" data-bs-toggle="dropdown"
-                                                class="btn btn-light rounded btn-sm font-sm"> <i
-                                                    class="material-icons md-more_horiz"></i> </a>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">View detail</a>
-                                                <a class="dropdown-item" href="#">Edit info</a>
-                                                <a class="dropdown-item text-danger" href="#">Delete</a>
-                                            </div>
-                                        </div>
-                                        <!-- dropdown //end -->
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2329</td>
-                                    <td><b>Darlene Robertson</b></td>
-                                    <td>deriene@example.com</td>
-                                    <td>$948.55</td>
-                                    <td><span class="badge rounded-pill alert-success">Received</span></td>
-                                    <td>03.07.2020</td>
-                                    <td class="text-end">
-                                        <a href="#" class="btn btn-md rounded font-sm">Detail</a>
-                                        <div class="dropdown">
-                                            <a href="#" data-bs-toggle="dropdown"
-                                                class="btn btn-light rounded btn-sm font-sm"> <i
-                                                    class="material-icons md-more_horiz"></i> </a>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">View detail</a>
-                                                <a class="dropdown-item" href="#">Edit info</a>
-                                                <a class="dropdown-item text-danger" href="#">Delete</a>
-                                            </div>
-                                        </div>
-                                        <!-- dropdown //end -->
-                                    </td>
-                                </tr>
+                                    <% }); %>
+                                <% }); %>
                             </tbody>
                         </table>
                     </div>

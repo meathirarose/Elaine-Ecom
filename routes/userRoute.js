@@ -90,10 +90,10 @@ user_route.get("/checkout", authentication.isLogin, accessAuth.accessUser, userC
 
 // load place order & orderDetails
 user_route.post("/placeOrder", userController.placeOrder);
-user_route.get("/orderDetails", authentication.isLogin, accessAuth.accessUser, userController.orderDetailsLoad);
+user_route.get("/orderDetails/", authentication.isLogin, accessAuth.accessUser, userController.orderDetailsLoad);
 
 // load contact us
-user_route.get("/contactUs", authentication.isLogin, accessAuth.accessUser,  userController.contactUsLoad);
+user_route.get("/contactUs", authentication.isLogin, accessAuth.accessUser, userController.contactUsLoad);
 
 // load my account
 user_route.get("/myAccount", authentication.isLogin, accessAuth.accessUser, userController.myAccountLoad);
