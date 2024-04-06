@@ -822,7 +822,7 @@ const orderDetailsLoad = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
-        //res.render("404");
+        res.render("404");
     }
 
 }

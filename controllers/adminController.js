@@ -208,9 +208,6 @@ const editProduct = async (req, res) => {
         const cateData = await Category.find({});
 
         const prdctId = req.query.prdctId;
-        console.log('====================================================================================')
-        console.log(prdctId,"-----------------------------prdctId----------------------------------------");
-        console.log('====================================================================================')
 
         //for getting the product data with the particular id
         const prdctData = await Product.findById({ _id: prdctId }).populate('categoryId');
@@ -220,7 +217,6 @@ const editProduct = async (req, res) => {
 
         // for getting the images only as an array
         const productImagesArray = productImagebyId.prdctImage.map(image => `${image}`);
-
 
         if (prdctData) {
             res.render("editProduct", { prdctData, cateData, productImagesArray });
@@ -237,11 +233,12 @@ const editProduct = async (req, res) => {
 // updateProduct
 const updateProduct = async (req, res) => {
     try {
-        const cateName = req.body.cateName;
 
-        const cateData = await Category.find({});
+        const prdctId = req.query.prdctId;
 
-        const { prdctId, prdctName, prdctDescription, prdctPrice, prdctQuantity, imgFiles } = req.body;
+        const { prdctName, prdctDescription, prdctPrice, prdctQuantity, prdctCategory } = req.body;
+
+        const cateName = await Category.findOne({cateName:prdctCategory}, {_id:1});
 
         // for getting product images only without id
         const productImagebyId = await Product.findById({ _id: prdctId }, { prdctImage: 1, _id: 0 });
@@ -253,17 +250,17 @@ const updateProduct = async (req, res) => {
         const prdctData = await Product.findById({ _id: prdctId }).populate('categoryId');
 
         if (!prdctData) {
-            return res.status(404).json({ success: false, message: "Product not found" });
+             res.render("editProduct",{prdctData, productImagesArray, success: false, message: "Product not found" });
         }
 
         // checking valid product name / space check
         if (!prdctName || /^\s*$/.test(prdctName)) {
-            return res.status(400).json({ success: false, message: "Enter a valid product name" });
+            return res.render("editProduct",{prdctData, productImagesArray, success: false, message: "Enter a valid product name" });
         }
 
         // checking valid category description / space check
         if (!prdctDescription || /^\s*$/.test(prdctDescription)) {
-            return res.status(400).json({ success: false, message: "Enter a valid product description" });
+            return res.render("editProduct",{prdctData, productImagesArray, success: false, message: "Enter a valid product description" });
         }
 
         const parsedPrdctPrice = parseFloat(prdctPrice);
@@ -271,39 +268,38 @@ const updateProduct = async (req, res) => {
 
         // checking the price should not be less than 0
         if (parsedPrdctPrice <= 0) {
-            return res.status(400).json({ success: false, message: "Price of the product should be greater than zero" });
+            return res.render("editProduct",{prdctData, productImagesArray, success: false, message: "Price of the product should be greater than zero" });
         }
 
         // checking the quantity should be at least one
         if (parsedPrdctQuantity < 1) {
-            return res.status(400).json({ success: false, message: "Quantity of the product should be at least one" });
+            return res.render("editProduct",{prdctData, productImagesArray, success: false, message: "Quantity of the product should be at least one" });
         }
 
         // checking if the image files are available
-        if (!imgFiles || imgFiles.length === 0 || imgFiles.length < 4) {
-            return res.status(400).json({ success: false, message: "Please upload at least 4 images" });
-        }
+        // if (!imgFiles || imgFiles.length === 0 || imgFiles.length < 4) {
+        //     return res.render("editProduct",{prdctData, productImagesArray, success: false, message: "Please upload at least 4 images" });
+        // }
 
-        const prdctImage = imgFiles.map(img => img.filename);
+        // const prdctImage = imgFiles.map(img => img.filename);
 
         const updatedProduct = await Product.findByIdAndUpdate(prdctId, {
             prdctName,
             prdctDescription,
             prdctPrice: parsedPrdctPrice,
             prdctQuantity: parsedPrdctQuantity,
-            prdctImage: prdctImage,
+            // prdctImage: prdctImage,
             categoryId: cateName
         });
 
         if (updatedProduct) {
-            return res.status(200).json({ success: true, message: "Product updated successfully" });
+            return res.redirect("productsList");
         } else {
-            return res.status(500).json({ success: false, message: "Failed to update product" });
+            return res.render("editProduct",{prdctData, productImagesArray, success: false, message: "Failed to update product" });
         }
 
     } catch (error) {
         console.log(error.message);
-        return res.status(500).json({ success: false, message: "An error occurred while updating the product" });
     }
 }
 
@@ -492,6 +488,7 @@ const ordersLoad = async (req, res) => {
 
 }
 
+// changing order status - shipping
 const shippedStatusChange = async (req, res) => {
     try {
         const orderId = req.params.orderId;
@@ -499,7 +496,7 @@ const shippedStatusChange = async (req, res) => {
         const order = await Order.findOne({ _id: orderId });
 
         if (!order) {
-            return res.status(404).json({ error: 'Order not found' });
+            return res.json({ error: 'Order not found' });
         }
 
         let productToUpdate;
@@ -511,19 +508,19 @@ const shippedStatusChange = async (req, res) => {
         }
 
         if (!productToUpdate) {
-            return res.status(400).json({ error: 'No product with status "Order Placed" found in the order' });
+            return res.json({ error: 'No product with status "Order Placed" found in the order' });
         }
 
         productToUpdate.status = 'Order Shipped';
         await order.save();
 
-        return res.status(200).json({ message: 'Order status updated to Shipped successfully' });
+        return res.json({ message: 'Order status updated to Shipped successfully' });
     } catch (error) {
-        console.log('Error:', error.message);
-        return res.status(500).json({ error: 'Internal server error' });
+        console.log(error.message);
     }
 };
 
+// changing order status - delivered
 const deliveredStatusChange = async (req, res) =>{
     try {
         const orderId = req.params.orderId;
@@ -531,7 +528,7 @@ const deliveredStatusChange = async (req, res) =>{
         const order = await Order.findOne({ _id: orderId });
 
         if (!order) {
-            return res.status(404).json({ error: 'Order not found' });
+            return res.json({ error: 'Order not found' });
         }
 
         let productToUpdate;
@@ -543,16 +540,15 @@ const deliveredStatusChange = async (req, res) =>{
         }
 
         if (!productToUpdate) {
-            return res.status(400).json({ error: 'No product with status "Order Placed" found in the order' });
+            return res.json({ error: 'No product with status "Order Placed" found in the order' });
         }
 
         productToUpdate.status = 'Order Delivered';
         await order.save();
 
-        return res.status(200).json({ message: 'Order status updated to Shipped successfully' });
+        return res.json({ message: 'Order status updated to Shipped successfully' });
     } catch (error) {
-        console.log('Error:', error.message);
-        return res.status(500).json({ error: 'Internal server error' });
+        console.log(error.message);
     }
 }
 

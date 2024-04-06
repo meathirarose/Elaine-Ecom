@@ -101,69 +101,79 @@
                     <div class="card mb-4">
 
                         <div class="card-body">
-                            <form action="" method="post">
+                            <form action="" method="post" enctype="">
                                 <div class="mb-4">
-                                    <label for="product_name" class="form-label">Product title</label>
-                                    <input type="text" placeholder="Type here" class="form-control" name="prdctName" id="product_name" value="<%= prdctData.prdctName %>" />
+                                    <label for="product_name" class="form-label" >Product title</label>
+                                    <input type="text" placeholder="Type here" name="prdctName" value="<%= prdctData.prdctName%> " class="form-control" id="product_name" />
                                 </div>
                                 <div class="mb-4">
-                                    <label class="form-label">Product description</label>
-                                    <input placeholder="Type here" id="product_description" name="prdctDescription" value="<%= prdctData.prdctDescription %>" class="form-control" rows="4">
+                                    <label class="form-label">Full description</label>
+                                    <input placeholder="Type here" name="prdctDescription" value="<%= prdctData.prdctDescription %>" class="form-control" rows="4">
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <div class="mb-4">
                                             <label class="form-label">Regular price</label>
                                             <div class="row gx-2">
-                                                <input placeholder="₹" type="number" name="prdctPrice" value="<%= prdctData.prdctPrice %>" class="form-control" />
+                                                <input placeholder="₹" type="text" name="prdctPrice" value="<%= prdctData.prdctPrice %>" class="form-control" />
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="mb-4">
                                             <label class="form-label">Quantity</label>
-                                            <input placeholder="" type="number" name="prdctQuantity" value="<%= prdctData.prdctQuantity %>" class="form-control" />
+                                            <input placeholder="1" type="text" name="prdctQuantity" value="<%= prdctData.prdctQuantity %>" class="form-control" />
                                         </div>
                                     </div>
-                                    
                                     <div class="col-lg-4">
                                         <label class="form-label">Category</label>
-                                        <input type="text" name="cateName" value="<%= prdctData.categoryId ? prdctData.categoryId.cateName : '' %>" class="form-control">
+                                        <input placeholder="Type here" type="text" name="prdctCategory" value="<%= prdctData.categoryId.cateName %>" class="form-control" />
                                     </div>
-
+                                    <div>
+                                        <input type="text" required name="prdctId" value="<%= prdctData._id %>" hidden>                  
+                                <button class="btn btn-md rounded font-sm hover-up mt-1" type="submit">Submit</button>
+                </div>
+            </form>
                                 </div>
-                                <input type="text" required name="prdctId" value="<%= prdctData._id %>" hidden>
-
                         </div>
                     </div>
+                    <!-- card end// -->
+                    
                 </div>
                 <div class="col-lg-3 ">
-                    <div class="card mb-4 ">
+                    
+                    <div class="card mb-4">
                         <div class="card-header">
                             <h4>Media</h4>
                         </div>
-                        <% productImagesArray.forEach(images=>{%>
-                            <div class="d-flex">
-                                <div class="m-2 ">
-                                    <img src="/uploads/<%= images %>" alt="Userpic" style="height: 85px; width: 75px;" />
-                                </div>
-            
-                                <div class="card-body">
-                                    <div class="input-upload">
-                                        <a href="#" onclick="deleteImage('<%=images%>')">Delete</a>
-                                    </div>
-                                </div>
 
-
+                        <% productImagesArray.forEach(image => { %>
+                        <div class="d-flex">
+                            <div class="m-2">
+                                <img src="/uploads/<%= image %>" alt="Userpic" style="height: 75px; width: 75px;" />
                             </div>
-                            <%});%>
-                    </div><!-- card end// -->
+                            <div class="card-body">
+                                <div class="input-upload">
+                                    <button class="btn btn-md rounded font-sm hover-up" onclick="deleteImage('<%= image %>')" type="button">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
+
+                        <% for (let i = 0; i < 4 - productImagesArray.length; i++) { %>
+                        <div class="d-flex">
+                            <div class="m-2">
+                                <input type="file" name="newImages" accept="image/*" />
+                            </div>
+                        </div>
+                        <% } %>
+                    </div>
+
+
                 </div>
 
                 </div>
-                <button class="btn btn-md rounded font-sm hover-up" type="button" onclick="handleSubmit()">Submit</button>
 
-            </form>
             </div>
         </section>
         <!-- content-main end// -->
@@ -227,67 +237,6 @@
     }
 </script>
 
-<script>
-    // Function to handle form submission
-    const handleSubmit = async (event) => {
-        event.preventDefault(); // Prevent default form submission
-
-        // Get form data
-        const formData = new FormData(event.target);
-
-        try {
-            // Send form data to server using fetch
-            const response = await fetch('/admin/updateProduct', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-
-                // Check if product update was successful
-                if (data.success) {
-                    // Product updated successfully, show success message
-                    Swal.fire({
-                        title: 'Success!',
-                        text: data.message,
-                        icon: 'success',
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => {
-                        // Redirect to products list page
-                        window.location.href = "/admin/productsList";
-                    });
-                } else {
-                    // Product update failed, show error message
-                    Swal.fire({
-                        title: 'Error!',
-                        text: data.message,
-                        icon: 'error'
-                    });
-                }
-            } else {
-                // Error occurred while updating product, show error message
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Failed to update product.',
-                    icon: 'error'
-                });
-            }
-        } catch (error) {
-            // An error occurred, show error message
-            Swal.fire({
-                title: 'Error!',
-                text: 'An error occurred while updating product.',
-                icon: 'error'
-            });
-            console.error("Error:", error);
-        }
-    };
-
-    // Add form submit event listener
-    document.querySelector('form').addEventListener('submit', handleSubmit);
-</script>
 
 
 

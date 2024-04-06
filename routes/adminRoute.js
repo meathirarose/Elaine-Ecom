@@ -49,7 +49,7 @@ admin_route.get('/adminHome', adminAuthentication.isAdminLogin, adminController.
 // products routes
 admin_route.get('/productsList', adminAuthentication.isAdminLogin, adminController.productListLoad);
 admin_route.get('/addProduct', adminAuthentication.isAdminLogin, adminController.addProductLoad);
-admin_route.post('/addProduct', upload.array("prdctImage"), adminController.addProduct);
+admin_route.post('/addProduct', upload.array("prdctImage", 4), adminController.addProduct);
 admin_route.get('/listProduct/:prdctId', adminAuthentication.isAdminLogin, adminController.listProduct);
 admin_route.get('/unlistProduct/:prdctId', adminAuthentication.isAdminLogin, adminController.unlistProduct);
 admin_route.get('/editProduct', adminAuthentication.isAdminLogin, adminController.editProduct);
@@ -76,7 +76,6 @@ admin_route.get('/unblockUser/:userId', adminAuthentication.isAdminLogin, adminC
 
 // admin logout
 admin_route.get('/adminLogout', adminAuthentication.isAdminLogin, adminController.adminLogout);
-
 
 admin_route.get('*', (req,res) => {
     res.redirect("/admin");
