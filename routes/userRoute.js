@@ -25,7 +25,10 @@ user_route.set('view engine','ejs');
 user_route.set('views','./views/user');
 
 // requiring controllers
-const userController = require('../controllers/userController');
+const userController = require('../controllers/user/userController');
+const cartController = require('../controllers/user/cartController');
+const orderController = require('../controllers/user/orderController');
+const productController = require('../controllers/user/productController');
 const otpController = require("../auth/otpMailVerify");
 const forgotPasswordController = require("../auth/forgotPassword");
 
@@ -77,20 +80,18 @@ user_route.post("/resendOtp", otpController.verifyResendOtp);
 user_route.get("/userHome", authentication.isLogin, accessAuth.accessUser, userController.userHomeLoad);
 
 // load product list route
-user_route.get("/products", authentication.isLogin, accessAuth.accessUser, userController.allProductsListLoad);
-user_route.get("/productDetails", authentication.isLogin, accessAuth.accessUser, userController.productDetailsLoad);
-user_route.get("/addProductsToCart", authentication.isLogin, accessAuth.accessUser, userController.addProductsToCart);
-user_route.delete("/deleteCartItem/:productId", authentication.isLogin, accessAuth.accessUser, userController.deleteCartItem);
-user_route.post("/updateCartItemQuantity/:productId", authentication.isLogin, accessAuth.accessUser, userController.updateCartQuantity);
-user_route.get("/sortProducts", authentication.isLogin, accessAuth.accessUser, userController.sortProducts);
+user_route.get("/products", authentication.isLogin, accessAuth.accessUser, productController.allProductsListLoad);
+user_route.get("/productDetails", authentication.isLogin, accessAuth.accessUser, productController.productDetailsLoad);
+user_route.get("/addProductsToCart", authentication.isLogin, accessAuth.accessUser, cartController.addProductsToCart);
+user_route.delete("/deleteCartItem/:productId", authentication.isLogin, accessAuth.accessUser, cartController.deleteCartItem);
+user_route.post("/updateCartItemQuantity/:productId", authentication.isLogin, accessAuth.accessUser, cartController.updateCartQuantity);
+user_route.get("/sortProducts", authentication.isLogin, accessAuth.accessUser, productController.sortProducts);
 
 // load cart & checkout
-user_route.get("/cart", authentication.isLogin, accessAuth.accessUser, userController.cartLoad);
-user_route.get("/checkout", authentication.isLogin, accessAuth.accessUser, userController.checkoutLoad);
-
-// load place order & orderDetails
-user_route.post("/placeOrder", userController.placeOrder);
-user_route.get("/orderDetails/", authentication.isLogin, accessAuth.accessUser, userController.orderDetailsLoad);
+user_route.get("/cart", authentication.isLogin, accessAuth.accessUser, cartController.cartLoad);
+user_route.get("/checkout", authentication.isLogin, accessAuth.accessUser, orderController.checkoutLoad);
+user_route.post("/placeOrder", orderController.placeOrder);
+user_route.get("/orderDetails/", authentication.isLogin, accessAuth.accessUser, orderController.orderDetailsLoad);
 
 // load contact us
 user_route.get("/contactUs", authentication.isLogin, accessAuth.accessUser, userController.contactUsLoad);

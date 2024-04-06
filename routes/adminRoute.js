@@ -36,7 +36,11 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage});
 
 // access controllers
-const adminController = require("../controllers/adminController");
+const adminController = require("../controllers/admin/adminController");
+const categoryController = require("../controllers/admin/categoryController");
+const productController = require("../controllers/admin/productController");
+const orderController = require("../controllers/admin/orderController");
+const userController = require("../controllers/admin/userController");
 
 // admin login routes
 admin_route.get('/', adminAuthentication.isAdminLogout ,adminController.adminLoad);
@@ -47,32 +51,32 @@ admin_route.post('/', adminController.verifyAdminLogin);
 admin_route.get('/adminHome', adminAuthentication.isAdminLogin, adminController.homeLoad);
 
 // products routes
-admin_route.get('/productsList', adminAuthentication.isAdminLogin, adminController.productListLoad);
-admin_route.get('/addProduct', adminAuthentication.isAdminLogin, adminController.addProductLoad);
-admin_route.post('/addProduct', upload.array("prdctImage", 4), adminController.addProduct);
-admin_route.get('/listProduct/:prdctId', adminAuthentication.isAdminLogin, adminController.listProduct);
-admin_route.get('/unlistProduct/:prdctId', adminAuthentication.isAdminLogin, adminController.unlistProduct);
-admin_route.get('/editProduct', adminAuthentication.isAdminLogin, adminController.editProduct);
-admin_route.post('/editProduct', adminController.updateProduct);
-admin_route.delete('/deleteProductImage', adminAuthentication.isAdminLogin, adminController.deleteProductImage);
+admin_route.get('/productsList', adminAuthentication.isAdminLogin, productController.productListLoad);
+admin_route.get('/addProduct', adminAuthentication.isAdminLogin, productController.addProductLoad);
+admin_route.post('/addProduct', upload.array("prdctImage", 4), productController.addProduct);
+admin_route.get('/listProduct/:prdctId', adminAuthentication.isAdminLogin, productController.listProduct);
+admin_route.get('/unlistProduct/:prdctId', adminAuthentication.isAdminLogin, productController.unlistProduct);
+admin_route.get('/editProduct', adminAuthentication.isAdminLogin, productController.editProduct);
+admin_route.post('/editProduct', productController.updateProduct);
+admin_route.delete('/deleteProductImage', adminAuthentication.isAdminLogin, productController.deleteProductImage);
 
 // category routes
-admin_route.get('/addCategory', adminAuthentication.isAdminLogin, adminController.categoryLoad); 
-admin_route.get('/listCategory/:cateId', adminAuthentication.isAdminLogin, adminController.listCategory);
-admin_route.get('/unlistCategory/:cateId', adminAuthentication.isAdminLogin, adminController.unlistCategory);
-admin_route.post('/addCategory', adminController.addCategory);
-admin_route.get('/editCategory', adminAuthentication.isAdminLogin, adminController.editCategory);
-admin_route.post('/editCategory', adminController.updateCategory);
+admin_route.get('/addCategory', adminAuthentication.isAdminLogin, categoryController.categoryLoad); 
+admin_route.get('/listCategory/:cateId', adminAuthentication.isAdminLogin, categoryController.listCategory);
+admin_route.get('/unlistCategory/:cateId', adminAuthentication.isAdminLogin, categoryController.unlistCategory);
+admin_route.post('/addCategory', categoryController.addCategory);
+admin_route.get('/editCategory', adminAuthentication.isAdminLogin, categoryController.editCategory);
+admin_route.post('/editCategory', categoryController.updateCategory);
 
 // orders route
-admin_route.get('/orders', adminAuthentication.isAdminLogin, adminController.ordersLoad);
-admin_route.post('/shippedStatusChange/:orderId', adminController.shippedStatusChange);
-admin_route.post('/deliveredStatusChange/:orderId', adminController.deliveredStatusChange);
+admin_route.get('/orders', adminAuthentication.isAdminLogin, orderController.ordersLoad);
+admin_route.post('/shippedStatusChange/:orderId', orderController.shippedStatusChange);
+admin_route.post('/deliveredStatusChange/:orderId', orderController.deliveredStatusChange);
 
 // customerlist routes
-admin_route.get('/customerList', adminAuthentication.isAdminLogin, adminController.customerListLoad);
-admin_route.get('/blockUser/:userId', adminAuthentication.isAdminLogin, adminController.blockUser);
-admin_route.get('/unblockUser/:userId', adminAuthentication.isAdminLogin, adminController.unblockUser);
+admin_route.get('/customerList', adminAuthentication.isAdminLogin, userController.customerListLoad);
+admin_route.get('/blockUser/:userId', adminAuthentication.isAdminLogin, userController.blockUser);
+admin_route.get('/unblockUser/:userId', adminAuthentication.isAdminLogin, userController.unblockUser);
 
 // admin logout
 admin_route.get('/adminLogout', adminAuthentication.isAdminLogin, adminController.adminLogout);
