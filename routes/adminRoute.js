@@ -19,21 +19,6 @@ const adminAuthentication = require('../middleware/adminAuthentication');
 admin_route.set('view engine', 'ejs');
 admin_route.set('views','./views/admin');
 
-// for image
-const multer = require("multer");
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, "../public/uploads"))
-    },
-    filename: (req, file, cb) => {
-        console.log(file);
-        const name = Date.now()+'-'+file.originalname;
-        cb(null, name);
-    }
-});
-
-const upload = multer({storage: storage});
 
 // access controllers
 const adminController = require("../controllers/admin/adminController");
@@ -53,7 +38,7 @@ admin_route.get('/adminHome', adminAuthentication.isAdminLogin, adminController.
 // products routes
 admin_route.get('/productsList', adminAuthentication.isAdminLogin, productController.productListLoad);
 admin_route.get('/addProduct', adminAuthentication.isAdminLogin, productController.addProductLoad);
-admin_route.post('/addProduct', upload.array("prdctImage", 4), productController.addProduct);
+admin_route.post('/addProduct', productController.uploadOriginal.array("prdctImage", 4), productController.addProduct);
 admin_route.get('/listProduct/:prdctId', adminAuthentication.isAdminLogin, productController.listProduct);
 admin_route.get('/unlistProduct/:prdctId', adminAuthentication.isAdminLogin, productController.unlistProduct);
 admin_route.get('/editProduct', adminAuthentication.isAdminLogin, productController.editProduct);

@@ -36,6 +36,7 @@ const placeOrder = async (req, res) => {
         }
 
         const cartData = await Cart.findOne({ userId: req.session.user_id }).populate('products.productId');
+
         const userData = await User.findOne({ _id: req.session.user_id }, {_id: 1, name: 1, email:1});
 
         if(cartData.products.length === 0){

@@ -1,5 +1,8 @@
 const Category = require("../../models/categorydbModel");
 const Product = require("../../models/productdbModel");
+const sharp = require("sharp");
+const multer = require('multer');
+const path = require('path');
 
 
 // product list load
@@ -17,11 +20,59 @@ const productListLoad = async (req, res) => {
 
 }
 
-// adding products
-const addProduct = async (req, res) => {
+// Multer configuration for uploading original images
+const originalStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, "../../public/uploads"));
+    },
+    filename: (req, file, cb) => {
+        const name = Date.now() + '-' + file.originalname;
+        cb(null, name);
+    }
+});
 
+// Multer configuration for saving processed images
+const processedStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, "../../public/processed_images"));
+    },
+    filename: (req, file, cb) => {
+        const name = Date.now() + '-' + file.originalname;
+        cb(null, name);
+    }
+});
+
+const uploadOriginal = multer({ storage: originalStorage });
+const uploadProcessed = multer({ storage: processedStorage });
+
+// crop image using sharp
+const processImage = async (imagePath, outputFolder) => {
     try {
+        const metadata = await sharp(imagePath).metadata();
+        const { width, height } = metadata;
 
+        const filename = path.basename(imagePath);
+        const outputFilename = filename.replace('.', '_cropped_resized.');
+        const outputPath = path.join(outputFolder, outputFilename);
+
+        const cropWidth = Math.min(width, 1500);  
+        const cropHeight = Math.min(height, 1800); 
+
+        await sharp(imagePath)
+            .extract({ left: 0, top: 0, width: cropWidth, height: cropHeight }) 
+            .resize(1200, 1800) 
+            .toFile(outputPath);
+        
+        return { filename: filename, processedFilename: outputFilename, processedPath: outputPath };
+    } catch (error) {
+        throw new Error(`Error processing image: ${error.message}`);
+    }
+};
+
+
+// Adding products
+const addProduct = async (req, res) => {
+    try {
         const cateData = await Category.find({});
 
         const prdctName = req.body.prdctName.trim();
@@ -31,13 +82,13 @@ const addProduct = async (req, res) => {
         const imgFiles = req.files;
         const cateName = req.body.cateId;
 
-        // checking valid product name / space check
+        // Checking valid product name / space check
         if (!prdctName || /^\s*$/.test(prdctName)) {
             const prdctData = await Product.find({});
             return res.render("addProduct", { prdctData, cateData, message: "Enter a valid product name" });
         }
 
-        // checking valid category description / space check
+        // Checking valid category description / space check
         if (!prdctDescription || /^\s*$/.test(prdctDescription)) {
             const prdctData = await Product.find({});
             return res.render("addProduct", { prdctData, cateData, message: "Enter a valid product description" });
@@ -46,25 +97,34 @@ const addProduct = async (req, res) => {
         const parsedPrdctPrice = parseFloat(prdctPrice);
         const parsedPrdctQuantity = parseInt(prdctQuantity);
 
-        // checking the price should not be less than 0
+        // Checking the price should not be less than 0
         if (parsedPrdctPrice <= 0) {
             const prdctData = await Product.find({});
             return res.render("addProduct", { prdctData, cateData, message: "Price of the product should be greater than zero" });
         }
 
-        // checking the quantity should be atleast one
+        // Checking the quantity should be at least one
         if (parsedPrdctQuantity < 1) {
             const prdctData = await Product.find({});
             return res.render("addProduct", { prdctData, cateData, message: "Quantity of the product should be at least one" });
         }
 
-        // checking if the image files are available
+        // Checking if the image files are available
         if (!imgFiles || imgFiles.length === 0 || imgFiles.length < 4) {
             const prdctData = await Product.find({});
-            return res.render("addProduct", { prdctData, cateData, message: "Please enter atleast 4 images" });
+            return res.render("addProduct", { prdctData, cateData, message: "Please enter at least 4 images" });
         }
-         
-        const prdctImage = imgFiles.map(img => img.filename);
+        
+        // Processing images - cropped and resized
+        const prdctImage = [];
+        for(const imgFile of imgFiles){
+
+            const originalImagePath = imgFile.path;
+
+            const { processedFilename } = await processImage(originalImagePath, path.join(__dirname, "../../public/processed_images"));
+            
+            prdctImage.push(processedFilename);
+        }
 
         const product = new Product({
             prdctName: prdctName,
@@ -84,8 +144,9 @@ const addProduct = async (req, res) => {
     } catch (error) {
         console.log(error.message);
     }
+};
 
-}
+
 
 // list product
 const listProduct = async (req, res) => {
@@ -263,6 +324,8 @@ module.exports = {
     unlistProduct,
     addProductLoad,
     addProduct,
+    uploadProcessed,
+    uploadOriginal,
     editProduct,
     updateProduct,
     deleteProductImage,

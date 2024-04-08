@@ -147,7 +147,7 @@
                                             <div class="product product-7 text-center">
                                                 <figure class="product-media">
                                                     <a href="productDetails?productId=<%=product._id%>">
-                                                        <img src="/uploads/<%= product.prdctImage[0] %>"
+                                                        <img src="/processed_images/<%= product.prdctImage[0] %>"
                                                             alt="Product image" class="product-image">
                                                     </a>
 
@@ -440,10 +440,10 @@ function sortAndRenderProducts(sortOption) {
                         <div class="product product-7 text-center">
                             <figure class="product-media">
                                 <a href="productDetails?productId=${product._id}">
-                                    <img src="/uploads/${product.prdctImage[0]}"
+                                    <img src="/processed_images/${product.prdctImage[0]}"
                                         alt="Product image" class="product-image">
                                 </a>
-
+                                
                                 <div class="product-action-vertical">
                                     <a href="#"
                                         class="btn-product-icon btn-wishlist btn-expandable"><span>add

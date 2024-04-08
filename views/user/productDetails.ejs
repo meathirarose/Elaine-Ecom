@@ -110,22 +110,23 @@
                             <div class="product-gallery product-gallery-vertical">
                                 <div class="row">
                                     <figure class="product-main-image">
-                                        <img id="product-zoom" src="/uploads/<%= productImagesArray[0] %>" data-zoom-image="/uploads/<%=productImagesArray[0] %>" alt="product image">
-                            
+                                        <img id="product-zoom" src="/processed_images/<%= productImagesArray[0] %>" data-zoom-image="/processed_images/<%= productImagesArray[0] %>" alt="product image">
+
                                         <a href="#" id="btn-product-gallery" class="btn-product-gallery">
                                             <i class="icon-arrows"></i>
                                         </a>
                                     </figure><!-- End .product-main-image -->
                             
                                     <div id="product-zoom-gallery" class="product-image-gallery">
+
                                         <% productImagesArray.forEach((item)=>{ %>
-                                        <a class="product-gallery-item active" href="#" data-image="/uploads/<%= item %>" data-zoom-image="/uploads/<%= item %>">
-                                            <img src="/uploads/<%= item %>" alt="product side">
+                                        <a class="product-gallery-item active" href="#" data-image="/processed_images/<%= productImagesArray[0] %>" data-zoom-image="/processed_images/<%= item %>">
+                                            <img src="/processed_images/<%= item %>" alt="product side">
                                         </a>
-                                    <% }) %>
-                            
-                                    
+                                        <% }) %>                                 
+
                                     </div><!-- End .product-image-gallery -->
+
                                 </div><!-- End .row -->
                             </div><!-- End .product-gallery -->
                         </div><!-- End .col-md-6 -->
@@ -373,22 +374,20 @@
     </div><!-- End .mobile-menu-container --> 
     
     <!-- Plugins JS File -->
-    <script src="/user/assets/js/jquery.min.js"></script>
-    <script src="/user/assets/js/bootstrap.bundle.min.js"></script>
-    <script src="/user/assets/js/jquery.hoverIntent.min.js"></script>
-    <script src="/user/assets/js/jquery.waypoints.min.js"></script>
-    <script src="/user/assets/js/superfish.min.js"></script>
-    <script src="/user/assets/js/owl.carousel.min.js"></script>
-    <script src="/user/assets/js/bootstrap-input-spinner.js"></script>
-    <script src="user/assets/js/bootstrap-input-spinner.js"></script>
-    <script src="user/assets/js/jquery.magnific-popup.min.js"></script>
-    <script src="user/assets/js/jquery.countdown.min.js"></script>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/jquery.hoverIntent.min.js"></script>
+    <script src="assets/js/jquery.waypoints.min.js"></script>
+    <script src="assets/js/superfish.min.js"></script>
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <script src="assets/js/bootstrap-input-spinner.js"></script>
+    <script src="assets/js/jquery.elevateZoom.min.js"></script>
+    <script src="assets/js/bootstrap-input-spinner.js"></script>
+    <script src="assets/js/jquery.magnific-popup.min.js"></script>
 
 
     <!-- Main JS File -->
-    <script src="/user/assets/js/main.js"></script>
-    <script src="user/assets/js/demos/demo-6.js"></script>
-    <script src="user/assets/js/demos/demo-16.js"></script>
+    <script src="assets/js/main.js"></script>
 
     <!--Sweet Alert  -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>

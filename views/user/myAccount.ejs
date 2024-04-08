@@ -180,7 +180,7 @@
                                                             <td class="product-col">
                                                                 <div class="product">
                                                                     <figure class="product-media">
-                                                                        <a href="#"><img src="/uploads/<%= productsData[orderIndex][productIndex].productData.prdctImage[0] %>" alt="Product image"></a>
+                                                                        <a href="#"><img src="/processed_images/<%= productsData[orderIndex][productIndex].productData.prdctImage[0] %>" alt="Product image"></a>
                                                                     </figure>
                                                                 </div><!-- End .product -->
                                                             </td> 
@@ -364,12 +364,39 @@
                                                         <%= userData.email %><br>
                                                         <%= userData.mobile %><br>
                                                     </p>
+                                                    <button type="submit" id="editProfile" class="btn btn-primary editProfile">Edit Profile</button>
                                                 </div><!-- End .card-body -->
                                             </div><!-- End .card-dashboard -->
                                         </div><!-- End .col-lg-6 -->
                                     </div><!-- .End .tab-pane -->
 
         <!-- ------------------------------------- end Account Details ---------------------------------------- -->
+        <!-- ---------------------------------------- edit profile ----------------------------------------- -->
+        <div class="tab-pane fade" id="profile-edit" role="tabpanel" aria-labelledby="tab-change-address-link">
+            <form action="/editProfile" id="editUserProfile" method="post">
+
+                <div class="col-sm-6">
+                    <label>Name </label>
+                    <input type="password" name="name" class="form-control">
+                </div><!-- End .col-sm-6 -->
+
+                <div class="col-sm-6">
+                    <label>Email id</label>
+		            <input type="password" name="email" class="form-control">
+                </div><!-- End .col-sm-6 -->
+
+                <div class="col-sm-6">
+                    <label>Mobile Number</label>
+		            <input type="password" name="mobile" class="form-control mb-2">
+                </div><!-- End .col-sm-6 -->
+
+                <button type="submit" class="btn btn-outline-primary-2 m-3">
+                    <span>SAVE CHANGES</span>
+                </button>
+                
+            </form>
+        </div>
+        <!-- ---------------------------------------- end Change password ------------------------------------- -->
         <!-- ---------------------------------------- Change password ----------------------------------------- -->
         <div class="tab-pane fade" id="tab-change-password" role="tabpanel" aria-labelledby="tab-change-address-link">
             <form action="/changePassword" id="changePasswordForm" method="post">

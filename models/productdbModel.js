@@ -28,7 +28,6 @@ const productSchema = mongoose.Schema({
 
     prdctImage: {
         type: Array,
-        default: " "
     },
 
     is_listed: {

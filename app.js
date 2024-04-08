@@ -31,9 +31,9 @@ app.use('/',userRoute.user_route);
 const adminRoute = require("./routes/adminRoute");
 app.use('/admin',adminRoute.admin_route);
 
-app.get('*', (req,res) => {
-    res.redirect("/pageNotFound");
-});
+// app.get('*', (req,res) => {
+//     res.redirect("/pageNotFound");
+// });
 
 app.listen(PORT, ()=>{
     console.log(`Listening to the port at http://localhost:${3000}`);

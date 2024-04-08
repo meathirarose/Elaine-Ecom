@@ -91,7 +91,7 @@ user_route.get("/sortProducts", authentication.isLogin, accessAuth.accessUser, p
 user_route.get("/cart", authentication.isLogin, accessAuth.accessUser, cartController.cartLoad);
 user_route.get("/checkout", authentication.isLogin, accessAuth.accessUser, orderController.checkoutLoad);
 user_route.post("/placeOrder", orderController.placeOrder);
-user_route.get("/orderDetails/", authentication.isLogin, accessAuth.accessUser, orderController.orderDetailsLoad);
+user_route.get("/orderDetails", authentication.isLogin, accessAuth.accessUser, orderController.orderDetailsLoad);
 
 // load contact us
 user_route.get("/contactUs", authentication.isLogin, accessAuth.accessUser, userController.contactUsLoad);

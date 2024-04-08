@@ -63,7 +63,6 @@ const verifyOtpForgotLoad = async (req, res) => {
 
 }
 
-
 // otp verification
 const verifyOtpForgot = async (req, res) =>{
     

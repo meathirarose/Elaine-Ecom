@@ -9,18 +9,25 @@ const cartLoad = async (req, res) => {
 
         const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
 
-        cartData.products.forEach(product => {
-            product.updatedTotalPrice = product.quantity * product.productPrice;
-        });
-        const totalCost = cartData.products.reduce((total, product) => total + product.totalPrice, 0);
-        cartData.totalCost = totalCost;
-        await cartData.save();
+        const productData = await Product.find({});
 
-        res.render("cart" ,{cartData:cartData});
+        if(!cartData || !productData){
+            res.redirect("/products");
+        }else{
+            cartData.products.forEach(product => {
+                product.updatedTotalPrice = product.quantity * product.productPrice;
+            });
+            const totalCost = cartData.products.reduce((total, product) => total + product.totalPrice, 0);
+            cartData.totalCost = totalCost;
+            await cartData.save();
+    
+            res.render("cart" ,{cartData:cartData, productData:productData});
+        }
+
 
     } catch (error) {
         console.log(error.message);
-        res.render("404");
+       // res.render("404");
     }
 
 }
