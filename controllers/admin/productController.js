@@ -57,10 +57,12 @@ const processImage = async (imagePath, outputFolder) => {
 
         const cropWidth = Math.min(width, 1500);  
         const cropHeight = Math.min(height, 1800); 
+        const cropLeft = Math.max(0, (width - cropWidth) / 2); 
+        const cropTop = Math.max(0, (height - cropHeight) / 2);
 
         await sharp(imagePath)
-            .extract({ left: 0, top: 0, width: cropWidth, height: cropHeight }) 
-            .resize(1200, 1800) 
+        .extract({ left: cropLeft, top: cropTop, width: cropWidth, height: cropHeight }) 
+        .resize(1200, 1800) 
             .toFile(outputPath);
         
         return { filename: filename, processedFilename: outputFilename, processedPath: outputPath };
@@ -68,6 +70,7 @@ const processImage = async (imagePath, outputFolder) => {
         throw new Error(`Error processing image: ${error.message}`);
     }
 };
+
 
 
 // Adding products
@@ -145,8 +148,6 @@ const addProduct = async (req, res) => {
         console.log(error.message);
     }
 };
-
-
 
 // list product
 const listProduct = async (req, res) => {
@@ -232,6 +233,26 @@ const updateProduct = async (req, res) => {
 
         const cateName = await Category.findOne({cateName:prdctCategory}, {_id:1});
 
+        // Check if an image is being deleted
+        if (req.query.imageId) {
+            try {
+                const result = await deleteProductImage(req.query.imageId);
+                return res.json(result);
+            } catch (error) {
+                return res.status(500).json({ message: error.message });
+            }
+        }
+
+        // Check if images are being uploaded
+        if (req.files) {
+            try {
+                const result = await editProductImages(prdctId, req.files);
+                return res.json(result);
+            } catch (error) {
+                return res.status(500).json({ message: error.message });
+            }
+        }
+
         // for getting product images only without id
         const productImagebyId = await Product.findById({ _id: prdctId }, { prdctImage: 1, _id: 0 });
 
@@ -268,19 +289,11 @@ const updateProduct = async (req, res) => {
             return res.render("editProduct",{prdctData, productImagesArray, success: false, message: "Quantity of the product should be at least one" });
         }
 
-        // checking if the image files are available
-        // if (!imgFiles || imgFiles.length === 0 || imgFiles.length < 4) {
-        //     return res.render("editProduct",{prdctData, productImagesArray, success: false, message: "Please upload at least 4 images" });
-        // }
-
-        // const prdctImage = imgFiles.map(img => img.filename);
-
         const updatedProduct = await Product.findByIdAndUpdate(prdctId, {
             prdctName,
             prdctDescription,
             prdctPrice: parsedPrdctPrice,
             prdctQuantity: parsedPrdctQuantity,
-            // prdctImage: prdctImage,
             categoryId: cateName
         });
 
@@ -294,8 +307,6 @@ const updateProduct = async (req, res) => {
         console.log(error.message);
     }
 }
-
-
 
 // deleting product image
 const deleteProductImage = async (req, res) =>{
@@ -317,6 +328,50 @@ const deleteProductImage = async (req, res) =>{
     }
 }
 
+// replace product images
+const editProductImages = async (req, res) =>{
+
+    try {
+        const imgFiles = req.files;
+
+        const prdctId = req.body.prdctId[0];
+
+        const allProductsData = await Product.findById({_id: prdctId});
+
+        console.log('====================================================================================')
+        console.log(allProductsData.prdctImage);
+        console.log('====================================================================================')
+        //checking if the image files are available
+        if (!imgFiles || imgFiles.length === 0 || (imgFiles.length + allProductsData.prdctImage.length < 4)) {
+            return res.json({message: "Please upload at least 4 images" });
+        }
+        // Processing images - cropped and resized
+        const prdctImage = [];
+        for(const imgFile of imgFiles){
+
+            const originalImagePath = imgFile.path;
+
+            const { processedFilename } = await processImage(originalImagePath, path.join(__dirname, "../../public/processed_images"));
+            
+            prdctImage.push(processedFilename);
+
+        }
+
+        await Product.updateOne(
+            {_id: prdctId},
+            { $push: 
+                { prdctImage: { $each: prdctImage } } }
+        );
+
+        res.json({message: "Image added successfully" });
+
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
 module.exports = {
 
     productListLoad,
@@ -329,5 +384,5 @@ module.exports = {
     editProduct,
     updateProduct,
     deleteProductImage,
-
+    editProductImages
 }

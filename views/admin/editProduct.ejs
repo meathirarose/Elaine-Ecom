@@ -101,7 +101,7 @@
                     <div class="card mb-4">
 
                         <div class="card-body">
-                            <form action="" method="post" enctype="">
+                            <form action="" id="editForm" method="post" enctype="">
                                 <div class="mb-4">
                                     <label for="product_name" class="form-label" >Product title</label>
                                     <input type="text" placeholder="Type here" name="prdctName" value="<%= prdctData.prdctName%> " class="form-control" id="product_name" />
@@ -129,19 +129,20 @@
                                         <label class="form-label">Category</label>
                                         <input placeholder="Type here" type="text" name="prdctCategory" value="<%= prdctData.categoryId.cateName %>" class="form-control" />
                                     </div>
-                                    <div>
-                                        <input type="text" required name="prdctId" value="<%= prdctData._id %>" hidden>                  
-                                <button class="btn btn-md rounded font-sm hover-up mt-1" type="submit">Submit</button>
-                </div>
-            </form>
+      
                                 </div>
                         </div>
                     </div>
                     <!-- card end// -->
-                    
+                    <div>
+                                        <input type="text" required name="prdctId" value="<%= prdctData._id %>" hidden>                  
+                                <button class="btn btn-md rounded font-sm hover-up mt-1" type="submit">Submit</button>
                 </div>
+                            </form>
+                                </div>
                 <div class="col-lg-3 ">
-                    
+                                    
+                <form id="imageForm" enctype="multipart/form-data" method="post" action="">
                     <div class="card mb-4">
                         <div class="card-header">
                             <h4>Media</h4>
@@ -150,7 +151,7 @@
                         <% productImagesArray.forEach(image => { %>
                         <div class="d-flex">
                             <div class="m-2">
-                                <img src="/uploads/<%= image %>" alt="Userpic" style="height: 75px; width: 75px;" />
+                                <img src="/processed_images/<%= image %>" alt="Userpic" style="height: 75px; width: 75px;" />
                             </div>
                             <div class="card-body">
                                 <div class="input-upload">
@@ -163,17 +164,24 @@
                         <% for (let i = 0; i < 4 - productImagesArray.length; i++) { %>
                         <div class="d-flex">
                             <div class="m-2">
-                                <input type="file" name="newImages" accept="image/*" />
+                                <input class="form-control" name="prdctImage" type="file" accept="image/*" multiple />
                             </div>
+                            <div id="preview<%= i %>" class="m-2"></div>
                         </div>
                         <% } %>
+                        <input type="text" required name="prdctId" value="<%= prdctData._id %>" hidden>
+
+                        <!-- Adjusted button container -->
+                        <div class="d-flex justify-content-center mt-3 mb-3">
+                            <button type="submit" class="btn btn-primary" style="width: auto;">Upload Images</button>
+                        </div>
                     </div>
+                </form>
 
 
+                    </div>
+    
                 </div>
-
-                </div>
-
             </div>
         </section>
         <!-- content-main end// -->
@@ -237,7 +245,96 @@
     }
 </script>
 
+<script>
+    
+    document.getElementById('imageForm').addEventListener('submit', async function (e){
+        e.preventDefault();
 
+        const formData = new FormData(this);
+        const prdctId = document.querySelector('input[name="prdctId"]').value;
+        formData.append('prdctId', prdctId); 
+
+        // Validate image files
+        const allowedExtensions = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
+        const fileInputs = document.querySelectorAll('input[type="file"]');
+        let totalImages = 0;
+
+        // Count existing images
+        <% productImagesArray.forEach(() => { %>
+            totalImages++;
+        <% }); %>
+
+        // Count new images
+        fileInputs.forEach(input => {
+            totalImages += input.files.length;
+        });
+
+        // Check if at least 4 images are selected
+        if (totalImages < 4) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Please upload at least 4 images.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return; // Stop the form submission
+        }
+
+        // Check each file's extension
+        fileInputs.forEach(input => {
+            for (let i = 0; i < input.files.length; i++) {
+                const fileExtension = input.files[i].name.split('.').pop().toLowerCase();
+                if (!allowedExtensions.includes(fileExtension)) {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Allowed Extensions are: ' + allowedExtensions.join(', '),
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                    return; // Stop the form submission
+                }
+            }
+        });
+
+        try {
+            const response = await fetch('/admin/uploadProductImages',{
+                method: 'PUT',
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json(); 
+
+            if (data.message === "Please upload at least 4 images") {
+                Swal.fire({
+                    title: "Error!",
+                    text: data.message,
+                    icon: "error",
+                    timer: 1500,
+                    buttons: false
+                });
+            } else if(data.message === "Image added successfully"){
+                Swal.fire({
+                    title: "Success!",
+                    text: data.message,
+                    icon: "success",
+                    timer: 1500,
+                    buttons: false
+                });
+                setTimeout(function() {
+                    location.reload();
+                }, 1500);
+            }
+        } catch (error) {
+            console.error('An error occurred:', error);
+        }
+    });
+
+    
+</script>
 
 
 <%-include("../layout/admin/footer")-%>
