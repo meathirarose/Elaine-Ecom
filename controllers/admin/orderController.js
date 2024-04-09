@@ -8,7 +8,9 @@ const ordersLoad = async (req, res) => {
 
         const orderData = await Order.find({});
 
-        res.render("orders", {orderData});
+        const sortedOrderData = orderData.sort((a,b) => b.date - a.date);
+
+        res.render("orders", {sortedOrderData});
 
     } catch (error) {
         console.log(error.message);
@@ -27,16 +29,23 @@ const shippedStatusChange = async (req, res) => {
             return res.json({ error: 'Order not found' });
         }
 
-        let productToUpdate;
-        for (const product of order.products) {
-            if (product.status === 'Order Placed') {
-                productToUpdate = product;
-                break;
-            }
+        // Check if any product in the order is already 'Order Delivered'
+        const isDelivered = order.products.some(product => product.status === 'Order Delivered');
+        if (isDelivered) {
+            return res.json({ error: 'Cannot be Shipped. Order is already Delivered.' });
         }
 
+        // Check if any product in the order is 'Cancelled by Admin'
+        const isCancelled = order.products.some(product => product.status === 'Cancelled by Admin');
+        if (isCancelled) {
+            return res.json({ error: 'Cannot be Shipped. Order cancelled by Admin.' });
+        }
+
+        // Assuming you want to ship the first product that is 'Order Placed'
+        let productToUpdate = order.products.find(product => product.status === 'Order Placed');
+
         if (!productToUpdate) {
-            return res.json({ error: 'No product with status "Order Placed" found in the order' });
+            return res.json({ error: 'Product is not Placed yet.!' });
         }
 
         productToUpdate.status = 'Order Shipped';
@@ -45,11 +54,14 @@ const shippedStatusChange = async (req, res) => {
         return res.json({ message: 'Order status updated to Shipped successfully' });
     } catch (error) {
         console.log(error.message);
+        return res.json({ error: 'An error occurred while updating the order status' });
     }
 };
 
+
+
 // changing order status - delivered
-const deliveredStatusChange = async (req, res) =>{
+const deliveredStatusChange = async (req, res) => {
     try {
         const orderId = req.params.orderId;
 
@@ -59,31 +71,70 @@ const deliveredStatusChange = async (req, res) =>{
             return res.json({ error: 'Order not found' });
         }
 
-        let productToUpdate;
+        let productToUpdate = null;
         for (const product of order.products) {
-            if (product.status == 'Order Shipped') {
+            if (product.status === 'Cancelled by Admin') {
+                return res.json({ error: 'Cannot be Delivered. Order cancelled by Admin.!' });
+            }
+            if (product.status === 'Order Shipped') {
                 productToUpdate = product;
-                break;
             }
         }
 
         if (!productToUpdate) {
-            return res.json({ error: 'No product with status "Order Placed" found in the order' });
+            return res.json({ error: 'Product is not Shipped yet.!' });
         }
 
         productToUpdate.status = 'Order Delivered';
         await order.save();
 
-        return res.json({ message: 'Order status updated to Shipped successfully' });
+        return res.json({ message: 'Order status updated to Delivered successfully' });
+    } catch (error) {
+        console.log(error.message);
+        return res.json({ error: 'An error occurred while updating the order status' });
+    }
+};
+
+
+// changing order status - cancelled
+const cancelledStatusChange = async (req, res) => {
+    try {
+        const orderId = req.params.orderId;
+        const productId = req.body.productId;
+
+        const order = await Order.findOne({ _id: orderId });
+
+        if (!order) {
+            return res.json({ error: 'Order not found' });
+        }
+
+        // Find the specific product within the order
+        const product = order.products.find(p => p._id.toString() === productId);
+
+        if (!product) {
+            return res.json({ error: 'Product not found' });
+        }
+
+        // Check if the product is already cancelled
+        if (product.status === 'Cancelled by Admin') {
+            return res.json({ error: 'Product is already cancelled' });
+        }
+
+        // Update the product status
+        product.status = 'Cancelled by Admin';
+        await order.save();
+
+        return res.json({ message: 'Order status updated to Cancelled successfully' });
     } catch (error) {
         console.log(error.message);
     }
-}
+};
 
 module.exports = {
 
     ordersLoad,
     shippedStatusChange,
     deliveredStatusChange,
+    cancelledStatusChange
 
 }

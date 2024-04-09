@@ -42,7 +42,16 @@ const processedStorage = multer.diskStorage({
     }
 });
 
-const uploadOriginal = multer({ storage: originalStorage });
+const uploadOriginal = multer({ 
+    storage: originalStorage,
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype.startsWith('image/')) {
+            cb(null, true);
+        } else {
+            cb(new Error('File type not supported'), false);
+        }
+    }
+});
 const uploadProcessed = multer({ storage: processedStorage });
 
 // crop image using sharp
@@ -51,7 +60,11 @@ const processImage = async (imagePath, outputFolder) => {
         const metadata = await sharp(imagePath).metadata();
         const { width, height } = metadata;
 
+        const fileExtensionRegex = /\.(jpg|jpeg|png|gif|webp)(\?.*)*$/i;
         const filename = path.basename(imagePath);
+        if (!fileExtensionRegex.test(filename)) {
+            throw new Error('Invalid image file extension');
+        }
         const outputFilename = filename.replace('.', '_cropped_resized.');
         const outputPath = path.join(outputFolder, outputFilename);
 
@@ -249,7 +262,7 @@ const updateProduct = async (req, res) => {
                 const result = await editProductImages(prdctId, req.files);
                 return res.json(result);
             } catch (error) {
-                return res.status(500).json({ message: error.message });
+                return res.json({ message: error.message });
             }
         }
 
@@ -338,9 +351,6 @@ const editProductImages = async (req, res) =>{
 
         const allProductsData = await Product.findById({_id: prdctId});
 
-        console.log('====================================================================================')
-        console.log(allProductsData.prdctImage);
-        console.log('====================================================================================')
         //checking if the image files are available
         if (!imgFiles || imgFiles.length === 0 || (imgFiles.length + allProductsData.prdctImage.length < 4)) {
             return res.json({message: "Please upload at least 4 images" });

@@ -1,5 +1,17 @@
 
 <%-include("../layout/admin/header")-%>
+<style>
+
+.card {
+    width: 105%; 
+}
+
+.content-main {
+    padding-left: 10px; 
+}
+
+
+</style>
 
     <div class="screen-overlay"></div>
     <aside class="navbar-aside" id="offcanvas_aside">
@@ -110,23 +122,23 @@
                                     <th scope="col">Total</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Order Placed Date</th>
-                                    <th scope="col">Payment Method</th>
+                                    <th scope="col">Payment Mode</th>
                                     <th scope="col" class="text-end">Change Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <% orderData.forEach((order,index) => { %>
+                                <% sortedOrderData.forEach((order,index) => { %>
                                     <% order.products.forEach((product) => { %>
 
                                 <tr>
-                                    <td><%= index+1001%></td>
+                                    <td><%= order.orderId %></td>
                                     <td><b><%= order.userName %></b></td>
                                     <td><%= order.email %></td>
                                     <td><%= product.productName %></td>
                                     <td><%= product.quantity %></td>
                                     <td><%= product.totalPrice %></td>
                                     <td><span class="badge rounded-pill alert-warning"><%= product.status %></span></td>
-                                    <td><%= order.date.toDateString() %></td>
+                                    <td><%= order.date.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }) %></td>
                                     <td><%= order.payment %></td>
                                     <td class="text-end">
                                         <a href="#" class="btn btn-md rounded font-sm">Detail</a>
@@ -137,7 +149,7 @@
                                             <div class="dropdown-menu">
                                                 <a class="dropdown-item" href="#" onclick="handleShippedStatusChange('<%= order._id %>', 'Shipped')">Shipped</a>
                                                 <a class="dropdown-item" href="#" onclick="handleDeliveredStatusChange('<%= order._id %>', 'Delivered')">Delivered</a>
-                                                <a class="dropdown-item" href="#">Cancel</a>
+                                                <a class="dropdown-item" href="#" onclick="handleOrderCancel('<%= order._id %>', '<%= product._id %>')">Cancel</a>
                                             </div>
                                         </div>
                                         
@@ -234,48 +246,94 @@ async function handleShippedStatusChange(orderId, newStatus) {
 
 <script>
 
-// handle status change  - delivered
-async function handleDeliveredStatusChange(orderId, newStatus) {
-    try {
-        const response = await fetch(`/admin/deliveredStatusChange/${orderId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ newStatus })
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to update order status');
-        }
-
-        const responseData = await response.json();
-
-        if (responseData.message) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: responseData.message
+    // handle status change  - delivered
+    async function handleDeliveredStatusChange(orderId, newStatus) {
+        try {
+            const response = await fetch(`/admin/deliveredStatusChange/${orderId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ newStatus })
             });
-            setTimeout(function() {
-                    location.reload();
-                }, 1500);
-        } else if (responseData.error) {
+
+            if (!response.ok) {
+                throw new Error('Failed to update order status');
+            }
+
+            const responseData = await response.json();
+
+            if (responseData.message) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: responseData.message
+                });
+                setTimeout(function() {
+                        location.reload();
+                    }, 1500);
+            } else if (responseData.error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: responseData.error
+                });
+            }
+        } catch (error) {
+            console.error('Error:', error.message);
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: responseData.error
+                text: 'Failed to update order status'
             });
         }
-    } catch (error) {
-        console.error('Error:', error.message);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Failed to update order status'
-        });
     }
-}
+
+</script>
+
+<script>
+// handle status change  - cancelled
+    async function handleOrderCancel(orderId, productId) {
+        try {
+            const response = await fetch(`/admin/cancelledStatusChange/${orderId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ productId }) 
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update order status');
+            }
+
+            const responseData = await response.json();
+
+            if (responseData.message) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: responseData.message
+                });
+                setTimeout(function() {
+                        location.reload();
+                    }, 1500);
+            } else if (responseData.error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: responseData.error
+                });
+            }
+        } catch (error) {
+            console.error('Error:', error.message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Failed to update order status'
+            });
+        }
+    }
 
 
 </script>

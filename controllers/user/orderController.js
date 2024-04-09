@@ -26,6 +26,23 @@ const checkoutLoad = async (req, res) => {
 
 }
 
+// Function to generate a new order ID
+async function generateOrderId() {
+    const lastOrder = await Order.findOne().sort({ orderId: -1 }).limit(1);
+    let nextId = 1001; 
+
+    if (lastOrder && typeof lastOrder.orderId === 'string') {
+
+        const numericPart = lastOrder.orderId.replace('OrderID#', '');
+        if (!isNaN(numericPart)) {
+            const lastId = parseInt(numericPart, 10);
+            nextId = lastId + 1;
+        }
+    }
+
+    return `OrderID#${nextId}`;
+}
+
 // load place order
 const placeOrder = async (req, res) => {
     try {
@@ -43,8 +60,11 @@ const placeOrder = async (req, res) => {
             return res.json({message: "Please add products to the cart"});
         }
 
+        const orderId = await generateOrderId();
+
         const newOrder = new Order({
             userId: userData._id,
+            orderId: orderId,
             deliveryAddress: addressId,
             userName: userData.name,
             email: userData.email,
