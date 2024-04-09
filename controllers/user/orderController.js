@@ -151,10 +151,22 @@ const orderDetailsLoad = async (req, res) => {
 
 }
 
+const orderSuccessLoad = async (req, res) =>{
+    try {
+        
+        res.render("orderSuccess");
+
+    } catch (error) {
+        console.log(error.message);
+        res.render("404");
+    }
+}
+
 module.exports = {
 
     checkoutLoad,
     placeOrder,
     orderDetailsLoad,
+    orderSuccessLoad
 
 }

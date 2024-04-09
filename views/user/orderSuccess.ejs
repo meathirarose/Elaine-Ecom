@@ -1,0 +1,276 @@
+<%- include("../layout/user/header") -%>
+
+    <style>
+      body {
+        text-align: center;
+        padding: 0 0;
+        background: #EBF0F5;
+      }
+        .success {
+          color: #88B04B;
+          font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
+          font-weight: 900;
+          font-size: 40px;
+          margin-bottom: 10px;
+        }
+        p {
+          color: #404F5E;
+          font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
+          font-size:20px;
+          margin: 0;
+        }
+      .checkmark {
+        color: #9ABC66;
+        font-size: 100px;
+        line-height: 200px;
+        margin-left:-15px;
+      }
+      .card {
+        background: white;
+        padding: 60px;
+        border-radius: 4px;
+        box-shadow: 0 2px 3px #C8D0D8;
+        display: inline-block;
+        margin: 0 auto;
+      }
+    </style>
+
+<div class="page-wrapper">
+    <div class="page-wrapper">
+        <header class="header header-6">
+            <div class="header-top">
+                <div class="container pt-1">
+                    <div class="header-right">
+                        <ul class="top-menu top-link-menu">
+                            <li>
+                                <ul>
+                                    <li><a href="/userLogout"><i class="icon-user"></i>Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul><!-- End .top-menu -->
+                    </div><!-- End .header-right -->
+                </div>
+            </div>
+    
+            <div class="header-middle">
+                <div class="container">
+                    <div class="header-left">
+                        <div class="header-search header-search-extended header-search-visible d-none d-lg-block">
+                            <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
+                            <form action="#" method="get">
+                                <div class="header-search-wrapper search-wrapper-wide">
+                                    <label for="q" class="sr-only">Search</label>
+                                    <button class="btn btn-primary" type="submit"><i
+                                            class="icon-search"></i></button>
+                                    <input type="search" class="form-control" name="q" id="q"
+                                        placeholder="Search product ..." required>
+                                </div><!-- End .header-search-wrapper -->
+                            </form>
+                        </div><!-- End .header-search -->
+                    </div>
+                    
+                    <div class="header-center">
+                        <a href="userHome" class="logo">
+                            <h3 class="text-center font-weight-bolder text-uppercase">Elaine</h3>
+                        </a>
+                    </div><!-- End .header-left -->
+    
+                    <div class="header-right">
+                        <a href="#" class="wishlist-link">
+                            <i class="icon-heart-o"></i>
+                            <span class="wishlist-txt">My Wishlist</span>
+                        </a>
+                        <div class="dropdown cart-dropdown">
+                            <a href="cart" class="dropdown-toggle" role="button" aria-haspopup="true"
+                                aria-expanded="false" data-display="static">
+                                <i class="icon-shopping-cart"></i>
+                            </a>
+                        </div><!-- End .cart-dropdown -->
+                    </div>
+                </div><!-- End .container -->
+            </div><!-- End .header-middle -->
+    
+            <div class="header-bottom sticky-header">
+                <div class="container">
+                    <div class="header-left">
+                        <nav class="main-nav">
+                            <ul class="menu sf-arrows">
+                                <li class="megamenu-container active">
+                                    <a href="userHome">Home</a>
+                                </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    
+                                <li><!-- start of pages -->
+                                    <a href="products" class="sf">Products</a>
+                                </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<!-- end of pages -->
+    
+                                <li><!-- start of pages -->
+                                    <a href="contactUs" class="sf">Contact</a>
+                                </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<!-- end of pages -->
+    
+                                <li>
+                                    <a href="#" class="sf">About Us</a>
+                                </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    
+                                <li>
+                                    <a href="myAccount" class="sf">My Account</a>
+                                </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            </ul><!-- End .menu -->
+                        </nav><!-- End .main-nav -->
+    
+                        <button class="mobile-menu-toggler">
+                            <span class="sr-only">Toggle mobile menu</span>
+                            <i class="icon-bars"></i>
+                        </button>
+                    </div><!-- End .header-left -->
+                </div><!-- End .container -->
+            </div><!-- End .header-bottom -->
+        </header><!-- End .header -->
+
+
+<br><br>
+    <h3 class="text-muted mb-0">Thanks for your Order</h3>
+    <br>
+      <div class="card">
+      <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
+        <i  class="checkmark">✓</i>
+      </div>
+        <h1 class="success">Success</h1> 
+        <p>Your order has been placed!<br/> You can see the order details in your account.</p>
+      </div>
+      <br><br>
+
+      <footer class="footer">
+        <div class="footer-middle">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="widget widget-about">
+                            <img src="/user/assets/images/elaine_final_logo_white.png" class="footer-logo"
+                                alt="Footer Logo" width="105" height="25">
+                            <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate
+                                magna eros eu erat. </p>
+
+                            <div class="social-icons">
+                                <a href="#" class="social-icon" target="_blank" title="Instagram"><i
+                                        class="icon-instagram"></i></a>
+                                <a href="#" class="social-icon" target="_blank" title="Youtube"><i
+                                        class="icon-youtube"></i></a>
+                                <a href="#" class="social-icon" target="_blank" title="Pinterest"><i
+                                        class="icon-pinterest"></i></a>
+                            </div><!-- End .soial-icons -->
+                        </div><!-- End .widget about-widget -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="widget">
+                            <h4 class="widget-title">Useful Links</h4><!-- End .widget-title -->
+
+                            <ul class="widget-list">
+                                <li><a href="#">About Us</a></li>
+                                <li><a href="#">How to shop on Elaine</a></li>
+                                <li><a href="#">FAQ</a></li>
+                                <li><a href="contactUs">Contact us</a></li>
+                                <li><a href="userLogin">Log in</a></li>
+                            </ul><!-- End .widget-list -->
+                        </div><!-- End .widget -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="widget">
+                            <h4 class="widget-title">Customer Service</h4><!-- End .widget-title -->
+
+                            <ul class="widget-list">
+                                <li><a href="#">Payment Methods</a></li>
+                                <li><a href="#">Money-back guarantee!</a></li>
+                                <li><a href="#">Returns</a></li>
+                                <li><a href="#">Shipping</a></li>
+                                <li><a href="#">Terms and conditions</a></li>
+                                <li><a href="#">Privacy Policy</a></li>
+                            </ul><!-- End .widget-list -->
+                        </div><!-- End .widget -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
+
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="widget">
+                            <h4 class="widget-title">My Account</h4><!-- End .widget-title -->
+
+                            <ul class="widget-list">
+                                <li><a href="userSignup">Sign Up</a></li>
+                                <li><a href="cart">View Cart</a></li>
+                                <li><a href="#">My Wishlist</a></li>
+                                <li><a href="#">Track My Order</a></li>
+                                <li><a href="#">Help</a></li>
+                            </ul><!-- End .widget-list -->
+                        </div><!-- End .widget -->
+                    </div><!-- End .col-sm-6 col-lg-3 -->
+                </div><!-- End .row -->
+            </div><!-- End .container -->
+        </div><!-- End .footer-middle -->
+
+
+    </footer><!-- End .footer -->
+</div><!-- End .page-wrapper -->
+<button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
+
+<div class="mobile-menu-container">
+    <div class="mobile-menu-wrapper">
+        <span class="mobile-menu-close"><i class="icon-close"></i></span>
+
+        <form action="#" method="get" class="mobile-search">
+            <label for="mobile-search" class="sr-only">Search</label>
+            <input type="search" class="form-control" name="mobile-search" id="mobile-search"
+                placeholder="Search in..." required>
+            <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+        </form>
+
+        <nav class="mobile-nav">
+
+            <ul class="mobile-menu">
+                <li class="active">
+                    <a href="userHome">Home</a>
+                </li>
+                <li>
+                    <a href="#" class="sf">Products</a>
+                </li>
+                <li>
+                    <a href="#" class="sf">Contact</a>
+                </li>
+                <li>
+                    <a href="#" class="sf">About Us</a>
+                </li>
+                <li>
+                    <a href="#" class="sf">My Account</a>
+                </li>
+            </ul>
+
+        </nav><!-- End .mobile-nav -->
+
+        <div class="social-icons">
+            <a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
+            <a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
+        </div><!-- End .social-icons -->
+    </div><!-- End .mobile-menu-wrapper -->
+</div><!-- End .mobile-menu-container -->
+
+      <!-- Plugins JS File -->
+<script src="/user/assets/js/jquery.min.js"></script>
+<script src="/user/assets/js/bootstrap.bundle.min.js"></script>
+<script src="/user/assets/js/jquery.hoverIntent.min.js"></script>
+<script src="/user/assets/js/jquery.waypoints.min.js"></script>
+<script src="/user/assets/js/superfish.min.js"></script>
+<script src="/user/assets/js/owl.carousel.min.js"></script>
+<script src="/user/assets/js/bootstrap-input-spinner.js"></script>
+<script src="user/assets/js/bootstrap-input-spinner.js"></script>
+<script src="user/assets/js/jquery.magnific-popup.min.js"></script>
+<script src="user/assets/js/jquery.countdown.min.js"></script>
+
+
+<!-- Main JS File -->
+<script src="/user/assets/js/main.js"></script>
+<script src="user/assets/js/demos/demo-6.js"></script>
+<script src="user/assets/js/demos/demo-16.js"></script>
+
+<%- include("../layout/user/footer") -%>

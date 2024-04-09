@@ -309,23 +309,18 @@
                                         </tbody>
                                     </table><!-- End .table table-summary -->
 
-                                    <div class="accordion-summary" id="accordion-payment">
-                                    
-
+                                    <div class="accordion-summary" id="accordion-payment">    
 
                                         <div class="form-group">
                                             <label for="paymentMode">Payment Mode:</label><br>
                                             <input type="radio" id="cashOnDelivery" name="paymentMode" value="COD" required>
                                             <label for="cashOnDelivery">Cash on Delivery</label><br>
                                         </div>
-
-
-                        
+                       
                                     </div><!-- End .accordion -->
 
                                     <a href="#" id="placeOrderBtn" class="btn btn-outline-primary-2 btn-order btn-block">Place Order
-                                    </a>
-                                    
+                                    </a> 
                                     
                                 </div><!-- End .summary -->
                             </aside><!-- End .col-lg-3 -->
@@ -666,9 +661,6 @@ $(document).ready(function () {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            setTimeout(function() {
-                    location.reload();
-            }, 1500);
             return response.json();
         })
         .then(data => {
@@ -691,14 +683,11 @@ $(document).ready(function () {
                 })
             }
             if(data.message === "Your order has been placed successfully."){
-                swal({
-                title: "Success!",
-                text: data.message,
-                icon: "success",
-                timer: 1500,
-                buttons: false
-            });
+            setTimeout(function() {
+                window.location.href = '/orderSuccess';
+                });
             }
+            
         })
         .catch(error => {
             console.error('Error:', error);
@@ -706,11 +695,12 @@ $(document).ready(function () {
                 title: "Error!",
                 text: "Something went wrong. Please try again later.",
                 icon: "error",
-                timer: 1500,
+                timer: 500,
                 buttons: false
             });
         });
     });
+
 </script>
 
 <%- include("../layout/user/footer") -%>
