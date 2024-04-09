@@ -242,14 +242,14 @@ const contactUsLoad = async (req, res) => {
 
 // my account load
 const myAccountLoad = async (req, res) => {
-
     try {
-        
         const userId = req.session.user_id;
 
         const userData = await User.findById(userId);
-        const orderData = await Order.find({ userId });
+        let orderData = await Order.find({ userId });
         
+        orderData = orderData.sort((a, b) => new Date(b.date) - new Date(a.date));
+
         const productDataPromises = orderData.map(async order => {
             const products = order.products.map(async product => {
                 const productData = await Product.findById(product.productId);
@@ -266,8 +266,8 @@ const myAccountLoad = async (req, res) => {
         console.log(error.message);
         res.render("404");
     }
+};
 
-}
 
 // add and save address
 

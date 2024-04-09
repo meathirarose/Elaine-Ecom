@@ -29,19 +29,16 @@ const shippedStatusChange = async (req, res) => {
             return res.json({ error: 'Order not found' });
         }
 
-        // Check if any product in the order is already 'Order Delivered'
-        const isDelivered = order.products.some(product => product.status === 'Order Delivered');
+        const isDelivered = order.products.find(product => product.status === 'Order Delivered');
         if (isDelivered) {
             return res.json({ error: 'Cannot be Shipped. Order is already Delivered.' });
         }
 
-        // Check if any product in the order is 'Cancelled by Admin'
-        const isCancelled = order.products.some(product => product.status === 'Cancelled by Admin');
+        const isCancelled = order.products.find(product => product.status === 'Cancelled by Admin');
         if (isCancelled) {
             return res.json({ error: 'Cannot be Shipped. Order cancelled by Admin.' });
         }
 
-        // Assuming you want to ship the first product that is 'Order Placed'
         let productToUpdate = order.products.find(product => product.status === 'Order Placed');
 
         if (!productToUpdate) {
@@ -108,19 +105,16 @@ const cancelledStatusChange = async (req, res) => {
             return res.json({ error: 'Order not found' });
         }
 
-        // Find the specific product within the order
-        const product = order.products.find(p => p._id.toString() === productId);
+        const product = order.products.find(prdct => prdct._id.toString() === productId);
 
         if (!product) {
             return res.json({ error: 'Product not found' });
         }
 
-        // Check if the product is already cancelled
         if (product.status === 'Cancelled by Admin') {
             return res.json({ error: 'Product is already cancelled' });
         }
 
-        // Update the product status
         product.status = 'Cancelled by Admin';
         await order.save();
 

@@ -7,6 +7,9 @@ const allProductsListLoad = async (req, res) => {
     try {
         
         const productsData = await Product.find({});
+        console.log('====================================================================================')
+        console.log(productsData, "------------------------------i am from products list");
+        console.log('====================================================================================')
 
         res.render("products", { productsData: productsData });
 

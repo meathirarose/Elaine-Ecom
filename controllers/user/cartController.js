@@ -42,6 +42,14 @@ const addProductsToCart = async (req, res) => {
         //for getting the product data with the particular id
         const productDatabyId = await Product.findById({ _id: productId });
 
+        console.log('====================================================================================')
+        console.log(productDatabyId.prdctQuantity, "---------------------------------------------productDatabyId");
+        console.log('====================================================================================')
+
+        if(productDatabyId.prdctQuantity === 0){
+            return res.json({message: "Out of stock"})
+        }
+
         const cartData = await Cart.findOne({userId: req.session.user_id});
         
         if (cartData) {

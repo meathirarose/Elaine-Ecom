@@ -141,7 +141,7 @@
                         <div class="products mb-3">
                             <div class="row justify-content-center">
                                 <% productsData.forEach(product=> { %>
-                                    <% if(product.is_listed===true){%>
+                                    <% if(product.is_listed===true && product.prdctQuantity > 0){%>
                                         <div class="col-6 col-md-4 col-lg-4">
 
                                             <div class="product product-7 text-center">
@@ -185,8 +185,8 @@
                                             </div><!-- End .product -->
 
                                         </div><!-- End .col-sm-6 col-lg-4 -->
-                                        <%} %>
-                                            <% }) %>
+                                    <%} %>
+                                <% }) %>
                             </div><!-- End .row -->
                         </div><!-- End .products -->
             <div class="sidebar-filter-overlay"></div><!-- End .sidebar-filter-overlay -->
