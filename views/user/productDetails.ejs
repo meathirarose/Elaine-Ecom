@@ -59,7 +59,7 @@
                     <div class="header-left">
                         <nav class="main-nav">
                             <ul class="menu sf-arrows">
-                                <li class="megamenu-container active">
+                                <li class="megamenu-container">
                                     <a href="userHome">Home</a>
                                 </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
@@ -80,7 +80,6 @@
                                 </li>
                             </ul><!-- End .menu -->
                         </nav><!-- End .main-nav -->
-
                         <button class="mobile-menu-toggler">
                             <span class="sr-only">Toggle mobile menu</span>
                             <i class="icon-bars"></i>
@@ -116,17 +115,14 @@
                                             <i class="icon-arrows"></i>
                                         </a>
                                     </figure><!-- End .product-main-image -->
-                            
+
                                     <div id="product-zoom-gallery" class="product-image-gallery">
-
                                         <% productImagesArray.forEach((item)=>{ %>
-                                        <a class="product-gallery-item active" href="#" data-image="/processed_images/<%= productImagesArray[0] %>" data-zoom-image="/processed_images/<%= item %>">
-                                            <img src="/processed_images/<%= item %>" alt="product side">
-                                        </a>
-                                        <% }) %>                                 
-
+                                            <a class="product-gallery-item active" href="#" data-image="/processed_images/<%= item %>" data-zoom-image="/processed_images/<%= item %>">
+                                                <img src="/processed_images/<%= item %>" alt="product side">
+                                            </a>
+                                        <% }) %>
                                     </div><!-- End .product-image-gallery -->
-
                                 </div><!-- End .row -->
                             </div><!-- End .product-gallery -->
                         </div><!-- End .col-md-6 -->
@@ -141,163 +137,86 @@
                                     </div><!-- End .ratings -->
                                     <a class="ratings-text" href="#product-review-link" id="review-link">( 2 Reviews )</a>
                                 </div><!-- End .rating-container -->
-                                <br>
+
                                 <div class="product-price">
-                                    <p class="font-weight-bold">₹<%= productDatabyId.prdctPrice %></p>
+                                    ₹<%= productDatabyId.prdctPrice %>
                                 </div><!-- End .product-price -->
-                                
+                                <br>
                                 <div class="product-content">
                                     <p><%= productDatabyId.prdctDescription %></p>
                                 </div><!-- End .product-content -->
-                                <div >
-                                    <% if(productDatabyId.prdctQuantity > 0){%>
-                                        <p class=" btn-product float-left">In Stock</p>
-                                        <% } else {%>
-                                        <p class=" btn-product float-left">Out Of Stock</p>
-                                        <% }  %>
-                                   </div>
-                                   <br>
-                                   <br>
-                                   <br>
-                                <div class="details-filter-row details-row-size">
-                                    <label for="qty">Qty:</label>
-                                    <div class="product-details-quantity">
-                                        <input type="number" id="qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
-                                    </div><!-- End .product-details-quantity -->
-                                    
-                                </div><!-- End .details-filter-row -->
                                 <br>
                                 <div class="product-details-action">
-                                    <a href="#" class="btn-product btn-cart" onclick="addToCart('<%= productDatabyId._id %>')"><span>Add to cart</span></a>
-                                   
-                                    <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
-
+                                    <% if(productDatabyId.quantity<1) {%>
+                                        <p class="h6 text-danger">Out of stock</p>
+                                        <% }else{ %>
+                                            <a href="#" class="btn-product btn-cart" onclick="addToCart('<%= productDatabyId._id %>')"><span>Add to cart</span></a>
+                                            <% } %>
+                                        <div class="details-action-wrapper">
+                                                                <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
+                                        </div><!-- End .details-action-wrapper -->
                                 </div><!-- End .product-details-action -->
 
+                                <div class="product-details-footer">
+                                    <div class="product-cat">
+                                        <span>Category:</span>
+                                        <a href="#"><%=productDatabyId.categoryId.cateName%></a>
+                                    </div><!-- End .product-cat -->
+
+                                </div><!-- End .product-details-footer -->
                             </div><!-- End .product-details -->
                         </div><!-- End .col-md-6 -->
                     </div><!-- End .row -->
                 </div><!-- End .product-details-top -->
 
-                <div class="product-details-tab">
-                    <ul class="nav nav-pills justify-content-center" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="product-desc-link" data-toggle="tab" href="#product-desc-tab" role="tab" aria-controls="product-desc-tab" aria-selected="true">Description</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab" role="tab" aria-controls="product-review-tab" aria-selected="false">Reviews (2)</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane fade show active" id="product-desc-tab" role="tabpanel" aria-labelledby="product-desc-link">
-                            <div class="product-desc-content">
-                                <h3>Product Information</h3>
-                                <p><%= productDatabyId.prdctDescription %></p>
-                            </div><!-- End .product-desc-content -->
-                        </div><!-- .End .tab-pane -->
-
-                        <div class="tab-pane fade" id="product-review-tab" role="tabpanel" aria-labelledby="product-review-link">
-                            <div class="reviews">
-                                <h3>Reviews (2)</h3>
-                                <div class="review">
-                                    <div class="row no-gutters">
-                                        <div class="col-auto">
-                                            <h4><a href="#">Samanta J.</a></h4>
-                                            <div class="ratings-container">
-                                                <div class="ratings">
-                                                    <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                                                </div><!-- End .ratings -->
-                                            </div><!-- End .rating-container -->
-                                            <span class="review-date">6 days ago</span>
-                                        </div><!-- End .col -->
-                                        <div class="col">
-                                            <h4>Good, perfect size</h4>
-
-                                            <div class="review-content">
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus cum dolores assumenda asperiores facilis porro reprehenderit animi culpa atque blanditiis commodi perspiciatis doloremque, possimus, explicabo, autem fugit beatae quae voluptas!</p>
-                                            </div><!-- End .review-content -->
-
-                                            <div class="review-action">
-                                                <a href="#"><i class="icon-thumbs-up"></i>Helpful (2)</a>
-                                                <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
-                                            </div><!-- End .review-action -->
-                                        </div><!-- End .col-auto -->
-                                    </div><!-- End .row -->
-                                </div><!-- End .review -->
-
-                                <div class="review">
-                                    <div class="row no-gutters">
-                                        <div class="col-auto">
-                                            <h4><a href="#">John Doe</a></h4>
-                                            <div class="ratings-container">
-                                                <div class="ratings">
-                                                    <div class="ratings-val" style="width: 100%;"></div><!-- End .ratings-val -->
-                                                </div><!-- End .ratings -->
-                                            </div><!-- End .rating-container -->
-                                            <span class="review-date">5 days ago</span>
-                                        </div><!-- End .col -->
-                                        <div class="col">
-                                            <h4>Very good</h4>
-
-                                            <div class="review-content">
-                                                <p>Sed, molestias, tempore? Ex dolor esse iure hic veniam laborum blanditiis laudantium iste amet. Cum non voluptate eos enim, ab cumque nam, modi, quas iure illum repellendus, blanditiis perspiciatis beatae!</p>
-                                            </div><!-- End .review-content -->
-
-                                            <div class="review-action">
-                                                <a href="#"><i class="icon-thumbs-up"></i>Helpful (0)</a>
-                                                <a href="#"><i class="icon-thumbs-down"></i>Unhelpful (0)</a>
-                                            </div><!-- End .review-action -->
-                                        </div><!-- End .col-auto -->
-                                    </div><!-- End .row -->
-                                </div><!-- End .review -->
-                            </div><!-- End .reviews -->
-                        </div><!-- .End .tab-pane -->
-                    </div><!-- End .tab-content -->
-                </div><!-- End .product-details-tab -->
+                
 
 
                 
             </div><!-- End .container -->
         </div><!-- End .page-content -->
     </main><!-- End .main -->
+
     <footer class="footer">
-        <div class="footer-middle border-0">
+        <div class="footer-middle">
             <div class="container">
                 <div class="row">
                     <div class="col-sm-6 col-lg-3">
                         <div class="widget widget-about">
-                            <img src="user/assets/images/elaine_final_logo_white.png" class="footer-logo" alt="Footer Logo" width="105" height="25">
-                            <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. </p>
-    
+                            <img src="/user/assets/images/elaine_final_logo_white.png" class="footer-logo"
+                                alt="Footer Logo" width="105" height="25">
+                            <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate
+                                magna eros eu erat. </p>
+
                             <div class="social-icons">
-                                <a href="#" class="social-icon" target="_blank" title="Facebook"><i class="icon-facebook-f"></i></a>
-                                <a href="#" class="social-icon" target="_blank" title="Twitter"><i class="icon-twitter"></i></a>
-                                <a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
-                                <a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
-                                <a href="#" class="social-icon" target="_blank" title="Pinterest"><i class="icon-pinterest"></i></a>
+                                <a href="#" class="social-icon" target="_blank" title="Instagram"><i
+                                        class="icon-instagram"></i></a>
+                                <a href="#" class="social-icon" target="_blank" title="Youtube"><i
+                                        class="icon-youtube"></i></a>
+                                <a href="#" class="social-icon" target="_blank" title="Pinterest"><i
+                                        class="icon-pinterest"></i></a>
                             </div><!-- End .soial-icons -->
                         </div><!-- End .widget about-widget -->
                     </div><!-- End .col-sm-6 col-lg-3 -->
-    
+
                     <div class="col-sm-6 col-lg-3">
                         <div class="widget">
                             <h4 class="widget-title">Useful Links</h4><!-- End .widget-title -->
-    
+
                             <ul class="widget-list">
-                                <li><a href="about.html">About Molla</a></li>
-                                <li><a href="#">How to shop on Molla</a></li>
+                                <li><a href="#">About Us</a></li>
+                                <li><a href="#">How to shop on Elaine</a></li>
                                 <li><a href="#">FAQ</a></li>
-                                <li><a href="contact.html">Contact us</a></li>
-                                <li><a href="login.html">Log in</a></li>
+                                <li><a href="contactUs">Contact us</a></li>
+                                <li><a href="userLogin">Log in</a></li>
                             </ul><!-- End .widget-list -->
                         </div><!-- End .widget -->
                     </div><!-- End .col-sm-6 col-lg-3 -->
-    
+
                     <div class="col-sm-6 col-lg-3">
                         <div class="widget">
                             <h4 class="widget-title">Customer Service</h4><!-- End .widget-title -->
-    
+
                             <ul class="widget-list">
                                 <li><a href="#">Payment Methods</a></li>
                                 <li><a href="#">Money-back guarantee!</a></li>
@@ -308,14 +227,14 @@
                             </ul><!-- End .widget-list -->
                         </div><!-- End .widget -->
                     </div><!-- End .col-sm-6 col-lg-3 -->
-    
+
                     <div class="col-sm-6 col-lg-3">
                         <div class="widget">
                             <h4 class="widget-title">My Account</h4><!-- End .widget-title -->
-    
+
                             <ul class="widget-list">
-                                <li><a href="#">Sign In</a></li>
-                                <li><a href="cart.html">View Cart</a></li>
+                                <li><a href="userSignup">Sign Up</a></li>
+                                <li><a href="cart">View Cart</a></li>
                                 <li><a href="#">My Wishlist</a></li>
                                 <li><a href="#">Track My Order</a></li>
                                 <li><a href="#">Help</a></li>
@@ -325,27 +244,28 @@
                 </div><!-- End .row -->
             </div><!-- End .container -->
         </div><!-- End .footer-middle -->
+
+
     </footer><!-- End .footer -->
-    
-    </div><!-- End .page-wrapper -->
-    <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
-    
-    <!-- Mobile Menu -->
-    <div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
-    
-    <div class="mobile-menu-container">
+</div><!-- End .page-wrapper -->
+<button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
+
+<div class="mobile-menu-container">
     <div class="mobile-menu-wrapper">
         <span class="mobile-menu-close"><i class="icon-close"></i></span>
-    
+
         <form action="#" method="get" class="mobile-search">
             <label for="mobile-search" class="sr-only">Search</label>
             <input type="search" class="form-control" name="mobile-search" id="mobile-search"
                 placeholder="Search in..." required>
             <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
         </form>
-    
+
         <nav class="mobile-nav">
-    
+
             <ul class="mobile-menu">
                 <li class="active">
                     <a href="userHome">Home</a>
@@ -363,31 +283,29 @@
                     <a href="#" class="sf">My Account</a>
                 </li>
             </ul>
-    
+
         </nav><!-- End .mobile-nav -->
-    
+
         <div class="social-icons">
             <a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
             <a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
         </div><!-- End .social-icons -->
     </div><!-- End .mobile-menu-wrapper -->
-    </div><!-- End .mobile-menu-container --> 
-    
-    <!-- Plugins JS File -->
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/jquery.hoverIntent.min.js"></script>
-    <script src="assets/js/jquery.waypoints.min.js"></script>
-    <script src="assets/js/superfish.min.js"></script>
-    <script src="assets/js/owl.carousel.min.js"></script>
-    <script src="assets/js/bootstrap-input-spinner.js"></script>
-    <script src="assets/js/jquery.elevateZoom.min.js"></script>
-    <script src="assets/js/bootstrap-input-spinner.js"></script>
-    <script src="assets/js/jquery.magnific-popup.min.js"></script>
+</div><!-- End .mobile-menu-container -->
 
-
-    <!-- Main JS File -->
-    <script src="assets/js/main.js"></script>
+<!-- Plugins JS File -->
+<script src="/user/assets/js/jquery.min.js"></script>
+<script src="/user/assets/js/bootstrap.bundle.min.js"></script>
+<script src="/user/assets/js/jquery.hoverIntent.min.js"></script>
+<script src="/user/assets/js/jquery.waypoints.min.js"></script>
+<script src="/user/assets/js/superfish.min.js"></script>
+<script src="/user/assets/js/owl.carousel.min.js"></script>
+<script src="/user/assets/js/bootstrap-input-spinner.js"></script>
+<script src="/user/assets/js/jquery.elevateZoom.min.js"></script>
+<script src="/user/assets/js/bootstrap-input-spinner.js"></script>
+<script src="/user/assets/js/jquery.magnific-popup.min.js"></script>
+<!-- Main JS File -->
+<script src="/user/assets/js/main.js"></script>
 
     <!--Sweet Alert  -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
