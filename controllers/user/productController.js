@@ -77,10 +77,23 @@ const productDetailsLoad = async (req, res) => {
 
 }
 
+// wishlist load
+const wishlistLoad = async (req, res) => {
+
+    try {
+        res.render("wishlist");
+    } catch (error) {
+        console.log(error.message);
+        res.render("404");
+    }
+
+}
+
 module.exports = {
 
     allProductsListLoad,
     sortProducts,
     productDetailsLoad,
+    wishlistLoad
 
 }
