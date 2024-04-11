@@ -118,91 +118,67 @@
                     </thead>
 
                     <tbody>
+    
                         <tr>
+                            <% wishlistData.products.forEach(product=> { %>
+                                <% if( product.productId.prdctQuantity > 0){%>
+
                             <td class="product-col">
                                 <div class="product">
                                     <figure class="product-media">
                                         <a href="#">
-                                            <img src="/user/assets/images/products/table/product-1.jpg" alt="Product image">
+                                            <img src="/processed_images/<%= product.productId.prdctImage[0] %>"
+                                                        alt="Product image">                                    
                                         </a>
                                     </figure>
 
                                     <h3 class="product-title">
-                                        <a href="#">Beige knitted elastic runner shoes</a>
+                                        <a href="#"><%= product.productId.prdctName %></a>
                                     </h3><!-- End .product-title -->
                                 </div><!-- End .product -->
                             </td>
-                            <td class="price-col">$84.00</td>
+                            <td class="price-col">₹<%= product.productId.prdctPrice %></td>
                             <td class="stock-col"><span class="in-stock">In stock</span></td>
                             <td class="action-col">
-                                <div class="dropdown">
-                                <button class="btn btn-block btn-outline-primary-2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="icon-list-alt"></i>Select Options
+                                <a href="#" class="btn btn-block btn-outline-primary-2" onclick="addToCart('<%= product.productId._id %>')"><span>add to cart</span></a>
+
+                            </td>
+                            <td class="remove-col">
+                                <button class="btn-remove" data-product-id="<%= product.productId._id %>">
+                                <i class="icon-close"></i>
                                 </button>
-
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="#">First option</a>
-                                    <a class="dropdown-item" href="#">Another option</a>
-                                    <a class="dropdown-item" href="#">The best option</a>
-                                  </div>
-                                </div>
-                            </td>
-                            <td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
+                            </td>                            
+                            
                         </tr>
+                        <%}else{%>
                         <tr>
                             <td class="product-col">
                                 <div class="product">
                                     <figure class="product-media">
                                         <a href="#">
-                                            <img src="/user/assets/images/products/table/product-2.jpg" alt="Product image">
-                                        </a>
+                                            <img src="/processed_images/<%= product.productId.prdctImage[0] %>"
+                                            alt="Product image" class="product-image"></a> 
                                     </figure>
 
                                     <h3 class="product-title">
-                                        <a href="#">Blue utility pinafore denim dress</a>
+                                        <a href="#"><%= product.prdctName %></a>
                                     </h3><!-- End .product-title -->
                                 </div><!-- End .product -->
                             </td>
-                            <td class="price-col">$76.00</td>
-                            <td class="stock-col"><span class="in-stock">In stock</span></td>
-                            <td class="action-col">
-                                <button class="btn btn-block btn-outline-primary-2"><i class="icon-cart-plus"></i>Add to Cart</button>
-                            </td>
-                            <td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
-                        </tr>
-                        <tr>
-                            <td class="product-col">
-                                <div class="product">
-                                    <figure class="product-media">
-                                        <a href="#">
-                                            <img src="/user/assets/images/products/table/product-3.jpg" alt="Product image">
-                                        </a>
-                                    </figure>
-
-                                    <h3 class="product-title">
-                                        <a href="#">Orange saddle lock front chain cross body bag</a>
-                                    </h3><!-- End .product-title -->
-                                </div><!-- End .product -->
-                            </td>
-                            <td class="price-col">$52.00</td>
+                            <td class="price-col">₹<%= product.prdctPrice %></td>
                             <td class="stock-col"><span class="out-of-stock">Out of stock</span></td>
                             <td class="action-col">
                                 <button class="btn btn-block btn-outline-primary-2 disabled">Out of Stock</button>
                             </td>
-                            <td class="remove-col"><button class="btn-remove"><i class="icon-close"></i></button></td>
+                            <td class="remove-col"><button class="btn-remove"
+                                data-product-id="<%= product.productId._id %>">
+                                <i class="icon-close"></i>
+                            </button>                            
                         </tr>
+                            <%} %>
+                        <% }) %>
                     </tbody>
                 </table><!-- End .table table-wishlist -->
-                <div class="wishlist-share">
-                    <div class="social-icons social-icons-sm mb-2">
-                        <label class="social-label">Share on:</label>
-                        <a href="#" class="social-icon" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
-                        <a href="#" class="social-icon" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
-                        <a href="#" class="social-icon" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
-                        <a href="#" class="social-icon" title="Youtube" target="_blank"><i class="icon-youtube"></i></a>
-                        <a href="#" class="social-icon" title="Pinterest" target="_blank"><i class="icon-pinterest"></i></a>
-                    </div><!-- End .soial-icons -->
-                </div><!-- End .wishlist-share -->
             </div><!-- End .container -->
         </div><!-- End .page-content -->
     </main><!-- End .main -->
@@ -347,5 +323,105 @@
 <!--Sweet Alert  -->
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.btn-remove').forEach(function(button) {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const productId = this.getAttribute('data-product-id');
+                swal({
+                        title: "Are you sure?",
+                        text: "Once deleted, you will not be able to recover this address!",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                    })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            fetch('/removeFromWishlist', {
+                                method: 'DELETE',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ productId: productId })
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                if(data.message === "Product removed from wishlist successfully"){
+                                    swal({
+                                        title: "Success!",
+                                        text: data.message,
+                                        icon: "success",
+                                        timer: 1500,
+                                        buttons: false
+                                    });
+                                    setTimeout(function() {
+                                        location.reload();
+                                    }, 1000);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
+                        } 
+                    });
+            });
+        });
+    });
+</script>
+
+<script>
+    function addToCart(productId) {
+        fetch(`/addProductsToCart?productId=${productId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === "Item added to cart") {
+                    swal({
+                        title: "Success!",
+                        text: "Item added to cart",
+                        icon: "success",
+                        timer: 1000, 
+                        buttons: false, 
+                        
+                    });
+                } else if (data.message === "Item is already in the cart") {
+                    swal({
+                        text: "This item is already in your cart",
+                        icon: "info",
+                        timer: 1000, 
+                        buttons: false, 
+                        
+                    });
+                } else {
+                    swal({
+                        title: "Error!",
+                        text: data.message,
+                        icon: "error",
+                        timer: 1000, 
+                        buttons: false, 
+                        
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                swal({
+                    title: "Error!",
+                    text: "Something went wrong",
+                    icon: "error",
+                    timer: 800, 
+                    buttons: false, 
+                    
+                });
+            });
+    }
+    </script>
+    
 
 <%-include("../layout/user/footer")-%>

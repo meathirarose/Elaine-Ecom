@@ -29,6 +29,7 @@ const userController = require('../controllers/user/userController');
 const cartController = require('../controllers/user/cartController');
 const orderController = require('../controllers/user/orderController');
 const productController = require('../controllers/user/productController');
+const wishlistController = require('../controllers/user/wishlistController');
 const otpController = require("../auth/otpMailVerify");
 const forgotPasswordController = require("../auth/forgotPassword");
 
@@ -88,7 +89,9 @@ user_route.post("/updateCartItemQuantity/:productId", authentication.isLogin, ac
 user_route.get("/sortProducts", authentication.isLogin, accessAuth.accessUser, productController.sortProducts);
 
 //wishlist
-user_route.get("/wishlist", authentication.isLogin, accessAuth.accessUser, productController.wishlistLoad);
+user_route.get("/wishlist", authentication.isLogin, accessAuth.accessUser, wishlistController.wishlistLoad);
+user_route.get("/addToWishlist", authentication.isLogin, accessAuth.accessUser, wishlistController.addToWishlist);
+user_route.delete("/removeFromWishlist", authentication.isLogin, accessAuth.accessUser, wishlistController.deleteWishlistItem);
 
 // load cart & checkout
 user_route.get("/cart", authentication.isLogin, accessAuth.accessUser, cartController.cartLoad);

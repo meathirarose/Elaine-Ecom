@@ -41,7 +41,7 @@
                     </div><!-- End .header-left -->
     
                     <div class="header-right">
-                        <a href="#" class="wishlist-link">
+                        <a href="wishlist" class="wishlist-link">
                             <i class="icon-heart-o"></i>
                             <span class="wishlist-txt">My Wishlist</span>
                         </a>
@@ -154,13 +154,13 @@
 
                                                     <div class="product-action-vertical">
                                                         <a href="#"
-                                                            class="btn-product-icon btn-wishlist btn-expandable"><span>add
+                                                            class="btn-product-icon btn-wishlist btn-expandable" onclick="addToWishlist('<%= product._id %>')"><span>add
                                                                 to wishlist</span></a>
                                                     </div><!-- End .product-action-vertical -->
 
                                                     <div class="product-action">
 
-                                                        <a href="#" class="btn-product btn-cart" onclick="addToCart('<%= product._id %>')"><span>Add to cart</span></a>
+                                                        <a href="#" class="btn-product btn-cart" onclick="addToCart('<%= product._id %>')"><span>add to cart</span></a>
 
                                                     </div><!-- End .product-action -->
 
@@ -350,8 +350,7 @@
             <a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
         </div><!-- End .social-icons -->
     </div><!-- End .mobile-menu-wrapper -->
-</div><!-- End .mobile-menu-container -->
-      
+</div><!-- End .mobile-menu-container -->     
 
 <!-- Plugins JS File -->
 <script src="/user/assets/js/jquery.min.js"></script>
@@ -364,8 +363,7 @@
 <script src="/user/assets/js/bootstrap-input-spinner.js"></script>
 <script src="/user/assets/js/jquery.magnific-popup.min.js"></script>
 <script src="/user/assets/js/jquery.countdown.min.js"></script>
-
-
+    
 <!-- Main JS File -->
 <script src="/user/assets/js/main.js"></script>
 <script src="/user/assets/js/demos/demo-6.js"></script>
@@ -399,7 +397,7 @@ function addToCart(productId) {
             } else {
                 swal({
                     title: "Error!",
-                    text: "Something went wrong",
+                    text: data.message,
                     icon: "error",
                     timer: 1000, 
                     buttons: false, 
@@ -419,6 +417,46 @@ function addToCart(productId) {
             });
         });
 }
+</script>
+
+<script>
+
+    function addToWishlist(productId){
+        fetch(`/addToWishlist?productId=${productId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === "Item added to wishlist") {
+                swal({
+                    title: "Success!",
+                    text: "Item added to wishlist",
+                    icon: "success",
+                    timer: 1000, 
+                    buttons: false, 
+                    
+                });
+            }  else {
+                swal({
+                    text: data.message,
+                    icon: "info",
+                    timer: 1000, 
+                    buttons: false, 
+                    
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            swal({
+                title: "Error!",
+                text: "Something went wrong",
+                icon: "error",
+                timer: 800, 
+                buttons: false, 
+                
+            });
+        });
+    }
+
 </script>
 
 <script>
