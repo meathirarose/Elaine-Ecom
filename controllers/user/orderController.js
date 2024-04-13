@@ -102,10 +102,30 @@ const placeOrder = async (req, res) => {
         res.json({ message: "Your order has been placed successfully." });
 
     } catch (error) {
-        console.error('Error:', error);
-        res.status(500).json({ error: "Something went wrong. Please try again later." });
+        console.log(error.message);
+        res.render("404");
     }
 }
+
+// // razor pay order
+// const createRazorpayOrder = async (req, res) => {
+
+//     try {
+        
+//         const { addressId, paymentMode } = req.body;
+//         console.log('====================================================================================')
+//         console.log(addressId, "addressId----------------------------------------------------------------");
+//         console.log('====================================================================================')
+//         console.log('====================================================================================')
+//         console.log(paymentMode, "paymentmode------------------------------------------------------------");
+//         console.log('====================================================================================')
+
+//     } catch (error) {
+//         console.log(error.message);
+//         res.render("404");
+//     }
+
+// }
 
 // const order details load
 const orderDetailsLoad = async (req, res) => {
@@ -166,6 +186,7 @@ module.exports = {
 
     checkoutLoad,
     placeOrder,
+    //createRazorpayOrder,
     orderDetailsLoad,
     orderSuccessLoad
 

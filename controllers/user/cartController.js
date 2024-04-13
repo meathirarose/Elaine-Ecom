@@ -42,7 +42,7 @@ const addProductsToCart = async (req, res) => {
         const productDatabyId = await Product.findById({ _id: productId });
 
         if(productDatabyId.prdctQuantity === 0){
-            return res.json({message: "Out of stock"})
+            return res.json({ message: "Out of stock" })
         }
 
         const cartData = await Cart.findOne({userId: req.session.user_id});
@@ -135,7 +135,7 @@ const updateCartQuantity = async (req, res) =>{
         await updatedCartData.save();
 
         const updatedProduct = updatedCartData.products.find(product => product.productId == productId);
-            res.json({ 
+           return res.json({ 
             success: true, 
             updatedTotalPrice: updatedProduct.totalPrice,
             totalCost: totalCost 

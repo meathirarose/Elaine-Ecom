@@ -315,6 +315,8 @@
                                             <label for="paymentMode">Payment Mode:</label><br>
                                             <input type="radio" id="cashOnDelivery" name="paymentMode" value="COD" required>
                                             <label for="cashOnDelivery">Cash on Delivery</label><br>
+                                            <input type="radio" id="razorPay" name="paymentMode" value="razor-pay" required>
+                                            <label for="RazorPay">Razor Pay</label><br>
                                         </div>
                        
                                     </div><!-- End .accordion -->
@@ -649,13 +651,15 @@ $(document).ready(function () {
             });
             return;
         }
+        if (paymentMode === 'razor-pay') {
 
-        fetch('/placeOrder', {
+        fetch('/createRazorpayOrder', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ addressId, paymentMode })
+            body: JSON.stringify({addressId, paymentMode})
+
         })
         .then(response => {
             if (!response.ok) {
@@ -664,42 +668,68 @@ $(document).ready(function () {
             return response.json();
         })
         .then(data => {
-            if(data.message === "Please add products to the cart"){
-                swal({
-                    title: "Error",
-                    text: data.message,
-                    icon: "error",
-                    timer: 1500,
-                    buttons: false
-                })
-            }
-            if(data.message === "Sorry!, This product is out of Stock!"){
-                swal({
-                    title: "Error",
-                    text: data.message,
-                    icon: "error",
-                    timer: 1500,
-                    buttons: false
-                })
-            }
-            if(data.message === "Your order has been placed successfully."){
-            setTimeout(function() {
-                window.location.href = '/orderSuccess';
-                });
-            }
-            
+            console.log("test");
         })
-        .catch(error => {
-            console.error('Error:', error);
-            swal({
-                title: "Error!",
-                text: "Something went wrong. Please try again later.",
-                icon: "error",
-                timer: 500,
-                buttons: false
+        .catch(error => console.error('Error:', error));
+
+        } else if(paymentMode === "COD"){
+
+            fetch('/placeOrder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ addressId, paymentMode })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if(data.message === "Please add products to the cart"){
+                    swal({
+                        title: "Error",
+                        text: data.message,
+                        icon: "error",
+                        timer: 1500,
+                        buttons: false
+                    })
+                }
+                if(data.message === "Sorry!, This product is out of Stock!"){
+                    swal({
+                        title: "Error",
+                        text: data.message,
+                        icon: "error",
+                        timer: 1500,
+                        buttons: false
+                    })
+                }
+                if(data.message === "Your order has been placed successfully."){
+                setTimeout(function() {
+                    window.location.href = '/orderSuccess';
+                    });
+                }
+                
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                swal({
+                    title: "Error!",
+                    text: "Something went wrong. Please try again later.",
+                    icon: "error",
+                    timer: 500,
+                    buttons: false
+                });
             });
-        });
+        }
     });
+
+</script>
+<script>
+
+    
 
 </script>
 

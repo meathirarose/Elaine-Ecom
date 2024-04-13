@@ -370,7 +370,8 @@
 <script src="/user/assets/js/demos/demo-16.js"></script>
    
 <!--Sweet Alert  -->
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+ <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+ 
 
 <script>
 function addToCart(productId) {
@@ -460,85 +461,85 @@ function addToCart(productId) {
 </script>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectElement = document.querySelector('#sortby');
 
-function sortAndRenderProducts(sortOption) {
-    fetch(`/sortProducts?sortOption=${sortOption}`)
-        .then(response => {
-            if (response.ok) {
+        selectElement.addEventListener('change', function() {
+            const selectedValue = selectElement.value;
+
+            fetch('/sortingProducts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ sortby: selectedValue })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Unknown network error occurred!");
+                }
                 return response.json();
-            } else {
-                throw new Error('Failed to fetch sorted products');
-            }
-        })
-        .then(sortedProducts => {
-            const productListContainer = document.querySelector('.products .row');
+            })
+            .then(data => {
+                if(data.success){
+                    const products = data.data;
+                    updateUIWithSortedProducts(products);
+                }else {
+                    console.error('Error:', data); 
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
 
-            productListContainer.innerHTML = '';
 
-            sortedProducts.forEach(product => {
-                 if(product.is_listed===true){
-
-                    const productHTML = `
+</script>
+<script>
+    function updateUIWithSortedProducts(products) {
+        
+        const productsContainer = document.querySelector('.products .row');
+        productsContainer.innerHTML = '';
+        
+        products.forEach(product => {
+            if (product.is_listed === true && product.prdctQuantity > 0) {
+                const productHTML = `
                     <div class="col-6 col-md-4 col-lg-4">
-
                         <div class="product product-7 text-center">
                             <figure class="product-media">
                                 <a href="productDetails?productId=${product._id}">
                                     <img src="/processed_images/${product.prdctImage[0]}"
                                         alt="Product image" class="product-image">
                                 </a>
-                                
                                 <div class="product-action-vertical">
-                                    <a href="#"
-                                        class="btn-product-icon btn-wishlist btn-expandable"><span>add
-                                            to wishlist</span></a>
+                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable" onclick="addToWishlist('${product._id}')"><span>Add to wishlist</span></a>
                                 </div><!-- End .product-action-vertical -->
-
                                 <div class="product-action">
-
                                     <a href="#" class="btn-product btn-cart" onclick="addToCart('${product._id}')"><span>Add to cart</span></a>
-
                                 </div><!-- End .product-action -->
-
                             </figure><!-- End .product-media -->
-
                             <div class="product-body">
-                                <h3 class="product-title"><a href="products">
-                                       ${product.prdctName}
-                                    </a></h3><!-- End .product-title -->
+                                <h3 class="product-title"><a href="productDetails?productId=${product._id}">${product.prdctName}</a></h3><!-- End .product-title -->
                                 <div class="product-price">
-                                    <p>₹${product.prdctPrice} 
-                                    </p>
+                                    <p>₹${product.prdctPrice}</p>
                                 </div><!-- End .product-price -->
                                 <div class="ratings-container">
                                     <div class="ratings">
-                                        <div class="ratings-val" style="width: 20%;"></div>
-                                        <!-- End .ratings-val -->
+                                        <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
                                     </div><!-- End .ratings -->
                                     <span class="ratings-text">( 2 Reviews )</span>
                                 </div><!-- End .rating-container -->
-
                             </div><!-- End .product-body -->
                         </div><!-- End .product -->
-
                     </div><!-- End .col-sm-6 col-lg-4 -->
-                    `;
-
-                    productListContainer.innerHTML += productHTML;
-                 }
-            });
-        })
-        .catch(error => {
-            console.error('Error sorting products:', error);
+                `;
+                productsContainer.insertAdjacentHTML('beforeend', productHTML);
+            }
         });
-}
-
-document.getElementById('sortby').addEventListener('change', function() {
-    const selectedSortOption = this.value;
-
-    sortAndRenderProducts(selectedSortOption);
-});
-
+    }
 </script>
+
+
 
 <%-include("../layout/user/footer")-%>

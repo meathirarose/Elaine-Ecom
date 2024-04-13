@@ -19,37 +19,39 @@ const allProductsListLoad = async (req, res) => {
 
 // sorting products 
 const sortProducts = async (req, res) => {
+
     try {
         
-        const productsData = await Product.find({});
-
-        const sortOption = req.query.sortOption;
-
-        let sortedProducts;
-    
-        switch (sortOption) {
+        const sortOption = req.body.sortby;
+        let sortedData;
+                
+        switch(sortOption){
+            
             case 'priceLowToHigh':
-                sortedProducts = productsData.sort((a, b) => a.prdctPrice - b.prdctPrice);
+                sortedData = await Product.find({}).sort({prdctPrice: 1});
                 break;
             case 'priceHighToLow':
-                sortedProducts = productsData.sort((a, b) => b.prdctPrice - a.prdctPrice);
+                sortedData = await Product.find({}).sort({prdctPrice: -1});
                 break;
             case 'nameAZ':
-                sortedProducts = productsData.sort((a, b) => a.prdctName.localeCompare(b.prdctName));
+                sortedData = await Product.find({}).sort({prdctName: 1});
                 break;
             case 'nameZA':
-                sortedProducts = productsData.sort((a, b) => b.prdctName.localeCompare(a.prdctName));
+                sortedData = await Product.find({}).sort({prdctName: -1});
                 break;
             default:
-                sortedProducts = productsData;
+                res.json({ success: false, message: 'Invalid sort option' });
+                return;
+           
         }
-
-        res.json(sortedProducts);
+        
+        res.json({success: true, data: sortedData});
 
     } catch (error) {
         console.log(error.message);
         res.render("404");
     }
+
 }
 
 // product details load
