@@ -1,4 +1,5 @@
-const Product =require("../../models/productdbModel");
+const Product = require("../../models/productdbModel");
+const Category = require("../../models/categorydbModel");
 
 
 // all product list
@@ -7,8 +8,9 @@ const allProductsListLoad = async (req, res) => {
     try {
         
         const productsData = await Product.find({});
+        const categoryData = await Category.find({});
 
-        res.render("products", { productsData: productsData });
+        res.render("products", { productsData: productsData, categoryData: categoryData });
 
     } catch (error) {
         console.log(error.message);
@@ -32,6 +34,9 @@ const sortProducts = async (req, res) => {
                 break;
             case 'priceHighToLow':
                 sortedData = await Product.find({}).sort({prdctPrice: -1});
+                break;
+            case 'newArrivals': 
+                sortedData = await Product.find({}).sort({createdOn: -1});
                 break;
             case 'nameAZ':
                 sortedData = await Product.find({}).sort({prdctName: 1});

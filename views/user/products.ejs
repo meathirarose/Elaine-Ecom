@@ -130,7 +130,7 @@
                                             <option value="priceLowToHigh">Price: low to high</option>
                                             <option value="priceHighToLow">Price : high to low</option>
                                             <option value="date">Featured</option>
-                                            <option value="date">New arrivals</option>
+                                            <option value="newArrivals">New arrivals</option>
                                             <option value="nameAZ">aA - zZ</option>
                                             <option value="nameZA">zZ - aA </option>
                                         </select>
@@ -204,29 +204,17 @@
 
                         <div class="widget-body">
                             <div class="filter-items filter-items-count">
-                                <div class="filter-item">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="cat-1">
-                                        <label class="custom-control-label" for="cat-1">Women</label>
-                                    </div><!-- End .custom-checkbox -->
-                                    <span class="item-count">3</span>
-                                </div><!-- End .filter-item -->
 
-                                <div class="filter-item">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="cat-2">
-                                        <label class="custom-control-label" for="cat-2">Men</label>
-                                    </div><!-- End .custom-checkbox -->
-                                    <span class="item-count">0</span>
-                                </div><!-- End .filter-item -->
-
-                                <div class="filter-item">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="cat-3">
-                                        <label class="custom-control-label" for="cat-3">Kids</label>
-                                    </div><!-- End .custom-checkbox -->
-                                    <span class="item-count">0</span>
-                                </div><!-- End .filter-item -->
+                                <% categoryData.forEach(element => { %>
+                                    <% if(element.is_listed === true) {%>
+                                    <div class="filter-item">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="cat-1">
+                                            <label class="custom-control-label" for="cat-1"><%= element.cateName  %></label>
+                                        </div><!-- End .custom-checkbox -->
+                                    </div><!-- End .filter-item -->
+                                    <% } %>
+                                <% }) %>
 
                             </div><!-- End .filter-items -->
                         </div><!-- End .widget-body -->

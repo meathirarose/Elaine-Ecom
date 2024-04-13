@@ -97,6 +97,7 @@ const addProduct = async (req, res) => {
         const prdctQuantity = req.body.prdctQuantity;
         const imgFiles = req.files;
         const cateName = req.body.cateId;
+        const createdOn = Date.now();
 
         // Checking valid product name / space check
         if (!prdctName || /^\s*$/.test(prdctName)) {
@@ -148,11 +149,12 @@ const addProduct = async (req, res) => {
             prdctPrice: parsedPrdctPrice,
             prdctQuantity: parsedPrdctQuantity,
             categoryId: cateName,
-            prdctImage: prdctImage
+            prdctImage: prdctImage,
+            createdOn: createdOn
         });
 
         const prdctData = await product.save();
-
+        
         if (prdctData) {
             res.redirect("/admin/productsList");
         }

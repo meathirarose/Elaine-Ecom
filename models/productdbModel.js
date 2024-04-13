@@ -33,6 +33,11 @@ const productSchema = mongoose.Schema({
     is_listed: {
         type: Boolean,
         default: true
+    },
+
+    createdOn: {
+        type: Date,
+        default: Date.now()
     }
 
 });
