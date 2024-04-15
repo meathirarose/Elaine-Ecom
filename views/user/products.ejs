@@ -204,20 +204,20 @@
 
                         <div class="widget-body">
                             <div class="filter-items filter-items-count">
-
                                 <% categoryData.forEach(element => { %>
-                                    <% if(element.is_listed === true) {%>
-                                    <div class="filter-item">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="cat-1">
-                                            <label class="custom-control-label" for="cat-1"><%= element.cateName  %></label>
-                                        </div><!-- End .custom-checkbox -->
-                                    </div><!-- End .filter-item -->
+                                    <% if (element.is_listed === true) { %>
+                                        <div class="filter-item">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="cat-<%= element._id %>" value="<%= element._id %>">
+                                                <label class="custom-control-label" for="cat-<%= element._id %>"><%= element.cateName %></label>
+                                            </div><!-- End .custom-checkbox -->
+                                        </div><!-- End .filter-item -->
                                     <% } %>
                                 <% }) %>
-
                             </div><!-- End .filter-items -->
                         </div><!-- End .widget-body -->
+                        
+
                     </div><!-- End .widget -->
                 </div><!-- End .sidebar-filter-wrapper -->
             </aside><!-- End .sidebar-filter -->
@@ -527,7 +527,97 @@ function addToCart(productId) {
         });
     }
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function handleFilterChange() {
+            const selectedCategories = Array.from(document.querySelectorAll('.custom-control-input:checked')).map(checkbox => checkbox.value);
+            
+            fetch('/filterProducts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ categories: selectedCategories })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    const products = data.data;
+                    updateUIWithFilteredProducts(products); 
+                } else {
+                    console.error('Error:', data); 
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
 
+        document.querySelectorAll('.custom-control-input').forEach(checkbox => {
+            checkbox.addEventListener('change', handleFilterChange);
+        });
+
+        const clearFiltersLink = document.querySelector('.sidebar-filter-clear');
+        clearFiltersLink.addEventListener('click', function(event) {
+            event.preventDefault();
+
+        document.querySelectorAll('.custom-control-input:checked').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+
+            handleFilterChange();
+        });
+    });
+</script>
+
+
+<script>
+    function updateUIWithFilteredProducts (products){
+        const productsContainer = document.querySelector('.products .row');
+        productsContainer.innerHTML = '';
+        
+        products.forEach(product => {
+            if (product.is_listed === true && product.prdctQuantity > 0) {
+                const productHTML = `
+                    <div class="col-6 col-md-4 col-lg-4">
+                        <div class="product product-7 text-center">
+                            <figure class="product-media">
+                                <a href="productDetails?productId=${product._id}">
+                                    <img src="/processed_images/${product.prdctImage[0]}"
+                                        alt="Product image" class="product-image">
+                                </a>
+                                <div class="product-action-vertical">
+                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable" onclick="addToWishlist('${product._id}')"><span>Add to wishlist</span></a>
+                                </div><!-- End .product-action-vertical -->
+                                <div class="product-action">
+                                    <a href="#" class="btn-product btn-cart" onclick="addToCart('${product._id}')"><span>Add to cart</span></a>
+                                </div><!-- End .product-action -->
+                            </figure><!-- End .product-media -->
+                            <div class="product-body">
+                                <h3 class="product-title"><a href="productDetails?productId=${product._id}">${product.prdctName}</a></h3><!-- End .product-title -->
+                                <div class="product-price">
+                                    <p>₹${product.prdctPrice}</p>
+                                </div><!-- End .product-price -->
+                                <div class="ratings-container">
+                                    <div class="ratings">
+                                        <div class="ratings-val" style="width: 20%;"></div><!-- End .ratings-val -->
+                                    </div><!-- End .ratings -->
+                                    <span class="ratings-text">( 2 Reviews )</span>
+                                </div><!-- End .rating-container -->
+                            </div><!-- End .product-body -->
+                        </div><!-- End .product -->
+                    </div><!-- End .col-sm-6 col-lg-4 -->
+                `;
+                productsContainer.insertAdjacentHTML('beforeend', productHTML);
+            }
+        });
+    }
+</script>
 
 
 <%-include("../layout/user/footer")-%>

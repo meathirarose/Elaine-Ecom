@@ -9,7 +9,7 @@ const allProductsListLoad = async (req, res) => {
         
         const productsData = await Product.find({});
         const categoryData = await Category.find({});
-
+        
         res.render("products", { productsData: productsData, categoryData: categoryData });
 
     } catch (error) {
@@ -59,6 +59,32 @@ const sortProducts = async (req, res) => {
 
 }
 
+// filter products
+const filterProducts = async (req, res) => {
+    try {
+
+        let categoryData;
+        const selectedCategories = req.body.categories;
+        
+        if (selectedCategories && selectedCategories.length > 0) {
+
+            categoryData = await Product.find({ categoryId: { $in: selectedCategories } });
+            
+        } else {
+
+            categoryData = await Product.find();
+
+        }
+        
+        res.json({ success: true, data: categoryData });
+        
+    } catch (error) {
+        console.log(error.message);
+        res.render("404");
+    }
+}
+
+
 // product details load
 const productDetailsLoad = async (req, res) => {
 
@@ -90,7 +116,7 @@ module.exports = {
 
     allProductsListLoad,
     sortProducts,
+    filterProducts,
     productDetailsLoad
     
-
 }

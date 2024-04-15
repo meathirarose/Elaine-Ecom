@@ -87,6 +87,8 @@ user_route.get("/addProductsToCart", authentication.isLogin, accessAuth.accessUs
 user_route.delete("/deleteCartItem/:productId", authentication.isLogin, accessAuth.accessUser, cartController.deleteCartItem);
 user_route.post("/updateCartItemQuantity/:productId", authentication.isLogin, accessAuth.accessUser, cartController.updateCartQuantity);
 user_route.post("/sortingProducts", productController.sortProducts);
+user_route.post("/filterProducts", productController.filterProducts);
+
 //wishlist
 user_route.get("/wishlist", authentication.isLogin, accessAuth.accessUser, wishlistController.wishlistLoad);
 user_route.get("/addToWishlist", authentication.isLogin, accessAuth.accessUser, wishlistController.addToWishlist);

@@ -18,6 +18,25 @@ const ordersLoad = async (req, res) => {
 
 }
 
+// order details load
+const orderDetails = async (req, res) => {
+
+    try {
+
+        const orderId = req.query.orderId;
+        const orderData = await Order.find({_id: orderId }).populate([
+            {path: 'userId'},
+            {path: 'products.productId'}
+        ]);
+
+        res.render("orderDetails", {orderData: orderData});
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
 // changing order status - shipping
 const shippedStatusChange = async (req, res) => {
     try {
@@ -34,9 +53,9 @@ const shippedStatusChange = async (req, res) => {
             return res.json({ error: 'Cannot be Shipped. Order is already Delivered.' });
         }
 
-        const isCancelled = order.products.find(product => product.status === 'Cancelled by Admin');
+        const isCancelled = order.products.find(product => product.status === 'Cancelled by ElaineEcom');
         if (isCancelled) {
-            return res.json({ error: 'Cannot be Shipped. Order cancelled by Admin.' });
+            return res.json({ error: 'Cannot be Shipped. Order cancelled by ElaineEcom.' });
         }
 
         let productToUpdate = order.products.find(product => product.status === 'Order Placed');
@@ -70,8 +89,8 @@ const deliveredStatusChange = async (req, res) => {
 
         let productToUpdate = null;
         for (const product of order.products) {
-            if (product.status === 'Cancelled by Admin') {
-                return res.json({ error: 'Cannot be Delivered. Order cancelled by Admin.!' });
+            if (product.status === 'Cancelled by ElaineEcom') {
+                return res.json({ error: 'Cannot be Delivered. Order cancelled by ElaineEcom.!' });
             }
             if (product.status === 'Order Shipped') {
                 productToUpdate = product;
@@ -111,11 +130,11 @@ const cancelledStatusChange = async (req, res) => {
             return res.json({ error: 'Product not found' });
         }
 
-        if (product.status === 'Cancelled by Admin') {
+        if (product.status === 'Cancelled by ElaineEcom') {
             return res.json({ error: 'Product is already cancelled' });
         }
 
-        product.status = 'Cancelled by Admin';
+        product.status = 'Cancelled by ElaineEcom';
         await order.save();
 
         return res.json({ message: 'Order status updated to Cancelled successfully' });
@@ -127,6 +146,7 @@ const cancelledStatusChange = async (req, res) => {
 module.exports = {
 
     ordersLoad,
+    orderDetails,
     shippedStatusChange,
     deliveredStatusChange,
     cancelledStatusChange

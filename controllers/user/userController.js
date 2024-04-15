@@ -259,7 +259,7 @@ const myAccountLoad = async (req, res) => {
         });
 
         const productsData = await Promise.all(productDataPromises);
-
+        
         res.render("myAccount", { userData, orderData, productsData });
 
     } catch (error) {

@@ -118,30 +118,25 @@
                                     <th scope="col">Name</th>
                                     <th scope="col">Email</th>
                                     <th scope="col">Product Name</th>
-                                    <th scope="col">Quantity</th>
                                     <th scope="col">Total</th>
                                     <th scope="col">Status</th>
                                     <th scope="col">Order Placed Date</th>
-                                    <th scope="col">Payment Mode</th>
                                     <th scope="col" class="text-end">Change Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <% sortedOrderData.forEach((order,index) => { %>
                                     <% order.products.forEach((product) => { %>
-
                                 <tr>
                                     <td><%= order.orderId %></td>
                                     <td><b><%= order.userName %></b></td>
                                     <td><%= order.email %></td>
                                     <td><%= product.productName %></td>
-                                    <td><%= product.quantity %></td>
                                     <td><%= product.totalPrice %></td>
                                     <td><span class="badge rounded-pill alert-warning"><%= product.status %></span></td>
                                     <td><%= order.date.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }) %></td>
-                                    <td><%= order.payment %></td>
                                     <td class="text-end">
-                                        <a href="#" class="btn btn-md rounded font-sm">Detail</a>
+                                        <a href="/admin/orderDetails?orderId=<%= order._id %>" class="btn btn-md rounded font-sm">Detail</a>
                                         <div class="dropdown">
                                             <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm">
                                                 <i class="material-icons md-more_horiz"></i>
@@ -152,7 +147,6 @@
                                                 <a class="dropdown-item" href="#" onclick="handleOrderCancel('<%= order._id %>', '<%= product._id %>')">Cancel</a>
                                             </div>
                                         </div>
-                                        
                                         <!-- dropdown //end -->
                                     </td>
                                 </tr>
