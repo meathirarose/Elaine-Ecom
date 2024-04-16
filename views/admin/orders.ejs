@@ -132,7 +132,7 @@
                                     <td><b><%= order.userName %></b></td>
                                     <td><%= order.email %></td>
                                     <td><%= product.productName %></td>
-                                    <td><%= product.totalPrice %></td>
+                                    <td>₹<%= product.totalPrice %></td>
                                     <td><span class="badge rounded-pill alert-warning"><%= product.status %></span></td>
                                     <td><%= order.date.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }) %></td>
                                     <td class="text-end">

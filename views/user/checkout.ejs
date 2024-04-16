@@ -474,6 +474,10 @@
 <!-- Axios CDN -->
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
+<!-- razor pay -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
 
 <script>
 
@@ -652,8 +656,8 @@ $(document).ready(function () {
             return;
         }
         if (paymentMode === 'razor-pay') {
-
-        fetch('/createRazorpayOrder', {
+            
+        fetch('/razorpayOrder', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -668,7 +672,36 @@ $(document).ready(function () {
             return response.json();
         })
         .then(data => {
-            console.log("test");
+            if (!data.success) {
+                throw new Error('Order creation failed: ' + data.msg);
+            }
+            var options = {
+                "key": data.key_id,
+                "amount": data.amount,
+                "currency": "INR",
+                "name": "Elaine Ecom",
+                "description": "Order Transaction",
+                "order_id": data.order_id,
+                "handler": function (response){
+                    window.location.href = '/orderSuccess';
+                },
+                "prefill": {
+                    "contact": data.contact,
+                    "name": data.name,
+                    "email": data.email
+                },
+                "theme": {
+                    "color": "#2300a3"
+                }
+            };
+            var rzrPy = new Razorpay(options);
+            rzrPy.on('payment.success', function (response) {
+                alert("Payment Succeeded");
+            });
+            rzrPy.on('payment.failed', function (response) {
+                alert("Payment Failed");
+            });
+            rzrPy.open();
         })
         .catch(error => console.error('Error:', error));
 
@@ -727,10 +760,6 @@ $(document).ready(function () {
     });
 
 </script>
-<script>
 
-    
-
-</script>
 
 <%- include("../layout/user/footer") -%>

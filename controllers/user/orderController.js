@@ -3,7 +3,16 @@ const Product =require("../../models/productdbModel");
 const Cart = require("../../models/cartdbModel");
 const Order = require("../../models/orderdbSchema");
 const Category = require("../../models/categorydbModel");
+const Razorpay = require("razorpay");
+require("dotenv").config();
 
+
+// razor pay instance
+var razorpayInstance = new Razorpay(
+    { 
+        key_id: process.env.RAZORPAY_KEY_ID, 
+        key_secret: process.env.RAZORPAY_KEY_SECRET 
+    })
 
 // load checkout page
 const checkoutLoad = async (req, res) => {
@@ -107,25 +116,92 @@ const placeOrder = async (req, res) => {
     }
 }
 
-// // razor pay order
-// const createRazorpayOrder = async (req, res) => {
+// razor pay order
+const createRazorpayOrder = async (req, res) => {
+    try {
+        const { addressId, paymentMode } = req.body;
 
-//     try {
+        if (!addressId || !paymentMode) {
+            throw new Error('Required data missing');
+        }
+
+        const cartData = await Cart.findOne({ userId: req.session.user_id }).populate('products.productId');
+        const userData = await User.findOne({ _id: req.session.user_id }, { _id: 1, name: 1, email: 1, mobile: 1 });
+
+        if(cartData.products.length === 0){
+            return res.json({message: "Please add products to the cart"});
+        }
+
+        const amount = cartData.totalCost * 100;
+        const orderId = await generateOrderId();
+
+        const options = {
+            amount: amount,
+            currency: "INR",
+            receipt: process.env.AUTHENTICATION_EMAIL
+        };
+
+        const order = await razorpayInstance.orders.create(options);
         
-//         const { addressId, paymentMode } = req.body;
-//         console.log('====================================================================================')
-//         console.log(addressId, "addressId----------------------------------------------------------------");
-//         console.log('====================================================================================')
-//         console.log('====================================================================================')
-//         console.log(paymentMode, "paymentmode------------------------------------------------------------");
-//         console.log('====================================================================================')
+        if(order){
 
-//     } catch (error) {
-//         console.log(error.message);
-//         res.render("404");
-//     }
+            const newrazorpayOrder = new Order({
+                userId: userData._id,
+                orderId: orderId,
+                deliveryAddress: addressId,
+                userName: userData.name,
+                email: userData.email,
+                totalAmount: cartData.totalCost,
+                date: new Date(),
+                payment: paymentMode,
+                products: cartData.products.map(product => ({
+                    productId: product.productId,
+                    productName: product.productId.prdctName,
+                    quantity: product.quantity,
+                    productPrice: product.productPrice,
+                    totalPrice: product.totalPrice
+                }))
+            })
 
-// }
+            await newrazorpayOrder.save();
+
+            for (const product of cartData.products) {
+                await Product.updateOne(
+                    { _id: product.productId },
+                    { $inc: { prdctQuantity: -product.quantity } } 
+                );
+            }
+            
+            cartData.products.map(product => {
+                if(product.productId.prdctQuantity <= 0){
+                    return res.json({message: "This product is out of Stock!"});
+                }
+            });
+    
+            cartData.products = [];
+            await cartData.save();
+
+        }
+
+        res.json({
+            success: true,
+            msg: "Order Created",
+            order_id: order.id,
+            amount: amount,
+            key_id: process.env.RAZORPAY_KEY_ID,
+            name: userData.name,
+            email: userData.email,
+            contact: userData.mobile
+        });
+
+
+
+    } catch (error) {
+        console.log(error.message);
+        res.render("404");
+    }
+}
+
 
 // const order details load
 const orderDetailsLoad = async (req, res) => {
@@ -186,7 +262,7 @@ module.exports = {
 
     checkoutLoad,
     placeOrder,
-    //createRazorpayOrder,
+    createRazorpayOrder,
     orderDetailsLoad,
     orderSuccessLoad
 
