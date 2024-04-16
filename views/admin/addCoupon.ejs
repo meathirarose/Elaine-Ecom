@@ -93,7 +93,7 @@
             <div class="row">
                 <div class="col-9">
                     <div class="content-header">
-                        <h2 class="content-title">Add New Product</h2>
+                        <h2 class="content-title">Add New Coupon</h2>
                     </div>
                 </div>
                 <div class="d-flex message m-3"> 
@@ -108,47 +108,43 @@
                 <div class="col-lg-6">
                     <div class="card mb-4">
                         <div class="card-header">
-                            <h4>Basic</h4>
+                            <h4>Coupon Details</h4>
                         </div>
                         <div class="card-body">
-                            <form action="/admin/addProduct" method="post" enctype="multipart/form-data">
+                            <form action="/admin/addCoupon" method="post">
                                 <div class="mb-4">
-                                    <label for="product_name" class="form-label" >Product title</label>
-                                    <input type="text" placeholder="Type here" name="prdctName" class="form-control" id="product_name" required/>
+                                    <label for="coupon-name" class="form-label" >Coupon Name</label>
+                                    <input type="text" placeholder="Type here" name="couponName" class="form-control" required/>
                                 </div>
                                 <div class="mb-4">
-                                    <label class="form-label">Full description</label>
-                                    <textarea placeholder="Type here" name="prdctDescription" class="form-control" rows="4" required></textarea>
+                                    <label class="form-label">Coupon description</label>
+                                    <textarea placeholder="Type here" name="couponDescription" class="form-control" rows="4" required></textarea>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Coupon code</label>
+                                    <input type="text" placeholder="Type here" name="couponCode" class="form-control" required>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Validity</label>
+                                    <input type="date" placeholder="Type here" name="couponValidity" class="form-control" required>
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="mb-4">
-                                            <label class="form-label">Regular price</label>
+                                    <div class="col-lg-6">
+                                        <div class="mb-6">
+                                            <label class="form-label">Minimum Purchase Amount</label>
                                             <div class="row gx-2">
-                                                <input placeholder="₹" type="text" name="prdctPrice" class="form-control" required/>
+                                                <input placeholder="₹" type="number" name="minimumPurchaseAmount" class="form-control" required/>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-6">
                                         <div class="mb-4">
-                                            <label class="form-label">Quantity</label>
-                                            <input placeholder="1" type="text" name="prdctQuantity" class="form-control" required/>
+                                            <label class="form-label">Discount</label>
+                                            <input placeholder="₹" type="number" name="couponDiscount" class="form-control" required/>
                                         </div>
-                                    </div>
-                                    
-                                            <div class="col-lg-4">
-                                                <label class="form-label">Category</label>
-                                                <select class="form-select" name="cateId">
-                                                    <% cateData.forEach(cate => { %>
-                                                        <% if(cate.is_listed === true){%>
-                                                            <option value="<%= cate._id%>"><%= cate.cateName %></option>
-                                                        <%}%>
-                                                    <% }) %>
-                                                </select>
-                                            </div>
-                                       
+                                    </div>                               
                                     <div>
-                                        <button class="btn btn-md rounded font-sm hover-up" type="submit">Add</button>
+                                        <button class="btn btn-md rounded font-sm hover-up" type="submit">Add Coupon</button>
                                     </div>
                                 </div>
                         </div>
@@ -156,21 +152,7 @@
                     <!-- card end// -->
                     
                 </div>
-                <div class="col-lg-3">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h4>Media</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="input-upload">
-                                <!-- <img src="assets/imgs/theme/upload.svg" alt="" /> -->
-                                <input class="form-control" name="prdctImage" type="file" accept="image/*" multiple />
-                            </div>
-                        </div>
-                        </form>
-                    </div>
-                    <!-- card end// -->                   
-                    </div>
+                
             </div>
 
         </section>

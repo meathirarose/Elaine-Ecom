@@ -26,6 +26,7 @@ const categoryController = require("../controllers/admin/categoryController");
 const productController = require("../controllers/admin/productController");
 const orderController = require("../controllers/admin/orderController");
 const userController = require("../controllers/admin/userController");
+const couponController = require("../controllers/admin/couponController");
 
 // admin login routes
 admin_route.get('/', adminAuthentication.isAdminLogout ,adminController.adminLoad);
@@ -60,6 +61,11 @@ admin_route.get('/orderDetails', adminAuthentication.isAdminLogin, orderControll
 admin_route.post('/shippedStatusChange/:orderId', orderController.shippedStatusChange);
 admin_route.post('/deliveredStatusChange/:orderId', orderController.deliveredStatusChange);
 admin_route.post('/cancelledStatusChange/:orderId', orderController.cancelledStatusChange);
+
+// coupons route
+admin_route.get('/coupons', adminAuthentication.isAdminLogin, couponController.couponLoad);
+admin_route.get('/addCoupon', adminAuthentication.isAdminLogin, couponController.addCouponLoad);
+admin_route.post('/addCoupon', couponController.addCoupons);
 
 // customerlist routes
 admin_route.get('/customerList', adminAuthentication.isAdminLogin, userController.customerListLoad);

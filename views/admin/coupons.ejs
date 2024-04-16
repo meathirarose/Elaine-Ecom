@@ -95,11 +95,11 @@
             <section class="content-main">
                 <div class="content-header">
                     <div>
-                        <h2 class="content-title card-title">Products List</h2>
-                        <p>All products are appear here</p>
+                        <h2 class="content-title card-title">Coupons List</h2>
+                        <p>All coupons are appear here</p>
                     </div>
                     <div>
-                        <button type="submit" class="btn btn-primary btn-sm rounded"><a href="/admin/addProduct" class="text-white">Add new product</a></button>
+                        <button type="submit" class="btn btn-primary btn-sm rounded"><a href="/admin/addCoupon" class="text-white">New Coupon</a></button>
                     </div>
                 </div>
                 <div class="card mb-4">
@@ -111,54 +111,38 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Product Image</th>
-                                        <th>Product Name</th>
+                                        <th>Name</th>
                                         <th>Description</t>
-                                        <th>Price</th>
-                                        <th>Quantity</th>
-                                        <th>Category</th>
+                                        <th>Code</th>
+                                        <th>Validity</th>
+                                        <th>Minimum Amount</th>
+                                        <th>Discount</th>
                                         <th>Status</th>
                                         <th class="text-end">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <% prdctData.forEach((prdct,index) => { %>
                                         <tr>
-                                            <td><%= index+1 %></td>
-                                            <td width="15%">
-                                                    <div class="left">
-                                                        <img src="/processed_images/<%= prdct.prdctImage[0] %>"  alt="Userpic" style="height: 85px; width: 75px;"/>
-                                                    </div>
-                                                </a>
-                                            </td>
-                                            <td ><%= prdct.prdctName %></td>
-                                            <td ><%= prdct.prdctDescription %></td>
-                                            <td class="text-center"><%= prdct.prdctPrice %></td>
-                                            <td class="text-center"><%= prdct.prdctQuantity %></td>
-                                            <td class="text-center"><%= prdct.categoryId.cateName %></td>
-                                            <td>
-                                                <% if(prdct.is_listed === false) { %>
-                                                <span class="badge rounded-pill alert-danger ">Unlisted</span>
-                                                <% } else { %>
-                                                <span class="badge rounded-pill alert-success">Listed</span>
-                                                <% } %>
-                                            </td>
-                                            <td class="text-end" >
-                                                <% if(prdct.is_listed === false) { %>
-                                                <button class="btn btn-md rounded font-sm " type="submit" >
-                                                    <a href="/admin/listProduct/<%=prdct._id%>" data-status="unblock" class="text-white">Listed</a>
-                                                </button>
-                                                <% } else { %>
-                                                <button class="btn btn-md rounded font-sm " type="submit" >
-                                                    <a href="/admin/unlistProduct/<%=prdct._id%>" data-status="block" class="text-white">Unlisted</a>
-                                                </button>
-                                                <% } %>
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-md rounded font-sm " type="submit" ><a href="/admin/editProduct?prdctId=<%=prdct._id%>" class="text-white">Edit</button></a>
-                                            </td>
+                                            <% couponData.forEach((coupon, index) => { %>
+                                                <td><%= index +1 %></td>
+                                                <td><%= coupon.name %></td>
+                                                <td ><%= coupon.description %></td>
+                                                <td ><%= coupon.code %></td>
+                                                <td><%= coupon.validity.toLocaleDateString() %></td>
+                                                <td ><%= coupon.minimumAmount %></td>
+                                                <td ><%= coupon.discount %></td>
+                                                <td>
+                                                    <% if (coupon.validity > Date.now()) { %>
+                                                        <span class="badge rounded-pill alert-success">Active</span>
+                                                    <% }else{%>
+                                                        <span class="badge rounded-pill alert-danger">Expired</span>
+                                                    <%} %>
+                                                </td>
+                                                <td class="text-end">
+                                                    <button class="btn btn-md rounded font-sm" type="submit" ><a href="#" class="text-white">Delete</button></a>
+                                                </td>
                                         </tr>
-                                        <% }); %>                                                                                                                                                                                                                       
+                                            <% }) %>
                                 </tbody>
                             </table>
                             <!-- table-responsive.// -->
