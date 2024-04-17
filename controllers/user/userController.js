@@ -1,6 +1,7 @@
 const User = require("../../models/userdbModel");
 const Product =require("../../models/productdbModel");
 const Order = require("../../models/orderdbSchema");
+const Coupon = require("../../models/coupondbModel");
 const bcrypt = require("bcrypt");
 const otpController = require("../../auth/otpMailVerify")
 
@@ -259,8 +260,10 @@ const myAccountLoad = async (req, res) => {
         });
 
         const productsData = await Promise.all(productDataPromises);
-        
-        res.render("myAccount", { userData, orderData, productsData });
+
+        const couponData = await Coupon.find({});
+                
+        res.render("myAccount", { userData, orderData, productsData, couponData });
 
     } catch (error) {
         console.log(error.message);

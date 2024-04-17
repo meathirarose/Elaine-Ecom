@@ -1,0 +1,50 @@
+.coupon-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+#coupon-card {
+  width: calc(33.33% - 20px); /* Adjust based on the number of items per row */
+  margin: 10px;
+  padding: 10px;
+  border-radius: 20px;
+  background: orange;
+  border: none;
+  color: #fff;
+  height: 250px; /* Adjusted height to accommodate the additional line */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+#h1 {
+  font-size: 35px;
+  margin-bottom: 0px;
+}
+
+.span, .small-code {
+  font-size: 15px;
+}
+
+.small-code {
+  font-size: 12px;
+}
+
+.coupon-image1, .coupon-image2 {
+  position: absolute;
+  opacity: .1;
+
+}
+
+.coupon-image1 {
+  left: 0;
+  top: 0;
+}
+
+.coupon-image2 {
+  right: 0;
+  bottom: 0;
+}

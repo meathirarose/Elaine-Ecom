@@ -19,7 +19,6 @@ const adminAuthentication = require('../middleware/adminAuthentication');
 admin_route.set('view engine', 'ejs');
 admin_route.set('views','./views/admin');
 
-
 // access controllers
 const adminController = require("../controllers/admin/adminController");
 const categoryController = require("../controllers/admin/categoryController");
@@ -68,7 +67,6 @@ admin_route.get('/coupons', adminAuthentication.isAdminLogin, couponController.c
 admin_route.get('/addCoupon', adminAuthentication.isAdminLogin, couponController.addCouponLoad);
 admin_route.post('/addCoupon', couponController.addCoupons);
 admin_route.delete('/coupon', adminAuthentication.isAdminLogin, couponController.deleteCoupon);
-
 
 // offer routes
 admin_route.get('/offers', adminAuthentication.isAdminLogin, offerController.offerLoad);

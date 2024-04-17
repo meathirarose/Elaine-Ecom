@@ -108,271 +108,275 @@
                 <div class="dashboard">
                     <div class="container">
                         <div class="row">
-                            <aside class="col-md-4 col-lg-3">
-                                <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab"
-                                            href="#tab-dashboard" role="tab" aria-controls="tab-dashboard"
-                                            aria-selected="true">Dashboard</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders"
-                                            role="tab" aria-controls="tab-orders" aria-selected="false">Orders</a>
-                                    </li>
+                        <aside class="col-md-4 col-lg-3">
+                            <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab"
+                                        href="#tab-dashboard" role="tab" aria-controls="tab-dashboard"
+                                        aria-selected="true">Dashboard</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders"
+                                        role="tab" aria-controls="tab-orders" aria-selected="false">Orders</a>
+                                </li>
 
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address"
-                                            role="tab" aria-controls="tab-address" aria-selected="false">Adresses</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="tab-account-link" data-toggle="tab" href="#tab-account"
-                                            role="tab" aria-controls="tab-account" aria-selected="false">Account
-                                            Details</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="tab-change-password-link" data-toggle="tab" href="#tab-change-password"
-                                            role="tab" aria-controls="tab-change-password" aria-selected="false">Change Password</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="/userLogout">Sign Out</a>
-                                    </li>
-                                </ul>
-                            </aside><!-- End .col-lg-3 -->
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address"
+                                        role="tab" aria-controls="tab-address" aria-selected="false">Adresses</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tab-account-link" data-toggle="tab" href="#tab-account"
+                                        role="tab" aria-controls="tab-account" aria-selected="false">Account
+                                        Details</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tab-coupon-link" data-toggle="tab" href="#tab-coupon"
+                                        role="tab" aria-controls="tab-coupon" aria-selected="false">Available Coupons</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="tab-change-password-link" data-toggle="tab" href="#tab-change-password"
+                                        role="tab" aria-controls="tab-change-password" aria-selected="false">Change Password</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/userLogout">Sign Out</a>
+                                </li>
+                            </ul>
+                        </aside><!-- End .col-lg-3 -->
 
-                            <div class="col-md-8 col-lg-9 ">
-                                <div class="tab-content">
-                                    <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
-                                        <p>Hello <span class="font-weight-normal text-dark"><%= userData.name %>,<br>
-                                            From your account dashboard you can view your <a href="#tab-orders"
-                                                class="tab-trigger-link ">recent orders</a>, manage your
-                                            <a href="#tab-address" class="tab-trigger-link">shipping and billing
-                                                addresses</a>,<br> and <a href="#tab-account" class="tab-trigger-link">edit
-                                                your password and account details</a>.
-                                        </p>
-                                    </div><!-- .End .tab-pane -->
-                                    <% if(!orderData || orderData.length === 0){%>
-                                    <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
-                                        
-                                        <p>No order has been made yet.</p>
-                                        <a href="products" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
-                                         
-                                    </div><!-- .End .tab-pane -->
-                                    <%}else{%>
-                                    <div class="tab-pane fade ml-5" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
-                                        <p class="text-center font-weight-bolder"><b>Order Details</b></p>
+        <div class="col-md-8 col-lg-9 ">
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
+                    <p>Hello <span class="font-weight-normal text-dark"><%= userData.name %>,<br>
+                        From your account dashboard you can view your <a href="#tab-orders"
+                            class="tab-trigger-link ">recent orders</a>, manage your
+                        <a href="#tab-address" class="tab-trigger-link">shipping and billing
+                            addresses</a>,<br> and <a href="#tab-account" class="tab-trigger-link">edit
+                            your password and account details</a>.
+                    </p>
+                </div><!-- .End .tab-pane -->
+                <% if(!orderData || orderData.length === 0){%>
+                <div class="tab-pane fade" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
+                    
+                    <p>No order has been made yet.</p>
+                    <a href="products" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
+                        
+                </div><!-- .End .tab-pane -->
+                <%}else{%>
+                <div class="tab-pane fade ml-5" id="tab-orders" role="tabpanel" aria-labelledby="tab-orders-link">
+                    <p class="text-center font-weight-bolder"><b>Order Details</b></p>
 
-                                        <table class="table table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Product Image</th>
-                                                    <th scope="col">Product Name</th>
-                                                    <th scope="col">Quantity</th>
-                                                    <th scope="col">Total Amount</th>
-                                                    <th scope="col">Status</th>
-                                                    <th scope="col">Order Details</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <% orderData.forEach((order, orderIndex) => { %>
-                                                    <% order.products.forEach((product, productIndex) => { %>
-                                                        
-                                                        <tr>
-                                                            <td class="product-col">
-                                                                <div class="product">
-                                                                    <figure class="product-media">
-                                                                        <a href="#"><img src="/processed_images/<%= productsData[orderIndex][productIndex].productData.prdctImage[0] %>" alt="Product image"></a>
-                                                                    </figure>
-                                                                </div><!-- End .product -->
-                                                            </td> 
-                                                            <td><a href="#"><%= productsData[orderIndex][productIndex].productData.prdctName %></a></td>                                                           
-                                                            <td><%= product.quantity %></td>
-                                                            <td><%= product.totalPrice %></td>
-                                                            <td><span class="badge rounded-pill alert-success"><%= product.status %></span></td>
-                                                            <td><button class="btn btn-primary order-details-btn" type="submit"><a href="/orderDetails?orderId=<%=order._id%>" class="text-white">Order Details</a></button>
-                                                            </td>
-                                                        </tr>
-
-                                                    <% }); %>
-                                                <% }); %>
-                                            </tbody>
-                                        </table>
-                                        
-                                    </div><!-- .End .tab-pane -->
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Product Image</th>
+                                <th scope="col">Product Name</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Total Amount</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Order Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% orderData.forEach((order, orderIndex) => { %>
+                                <% order.products.forEach((product, productIndex) => { %>
                                     
-                                    <% } %>
+                                    <tr>
+                                        <td class="product-col">
+                                            <div class="product">
+                                                <figure class="product-media">
+                                                    <a href="#"><img src="/processed_images/<%= productsData[orderIndex][productIndex].productData.prdctImage[0] %>" alt="Product image"></a>
+                                                </figure>
+                                            </div><!-- End .product -->
+                                        </td> 
+                                        <td><a href="#"><%= productsData[orderIndex][productIndex].productData.prdctName %></a></td>                                                           
+                                        <td><%= product.quantity %></td>
+                                        <td><%= product.totalPrice %></td>
+                                        <td><span class="badge rounded-pill alert-success"><%= product.status %></span></td>
+                                        <td><button class="btn btn-primary order-details-btn" type="submit"><a href="/orderDetails?orderId=<%=order._id%>" class="text-white">Order Details</a></button>
+                                        </td>
+                                    </tr>
+
+                                <% }); %>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                    
+                </div><!-- .End .tab-pane -->
+                
+                <% } %>
             <!-- ------------------------ Show available address ---------------------------- -->
 
-                                    <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
-                                        <p>The following addresses will be used on the checkout page by default.</p>
+        <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
+            <p>The following addresses will be used on the checkout page by default.</p>
 
-                                        <div class="row">
+            <div class="row">
 
-                                            <% if(!userData.address || userData.address.length===0) { %>
-                                                <div class="col-lg-6">
-                                                    <div class="card card-dashboard">
-                                                        <div class="card-body">
-                                                            <h3 class="card-title">Billing Address</h3>
-                                                            <!-- End .card-title -->
-                                                            <p>You have not set up this type of address yet.<br>
-                                                                <!-- <a href="#" class="showAddAddress">Add address <i class="icon-edit"></i></a> -->
-                                                            </p>
-                                                        </div><!-- End .card-body -->
-                                                    </div><!-- End .card-dashboard -->
-                                                </div><!-- End .col-lg-6 -->
-                                                <% } else { %>
-                                                <% userData.address.forEach(element=> { %>
-                                                <div class="col-lg-6">
-                                                    <div class="card card-dashboard" id="cardDashboard">
-                                                        <div class="card-body">
-                                                            <h3 class="card-title">Billing Address</h3>
-                                                            <!-- End .card-title -->
-                                                            <p>
-                                                                <%= element.fullname %><br>
-                                                                <%= element.addressline %><br>
-                                                                <%= element.city %>,
-                                                                <%= element.state %><br>
-                                                                <%= element.email %><br>
-                                                                <%= element.pincode %><br>
-                                                                <%= element.phone %>
-                                                                <br><br>
-                                                            <button class="edit-address btn btn-primary " id="edit-address<%=element._id%>"
-                                                                    onclick="editAddressShow('<%=element._id%>')" data-edit-id="<%= element._id %>">
-                                                                    Edit <i class="icon-edit"></i></button>&nbsp;&nbsp;
-                                                            <a href="#" class="remove-address btn btn-primary" data-address-id="<%= element._id %>">Delete</a>
-                                                            </p>
-                                                        </div><!-- End .card-body -->
-                                                    </div><!-- End .card-dashboard -->
-                                                </div><!-- End .col-lg-6 -->
+                <% if(!userData.address || userData.address.length===0) { %>
+                    <div class="col-lg-6">
+                        <div class="card card-dashboard">
+                            <div class="card-body">
+                                <h3 class="card-title">Billing Address</h3>
+                                <!-- End .card-title -->
+                                <p>You have not set up this type of address yet.<br>
+                                    <!-- <a href="#" class="showAddAddress">Add address <i class="icon-edit"></i></a> -->
+                                </p>
+                            </div><!-- End .card-body -->
+                        </div><!-- End .card-dashboard -->
+                    </div><!-- End .col-lg-6 -->
+                    <% } else { %>
+                    <% userData.address.forEach(element=> { %>
+                    <div class="col-lg-6">
+                        <div class="card card-dashboard" id="cardDashboard">
+                            <div class="card-body">
+                                <h3 class="card-title">Billing Address</h3>
+                                <!-- End .card-title -->
+                                <p>
+                                    <%= element.fullname %><br>
+                                    <%= element.addressline %><br>
+                                    <%= element.city %>,
+                                    <%= element.state %><br>
+                                    <%= element.email %><br>
+                                    <%= element.pincode %><br>
+                                    <%= element.phone %>
+                                    <br><br>
+                                <button class="edit-address btn btn-primary " id="edit-address<%=element._id%>"
+                                        onclick="editAddressShow('<%=element._id%>')" data-edit-id="<%= element._id %>">
+                                        Edit <i class="icon-edit"></i></button>&nbsp;&nbsp;
+                                <a href="#" class="remove-address btn btn-primary" data-address-id="<%= element._id %>">Delete</a>
+                                </p>
+                            </div><!-- End .card-body -->
+                        </div><!-- End .card-dashboard -->
+                    </div><!-- End .col-lg-6 -->
         <!-- ------------------------ end available address ---------------------------- -->
         <!-- ------------------------- edit address form ------------------------------- -->
 
-                                                <div id="editAddress<%=element._id%>" style="display: none;">
-                                                    
-                                                    <form id="editAddressForm" class="edit-address-form" method="post" action="/editAddress">
-                                                        <input type="hidden" id="editAddressId" name="editAddressId" value="<%= element._id %>">
-                                                        
-                                                        <div class="form-group">
-                                                            <label for="name">Full Name </label>
-                                                            <input type="text" class="form-control" id="fullname" value="<%= element.fullname %>"
-                                                                name="fullname" required>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="addressline">Street address *</label>
-                                                            <input type="text" class="form-control" id="addressline" placeholder="House number and Street name" value="<%= element.addressline %>"
-                                                                name="addressline" required>
-                                                        </div>
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-6">
-                                                                <label for="city">Town / City *</label>
-                                                                <input type="text" class="form-control" id="city" value="<%= element.city %>"
-                                                                    name="city" required>
-                                                            </div>
-                                                            <div class="form-group col-md-6">
-                                                                <label for="state">State / County *</label>
-                                                                <input type="text" class="form-control" id="state" value="<%= element.state %>"
-                                                                    name="state" required>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-row">
-                                                            <div class="form-group col-md-6">
-                                                                <label for="pincode">Postcode / ZIP *</label>
-                                                                <input type="number" class="form-control" id="pincode" value="<%= element.pincode %>"
-                                                                    name="pincode" required>
-                                                            </div>
-                                                            <div class="form-group col-md-6">
-                                                                <label for="phone">Phone *</label>
-                                                                <input type="tel" class="form-control" id="phone" value="<%= element.phone %>"
-                                                                    name="phone" required>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="email">Email address *</label>
-                                                                <input type="email" class="form-control" id="email" value="<%= element.email %>" 
-                                                                    name="email" required>
-                                                            </div>
-                                                        </div>
-                                                        <button type="submit"
-                                                            class="btn btn-primary">Update</button>
-                                                    </form>
-                                                </div>        
-                                                <% }); %>
-                                            <% } %>
-                                        </div><!-- End .row -->
+                    <div id="editAddress<%=element._id%>" style="display: none;">
+                        
+                        <form id="editAddressForm" class="edit-address-form" method="post" action="/editAddress">
+                            <input type="hidden" id="editAddressId" name="editAddressId" value="<%= element._id %>">
+                            
+                            <div class="form-group">
+                                <label for="name">Full Name </label>
+                                <input type="text" class="form-control" id="fullname" value="<%= element.fullname %>"
+                                    name="fullname" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="addressline">Street address *</label>
+                                <input type="text" class="form-control" id="addressline" placeholder="House number and Street name" value="<%= element.addressline %>"
+                                    name="addressline" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="city">Town / City *</label>
+                                    <input type="text" class="form-control" id="city" value="<%= element.city %>"
+                                        name="city" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="state">State / County *</label>
+                                    <input type="text" class="form-control" id="state" value="<%= element.state %>"
+                                        name="state" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="pincode">Postcode / ZIP *</label>
+                                    <input type="number" class="form-control" id="pincode" value="<%= element.pincode %>"
+                                        name="pincode" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="phone">Phone *</label>
+                                    <input type="tel" class="form-control" id="phone" value="<%= element.phone %>"
+                                        name="phone" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email address *</label>
+                                    <input type="email" class="form-control" id="email" value="<%= element.email %>" 
+                                        name="email" required>
+                                </div>
+                            </div>
+                            <button type="submit"
+                                class="btn btn-primary">Update</button> 
+                        </form>
+                    </div>        
+                    <% }); %>
+                <% } %>
+            </div><!-- End .row -->
         <!-- ----------------------------------- end address form --------------------------------- -->
         <!-- --------------------------------- add new address button ----------------------------- -->
 
-                                        <div class="col-lg-6">
-                                            <button id="addNewAddressBtn" class="btn btn-primary showAddAddress">
-                                                Add a new address <i class="icon-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div><!-- .End .tab-pane -->
+                        <div class="col-lg-6">
+                            <button id="addNewAddressBtn" class="btn btn-primary showAddAddress">
+                                Add a new address <i class="icon-plus"></i>
+                            </button>
+                        </div>
+                    </div><!-- .End .tab-pane -->
         <!-- --------------------------------- end new address button ------------------------------ -->
         <!-- ------------------------------ new address form --------------------------------------- -->
 
-                                    <div class="addAddress" style="display: none;">
-                                        <form id="addressForm" method="post" action="/saveAddress">
-                                            <div class="form-group">
-                                                <label for="name">Full Name </label>
-                                                <input type="text" class="form-control" id="fullname" name="fullname" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="addressline">Street address *</label>
-                                                <input type="text" class="form-control" id="addressline" name="addressline" required>
-                                            </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-md-6">
-                                                    <label for="city">Town / City *</label>
-                                                    <input type="text" class="form-control" id="city" name="city" required>
-                                                </div>
-                                                <div class="form-group col-md-6">
-                                                    <label for="state">State / County *</label>
-                                                    <input type="text" class="form-control" id="state" name="state" required>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="form-row">
-                                                <div class="form-group col-md-6">
-                                                    <label for="pincode">Postcode / ZIP *</label>
-                                                    <input type="number" class="form-control" id="pincode" name="pincode" required>
-                                                </div>
-                                                <div class="form-group col-md-6">
-                                                    <label for="phone">Phone *</label>
-                                                    <input type="tel" class="form-control" id="phone" name="phone" required>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="email">Email Address </label>
-                                                <input type="email" class="form-control" id="email" name="email" required>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Save</button>
-                                            
-                                        </form>
-                                    </div>
+                    <div class="addAddress" style="display: none;">
+                        <form id="addressForm" method="post" action="/saveAddress">
+                            <div class="form-group">
+                                <label for="name">Full Name </label>
+                                <input type="text" class="form-control" id="fullname" name="fullname" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="addressline">Street address *</label>
+                                <input type="text" class="form-control" id="addressline" name="addressline" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="city">Town / City *</label>
+                                    <input type="text" class="form-control" id="city" name="city" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="state">State / County *</label>
+                                    <input type="text" class="form-control" id="state" name="state" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="pincode">Postcode / ZIP *</label>
+                                    <input type="number" class="form-control" id="pincode" name="pincode" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="phone">Phone *</label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address </label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            
+                        </form>
+                    </div>
 
         <!-- ------------------------------------- end address form ---------------------------------------- -->
         <!-- -------------------------------------- Account Details ---------------------------------------- -->
 
 
-                                    <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
-                                        <div class="col-lg-6">
-                                            <div class="card card-dashboard" id="cardDashboard">
-                                                <div class="card-body">
-                                                    <h3 class="card-title">Account Details</h3>
-                                                    <!-- End .card-title -->
-                                                    <p>
-                                                        <%= userData.name %><br>
-                                                        <%= userData.email %><br>
-                                                        <%= userData.mobile %><br>
-                                                    </p>
-                                                    <button type="submit" id="editProfile" class="btn btn-primary editProfile">Edit Profile</button>
-                                                </div><!-- End .card-body -->
-                                            </div><!-- End .card-dashboard -->
-                                        </div><!-- End .col-lg-6 -->
-                                    </div><!-- .End .tab-pane -->
+                <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
+                    <div class="col-lg-6">
+                        <div class="card card-dashboard" id="cardDashboard">
+                            <div class="card-body">
+                                <h3 class="card-title">Account Details</h3>
+                                <!-- End .card-title -->
+                                <p>
+                                    <%= userData.name %><br>
+                                    <%= userData.email %><br>
+                                    <%= userData.mobile %><br>
+                                </p>
+                                <button type="submit" id="editProfile" class="btn btn-primary editProfile">Edit Profile</button>
+                            </div><!-- End .card-body -->
+                        </div><!-- End .card-dashboard -->
+                    </div><!-- End .col-lg-6 -->
+                </div><!-- .End .tab-pane -->
 
         <!-- ------------------------------------- end Account Details ---------------------------------------- -->
         <!-- ---------------------------------------- edit profile ----------------------------------------- -->
-        <div class="tab-pane fade" id="profile-edit" role="tabpanel" aria-labelledby="tab-change-address-link">
+        <div class="tab-pane fade" id="profile-edit" role="tabpanel" aria-labelledby="tab-profile-edit-link">
             <form action="/editProfile" id="editUserProfile" method="post">
 
                 <div class="col-sm-6">
@@ -397,6 +401,33 @@
             </form>
         </div>
         <!-- ---------------------------------------- end Change password ------------------------------------- -->
+        <!-- ---------------------------------------- coupons ------------------------------------- -->
+        <div class="tab-pane fade" id="tab-coupon" role="tabpanel" aria-labelledby="tab-coupon-link">
+            <div class="coupon-container">
+                <% couponData.forEach(coupon => { %>
+                    <div class="card text-center" id="coupon-card">
+                        <div class="coupon-image1"><img src="https://i.imgur.com/DC94rZe.png" width="150"></div>
+                        <div class="coupon-image2"><img src="https://i.imgur.com/DC94rZe.png" width="150"></div>
+                        <h1 id="h1" class="mt-2">₹<%= coupon.discount %></h1>
+                        <span class="d-block span"><%= coupon.name %></span>
+                        <span class="d-block span"><%= coupon.description %></span>
+                        <div class="mt-1"><small class="small-code">Validity:
+                                <% if (coupon.validity > Date.now()) { %>
+                                    <%= coupon.validity.toLocaleDateString() %>
+                                <% } else { %>
+                                    <span class="text-danger">Expired</span>
+                                <% } %>
+                            </small></div>
+                        <div class="mt-1"><small class="small-code">Minimum Purchase: ₹<%= coupon.minimumAmount %></small></div>
+                        <div class="mt-0"><small class="small-code">Use Code: <span class="font-weight-bolder text-dark"><%= coupon.code %></span> </small></div>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+        
+        
+        <!-- ---------------------------------------- end coupons ------------------------------------- -->
+
         <!-- ---------------------------------------- Change password ----------------------------------------- -->
         <div class="tab-pane fade" id="tab-change-password" role="tabpanel" aria-labelledby="tab-change-address-link">
             <form action="/changePassword" id="changePasswordForm" method="post">
@@ -799,5 +830,14 @@
 
     </script>
 
+    <script>
 
+        $(document).ready(function () {
+            $('#toggleCouponBtn').click(function () {
+                $('.tab-pane').hide(); 
+                $('.coupon-container').show(); 
+            });
+        });
+
+    </script>
     <%-include("../layout/user/footer")-%>
