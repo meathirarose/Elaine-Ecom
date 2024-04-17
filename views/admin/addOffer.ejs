@@ -50,7 +50,7 @@
                         <i class="icon material-icons md-monetization_on"></i>
                         <span class="text">Coupons</span>
                     </a>  
-                </li>
+                </li> 
                 <li class="menu-item p-2">
                     <a class="menu-link" href="/admin/offers">
                         <i class="icon material-icons md-local_offer"></i>
@@ -95,44 +95,77 @@
                 </ul>
             </div>
         </header>
-        
         <section class="content-main">
             <div class="row">
                 <div class="col-9">
                     <div class="content-header">
-                        <h2 class="content-title">Edit Category</h2>
-                        
-                    </div>
-                    <div class="d-flex message m-3"> 
-                        <%
-                        if(typeof message !== 'undefined'){
-                            %>
-                            <p><br><%= message %></p>
-                            <%
-                        }
-                        %>
+                        <h2 class="content-title">Add New Offer</h2>
                     </div>
                 </div>
-                
-                
+                <div class="d-flex message m-3"> 
+                    <%
+                    if(typeof message !== 'undefined'){
+                        %>
+                        <p><br><%= message %></p>
+                        <%
+                    }
+                    %>
+                </div>
                 <div class="col-lg-6">
                     <div class="card mb-4">
                         <div class="card-header">
-                            <h4>Basic</h4>
+                            <h4>Offer Details</h4>
                         </div>
                         <div class="card-body">
-                            <form action="" method="post">
+                            <form action="/admin/addOffer" method="post">
                                 <div class="mb-4">
-                                    <label for="product_name" class="form-label" >Product title</label>
-                                    <input type="text" placeholder="Type here" value="<%=cateData.cateName%>" name="cateName" class="form-control" id="product_name" />
+                                    <label for="coupon-name" class="form-label" >Offer Name</label>
+                                    <input type="text" placeholder="Type here" name="offerName" class="form-control" required/>
                                 </div>
                                 <div class="mb-4">
-                                    <label class="form-label">Full description</label>
-                                    <input placeholder="Type here" value="<%= cateData.cateDescription %>" name="cateDescription" class="form-control" rows="4">
+                                    <label class="form-label">Offer description</label>
+                                    <textarea placeholder="Type here" name="offerDescription" class="form-control" rows="4" required></textarea>
                                 </div>
-                                <div>
-                                    <input type="hidden" required name="cateId" value="<%= cateData._id %>">
-                                    <button class="btn btn-md rounded font-sm hover-up" name="id" type="submit"><a href="/admin/updateCategory"></a>Submit</button>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-6">
+                                            <label class="form-label">Offer Percentage</label>
+                                            <div class="row gx-2">
+                                                <input placeholder="%" type="number" name="offerPercentage" class="form-control" required/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-4">
+                                            <label class="form-label">Validity</label>
+                                            <input type="date" name="offerValidity" class="form-control" required>
+                                        </div>
+                                    </div>                               
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-6">
+                                            <label class="form-label">Offer Type</label>
+                                                <select class="form-select" name="offerType">
+                                                    <option>name1</option>
+                                                    <option>name2</option>
+                                                    <option>name3</option>                                                
+                                                </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-4">
+                                            <label class="form-label">Offer Category</label>
+                                                <select class="form-select" name="offerTypeName">
+                                                    <option>name1</option>
+                                                    <option>name2</option>
+                                                    <option>name3</option>
+                                                </select>
+                                        </div>
+                                    </div>                               
+                                    <div>
+                                        <button class="btn btn-md rounded font-sm hover-up" type="submit">Add Offer</button>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -142,6 +175,7 @@
                 </div>
                 
             </div>
+
         </section>
         <!-- content-main end// -->
         

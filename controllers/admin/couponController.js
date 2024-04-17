@@ -77,7 +77,7 @@ const addCoupons = async (req, res) =>{
 
         await newCoupon.save();
 
-        res.render("addCoupon",{message: "coupon added successfully"});
+        res.redirect("coupons");
 
     } catch (error) {
         console.log(error.message);
@@ -85,9 +85,35 @@ const addCoupons = async (req, res) =>{
 
 }
 
+// delete coupon
+const deleteCoupon = async (req, res) => {
+
+    try {
+        
+        const couponId = req.query.couponId;
+        
+        const couponData = await Coupon.findOne({_id: couponId});
+        console.log('====================================================================================')
+        console.log(couponData);
+        console.log('====================================================================================')
+        
+        if (!couponData) {
+            return res.json({ message: "No coupons found" });
+        }
+
+        await Coupon.deleteOne({_id: couponId});
+        
+        res.json({ message: "Coupon deleted successfully" });
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
 
 module.exports = {
     couponLoad,
     addCouponLoad,
-    addCoupons
+    addCoupons,
+    deleteCoupon
 }

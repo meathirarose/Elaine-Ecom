@@ -27,6 +27,7 @@ const productController = require("../controllers/admin/productController");
 const orderController = require("../controllers/admin/orderController");
 const userController = require("../controllers/admin/userController");
 const couponController = require("../controllers/admin/couponController");
+const offerController = require("../controllers/admin/offerController");
 
 // admin login routes
 admin_route.get('/', adminAuthentication.isAdminLogout ,adminController.adminLoad);
@@ -55,17 +56,25 @@ admin_route.post('/addCategory', categoryController.addCategory);
 admin_route.get('/editCategory', adminAuthentication.isAdminLogin, categoryController.editCategory);
 admin_route.post('/editCategory', categoryController.updateCategory);
 
-// orders route
+// order routes
 admin_route.get('/orders', adminAuthentication.isAdminLogin, orderController.ordersLoad);
 admin_route.get('/orderDetails', adminAuthentication.isAdminLogin, orderController.orderDetails);
 admin_route.post('/shippedStatusChange/:orderId', orderController.shippedStatusChange);
 admin_route.post('/deliveredStatusChange/:orderId', orderController.deliveredStatusChange);
 admin_route.post('/cancelledStatusChange/:orderId', orderController.cancelledStatusChange);
 
-// coupons route
+// coupon routes
 admin_route.get('/coupons', adminAuthentication.isAdminLogin, couponController.couponLoad);
 admin_route.get('/addCoupon', adminAuthentication.isAdminLogin, couponController.addCouponLoad);
 admin_route.post('/addCoupon', couponController.addCoupons);
+admin_route.delete('/coupon', adminAuthentication.isAdminLogin, couponController.deleteCoupon);
+
+
+// offer routes
+admin_route.get('/offers', adminAuthentication.isAdminLogin, offerController.offerLoad);
+admin_route.get('/addOffer', adminAuthentication.isAdminLogin, offerController.addOfferLoad);
+admin_route.post('/addOffer', offerController.addOffer);
+admin_route.delete('/offer', adminAuthentication.isAdminLogin, offerController.deleteOffer);
 
 // customerlist routes
 admin_route.get('/customerList', adminAuthentication.isAdminLogin, userController.customerListLoad);
