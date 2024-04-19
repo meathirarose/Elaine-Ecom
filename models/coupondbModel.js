@@ -30,6 +30,10 @@ const couponSchema = new mongoose.Schema({
     validity: {
         type: Date,
         required: true
+    },
+
+    usedCoupons:{
+        type: Array
     }
 })
 

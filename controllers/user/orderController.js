@@ -3,6 +3,7 @@ const Product =require("../../models/productdbModel");
 const Cart = require("../../models/cartdbModel");
 const Order = require("../../models/orderdbSchema");
 const Category = require("../../models/categorydbModel");
+const Coupon = require("../../models/coupondbModel");
 const Razorpay = require("razorpay");
 require("dotenv").config();
 
@@ -24,9 +25,75 @@ const checkoutLoad = async (req, res) => {
                 _id: req.session.user_id
             }
         );
-        const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
 
-        res.render("checkout", {userDataCheckout, cartData});
+        const couponCode = req.session.couponCode;
+        const couponData = await Coupon.find({});
+
+        if(couponData){
+            var couponExists = couponData.find(coupon => coupon.code === couponCode);
+        }
+
+        const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
+                
+        let totalPriceSum = 0;
+        cartData.products.forEach(product => {
+            totalPriceSum += product.totalPrice;
+        });
+
+        console.log('====================================================================================')
+        console.log(totalPriceSum,"from checkout------------------------------------------------------------");
+        console.log('====================================================================================')
+
+        res.render("checkout", {userDataCheckout, cartData, couponExists, totalPriceSum});
+
+    } catch (error) {
+        console.log(error.message);
+        res.render("404");
+    }
+
+}
+
+// adding coupons
+const addCoupon = async (req, res) => {
+
+    try {
+        
+        let couponCode = req.body.couponCode;
+        let currentDate = Date.now();
+        const couponData = await Coupon.find({});
+
+        if(couponData){
+            const couponExists = couponData.find(coupon => coupon.code === couponCode);
+            if(couponExists && couponExists.validity >=currentDate){
+
+                const discount = couponExists.discount;
+                
+                const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
+
+                let totalPriceSum = 0;
+                cartData.products.forEach(product => {
+                    totalPriceSum += product.totalPrice;
+                });
+
+                let totalCost = totalPriceSum;
+                if(totalCost >= couponExists.minimumAmount){
+                    totalCost-=discount;
+                }
+                
+                cartData.totalCost = totalCost;
+                await cartData.save();
+
+                req.session.couponCode = couponCode;
+
+                res.json({message: "coupon added successfully", discount: discount});
+
+            }else{
+                res.json({message: "coupon is not present"});
+            }
+            
+        }else{
+            res.json({message: "currently no coupons are available"});
+        }       
 
     } catch (error) {
         console.log(error.message);
@@ -37,6 +104,7 @@ const checkoutLoad = async (req, res) => {
 
 // Function to generate a new order ID
 async function generateOrderId() {
+
     const lastOrder = await Order.findOne().sort({ orderId: -1 }).limit(1);
     let nextId = 1001; 
 
@@ -50,6 +118,7 @@ async function generateOrderId() {
     }
 
     return `OrderID#${nextId}`;
+
 }
 
 // load place order
@@ -214,6 +283,13 @@ const orderDetailsLoad = async (req, res) => {
 
         const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
 
+        if(req.session.couponCode){
+            const couponData = await Coupon.findOne({code: req.session.couponCode});
+            if(couponData){
+                var discount = couponData.discount;
+            }
+        }
+
         const orderData = await Order.find({ userId, _id: orderId });
 1
         const productDataPromises = orderData.map(async order => {
@@ -237,7 +313,10 @@ const orderDetailsLoad = async (req, res) => {
             var address = user.address.find(address => address._id == addressId);
         }
 
-        res.render("orderDetails",{ cartData, orderData, productsData, address });
+        let totalPriceSum = 0;
+        totalPriceSum = orderData.totalCost + discount;
+
+        res.render("orderDetails",{ cartData, orderData, productsData, address, totalPriceSum, discount });
 
 
     } catch (error) {
@@ -261,6 +340,7 @@ const orderSuccessLoad = async (req, res) =>{
 module.exports = {
 
     checkoutLoad,
+    addCoupon,
     placeOrder,
     createRazorpayOrder,
     orderDetailsLoad,

@@ -408,9 +408,9 @@
                     <div class="card text-center" id="coupon-card">
                         <div class="coupon-image1"><img src="https://i.imgur.com/DC94rZe.png" width="150"></div>
                         <div class="coupon-image2"><img src="https://i.imgur.com/DC94rZe.png" width="150"></div>
-                        <h1 id="h1" class="mt-2">₹<%= coupon.discount %></h1>
+                        <h1 id="h1" class="mt-1">₹<%= coupon.discount %> <span>OFF</span></h1>
                         <span class="d-block span"><%= coupon.name %></span>
-                        <span class="d-block span"><%= coupon.description %></span>
+                        <span class="d-block span coupon-des"><%= coupon.description %></span>
                         <div class="mt-1"><small class="small-code">Validity:
                                 <% if (coupon.validity > Date.now()) { %>
                                     <%= coupon.validity.toLocaleDateString() %>
@@ -418,13 +418,17 @@
                                     <span class="text-danger">Expired</span>
                                 <% } %>
                             </small></div>
-                        <div class="mt-1"><small class="small-code">Minimum Purchase: ₹<%= coupon.minimumAmount %></small></div>
-                        <div class="mt-0"><small class="small-code">Use Code: <span class="font-weight-bolder text-dark"><%= coupon.code %></span> </small></div>
+                        <div class="mt-1"><small class="small-code font-weight-normal">Minimum Purchase: ₹<%= coupon.minimumAmount %></small></div>
+                        <div class="coupon-code-container">
+                            <span class="small-code code">
+                                Use Code: <span class="font-weight-bolder text-dark coupon-code"><%= coupon.code %></span>
+                            </span>
+                        </div>
+
                     </div>
                 <% }) %>
             </div>
         </div>
-        
         
         <!-- ---------------------------------------- end coupons ------------------------------------- -->
 
@@ -830,14 +834,4 @@
 
     </script>
 
-    <script>
-
-        $(document).ready(function () {
-            $('#toggleCouponBtn').click(function () {
-                $('.tab-pane').hide(); 
-                $('.coupon-container').show(); 
-            });
-        });
-
-    </script>
     <%-include("../layout/user/footer")-%>

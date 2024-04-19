@@ -128,26 +128,26 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <% couponData.forEach((coupon, index) => { %>
                                 <tr>
-                                    <% couponData.forEach((coupon, index) => { %>
-                                        <td><%= index +1 %></td>
-                                        <td><%= coupon.name %></td>
-                                        <td ><%= coupon.description %></td>
-                                        <td ><%= coupon.code %></td>
-                                        <td><%= coupon.validity.toLocaleDateString() %></td>
-                                        <td ><%= coupon.minimumAmount %></td>
-                                        <td ><%= coupon.discount %></td>
-                                        <td>
-                                            <% if (coupon.validity > Date.now()) { %>
-                                                <span class="badge rounded-pill alert-success">Active</span>
-                                            <% }else{%>
-                                                <span class="badge rounded-pill alert-danger">Expired</span>
-                                            <%} %>
-                                        </td>
-                                        <td class="text-end">
-                                            <button class="btn btn-md bg-danger rounded font-sm" onclick="deleteCoupon('<%= coupon._id %>')" type="submit" ><a href="#" class="text-white">Delete</a>
-                                            </button>
-                                        </td>
+                                    <td><%= index +1 %></td>
+                                    <td><%= coupon.name %></td>
+                                    <td ><%= coupon.description %></td>
+                                    <td ><%= coupon.code %></td>
+                                    <td><%= coupon.validity.toLocaleDateString() %></td>
+                                    <td ><%= coupon.minimumAmount %></td>
+                                    <td ><%= coupon.discount %></td>
+                                    <td>
+                                        <% if (coupon.validity > Date.now()) { %>
+                                            <span class="badge rounded-pill alert-success">Active</span>
+                                        <% }else{%>
+                                            <span class="badge rounded-pill alert-danger">Expired</span>
+                                        <%} %>
+                                    </td>
+                                    <td class="text-end">
+                                        <button class="btn btn-md bg-danger rounded font-sm" onclick="deleteCoupon('<%= coupon._id %>')" type="submit" ><a href="#" class="text-white">Delete</a>
+                                        </button>
+                                    </td>
                                 </tr>
                                     <% }) %>
                         </tbody>

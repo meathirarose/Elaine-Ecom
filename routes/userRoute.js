@@ -59,53 +59,50 @@ user_route.get("/auth/google/callback", authentication.isLogout, passport.authen
     failureRedirect: "/failure"
 }));
 
-// for google authentication success
+// user google authentication routes
 user_route.get("/success", authentication.isLogout, userController.successGoogleLogin);
-
-// for google authentication failure
 user_route.get("/failure", authentication.isLogin, userController.failureGoogleLogin);
 
-// user signUp route
+// user routes
 user_route.get("/userSignup", authentication.isLogout, userController.userSignupLoad);
 user_route.post("/userSignup", userController.verifySignup);
+user_route.get("/userHome", authentication.isLogin, accessAuth.accessUser, userController.userHomeLoad);
 
-// verify otp load route
+// otp routes
 user_route.get("/verifyOtp", authentication.isLogout, otpController.verifyOtpLoad)
 user_route.post("/verifyOtp", otpController.verifyOtp);
-
-// resend otp route
 user_route.get("/resendOtp", authentication.isLogout, otpController.resendOtpLoad);
 user_route.post("/resendOtp", otpController.verifyResendOtp);
 
-// load home page route
-user_route.get("/userHome", authentication.isLogin, accessAuth.accessUser, userController.userHomeLoad);
-
-// load product list route
+// product routes
 user_route.get("/products", authentication.isLogin, accessAuth.accessUser, productController.allProductsListLoad);
 user_route.get("/productDetails", authentication.isLogin, accessAuth.accessUser, productController.productDetailsLoad);
-user_route.get("/addProductsToCart", authentication.isLogin, accessAuth.accessUser, cartController.addProductsToCart);
-user_route.delete("/deleteCartItem/:productId", authentication.isLogin, accessAuth.accessUser, cartController.deleteCartItem);
-user_route.post("/updateCartItemQuantity/:productId", authentication.isLogin, accessAuth.accessUser, cartController.updateCartQuantity);
 user_route.post("/sortingProducts", productController.sortProducts);
 user_route.post("/filterProducts", productController.filterProducts);
 
-//wishlist
+// cart routes
+user_route.get("/cart", authentication.isLogin, accessAuth.accessUser, cartController.cartLoad);
+user_route.get("/addProductsToCart", authentication.isLogin, accessAuth.accessUser, cartController.addProductsToCart);
+user_route.delete("/deleteCartItem/:productId", authentication.isLogin, accessAuth.accessUser, cartController.deleteCartItem);
+user_route.post("/updateCartItemQuantity/:productId", authentication.isLogin, accessAuth.accessUser, cartController.updateCartQuantity);
+
+//wishlist routes
 user_route.get("/wishlist", authentication.isLogin, accessAuth.accessUser, wishlistController.wishlistLoad);
 user_route.get("/addToWishlist", authentication.isLogin, accessAuth.accessUser, wishlistController.addToWishlist);
 user_route.delete("/removeFromWishlist", authentication.isLogin, accessAuth.accessUser, wishlistController.deleteWishlistItem);
 
-// load cart & checkout
-user_route.get("/cart", authentication.isLogin, accessAuth.accessUser, cartController.cartLoad);
+// order routes
 user_route.get("/checkout", authentication.isLogin, accessAuth.accessUser, orderController.checkoutLoad);
 user_route.post("/placeOrder", orderController.placeOrder);
 user_route.get("/orderDetails", authentication.isLogin, accessAuth.accessUser, orderController.orderDetailsLoad);
 user_route.get("/orderSuccess", authentication.isLogin, orderController.orderSuccessLoad);
 user_route.post("/razorpayOrder", orderController.createRazorpayOrder);
+user_route.post("/addCoupon", orderController.addCoupon);
 
 // load contact us
 user_route.get("/contactUs", authentication.isLogin, accessAuth.accessUser, userController.contactUsLoad);
 
-// load my account
+// user routes on myAccount page
 user_route.get("/myAccount", authentication.isLogin, accessAuth.accessUser, userController.myAccountLoad);
 user_route.post("/saveAddress", authentication.isLogin, accessAuth.accessUser, userController.saveAddress);
 user_route.delete("/removeAddress", authentication.isLogin, accessAuth.accessUser, userController.removeAddress);

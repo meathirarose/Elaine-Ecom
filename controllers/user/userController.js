@@ -260,9 +260,9 @@ const myAccountLoad = async (req, res) => {
         });
 
         const productsData = await Promise.all(productDataPromises);
-
+        
         const couponData = await Coupon.find({});
-                
+          
         res.render("myAccount", { userData, orderData, productsData, couponData });
 
     } catch (error) {

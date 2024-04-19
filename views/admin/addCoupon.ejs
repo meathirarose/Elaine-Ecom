@@ -1,4 +1,11 @@
 <%-include("../layout/admin/header")-%>
+<style>
+
+.message{
+    font-size: medium;
+}
+
+</style>
 
     <div class="screen-overlay"></div>
     <aside class="navbar-aside" id="offcanvas_aside">
@@ -106,7 +113,7 @@
                     <%
                     if(typeof message !== 'undefined'){
                         %>
-                        <p><br><%= message %></p>
+                        <p class="text-danger message"><br><%= message %></p>
                         <%
                     }
                     %>

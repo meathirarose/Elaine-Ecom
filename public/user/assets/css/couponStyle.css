@@ -5,14 +5,14 @@
 }
 
 #coupon-card {
-  width: calc(33.33% - 20px); /* Adjust based on the number of items per row */
+  width: calc(33.33% - 20px); 
   margin: 10px;
   padding: 10px;
   border-radius: 20px;
-  background: orange;
+  background: rgb(253, 196, 89);
   border: none;
   color: #fff;
-  height: 250px; /* Adjusted height to accommodate the additional line */
+  height: 250px; 
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -39,6 +39,10 @@
 
 }
 
+.coupon-des{
+  font-size: small;
+}
+
 .coupon-image1 {
   left: 0;
   top: 0;
@@ -47,4 +51,29 @@
 .coupon-image2 {
   right: 0;
   bottom: 0;
+}
+
+.coupon-code-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.coupon-code-container .copy-button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.coupon-code-container .copy-button:hover {
+  background-color: #0056b3;
+}
+
+.coupon-code-container .copy-button:focus {
+  outline: none;
 }

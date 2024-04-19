@@ -1,4 +1,10 @@
 <%- include("../layout/user/header") -%>
+<style>
+    .billing{
+        font-size: 25px;
+        font-weight: bold;
+    }
+</style>
 
 <div class="page-wrapper">
 <div class="page-wrapper">
@@ -109,21 +115,19 @@
         <div class="page-content">
             <div class="checkout">
                 <div class="container">
+
                     <div class="checkout-discount">
-                        <form action="#">
+                        <form id="coupon-form" action="/addCoupon" method="post">
                             <input type="text" class="form-control" required id="checkout-discount-input">
                             <label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
+                            <button type="submit" id="apply-coupon-btn" class="btn btn-success mt-3">Apply</button>
                         </form>
                     </div><!-- End .checkout-discount -->
                     
-                    <h2 class="checkout-title">Billing Details</h2><!-- End .checkout-title -->
-            
+                    <br>
+                    <h2 class="checkout-title billing">Billing Details</h2><!-- End .checkout-title -->
                         <div class="row ">
-
                             <div class="col-lg-9 ">
-
-                               <br>
-
                             <!-- ------------------------------ new address form --------------------------------------- -->
 
                             <div class="addAddress" style="display: none;">
@@ -147,7 +151,6 @@
                                             <input type="text" class="form-control" id="state" name="state" required>
                                         </div>
                                     </div>
-                                    
                                     <div class="form-row">
                                         <div class="form-group col-md-6">
                                             <label for="pincode">Postcode / ZIP *</label>
@@ -279,10 +282,10 @@
                                                 
                                             </tr>
                                             <% });%>
-                                            <% if(cartData.products && cartData.products.length > 0) {%>
+                                            <% if(totalPriceSum > 0) {%>
                                             <tr class="summary-subtotal">
                                                 <td>Subtotal:</td>
-                                                <td>Rs. <%= cartData.totalCost %></td>
+                                                <td>Rs. <%= totalPriceSum %></td>
                                             </tr><!-- End .summary-subtotal -->
                                             <%}else{%>
                                             <tr class="summary-subtotal">
@@ -290,10 +293,18 @@
                                                 <td>Rs. 0.00</td>
                                             </tr><!-- End .summary-subtotal -->
                                             <%}%>
-                                            <tr>
-                                                <td>Shipping:</td>
-                                                <td>Free shipping</td>
-                                            </tr>
+                                            <% if (!couponExists) { %>
+                                                <tr>
+                                                    <td>Coupon Discount:</td>
+                                                    <td id="coupon-discount">₹0.00</td>
+                                                </tr> 
+                                            <% }else{%> 
+                                                <tr>
+                                                    <td>Coupon Discount:</td>
+                                                    <td id="coupon-discount">₹<%= couponExists.discount%></td>
+                                                </tr> 
+                                            <%} %>
+                                          
                                             <% if(cartData.products && cartData.products.length > 0) {%>
                                             <tr class="summary-total">
                                                 <td>Total:</td>
@@ -754,6 +765,69 @@ $(document).ready(function () {
     });
 
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        const form = document.querySelector('#coupon-form');
+        form.addEventListener('submit',function(event){
+            event.preventDefault();
+
+            const couponCode = document.getElementById('checkout-discount-input').value;
+        
+            fetch('/addCoupon', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({couponCode: couponCode})
+            })
+            .then(response => response.json())
+            .then(data => {   
+                if(data.message === "coupon added successfully"){
+
+                    swal({
+                        title: "Success!",
+                        text: data.message,
+                        icon: "success",
+                        timer: 1500,
+                        buttons: false
+                    });
+                    setTimeout(function() {
+                    location.reload();
+                }, 1500);
+                }
+                if(data.message === "coupon is not present"){
+                    swal({
+                        title: "Error",
+                        text: data.message,
+                        icon: "error",
+                        timer: 1500,
+                        buttons: false
+                    })
+                }
+                if(data.message === "currently no coupons are available"){
+                    swal({
+                        title: "Error",
+                        text: data.message,
+                        icon: "error",
+                        timer: 1500,
+                        buttons: false
+                    })
+                }
+            })
+            .catch(error => {
+                console.error('Error applying coupon:', error);
+                swal({
+                    title: "Error!",
+                    text: "Something went wrong. Please try again later.",
+                    icon: "error",
+                    timer: 500,
+                    buttons: false
+                });
+            });
+        });
+    });
+</script>
+
 
 
 <%- include("../layout/user/footer") -%>
