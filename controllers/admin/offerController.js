@@ -12,6 +12,39 @@ const offerLoad = async (req, res) => {
         res.render("offers", {offerData: offerData});
 
     } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+// offer activate
+const offerActivate = async (req, res) => {
+
+    try {
+        
+        const {offerId} = req.params;
+
+        await Offer.findByIdAndUpdate(offerId, { status: true });
+        res.redirect("/admin/offers");
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+// offer deactivate
+const offerDeactivate = async (req, res) => {
+
+    try {
+        
+        const {offerId} = req.params;
+
+        await Offer.findByIdAndUpdate(offerId, { status: false });
+        res.redirect("/admin/offers");
+
+    } catch (error) {
+        console.log(error.message);
     }
 
 }
@@ -29,27 +62,29 @@ const addOfferLoad = async (req, res) => {
 
 }
 
-// Example route to get products
+// to get products
 const getProducts = async (req, res) => {
     try {
+
         const productData = await Product.find({ is_listed: true });
         const products = productData.map(product => product.prdctName);
         res.json({ products });
+
     } catch (error) {
-        console.error('Error fetching products:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        console.log(error.message);
     }
 }
 
-// Example route to get categories
+// to get categories
 const getCategories = async (req, res) => {
     try {
+
         const categoryData = await Category.find({ is_listed: true });
         const categories = categoryData.map(category => category.cateName);
         res.json({ categories });
+
     } catch (error) {
-        console.error('Error fetching categories:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        console.log(error.message);
     }
 }
 
@@ -135,6 +170,8 @@ const deleteOffer = async (req, res) => {
 
 module.exports = {
     offerLoad,
+    offerActivate,
+    offerDeactivate,
     addOfferLoad,
     getProducts,
     getCategories,

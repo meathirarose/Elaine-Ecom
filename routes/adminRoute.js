@@ -70,6 +70,8 @@ admin_route.delete('/coupon', adminAuthentication.isAdminLogin, couponController
 
 // offer routes
 admin_route.get('/offers', adminAuthentication.isAdminLogin, offerController.offerLoad);
+admin_route.get('/offerActive/:offerId', adminAuthentication.isAdminLogin, offerController.offerActivate);
+admin_route.get('/offerDeactive/:offerId', adminAuthentication.isAdminLogin, offerController.offerDeactivate);
 admin_route.get('/addOffer', adminAuthentication.isAdminLogin, offerController.addOfferLoad);
 admin_route.get('/getProducts', adminAuthentication.isAdminLogin, offerController.getProducts);
 admin_route.get('/getCategories', adminAuthentication.isAdminLogin, offerController.getCategories);

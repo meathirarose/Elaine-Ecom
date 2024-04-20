@@ -170,7 +170,7 @@ const listProduct = async (req, res) => {
     try {
 
         const prdctId = req.params.prdctId;
-        await Product.findByIdAndUpdate(prdctId, { is_listed: true });
+        await Product.findByIdAndUpdate(prdctId, { is_listed: false });
         res.redirect("/admin/productsList");
 
     } catch (error) {
@@ -185,7 +185,7 @@ const unlistProduct = async (req, res) => {
     try {
 
         const prdctId = req.params.prdctId;
-        await Product.findByIdAndUpdate(prdctId, { is_listed: false });
+        await Product.findByIdAndUpdate(prdctId, { is_listed: true });
         res.redirect("/admin/productsList");
 
     } catch (error) {

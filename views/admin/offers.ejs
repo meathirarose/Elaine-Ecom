@@ -123,6 +123,8 @@
                             <th>Validity</th>
                             <th>Offer Type</th>
                             <th>Offer Categories</th>
+                            <th>Status</th>
+                            <th>Change Status</th>
                             <th class="text-end">Action</th>
                         </tr>
                     </thead>
@@ -133,12 +135,31 @@
                                     <td><%= offer.name %></td>
                                     <td><%= offer.description %></td>
                                     <td><%= offer.offerPercentage %>%</td>
-                                    <td><%= offer.validity.toLocaleDateString() %></td>
+                                    <td>
+                                        <% if(offer.validity >= Date.now()) { %>
+                                        <%= offer.validity.toLocaleDateString() %></td>
+                                        <% } else { %>
+                                            <span class="badge rounded-pill alert-danger">Expired</span>
+                                        <% } %>
                                     <td><%= offer.type %></td>
                                     <td><%= offer.typeName %></td>
                                     <td>
-                                            <span class="badge rounded-pill alert-success">Active</span>
-                                            <span class="badge rounded-pill alert-danger">Expired</span>
+                                        <% if(offer.status=== false) { %>
+                                        <span class="badge rounded-pill alert-danger ">Deactive</span>
+                                        <% } else { %>
+                                        <span class="badge rounded-pill alert-success">Active</span>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <% if(offer.status=== false) { %>
+                                        <button class="btn btn-md rounded font-sm " type="submit" >
+                                            <a href="/admin/offerActive/<%=offer._id%>" data-status="unblock" class="text-white">Activate</a>
+                                        </button>
+                                        <% } else { %>
+                                        <button class="btn btn-md rounded font-sm " type="submit" >
+                                            <a href="/admin/offerDeactive/<%=offer._id%>" data-status="block" class="text-white">Deactivate</a>
+                                        </button>
+                                        <% } %>
                                     </td>
                                     <td class="text-end">
                                         <button class="btn btn-md bg-danger rounded font-sm" onclick="deleteOffer('<%= offer._id %>')" type="submit" >
