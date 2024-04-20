@@ -87,10 +87,7 @@ const deleteWishlistItem = async (req, res) => {
     try {
 
         const productId = req.body.productId;
-        console.log('====================================================================================')
-        console.log(productId, "here iam productId form delete wishlist item ----------------------------");
-        console.log('====================================================================================')
-
+        
         await Wishlist.findOneAndUpdate(
             {
                 userId: req.session.user_id

@@ -293,7 +293,7 @@
                                                 <td>Rs. 0.00</td>
                                             </tr><!-- End .summary-subtotal -->
                                             <%}%>
-                                            <% if (!couponExists) { %>
+                                            <% if (!couponExists || couponExists.usedCoupons[0].status === true) { %>
                                                 <tr>
                                                     <td>Coupon Discount:</td>
                                                     <td id="coupon-discount">₹0.00</td>
@@ -796,6 +796,15 @@ $(document).ready(function () {
                 }, 1500);
                 }
                 if(data.message === "coupon is not present"){
+                    swal({
+                        title: "Error",
+                        text: data.message,
+                        icon: "error",
+                        timer: 1500,
+                        buttons: false
+                    })
+                }
+                if(data.message === "Coupon has already been used."){
                     swal({
                         title: "Error",
                         text: data.message,

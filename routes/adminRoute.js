@@ -35,6 +35,7 @@ admin_route.post('/', adminController.verifyAdminLogin);
 
 // admin home/dashboard
 admin_route.get('/adminHome', adminAuthentication.isAdminLogin, adminController.homeLoad);
+admin_route.get('/salesReport', adminAuthentication.isAdminLogin, adminController.generateSalesReport);
 
 // products routes
 admin_route.get('/productsList', adminAuthentication.isAdminLogin, productController.productListLoad);

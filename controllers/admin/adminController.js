@@ -1,4 +1,6 @@
 const User = require("../../models/userdbModel");
+const Order = require("../../models/orderdbSchema");
+const Category = require("../../models/categorydbModel");
 const bcrypt = require("bcrypt");
 
 //-----------------------------------------------admin-login-and-verification----------------------------------------------//
@@ -59,12 +61,72 @@ const homeLoad = async (req, res) => {
 
     try {
 
-        res.render('adminHome');
+        const orderData = await Order.find({});
+
+        // sorting orders
+        orderData.sort((a,b) => b.date - a.date);
+
+        // total order amount
+        let totalOrderAmount = 0;
+        orderData.forEach(total => 
+            totalOrderAmount += total.totalAmount
+        )
+
+        // total order count
+        const orderCount = orderData.length;
+
+        // total product count
+        let productCount = 0;
+        orderData.forEach(order =>
+            productCount+= order.products.length
+        )
+
+        const categoryData = await Category.find({is_listed: true});
+        const categoryCount = categoryData.length;
+
+        res.render('adminHome', {orderData, totalOrderAmount, orderCount, productCount, categoryCount});
 
     } catch (error) {
         console.log(error.message);
     }
 }
+
+// sales report
+const generateSalesReport = async (req, res) => {
+
+    try {
+
+        const orderData = await Order.find({});
+
+        // sorting orders
+        orderData.sort((a,b) => b.date - a.date);
+
+        // total order amount
+        let totalOrderAmount = 0;
+        orderData.forEach(total => 
+            totalOrderAmount += total.totalAmount
+        )
+
+        // total order count
+        const orderCount = orderData.length;
+
+        // total product count
+        let productCount = 0;
+        orderData.forEach(order =>
+            productCount+= order.products.length
+        )
+
+        const categoryData = await Category.find({is_listed: true});
+        const categoryCount = categoryData.length;
+
+        res.render('salesReport', {orderData, totalOrderAmount, orderCount, productCount, categoryCount});
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
 
 //---------------------------------------------end-admin-login-and-verification--------------------------------------------//
 
@@ -86,6 +148,7 @@ module.exports = {
     adminLoad,
     verifyAdminLogin,
     homeLoad,
+    generateSalesReport,
     adminLogout
 
 }

@@ -40,10 +40,6 @@ const checkoutLoad = async (req, res) => {
             totalPriceSum += product.totalPrice;
         });
 
-        console.log('====================================================================================')
-        console.log(totalPriceSum,"from checkout------------------------------------------------------------");
-        console.log('====================================================================================')
-
         res.render("checkout", {userDataCheckout, cartData, couponExists, totalPriceSum});
 
     } catch (error) {
@@ -60,11 +56,17 @@ const addCoupon = async (req, res) => {
         
         let couponCode = req.body.couponCode;
         let currentDate = Date.now();
+        const userId = req.session.user_id;
         const couponData = await Coupon.find({});
 
         if(couponData){
             const couponExists = couponData.find(coupon => coupon.code === couponCode);
             if(couponExists && couponExists.validity >=currentDate){
+
+                const usedCoupon = couponExists.usedCoupons.find(entry => entry.userId.equals(userId));
+                if (usedCoupon && usedCoupon.status === true) {
+                    return res.json({ message: "Coupon has already been used." });
+                }
 
                 const discount = couponExists.discount;
                 
@@ -126,6 +128,11 @@ const placeOrder = async (req, res) => {
     try {
         const { addressId, paymentMode } = req.body;
 
+        const coupon = req. session.couponCode;
+        if(coupon){
+            var couponData = await Coupon.findOne({code:coupon});
+        }
+
         if (!addressId || !paymentMode) {
             throw new Error('Required data missing');
         }
@@ -146,6 +153,7 @@ const placeOrder = async (req, res) => {
             deliveryAddress: addressId,
             userName: userData.name,
             email: userData.email,
+            couponDiscount: couponData.discount,
             totalAmount: cartData.totalCost,
             date: new Date(),
             payment: paymentMode,
@@ -160,6 +168,16 @@ const placeOrder = async (req, res) => {
         })
 
         await newOrder.save();
+
+        if (coupon) {
+            const couponData = await Coupon.findOne({ code: coupon });
+
+            if (couponData && !couponData.usedCoupons.some(coupon => coupon.userId.equals(req.session.user_id))) {
+                newOrder.couponDiscount = couponData.discount;
+                couponData.usedCoupons.push({ userId: req.session.user_id, status: true });
+                await couponData.save();
+            }
+        }
 
         for (const product of cartData.products) {
             await Product.updateOne(
@@ -194,6 +212,11 @@ const createRazorpayOrder = async (req, res) => {
             throw new Error('Required data missing');
         }
 
+        const coupon = req. session.couponCode;
+        if(coupon){
+            var couponData = await Coupon.findOne({code: coupon});
+        }
+
         const cartData = await Cart.findOne({ userId: req.session.user_id }).populate('products.productId');
         const userData = await User.findOne({ _id: req.session.user_id }, { _id: 1, name: 1, email: 1, mobile: 1 });
 
@@ -220,6 +243,7 @@ const createRazorpayOrder = async (req, res) => {
                 deliveryAddress: addressId,
                 userName: userData.name,
                 email: userData.email,
+                couponDiscount: couponData.discount,
                 totalAmount: cartData.totalCost,
                 date: new Date(),
                 payment: paymentMode,
@@ -234,6 +258,16 @@ const createRazorpayOrder = async (req, res) => {
 
             await newrazorpayOrder.save();
 
+            if (coupon) {
+                const couponData = await Coupon.findOne({ code: coupon });
+    
+                if (couponData && !couponData.usedCoupons.some(coupon => coupon.userId.equals(req.session.user_id))) {
+                    newOrder.couponDiscount = couponData.discount;
+                    couponData.usedCoupons.push({ userId: req.session.user_id, status: true });
+                    await couponData.save();
+                }
+            }   
+
             for (const product of cartData.products) {
                 await Product.updateOne(
                     { _id: product.productId },
@@ -246,7 +280,7 @@ const createRazorpayOrder = async (req, res) => {
                     return res.json({message: "This product is out of Stock!"});
                 }
             });
-    
+            
             cartData.products = [];
             await cartData.save();
 
