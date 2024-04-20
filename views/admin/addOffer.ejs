@@ -117,7 +117,7 @@
                             <h4>Offer Details</h4>
                         </div>
                         <div class="card-body">
-                            <form action="/admin/addOffer" method="post">
+                            <form id="offer-form">
                                 <div class="mb-4">
                                     <label for="coupon-name" class="form-label" >Offer Name</label>
                                     <input type="text" placeholder="Type here" name="offerName" class="form-control" required/>
@@ -146,21 +146,20 @@
                                     <div class="col-lg-6">
                                         <div class="mb-6">
                                             <label class="form-label">Offer Type</label>
-                                                <select class="form-select" name="offerType">
-                                                    <option>name1</option>
-                                                    <option>name2</option>
-                                                    <option>name3</option>                                                
-                                                </select>
+                                            <select id="offer-type-select" class="form-select" name="offerType">
+                                                <option disabled selected>--choose option--</option>
+                                                <option value="Products">Products</option>
+                                                <option value="Category">Category</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-4">
                                             <label class="form-label">Offer Category</label>
-                                                <select class="form-select" name="offerTypeName">
-                                                    <option>name1</option>
-                                                    <option>name2</option>
-                                                    <option>name3</option>
-                                                </select>
+                                            <select id="offer-category-select" class="form-select" name="offerTypeName">
+                                                <option disabled selected>--choose option--</option>
+                                                <option value="Category">Category</option>
+                                            </select>
                                         </div>
                                     </div>                               
                                     <div>
@@ -180,13 +179,138 @@
         <!-- content-main end// -->
         
     </main>
+
+
+
     <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="assets/js/vendors/select2.min.js"></script>
     <script src="assets/js/vendors/perfect-scrollbar.js"></script>
     <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
+
+    <!--Sweet Alert  -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
     <!-- Main Script -->
-    <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+
+        $(document).ready(function() {
+            $('#offer-type-select').change(function() {
+                var selectedType = $(this).val();
+                if (selectedType === 'Products') {
+                    fetch('/admin/getProducts')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.products) {
+                            populateSelectOptions(data.products);
+                        } else {
+                            Swal.fire({
+                                position: "center",
+                                text: 'No products found',
+                                showConfirmButton: false,
+                                timer: 1500,
+                                width: 450,
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching products:', error);
+                    });
+                } else if (selectedType === 'Category') {
+                    fetch('/admin/getCategories')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.categories) {
+                            populateSelectOptions(data.categories);
+                        } else {
+                            Swal.fire({
+                                position: "center",
+                                text: 'No categories found',
+                                showConfirmButton: false,
+                                timer: 1500,
+                                width: 450,
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching categories:', error);
+                    });
+                }
+            });
+
+            function populateSelectOptions(options) {
+                var select = $('#offer-category-select');
+                select.empty();
+                select.append('<option disabled selected>--choose option--</option>');
+                options.forEach(option => {
+                    select.append('<option value="' + option + '">' + option + '</option>');
+                });
+            }
+        });
+
+
+    </script>
+    <script>
+
+    $('#offer-form').submit(function (e) {
+        e.preventDefault();
+
+        var formData = $(this).serialize();
+
+        fetch('/admin/addoffer', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.error) {
+                Swal.fire({
+                    position: "center",
+                    text: data.error,
+                    showConfirmButton: false,
+                    timer: 1500,
+                    width: 450,
+                });
+            }
+
+            if (data.message) {
+                window.location.href = '/admin/offers';
+            }
+        })
+        .catch(error => {
+            var errorMessage = error.message || "Something went wrong";
+            Swal.fire({
+                position: "center",
+                text: errorMessage,
+                showConfirmButton: false,
+                timer: 1500
+            });
+        });
+    });
+
+    
+</script>
+
+
 
 
 <%-include("../layout/admin/footer")-%>

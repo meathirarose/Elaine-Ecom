@@ -1,4 +1,6 @@
 const Offer = require("../../models/offerdbModel");
+const Product = require("../../models/productdbModel");
+const Category = require("../../models/categorydbModel");
 
 // offer load
 const offerLoad = async (req, res) => {
@@ -27,11 +29,34 @@ const addOfferLoad = async (req, res) => {
 
 }
 
+// Example route to get products
+const getProducts = async (req, res) => {
+    try {
+        const productData = await Product.find({ is_listed: true });
+        const products = productData.map(product => product.prdctName);
+        res.json({ products });
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+// Example route to get categories
+const getCategories = async (req, res) => {
+    try {
+        const categoryData = await Category.find({ is_listed: true });
+        const categories = categoryData.map(category => category.cateName);
+        res.json({ categories });
+    } catch (error) {
+        console.error('Error fetching categories:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+}
+
+
 // add offer
 const addOffer = async (req, res) => {
-
     try {
-        
         const name = req.body.offerName;
         const description = req.body.offerDescription;
         const offerPercentage = req.body.offerPercentage;
@@ -40,28 +65,28 @@ const addOffer = async (req, res) => {
         const type = req.body.offerType;
         const typeName = req.body.offerTypeName;
 
-        if(!name || /^\s*$/.test(name)){
-            return res.render("addOffer", {message: "Enter a valid offer name"});
+        if (!name || /^\s*$/.test(name)) {
+            return res.json({ error: "Enter a valid offer name" });
         }
 
-        if(!description || /^\s*$/.test(description) || description.trim().length < 5){
-            return res.render("addOffer", {message: "Enter a valid offer description"});
+        if (!description || /^\s*$/.test(description) || description.trim().length < 5) {
+            return res.json({ error: "Enter a valid offer description" });
         }
 
-        if(!offerPercentage || offerPercentage > 100 || offerPercentage < 0){
-            return res.render("addOffer", {message: "Enter a valid offer percentage"});
+        if (!offerPercentage || offerPercentage > 100 || offerPercentage <= 0) {
+            return res.json({ error: "Enter a valid offer percentage" });
         }
 
-        if(!validity || validity < currentDate){
-            return res.render("addOffer", {message: "Enter a valid date"});
+        if (!validity || validity < currentDate) {
+            return res.json({ error: "Enter a valid date" });
         }
 
-        if(!type || /^\s*$/.test(type)){
-            return res.render("addOffer", {message: "Please select an offer type"});
+        if (!type || /^\s*$/.test(type)) {
+            return res.json({ error: "Please select an offer type" });
         }
 
-        if(!typeName || /^\s*$/.test(typeName)){
-            return res.render("addOffer", {message: "Please select an offer type name"});
+        if (!typeName || /^\s*$/.test(typeName)) {
+            return res.json({ error: "Please select an offer typeName" });
         }
 
         const newOffer = new Offer({
@@ -72,16 +97,16 @@ const addOffer = async (req, res) => {
             status: true,
             type: type,
             typeName: typeName
-        })
+        });
 
-        await newOffer.save();
+          await newOffer.save();
 
-        res.redirect("offers");
+        return res.json({message: " success"})
 
     } catch (error) {
         console.log(error.message);
+        res.json({ error: "An error occurred while adding the offer" });
     }
-
 }
 
 // delete offer
@@ -92,9 +117,6 @@ const deleteOffer = async (req, res) => {
         const offerId = req.query.offerId;
         
         const offerData = await Offer.findOne({_id: offerId});
-        console.log('====================================================================================')
-        console.log(offerData);
-        console.log('====================================================================================')
         
         if (!offerData) {
             return res.json({ message: "No offers found" });
@@ -114,6 +136,8 @@ const deleteOffer = async (req, res) => {
 module.exports = {
     offerLoad,
     addOfferLoad,
+    getProducts,
+    getCategories,
     addOffer,
     deleteOffer
 }

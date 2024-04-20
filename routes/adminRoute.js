@@ -71,6 +71,8 @@ admin_route.delete('/coupon', adminAuthentication.isAdminLogin, couponController
 // offer routes
 admin_route.get('/offers', adminAuthentication.isAdminLogin, offerController.offerLoad);
 admin_route.get('/addOffer', adminAuthentication.isAdminLogin, offerController.addOfferLoad);
+admin_route.get('/getProducts', adminAuthentication.isAdminLogin, offerController.getProducts);
+admin_route.get('/getCategories', adminAuthentication.isAdminLogin, offerController.getCategories);
 admin_route.post('/addOffer', offerController.addOffer);
 admin_route.delete('/offer', adminAuthentication.isAdminLogin, offerController.deleteOffer);
 
