@@ -278,14 +278,14 @@
                                             <% cartData.products.forEach(product=> { %>
 
                                                 <td><a href="#"><%= product.productId.prdctName %></a></td>
-                                                <td>Rs. <%= product.totalPrice %></td>
+                                                <td>Rs. <%= product.totalPrice.toFixed(2) %></td>
                                                 
                                             </tr>
                                             <% });%>
                                             <% if(totalPriceSum > 0) {%>
                                             <tr class="summary-subtotal">
                                                 <td>Subtotal:</td>
-                                                <td>Rs. <%= totalPriceSum %></td>
+                                                <td>Rs. <%= totalPriceSum.toFixed(2) %></td>
                                             </tr><!-- End .summary-subtotal -->
                                             <%}else{%>
                                             <tr class="summary-subtotal">
@@ -301,14 +301,14 @@
                                             <% }else{%> 
                                                 <tr>
                                                     <td>Coupon Discount:</td>
-                                                    <td id="coupon-discount">₹<%= couponExists.discount%></td>
+                                                    <td id="coupon-discount">₹<%= couponExists.discount.toFixed(2)%></td>
                                                 </tr> 
                                             <%} %>
                                           
                                             <% if(cartData.products && cartData.products.length > 0) {%>
                                             <tr class="summary-total">
                                                 <td>Total:</td>
-                                                <td>Rs. <%= cartData.totalCost %></td>
+                                                <td>Rs. <%= cartData.totalCost.toFixed(2)  %></td>
                                             </tr><!-- End .summary-total -->
                                             <%}else{%>
                                             <tr class="summary-total">

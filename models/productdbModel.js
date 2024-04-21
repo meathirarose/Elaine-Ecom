@@ -38,6 +38,11 @@ const productSchema = mongoose.Schema({
     createdOn: {
         type: Date,
         default: Date.now()
+    },
+
+    offer: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Offer"
     }
 
 });

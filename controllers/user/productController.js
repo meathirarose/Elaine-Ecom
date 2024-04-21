@@ -1,23 +1,44 @@
 const Product = require("../../models/productdbModel");
 const Category = require("../../models/categorydbModel");
+const Offer = require("../../models/offerdbModel");
 
 
 // all product list
 const allProductsListLoad = async (req, res) => {
-
     try {
+        const productsData = await Product.find({}).populate('offer');
         
-        const productsData = await Product.find({});
         const categoryData = await Category.find({});
         
+        const offerData = await Offer.find({});
+
+        if (offerData) {
+            for (const offer of offerData) {
+                if (offer.type === 'Products') {
+                    const offerTypeName = offer.typeName;
+                    const matchingProducts = productsData.filter(product => product.prdctName === offerTypeName);
+                    for (const matchingProduct of matchingProducts) {
+                        const offerId = offer._id;
+                        if(offer.status === true){
+                                await Product.updateOne({ _id: matchingProduct._id }, { offer: offerId });
+
+                        }else if (offer.status === false){
+                                await Product.updateOne({ _id: matchingProduct._id }, { offer: null });
+                        }
+
+                    }
+                }
+            }
+        }
+
         res.render("products", { productsData: productsData, categoryData: categoryData });
 
     } catch (error) {
         console.log(error.message);
         res.render("404");
     }
-
 }
+
 
 // sorting products 
 const sortProducts = async (req, res) => {

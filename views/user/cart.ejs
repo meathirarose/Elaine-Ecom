@@ -136,7 +136,7 @@
 
                                         <% cartData.products.forEach(product=> { %>
                                         
-                                            <td class="product-col">
+                                            <td class="product-col ">
                                                 <div class="product">
                                                     <figure class="product-media">
                                                         <a href="#"><img src="/processed_images/<%= product.productId.prdctImage[0] %>"
@@ -153,11 +153,11 @@
                                             </td>
                                             <td class="quantity-col">
                                                 <div class="cart-product-quantity">
-                                                    <input type="number" class="quantity" data-product-id="<%= product.productId._id %>" value="1" min="1" max="5" step="1" data-decimals="0" onchange="updateCartItem(this)" required>
+                                                    <input type="number" class="quantity" data-product-id="<%= product.productId._id %>" value="<%= product.quantity %>" min="1" max="5" step="1" data-decimals="0" onchange="updateCartItem(this)" required>
                                                 </div><!-- End .cart-product-quantity -->
                                             </td>
                                             
-                                            <td class="total-col">Rs. <%= product.updatedTotalPrice %></td>
+                                            <td class="total-col">Rs.<%= product.updatedTotalPrice.toFixed(2) %></td>
 
                                             <td class="remove-col"><button class="btn-remove"
                                                 data-product-id="<%= product.productId._id %>">
@@ -181,7 +181,7 @@
                                         <% if(cartData && cartData.products.length > 0) {%>
                                             <tr class="summary-subtotal">
                                                 <td>Subtotal:</td>
-                                                <td class="totalCost">Rs. <%= cartData.totalCost %></td>
+                                                <td class="totalCost">Rs. <%= cartData.totalCost.toFixed(2) %></td>
                                             </tr><!-- End .summary-subtotal -->
                                             <%}else{%>
                                                 <tr class="summary-subtotal">
@@ -207,7 +207,7 @@
                                         <% if(cartData && cartData.products.length > 0) {%>
                                             <tr class="allTotal">
                                                 <td>Total:</td>
-                                                <td class="total">Rs. <%= cartData.totalCost %></td>
+                                                <td class="total">Rs. <%= cartData.totalCost.toFixed(2) %></td>
                                             </tr><!-- End .summary-subtotal -->
                                             <%}else{%>
                                                 <tr class="summary-subtotal">
@@ -387,15 +387,15 @@
         .then(data => {
 
             const totalValue = element.closest('tr').querySelector(".total-col");
-            totalValue.innerHTML = `Rs. ${data.updatedTotalPrice}`;
+            totalValue.innerHTML = `Rs. ${data.updatedTotalPrice.toFixed(2)}`;
             
             const subtotalElement = document.querySelector(".summary-subtotal .totalCost");
             if (subtotalElement) {
-                subtotalElement.textContent = `Rs. ${data.totalCost}`;
+                subtotalElement.textContent = `Rs. ${data.totalCost.toFixed(2)}`;
             }
             const totalElement = document.querySelector(".allTotal .total");
             if (totalElement) {
-                totalElement.textContent = `Rs. ${data.totalCost}`;
+                totalElement.textContent = `Rs. ${data.totalCost.toFixed(2)}`;
             }
         })
         .catch(error => console.error('Error:', error));
@@ -404,30 +404,6 @@
     
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const getQuantityFromLocalStorage = (productId) => {
-            const storedQuantity = localStorage.getItem(`quantity_${productId}`);
-            return storedQuantity ? parseInt(storedQuantity) : 1;
-        };
-
-        const setQuantityInLocalStorage = (productId, quantity) => {
-            localStorage.setItem(`quantity_${productId}`, quantity);
-        };
-
-        const removeQuantityFromLocalStorage = (productId) => {
-            localStorage.removeItem(`quantity_${productId}`);
-        };
-
-        const quantityInputs = document.querySelectorAll(".quantity");
-        quantityInputs.forEach(input => {
-            const productId = input.dataset.productId;
-            input.value = getQuantityFromLocalStorage(productId);
-
-            input.addEventListener("change", function () {
-                const quantity = parseInt(this.value);
-                setQuantityInLocalStorage(productId, quantity);
-            });
-        });
 
         const removeButtons = document.querySelectorAll(".btn-remove");
         removeButtons.forEach(button => {
@@ -442,7 +418,6 @@
                     confirmButtonText: 'Yes, remove it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        removeQuantityFromLocalStorage(productId);
 
                         fetch(`/deleteCartItem/${productId}`, {
                             method: 'DELETE',
@@ -463,7 +438,7 @@
                 });
             });
         });
-    });
+   
 </script>
 
 <script>

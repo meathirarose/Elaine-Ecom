@@ -116,7 +116,7 @@
                         <div class="toolbox toolbox-right">
                             <div class="toolbox-left">
                                 <div class="toolbox-info">
-                                    Showing <span>9 of 56</span> Products
+                                    Showing <span><%= productsData.length %> of <%= productsData.length %></span> Products
                                 </div><!-- End .toolbox-info -->
                             </div><!-- End .toolbox-left -->
 
@@ -151,7 +151,9 @@
                                                         <img src="/processed_images/<%= product.prdctImage[0] %>"
                                                             alt="Product image" class="product-image">
                                                     </a>
-
+                                                    <% if (product.offer && product.offer.status === true) { %>
+                                                        <span class="product-label label-sale">Sale</span>
+                                                    <% } %>
                                                     <div class="product-action-vertical">
                                                         <a href="#"
                                                             class="btn-product-icon btn-wishlist btn-expandable" onclick="addToWishlist('<%= product._id %>')"><span>add
@@ -171,8 +173,15 @@
                                                             <%= product.prdctName %>
                                                         </a></h3><!-- End .product-title -->
                                                     <div class="product-price">
-                                                        <p>₹<%= product.prdctPrice %>
-                                                        </p>
+
+                                                        <% if (product.offer && product.offer.status === true) { %>
+                                                            <h5 class="new-price  ">₹<%= product.prdctPrice - (product.offer.offerPercentage * product.prdctPrice)/100 %></h5>
+                                                            <p class="old-price "><s>₹<%= product.prdctPrice %></s></p>
+                                                        <% } else { %>
+                                                            <p>₹<%= product.prdctPrice %></p>
+                                                        <% } %>
+
+
                                                     </div><!-- End .product-price -->
                                                     <div class="ratings-container">
                                                         <div class="ratings">

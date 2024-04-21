@@ -129,8 +129,12 @@ const placeOrder = async (req, res) => {
         const { addressId, paymentMode } = req.body;
 
         const coupon = req. session.couponCode;
+        let couponDiscount = 0;
         if(coupon){
-            var couponData = await Coupon.findOne({code:coupon});
+            var couponData = await Coupon.findOne({code: coupon});
+            couponDiscount = couponData.discount;
+        }else{
+            couponDiscount = 0;
         }
 
         if (!addressId || !paymentMode) {
@@ -153,7 +157,7 @@ const placeOrder = async (req, res) => {
             deliveryAddress: addressId,
             userName: userData.name,
             email: userData.email,
-            couponDiscount: couponData.discount,
+            couponDiscount: couponDiscount,
             totalAmount: cartData.totalCost,
             date: new Date(),
             payment: paymentMode,
@@ -168,6 +172,9 @@ const placeOrder = async (req, res) => {
         })
 
         await newOrder.save();
+        console.log('====================================================================================')
+        console.log(newOrder);
+        console.log('====================================================================================')
 
         if (coupon) {
             const couponData = await Coupon.findOne({ code: coupon });
@@ -195,6 +202,11 @@ const placeOrder = async (req, res) => {
         cartData.products = [];
         await cartData.save();
 
+        if(newOrder){
+            newOrder.paymentStatus = 'Paid';
+            await newOrder.save();
+        }
+
         res.json({ message: "Your order has been placed successfully." });
 
     } catch (error) {
@@ -213,8 +225,12 @@ const createRazorpayOrder = async (req, res) => {
         }
 
         const coupon = req. session.couponCode;
+        let couponDiscount = 0;
         if(coupon){
             var couponData = await Coupon.findOne({code: coupon});
+            couponDiscount = couponData.discount;
+        }else{
+            couponDiscount = 0;
         }
 
         const cartData = await Cart.findOne({ userId: req.session.user_id }).populate('products.productId');
@@ -243,7 +259,7 @@ const createRazorpayOrder = async (req, res) => {
                 deliveryAddress: addressId,
                 userName: userData.name,
                 email: userData.email,
-                couponDiscount: couponData.discount,
+                couponDiscount: couponDiscount,
                 totalAmount: cartData.totalCost,
                 date: new Date(),
                 payment: paymentMode,
