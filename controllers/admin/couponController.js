@@ -93,9 +93,6 @@ const deleteCoupon = async (req, res) => {
         const couponId = req.query.couponId;
         
         const couponData = await Coupon.findOne({_id: couponId});
-        console.log('====================================================================================')
-        console.log(couponData);
-        console.log('====================================================================================')
         
         if (!couponData) {
             return res.json({ message: "No coupons found" });

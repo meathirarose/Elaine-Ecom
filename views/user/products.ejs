@@ -367,55 +367,60 @@
 <script src="/user/assets/js/demos/demo-16.js"></script>
    
 <!--Sweet Alert  -->
- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
- 
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-function addToCart(productId) {
-    fetch(`/addProductsToCart?productId=${productId}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.message === "Item added to cart") {
-                swal({
-                    title: "Success!",
-                    text: "Item added to cart",
-                    icon: "success",
-                    timer: 1000, 
-                    buttons: false, 
-                    
-                });
-            } else if (data.message === "Item is already in the cart") {
-                swal({
-                    text: "This item is already in your cart",
-                    icon: "info",
-                    timer: 1000, 
-                    buttons: false, 
-                    
-                });
-            } else {
-                swal({
-                    title: "Error!",
-                    text: data.message,
-                    icon: "error",
-                    timer: 1000, 
-                    buttons: false, 
-                    
-                });
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            swal({
-                title: "Error!",
-                text: "Something went wrong",
-                icon: "error",
-                timer: 800, 
-                buttons: false, 
-                
+    function addToCart(productId) {
+        fetch(`/addProductsToCart?productId=${productId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === "Item added to cart") {
+                    Swal.fire({
+                                position: "bottom",
+                                text: 'Item added to cart',
+                                showConfirmButton: false,
+                                color: "#fff",
+                                background:"#000000",
+                                timer: 1500,
+                                width: 300,
+                            });
+                } else if (data.message === "Item is already in the cart") {
+                    Swal.fire({
+                                position: "bottom",
+                                text: 'This item is already in your cart',
+                                showConfirmButton: false,
+                                color: "#fff",
+                                background:"#000000",
+                                timer: 1500,
+                                width: 300,
+                            });
+                } else {
+                    Swal.fire({
+                                position: "bottom",
+                                text: data.message,
+                                showConfirmButton: false,
+                                color: "#fff",
+                                background:"#000000",
+                                timer: 1500,
+                                width: 300,
+                            });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                            position: "bottom",
+                            text: "Something went wrong",
+                            showConfirmButton: false,
+                            color: "#fff",
+                            background:"#000000",
+                            timer: 1500,
+                            width: 300,
+                        });
             });
-        });
-}
-</script>
+    }
+    </script>
 
 <script>
 
@@ -424,34 +429,38 @@ function addToCart(productId) {
         .then(response => response.json())
         .then(data => {
             if (data.message === "Item added to wishlist") {
-                swal({
-                    title: "Success!",
-                    text: "Item added to wishlist",
-                    icon: "success",
-                    timer: 1000, 
-                    buttons: false, 
-                    
-                });
+                Swal.fire({
+                            position: "bottom",
+                            text: "Item added to wishlist",
+                            showConfirmButton: false,
+                            color: "#fff",
+                            background:"#000000",
+                            timer: 1500,
+                            width: 300,
+                        });
             }  else {
-                swal({
-                    text: data.message,
-                    icon: "info",
-                    timer: 1000, 
-                    buttons: false, 
-                    
-                });
+                Swal.fire({
+                            position: "bottom",
+                            text: data.message,
+                            showConfirmButton: false,
+                            color: "#fff",
+                            background:"#000000",
+                            timer: 1500,
+                            width: 300,
+                        });
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            swal({
-                title: "Error!",
-                text: "Something went wrong",
-                icon: "error",
-                timer: 800, 
-                buttons: false, 
-                
-            });
+            Swal.fire({
+                        position: "bottom",
+                        text: "Something went wrong",
+                        showConfirmButton: false,
+                        color: "#fff",
+                        background:"#000000",
+                        timer: 1500,
+                        width: 300,
+                    });
         });
     }
 

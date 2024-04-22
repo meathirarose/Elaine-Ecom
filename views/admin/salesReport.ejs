@@ -171,9 +171,11 @@
                                         <td><a href="#" class="fw-bold"><%= order.orderId %></a></td>
                                         <td><%= order.userName %></td>
                                         <td><%= order.date.toLocaleDateString() %></td>
-                                        <td>₹<%= order.totalAmount %></td>
+                                        <td>₹<%= order.totalAmount.toFixed(2) %></td>
+                                        <td>₹<%= order.couponDiscount.toFixed(2) %></td>
+                                        <td>₹ 0.00 </td>
                                         <td>
-                                            <span class="badge badge-pill badge-soft-success">Paid</span>
+                                            <span class="badge badge-pill badge-soft-success"><%= order.paymentStatus %></span>
                                         </td>
                                         <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i><%= order.payment %></td>
                                         <td>

@@ -57,7 +57,13 @@
                     <i class="icon material-icons md-local_offer"></i>
                     <span class="text">Offers</span>
                 </a>  
-            </li>                                                            
+            </li>    
+            <li class="menu-item p-2">
+                <a class="menu-link" href="/admin/salesReport">
+                    <i class="icon material-icons md-comment"></i>
+                    <span class="text">Sales Report</span>
+                </a>  
+            </li>                                                        
         </ul>                      
     </nav>
 </aside>
@@ -125,8 +131,7 @@
                                 </span>
                                 <div class="text">
 
-                                    <h6 class="mb-1">Customer</h6>
-                                    <p class="mb-1">
+                                    <h6 class="mb-1 ">Customer</h6>
                                         <%= orderData[0].userId.name %> <br />
                                         <%= orderData[0].userId.email %> <br />
                                         <%= orderData[0].userId.mobile %>
@@ -195,15 +200,15 @@
                                                     <div class="left">
                                                         <img src="/processed_images/<%= product.productId.prdctImage[0] %>" width="50" height="60" class="img-xl" alt="Item" /><br>
                                                     </div>
-                                                    <div class=" left"><%= product.productId.prdctName %></div>
+                                                    
                                                 </a>
                                             </td>
-                                            <td>₹<%= product.productId.prdctPrice %></td>
+                                            <td>₹<%= product.productId.prdctPrice%></td>
                                             <td><%= product.quantity %></td>
                                             <td>
                                                 <span class="badge rounded-pill alert-success text-success"><%= product.status %></span>
                                             </td>
-                                            <td><%= product.totalPrice %></td>
+                                            <td><%= product.totalPrice.toFixed(2) %></td>
                                             <td>Reason for return</td>
                                             <td class="text-end">
                                                 <button class="btn btn-xs rounded font-sm " type="submit" >Approved</button>
@@ -219,7 +224,7 @@
                                                 <article class="float-end">
                                                     <dl class="dlist">
                                                         <dt>Subtotal:</dt>
-                                                        <dd>₹<%= orderData[0].totalAmount %></dd>
+                                                        <dd>₹<%= orderData[0].totalAmount.toFixed(2) %></dd>
                                                     </dl>
                                                     <dl class="dlist">
                                                         <dt>Shipping cost:</dt>
@@ -227,7 +232,7 @@
                                                     </dl>
                                                     <dl class="dlist">
                                                         <dt>Grand total:</dt>
-                                                        <dd><b class="h5">₹<%= orderData[0].totalAmount %></b></dd>
+                                                        <dd><b class="h5">₹<%= orderData[0].totalAmount.toFixed(2) %></b></dd>
                                                     </dl>
                                                 </article>
                                             </td>
@@ -243,9 +248,10 @@
                             <div class="box shadow-sm bg-light">
                                 <h6 class="mb-15">Payment info</h6>
                                 <p>
-                                    <img src="/admin/assets/imgs/card-brands/2.png" class="border" height="20" /> Master Card **** **** 4768 <br />
-                                    Business name: Grand Market LLC <br />
-                                    Phone: +1 (800) 555-154-52
+                                    <img src="/admin/assets/imgs/card-brands/2.png" class="border" height="20" />       
+                                    <%= orderData[0].payment %>  <br />
+                                    <%= orderData[0].userName %> <br />
+                                    <%= orderData[0].userId.mobile %>
                                 </p>
                             </div>
 

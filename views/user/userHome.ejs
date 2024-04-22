@@ -130,87 +130,15 @@
                 <span class="slider-loader"></span><!-- End .slider-loader -->
             </div><!-- End .intro-slider-container -->
 
-            <div class="pt-2 pb-3">
-                <div class="container">
-                    <div class="row">
-
-                        <div class="col-sm-4">
-                            <div class="banner banner-overlay">
-                                <a href="#">
-                                    <img src="user/assets/images/demos/demo-6/banners/banner-1.jpg" alt="Banner">
-                                </a>
-
-                                <div class="banner-content banner-content-center">
-                                    <h4 class="banner-subtitle text-white"><a href="#">New in</a></h4>
-                                    <!-- End .banner-subtitle -->
-                                    <h3 class="banner-title text-white"><a href="#"><strong>Women’s</strong></h3>
-                                    <!-- End .banner-title -->
-                                    <a href="#" class="btn btn-outline-white banner-link underline">Shop Now</a>
-                                </div><!-- End .banner-content -->
-                            </div><!-- End .banner -->
-                        </div><!-- End .col-sm-6 -->
-
-                        <div class="col-sm-4">
-                            <div class="banner banner-overlay">
-                                <a href="#">
-                                    <img src="user/assets/images/demos/demo-6/banners/banner-2.jpg" alt="Banner">
-                                </a>
-
-                                <div class="banner-content banner-content-center">
-                                    <h4 class="banner-subtitle text-white"><a href="#">New in</a></h4>
-                                    <!-- End .banner-subtitle -->
-                                    <h3 class="banner-title text-white"><a href="#"><strong>Men’s</strong></a></h3>
-                                    <!-- End .banner-title -->
-                                    <a href="#" class="btn btn-outline-white banner-link underline">Shop Now</a>
-                                </div><!-- End .banner-content -->
-                            </div><!-- End .banner -->
-                        </div><!-- End .col-sm-6 -->
-
-                        <div class="col-sm-4">
-                            <div class="banner banner-overlay">
-                                <a href="#">
-                                    <img src="user/assets/images/demos/demo-6/banners/banner-4.jpg" alt="Banner">
-                                </a>
-
-                                <div class="banner-content banner-content-center">
-                                    <h4 class="banner-subtitle text-white"><a href="#">New in</a></h4>
-                                    <!-- End .banner-subtitle -->
-                                    <h3 class="banner-title text-white"><a href="#"><strong>Kids’s</strong></a></h3>
-                                    <!-- End .banner-title -->
-                                    <a href="#" class="btn btn-outline-white banner-link underline">Shop Now</a>
-                                </div><!-- End .banner-content -->
-                            </div><!-- End .banner -->
-                        </div><!-- End .col-sm-6 -->
-
-                    </div><!-- End .row -->
-                    <hr class="mt-0 mb-0">
-                </div><!-- End .container -->
-            </div><!-- End .bg-gray -->
 
             <div class="mb-5"></div><!-- End .mb-5 -->
             <div class="container">
                 <div class="heading heading-center mb-3">
-                    <h2 class="title">Trending</h2><!-- End .title -->
+                    <h2 class="title">Trending Collections</h2><!-- End .title -->
+                    <!-- <h6 class="title">. . . . . . . . . . .</h6>End .title -->
+                    <hr>
 
-                    <ul class="nav nav-pills justify-content-center" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="trending-all-link" data-toggle="tab" href="#trending-all-tab"
-                                role="tab" aria-controls="trending-all-tab" aria-selected="true">All</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="trending-women-link" data-toggle="tab" href="#trending-women-tab"
-                                role="tab" aria-controls="trending-women-tab" aria-selected="false">Women</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="trending-men-link" data-toggle="tab" href="#trending-men-tab"
-                                role="tab" aria-controls="trending-men-tab" aria-selected="false">Men</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="trending-men-link" data-toggle="tab" href="#trending-men-tab"
-                                role="tab" aria-controls="trending-men-tab" aria-selected="false">Kids</a>
-                        </li>
-                    </ul>
-                </div><!-- End .heading -->
+              </div><!-- End .heading -->
 
                 <div class="tab-content tab-content-carousel">
                     <div class="tab-pane p-0 fade show active" id="trending-all-tab" role="tabpanel"
@@ -241,774 +169,62 @@
                                 }
                             }
                         }'>
+                        <% productData.forEach(product=> { %>
+                            <% if(product.is_listed===true && product.prdctQuantity > 0){%>
                             <div class="product product-7 text-center">
                                 <figure class="product-media">
                                     <a href="product.html">
-                                        <img src="user/assets/images/demos/demo-6/products/product-1-1.jpg"
+                                   
+                                        <img src="/processed_images/<%= product.prdctImage[0] %>"
                                             alt="Product image" class="product-image">
-                                        <img src="user/assets/images/demos/demo-6/products/product-1-2.jpg"
-                                            alt="Product image" class="product-image-hover">
                                     </a>
+                                    <% if (product.offer && product.offer.status === true) { %>
+                                        <span class="product-label label-sale">Sale</span>
+                                    <% } %>
 
                                     <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
+                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable" onclick="addToWishlist('<%= product._id %>')"><span>add to
                                                 wishlist</span></a>
                                     </div><!-- End .product-action-vertical -->
 
                                     <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                        <a href="#" class="btn-product btn-cart" onclick="addToCart('<%= product._id %>')"><span>add to cart</span></a>
                                     </div><!-- End .product-action -->
                                 </figure><!-- End .product-media -->
 
                                 <div class="product-body">
                                     <div class="product-cat">
-                                        <a href="#">Clothing</a>
+                                        <a href="#"><%= product.categoryId.cateName %></a>
                                     </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Denim jacket</a></h3>
-                                    <!-- End .product-title -->
-                                    <div class="product-price">
-                                        $19.99
-                                    </div><!-- End .product-price -->
-
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-
-                            <div class="product product-7 text-center">
-                                <figure class="product-media">
-                                    <a href="product.html">
-                                        <img src="user/assets/images/demos/demo-6/products/product-2-1.jpg"
-                                            alt="Product image" class="product-image">
-                                        <img src="user/assets/images/demos/demo-6/products/product-2-2.jpg"
-                                            alt="Product image" class="product-image-hover">
-                                    </a>
-
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                                wishlist</span></a>
-                                    </div><!-- End .product-action-vertical -->
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Shoes</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Sandals</a></h3>
-                                    <!-- End .product-title -->
-                                    <div class="product-price">
-                                        $24.99
-                                    </div><!-- End .product-price -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-
-                            <div class="product product-7 text-center">
-                                <figure class="product-media">
-                                    <span class="product-label label-sale">sale</span>
-                                    <a href="product.html">
-                                        <img src="user/assets/images/demos/demo-6/products/product-3-1.jpg"
-                                            alt="Product image" class="product-image">
-                                        <img src="user/assets/images/demos/demo-6/products/product-3-2.jpg"
-                                            alt="Product image" class="product-image-hover">
-                                    </a>
-
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                                wishlist</span></a>
-                                    </div><!-- End .product-action-vertical -->
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Clothing</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Printed sweatshirt</a></h3>
-                                    <!-- End .product-title -->
-                                    <div class="product-price">
-                                        <span class="new-price">Now $7.99</span>
-                                        <span class="old-price">Was $12.99</span>
-                                    </div><!-- End .product-price -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-
-                            <div class="product product-7 text-center">
-                                <figure class="product-media">
-                                    <a href="product.html">
-                                        <img src="user/assets/images/demos/demo-6/products/product-4-1.jpg"
-                                            alt="Product image" class="product-image">
-                                        <img src="user/assets/images/demos/demo-6/products/product-4-2.jpg"
-                                            alt="Product image" class="product-image-hover">
-                                    </a>
-
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                                wishlist</span></a>
-                                    </div><!-- End .product-action-vertical -->
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Clothing</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Linen-blend paper bag trousers</a>
+                                    <h3 class="product-title"><a href="product.html"><%= product.prdctName %></a>
                                     </h3><!-- End .product-title -->
                                     <div class="product-price">
-                                        $17.99
-                                    </div><!-- End .product-price -->
 
+                                        <% if (product.offer && product.offer.status === true) { %>
+                                            <h5 class="new-price  ">₹<%= product.prdctPrice - (product.offer.offerPercentage * product.prdctPrice)/100 %></h5>
+                                            <p class="old-price "><s>₹<%= product.prdctPrice %></s></p>
+                                        <% } else { %>
+                                            <p>₹<%= product.prdctPrice %></p>
+                                        <% } %>
+
+                                    </div><!-- End .product-price -->
 
                                 </div><!-- End .product-body -->
                             </div><!-- End .product -->
-
-                            <div class="product product-7 text-center">
-                                <figure class="product-media">
-                                    <a href="product.html">
-                                        <img src="user/assets/images/demos/demo-6/products/product-1-1.jpg"
-                                            alt="Product image" class="product-image">
-                                        <img src="user/assets/images/demos/demo-6/products/product-1-2.jpg"
-                                            alt="Product image" class="product-image-hover">
-                                    </a>
-
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                                wishlist</span></a>
-                                    </div><!-- End .product-action-vertical -->
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Clothing</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Denim jacket</a></h3>
-                                    <!-- End .product-title -->
-                                    <div class="product-price">
-                                        $19.99
-                                    </div><!-- End .product-price -->
-
-                                    <div class="product-nav product-nav-thumbs">
-                                        <a href="#" class="active">
-                                            <img src="user/assets/images/demos/demo-6/products/product-1-thumb.jpg"
-                                                alt="product desc">
-                                        </a>
-                                        <a href="#">
-                                            <img src="user/assets/images/demos/demo-6/products/product-1-2-thumb.jpg"
-                                                alt="product desc">
-                                        </a>
-                                        <a href="#">
-                                            <img src="user/assets/images/demos/demo-6/products/product-1-3-thumb.jpg"
-                                                alt="product desc">
-                                        </a>
-                                    </div><!-- End .product-nav -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
+                            <%} %>
+                        <% }) %>
 
                         </div><!-- End .owl-carousel -->
-                    </div><!-- .End .tab-pane -->
-                    <div class="tab-pane p-0 fade" id="trending-women-tab" role="tabpanel"
-                        aria-labelledby="trending-women-link">
-                        <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow"
-                            data-toggle="owl" data-owl-options='{
-                            "nav": false, 
-                            "dots": true,
-                            "margin": 20,
-                            "loop": false,
-                            "responsive": {
-                                "0": {
-                                    "items":0
-                                },
-                                "480": {
-                                    "items":2
-                                },
-                                "768": {
-                                    "items":3
-                                },
-                                "992": {
-                                    "items":4
-                                },
-                                "1200": {
-                                    "items":4,
-                                    "nav": true,
-                                    "dots": false
-                                }
-                            }
-                        }'>
-                            <div class="product product-7 text-center">
-                                <figure class="product-media">
-                                    <span class="product-label label-sale">sale</span>
-                                    <a href="product.html">
-                                        <img src="user/assets/images/demos/demo-6/products/product-3-1.jpg"
-                                            alt="Product image" class="product-image">
-                                        <!-- <img src="user/assets/images/demos/demo-6/products/product-3-2.jpg" alt="Product image" class="product-image-hover"> -->
-                                    </a>
+                        <hr>
 
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                                wishlist</span></a>
-                                    </div><!-- End .product-action-vertical -->
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Clothing</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Printed sweatshirt</a></h3>
-                                    <!-- End .product-title -->
-                                    <div class="product-price">
-                                        <span class="new-price">Now $7.99</span>
-                                        <span class="old-price">Was $12.99</span>
-                                    </div><!-- End .product-price -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-
-                            <div class="product product-7 text-center">
-                                <figure class="product-media">
-                                    <a href="product.html">
-                                        <img src="user/assets/images/demos/demo-6/products/product-4-1.jpg"
-                                            alt="Product image" class="product-image">
-                                        <img src="user/assets/images/demos/demo-6/products/product-4-2.jpg"
-                                            alt="Product image" class="product-image-hover">
-                                    </a>
-
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                                wishlist</span></a>
-                                    </div><!-- End .product-action-vertical -->
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Clothing</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Linen-blend paper bag trousers</a>
-                                    </h3><!-- End .product-title -->
-                                    <div class="product-price">
-                                        $17.99
-                                    </div><!-- End .product-price -->
-
-                                    <div class="product-nav product-nav-thumbs">
-                                        <a href="#" class="active">
-                                            <img src="user/assets/images/demos/demo-6/products/product-4-thumb.jpg"
-                                                alt="product desc">
-                                        </a>
-                                        <a href="#">
-                                            <img src="user/assets/images/demos/demo-6/products/product-4-2-thumb.jpg"
-                                                alt="product desc">
-                                        </a>
-                                    </div><!-- End .product-nav -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-
-                            <div class="product product-7 text-center">
-                                <figure class="product-media">
-                                    <a href="product.html">
-                                        <img src="user/assets/images/demos/demo-6/products/product-1-1.jpg"
-                                            alt="Product image" class="product-image">
-                                        <img src="user/assets/images/demos/demo-6/products/product-1-2.jpg"
-                                            alt="Product image" class="product-image-hover">
-                                    </a>
-
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                                wishlist</span></a>
-                                    </div><!-- End .product-action-vertical -->
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Clothing</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Denim jacket</a></h3>
-                                    <!-- End .product-title -->
-                                    <div class="product-price">
-                                        $19.99
-                                    </div><!-- End .product-price -->
-
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-                        </div><!-- End .owl-carousel -->
                     </div><!-- .End .tab-pane -->
 
-                    <div class="tab-pane p-0 fade" id="trending-men-tab" role="tabpanel"
-                        aria-labelledby="trending-men-link">
-                        <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow"
-                            data-toggle="owl" data-owl-options='{
-                            "nav": false, 
-                            "dots": true,
-                            "margin": 20,
-                            "loop": false,
-                            "responsive": {
-                                "0": {
-                                    "items":0
-                                },
-                                "480": {
-                                    "items":2
-                                },
-                                "768": {
-                                    "items":3
-                                },
-                                "992": {
-                                    "items":4
-                                },
-                                "1200": {
-                                    "items":4,
-                                    "nav": true,
-                                    "dots": false
-                                }
-                            }
-                        }'>
-                            <div class="product product-7 text-center">
-                                <figure class="product-media">
-                                    <span class="product-label label-sale">sale</span>
-                                    <a href="product.html">
-                                        <img src="user/assets/images/demos/demo-6/products/product-3-1.jpg"
-                                            alt="Product image" class="product-image">
-                                        <img src="user/assets/images/demos/demo-6/products/product-3-2.jpg"
-                                            alt="Product image" class="product-image-hover">
-                                    </a>
-
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                                wishlist</span></a>
-                                    </div><!-- End .product-action-vertical -->
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Clothing</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Printed sweatshirt</a></h3>
-                                    <!-- End .product-title -->
-                                    <div class="product-price">
-                                        <span class="new-price">Now $7.99</span>
-                                        <span class="old-price">Was $12.99</span>
-                                    </div><!-- End .product-price -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-                        </div><!-- End .owl-carousel -->
-                    </div><!-- .End .tab-pane -->
                 </div><!-- End .tab-content -->
             </div><!-- End .container -->
 
             <div class="mb-5"></div><!-- End .mb-5 -->
 
-            <div class="deal bg-image pt-8 pb-8"
-                style="background-image: url(user/assets/images/demos/demo-6/deal/bg-1.jpg);">
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-sm-12 col-md-8 col-lg-6">
-                            <div class="deal-content text-center">
-                                <h4>Limited quantities. </h4>
-                                <h2>Deal of the Day</h2>
-                                <div class="deal-countdown" data-until="+10h"></div><!-- End .deal-countdown -->
-                            </div><!-- End .deal-content -->
-                            <div class="row deal-products">
-                                <div class="col-6 deal-product text-center">
-                                    <figure class="product-media">
-                                        <a href="product.html">
-                                            <img src="user/assets/images/demos/demo-6/deal/product-1.jpg"
-                                                alt="Product image" class="product-image">
-                                        </a>
-
-                                    </figure><!-- End .product-media -->
-
-                                    <div class="product-body">
-                                        <h3 class="product-title"><a href="product.html">Elasticated cotton shorts</a>
-                                        </h3><!-- End .product-title -->
-                                        <div class="product-price">
-                                            <span class="new-price">Now $24.99</span>
-                                            <span class="old-price">Was $30.99</span>
-                                        </div><!-- End .product-price -->
-                                    </div><!-- End .product-body -->
-                                    <a href="category.html" class="action">shop now</a>
-                                </div>
-                                <div class="col-6 deal-product text-center">
-                                    <figure class="product-media">
-                                        <a href="product.html">
-                                            <img src="user/assets/images/demos/demo-6/deal/product-2.jpg"
-                                                alt="Product image" class="product-image">
-                                        </a>
-
-                                    </figure><!-- End .product-media -->
-
-                                    <div class="product-body">
-                                        <h3 class="product-title"><a href="product.html">Fine-knit jumper</a></h3>
-                                        <!-- End .product-title -->
-                                        <div class="product-price">
-                                            <span class="new-price">Now $8.99</span>
-                                            <span class="old-price">Was $17.99</span>
-                                        </div><!-- End .product-price -->
-                                    </div><!-- End .product-body -->
-                                    <a href="category.html" class="action">shop now</a>
-                                </div>
-                            </div>
-                        </div><!-- End .col-lg-5 -->
-                    </div><!-- End .row -->
-                </div><!-- End .container -->
-            </div><!-- End .deal -->
-
-            <div class="pt-4 pb-3" style="background-color: #222;">
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="icon-box text-center">
-                                <span class="icon-box-icon">
-                                    <i class="icon-truck"></i>
-                                </span>
-                                <div class="icon-box-content">
-                                    <h3 class="icon-box-title">Payment & Delivery</h3><!-- End .icon-box-title -->
-                                    <p>Free shipping for orders over $50</p>
-                                </div><!-- End .icon-box-content -->
-                            </div><!-- End .icon-box -->
-                        </div><!-- End .col-lg-3 col-sm-6 -->
-
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="icon-box text-center">
-                                <span class="icon-box-icon">
-                                    <i class="icon-rotate-left"></i>
-                                </span>
-                                <div class="icon-box-content">
-                                    <h3 class="icon-box-title">Return & Refund</h3><!-- End .icon-box-title -->
-                                    <p>Free 100% money back guarantee</p>
-                                </div><!-- End .icon-box-content -->
-                            </div><!-- End .icon-box -->
-                        </div><!-- End .col-lg-3 col-sm-6 -->
-
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="icon-box text-center">
-                                <span class="icon-box-icon">
-                                    <i class="icon-unlock"></i>
-                                </span>
-                                <div class="icon-box-content">
-                                    <h3 class="icon-box-title">Secure Payment</h3><!-- End .icon-box-title -->
-                                    <p>100% secure payment</p>
-                                </div><!-- End .icon-box-content -->
-                            </div><!-- End .icon-box -->
-                        </div><!-- End .col-lg-3 col-sm-6 -->
-
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="icon-box text-center">
-                                <span class="icon-box-icon">
-                                    <i class="icon-headphones"></i>
-                                </span>
-                                <div class="icon-box-content">
-                                    <h3 class="icon-box-title">Quality Support</h3><!-- End .icon-box-title -->
-                                    <p>Alway online feedback 24/7</p>
-                                </div><!-- End .icon-box-content -->
-                            </div><!-- End .icon-box -->
-                        </div><!-- End .col-lg-3 col-sm-6 -->
-                    </div><!-- End .row -->
-                </div><!-- End .container -->
-            </div><!-- End .bg-light pt-2 pb-2 -->
-
             <div class="mb-6"></div><!-- End .mb-5 -->
-
-            <div class="container">
-                <h2 class="title text-center mb-4">New Arrivals</h2><!-- End .title text-center -->
-
-                <div class="products">
-                    <div class="row justify-content-center">
-                        <div class="col-6 col-md-4 col-lg-3">
-                            <div class="product product-7 text-center">
-                                <figure class="product-media">
-                                    <span class="product-label label-sale">Sale</span>
-                                    <a href="product.html">
-                                        <img src="user/assets/images/demos/demo-6/products/product-5-1.jpg"
-                                            alt="Product image" class="product-image">
-                                        <img src="user/assets/images/demos/demo-6/products/product-5-2.jpg"
-                                            alt="Product image" class="product-image-hover">
-                                    </a>
-
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                                wishlist</span></a>
-                                    </div><!-- End .product-action-vertical -->
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Clothing</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Tie-detail top</a></h3>
-                                    <!-- End .product-title -->
-                                    <div class="product-price">
-                                        <span class="new-price">Now $3.99</span>
-                                        <span class="old-price">Was $6.99</span>
-                                    </div><!-- End .product-price -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-                        </div><!-- End .col-sm-6 col-md-4 col-lg-3 -->
-
-                        <div class="col-6 col-md-4 col-lg-3">
-                            <div class="product product-7 text-center">
-                                <figure class="product-media">
-                                    <a href="product.html">
-                                        <img src="user/assets/images/demos/demo-6/products/product-6-1.jpg"
-                                            alt="Product image" class="product-image">
-                                        <img src="user/assets/images/demos/demo-6/products/product-6-2.jpg"
-                                            alt="Product image" class="product-image-hover">
-                                    </a>
-
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                                wishlist</span></a>
-                                    </div><!-- End .product-action-vertical -->
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Shoes</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Sandals</a></h3>
-                                    <!-- End .product-title -->
-                                    <div class="product-price">
-                                        $12.99
-                                    </div><!-- End .product-price -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-                        </div><!-- End .col-sm-6 col-md-4 col-lg-3 -->
-
-                        <div class="col-6 col-md-4 col-lg-3">
-                            <div class="product product-7 text-center">
-                                <figure class="product-media">
-                                    <a href="product.html">
-                                        <img src="user/assets/images/demos/demo-6/products/product-7-1.jpg"
-                                            alt="Product image" class="product-image">
-                                        <img src="user/assets/images/demos/demo-6/products/product-7-2.jpg"
-                                            alt="Product image" class="product-image-hover">
-                                    </a>
-
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                                wishlist</span></a>
-                                    </div><!-- End .product-action-vertical -->
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Bags</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Small bucket bag</a></h3>
-                                    <!-- End .product-title -->
-                                    <div class="product-price">
-                                        $14.99
-                                    </div><!-- End .product-price -->
-
-
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-                        </div><!-- End .col-sm-6 col-md-4 col-lg-3 -->
-
-                        <div class="col-6 col-md-4 col-lg-3">
-                            <div class="product product-7 text-center">
-                                <figure class="product-media">
-                                    <a href="product.html">
-                                        <img src="user/assets/images/demos/demo-6/products/product-8-1.jpg"
-                                            alt="Product image" class="product-image">
-                                        <img src="user/assets/images/demos/demo-6/products/product-8-2.jpg"
-                                            alt="Product image" class="product-image-hover">
-                                    </a>
-
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                                wishlist</span></a>
-                                    </div><!-- End .product-action-vertical -->
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Clothing</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Denim jacket</a></h3>
-                                    <!-- End .product-title -->
-                                    <div class="product-price">
-                                        $34.99
-                                    </div><!-- End .product-price -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-                        </div><!-- End .col-sm-6 col-md-4 col-lg-3 -->
-
-                        <div class="col-6 col-md-4 col-lg-3">
-                            <div class="product product-7 text-center">
-                                <figure class="product-media">
-                                    <a href="product.html">
-                                        <img src="user/assets/images/demos/demo-6/products/product-9-1.jpg"
-                                            alt="Product image" class="product-image">
-                                        <img src="user/assets/images/demos/demo-6/products/product-9-2.jpg"
-                                            alt="Product image" class="product-image-hover">
-                                    </a>
-
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                                wishlist</span></a>
-                                    </div><!-- End .product-action-vertical -->
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Clothing</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">BShort wrap dress</a></h3>
-                                    <!-- End .product-title -->
-                                    <div class="product-price">
-                                        $17.99
-                                    </div><!-- End .product-price -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-                        </div><!-- End .col-sm-6 col-md-4 col-lg-3 -->
-
-                        <div class="col-6 col-md-4 col-lg-3">
-                            <div class="product product-7 text-center">
-                                <figure class="product-media">
-                                    <a href="product.html">
-                                        <img src="user/assets/images/demos/demo-6/products/product-10-1.jpg"
-                                            alt="Product image" class="product-image">
-                                        <img src="user/assets/images/demos/demo-6/products/product-10-2.jpg"
-                                            alt="Product image" class="product-image-hover">
-                                    </a>
-
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                                wishlist</span></a>
-                                    </div><!-- End .product-action-vertical -->
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Clothing</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Biker jacket</a></h3>
-                                    <!-- End .product-title -->
-                                    <div class="product-price">
-                                        $34.99
-                                    </div><!-- End .product-price -->
-
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-                        </div><!-- End .col-sm-6 col-md-4 col-lg-3 -->
-
-                        <div class="col-6 col-md-4 col-lg-3">
-                            <div class="product product-7 text-center">
-                                <figure class="product-media">
-                                    <a href="product.html">
-                                        <img src="user/assets/images/demos/demo-6/products/product-11-1.jpg"
-                                            alt="Product image" class="product-image">
-                                        <img src="user/assets/images/demos/demo-6/products/product-11-2.jpg"
-                                            alt="Product image" class="product-image-hover">
-                                    </a>
-
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                                wishlist</span></a>
-                                    </div><!-- End .product-action-vertical -->
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Shoes</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Loafers</a></h3>
-                                    <!-- End .product-title -->
-                                    <div class="product-price">
-                                        $9.99
-                                    </div><!-- End .product-price -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-                        </div><!-- End .col-sm-6 col-md-4 col-lg-3 -->
-
-                        <div class="col-6 col-md-4 col-lg-3">
-                            <div class="product product-7 text-center">
-                                <figure class="product-media">
-                                    <span class="product-label label-sale">sale</span>
-                                    <a href="product.html">
-                                        <img src="user/assets/images/demos/demo-6/products/product-12-1.jpg"
-                                            alt="Product image" class="product-image">
-                                        <img src="user/assets/images/demos/demo-6/products/product-12-2.jpg"
-                                            alt="Product image" class="product-image-hover">
-                                    </a>
-
-                                    <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                                wishlist</span></a>
-                                    </div><!-- End .product-action-vertical -->
-
-                                    <div class="product-action">
-                                        <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                                    </div><!-- End .product-action -->
-                                </figure><!-- End .product-media -->
-
-                                <div class="product-body">
-                                    <div class="product-cat">
-                                        <a href="#">Clothing</a>
-                                    </div><!-- End .product-cat -->
-                                    <h3 class="product-title"><a href="product.html">Super Skinny High Jeggings</a></h3>
-                                    <!-- End .product-title -->
-                                    <div class="product-price">
-                                        $9.99
-                                    </div><!-- End .product-price -->
-                                </div><!-- End .product-body -->
-                            </div><!-- End .product -->
-                        </div><!-- End .col-sm-6 col-md-4 col-lg-3 -->
-                    </div><!-- End .row -->
-                </div><!-- End .products -->
-            </div><!-- End .container -->
 
         </main><!-- End .main -->
 
@@ -1128,22 +344,120 @@
         </div><!-- End .mobile-menu-wrapper -->
     </div><!-- End .mobile-menu-container -->
         
-            <!-- Plugins JS File -->
-            <script src="/user/assets/js/jquery.min.js"></script>
-            <script src="/user/assets/js/bootstrap.bundle.min.js"></script>
-            <script src="/user/assets/js/jquery.hoverIntent.min.js"></script>
-            <script src="/user/assets/js/jquery.waypoints.min.js"></script>
-            <script src="/user/assets/js/superfish.min.js"></script>
-            <script src="/user/assets/js/owl.carousel.min.js"></script>
-            <script src="/user/assets/js/bootstrap-input-spinner.js"></script>
-            <script src="user/assets/js/bootstrap-input-spinner.js"></script>
-            <script src="user/assets/js/jquery.magnific-popup.min.js"></script>
-            <script src="user/assets/js/jquery.countdown.min.js"></script>
-        
-        
-            <!-- Main JS File -->
-            <script src="/user/assets/js/main.js"></script>
-            <script src="user/assets/js/demos/demo-6.js"></script>
-            <script src="user/assets/js/demos/demo-16.js"></script>
+<!-- Plugins JS File -->
+<script src="/user/assets/js/jquery.min.js"></script>
+<script src="/user/assets/js/bootstrap.bundle.min.js"></script>
+<script src="/user/assets/js/jquery.hoverIntent.min.js"></script>
+<script src="/user/assets/js/jquery.waypoints.min.js"></script>
+<script src="/user/assets/js/superfish.min.js"></script>
+<script src="/user/assets/js/owl.carousel.min.js"></script>
+<script src="/user/assets/js/bootstrap-input-spinner.js"></script>
+<script src="/user/assets/js/bootstrap-input-spinner.js"></script>
+<script src="/user/assets/js/jquery.magnific-popup.min.js"></script>
+<script src="/user/assets/js/jquery.countdown.min.js"></script>
+
+<!-- Main JS File -->
+<script src="/user/assets/js/main.js"></script>
+<script src="/user/assets/js/demos/demo-6.js"></script>
+<script src="/user/assets/js/demos/demo-16.js"></script>
+
+<!--Sweet Alert  -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function addToCart(productId) {
+        fetch(`/addProductsToCart?productId=${productId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === "Item added to cart") {
+                    Swal.fire({
+                                position: "bottom",
+                                text: 'Item added to cart',
+                                showConfirmButton: false,
+                                color: "#fff",
+                                background:"#000000",
+                                timer: 1500,
+                                width: 300,
+                            });
+                } else if (data.message === "Item is already in the cart") {
+                    Swal.fire({
+                                position: "bottom",
+                                text: 'This item is already in your cart',
+                                showConfirmButton: false,
+                                color: "#fff",
+                                background:"#000000",
+                                timer: 1500,
+                                width: 300,
+                            });
+                } else {
+                    Swal.fire({
+                                position: "bottom",
+                                text: data.message,
+                                showConfirmButton: false,
+                                color: "#fff",
+                                background:"#000000",
+                                timer: 1500,
+                                width: 300,
+                            });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                            position: "bottom",
+                            text: "Something went wrong",
+                            showConfirmButton: false,
+                            color: "#fff",
+                            background:"#000000",
+                            timer: 1500,
+                            width: 400,
+                        });
+            });
+    }
+    </script>
+
+<script>
+
+    function addToWishlist(productId){
+        fetch(`/addToWishlist?productId=${productId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === "Item added to wishlist") {
+                Swal.fire({
+                            position: "bottom",
+                            text: "Item added to wishlist",
+                            showConfirmButton: false,
+                            color: "#fff",
+                            background:"#000000",
+                            timer: 1500,
+                            width: 400,
+                        });
+            }  else {
+                Swal.fire({
+                            position: "bottom",
+                            text: data.message,
+                            showConfirmButton: false,
+                            color: "#fff",
+                            background:"#000000",
+                            timer: 1500,
+                            width: 400,
+                        });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                        position: "bottom",
+                        text: "Something went wrong",
+                        showConfirmButton: false,
+                        color: "#fff",
+                        background:"#000000",
+                        timer: 1500,
+                        width: 300,
+                    });
+        });
+    }
+
+</script>
 
 <%-include("../layout/user/footer")-%>

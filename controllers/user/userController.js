@@ -2,6 +2,7 @@ const User = require("../../models/userdbModel");
 const Product =require("../../models/productdbModel");
 const Order = require("../../models/orderdbSchema");
 const Coupon = require("../../models/coupondbModel");
+const Category = require("../../models/categorydbModel");
 const bcrypt = require("bcrypt");
 const otpController = require("../../auth/otpMailVerify")
 
@@ -218,13 +219,20 @@ const failureGoogleLogin = async (req, res) =>{
 const userHomeLoad = async (req, res) => {
     try {
 
-        res.render("userHome");
+        const productData = await Product.find({})
+                            .populate([
+                                { path: 'categoryId' },
+                                { path: 'offer' }
+                            ]);
+        const sortedProductData = productData.sort((a,b) => b.createdOn - a.createdOn);
+        res.render("userHome", {productData: sortedProductData});
 
     } catch (error) {
         console.log(error.message);
         res.render("404");
     }
 }
+
 
 // contact us page load
 const contactUsLoad = async (req, res) => {

@@ -204,7 +204,7 @@
                                         <td><a href="#" class="fw-bold"><%= order.orderId %></a></td>
                                         <td><%= order.userName %></td>
                                         <td><%= order.date.toLocaleDateString() %></td>
-                                        <td>₹<%= order.totalAmount %></td>
+                                        <td>₹<%= order.totalAmount.toFixed(2) %></td>
                                         <td>
                                             <span class="badge badge-pill badge-soft-success"><%= order.paymentStatus %></span>
                                         </td>
