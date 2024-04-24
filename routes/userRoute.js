@@ -84,7 +84,7 @@ user_route.post("/filterProducts", productController.filterProducts);
 user_route.get("/cart", authentication.isLogin, accessAuth.accessUser, cartController.cartLoad);
 user_route.get("/addProductsToCart", authentication.isLogin, accessAuth.accessUser, cartController.addProductsToCart);
 user_route.delete("/deleteCartItem/:productId", authentication.isLogin, accessAuth.accessUser, cartController.deleteCartItem);
-user_route.post("/updateCartItemQuantity/:productId", authentication.isLogin, accessAuth.accessUser, cartController.updateCartQuantity);
+user_route.post("/updateCartItemQuantity/:productId", cartController.updateCartQuantity);
 
 //wishlist routes
 user_route.get("/wishlist", authentication.isLogin, accessAuth.accessUser, wishlistController.wishlistLoad);
@@ -95,7 +95,7 @@ user_route.delete("/removeFromWishlist", authentication.isLogin, accessAuth.acce
 user_route.get("/checkout", authentication.isLogin, accessAuth.accessUser, orderController.checkoutLoad);
 user_route.post("/placeOrder", orderController.placeOrder);
 user_route.get("/orderDetails", authentication.isLogin, accessAuth.accessUser, orderController.orderDetailsLoad);
-user_route.get("/orderSuccess", authentication.isLogin, orderController.orderSuccessLoad);
+user_route.get("/orderSuccess", authentication.isLogin, accessAuth.accessUser, orderController.orderSuccessLoad);
 user_route.post("/razorpayOrder", orderController.createRazorpayOrder);
 user_route.post("/addCoupon", orderController.addCoupon);
 
@@ -104,7 +104,7 @@ user_route.get("/contactUs", authentication.isLogin, accessAuth.accessUser, user
 
 // user routes on myAccount page
 user_route.get("/myAccount", authentication.isLogin, accessAuth.accessUser, userController.myAccountLoad);
-user_route.post("/saveAddress", authentication.isLogin, accessAuth.accessUser, userController.saveAddress);
+user_route.post("/saveAddress", userController.saveAddress);
 user_route.delete("/removeAddress", authentication.isLogin, accessAuth.accessUser, userController.removeAddress);
 user_route.put("/editAddress/:id", authentication.isLogin, accessAuth.accessUser, userController.editAddress);
 user_route.put("/changePassword", authentication.isLogin, accessAuth.accessUser, userController.changePassword);

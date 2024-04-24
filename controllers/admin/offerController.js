@@ -17,36 +17,25 @@ const offerLoad = async (req, res) => {
 
 }
 
-// offer activate
-const offerActivate = async (req, res) => {
-
+// change the status of offer
+const changeOfferStatus = async (req, res) =>{
     try {
         
-        const {offerId} = req.params;
+        const {offerId, newStatus} = req.params;
 
-        await Offer.findByIdAndUpdate(offerId, { status: true });
-        res.redirect("/admin/offers");
+        let status;
+        if (newStatus === 'activate') {
+            status = true;
+        } else if('deactivate'){
+            status = false;
+        }
+        await Offer.findByIdAndUpdate({_id: offerId}, {status: status});
+
+        res.json({success: true});
 
     } catch (error) {
         console.log(error.message);
     }
-
-}
-
-// offer deactivate
-const offerDeactivate = async (req, res) => {
-
-    try {
-        
-        const {offerId} = req.params;
-
-        await Offer.findByIdAndUpdate(offerId, { status: false });
-        res.redirect("/admin/offers");
-
-    } catch (error) {
-        console.log(error.message);
-    }
-
 }
 
 // add offer load
@@ -170,8 +159,7 @@ const deleteOffer = async (req, res) => {
 
 module.exports = {
     offerLoad,
-    offerActivate,
-    offerDeactivate,
+    changeOfferStatus,
     addOfferLoad,
     getProducts,
     getCategories,

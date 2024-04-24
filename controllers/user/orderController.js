@@ -33,12 +33,30 @@ const checkoutLoad = async (req, res) => {
             var couponExists = couponData.find(coupon => coupon.code === couponCode);
         }
 
-        const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
-                
+        const cartData = await Cart.findOne({ userId: req.session.user_id })
+                                    .populate({
+                                        path: 'products.productId',
+                                        populate: {
+                                            path: 'offer'
+                                        }
+                                    });
         let totalPriceSum = 0;
-        cartData.products.forEach(product => {
-            totalPriceSum += product.totalPrice;
-        });
+        if (cartData) {
+            cartData.products.forEach(cartProduct => {
+                if (cartProduct.productId && cartProduct.productId.offer) {
+                    const offer = cartProduct.productId.offer.offerPercentage;
+                    const productPrice = cartProduct.productId.prdctPrice;
+                    const offerPrice = productPrice - (productPrice * offer)/100;
+                    totalPriceSum+=offerPrice;
+                    console.log('Offer for product with ID', productPrice);
+                    console.log('Offer details:', offer);
+                    console.log('Offer price:', offerPrice);
+                    console.log('Offer price:', totalPriceSum);
+                }else {
+                    totalPriceSum+=cartProduct.productId.prdctPrice;
+                }
+            });
+        } 
 
         res.render("checkout", {userDataCheckout, cartData, couponExists, totalPriceSum});
 

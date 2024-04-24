@@ -14,12 +14,12 @@ const userSchema = new mongoose.Schema({
 
     mobile:{
         type: String,
-        default: " "
+        default: ""
     },
 
     password:{
         type: String,
-        default: " "
+        default: ""
     },
 
     is_verified:{

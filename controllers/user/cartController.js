@@ -12,8 +12,6 @@ const cartLoad = async (req, res) => {
         
         const productData = await Product.find({}).populate('offer');
 
-        const offerData = await Offer.find({});
-
         if(!cartData || !productData){
             res.redirect("/products");
         }else{
@@ -25,14 +23,15 @@ const cartLoad = async (req, res) => {
 
                     const offerPrice = product.prdctPrice - (offer.offerPercentage * product.prdctPrice) / 100;
                     cartProduct.productPrice = offerPrice;
-                    cartProduct.updatedTotalPrice = cartProduct.quantity * offerPrice;
-
+                    cartProduct.totalPrice = cartProduct.quantity * offerPrice;
                 } else {
-                    cartProduct.updatedTotalPrice = cartProduct.quantity * cartProduct.productPrice;
+                    const productPrice = product.prdctPrice;
+                    const quantity = cartProduct.quantity;
+                    cartProduct.totalPrice = quantity * productPrice;
                 }
 
             });
-            const totalCost = cartData.products.reduce((total, product) => total + product.updatedTotalPrice, 0);
+            const totalCost = cartData.products.reduce((total, product) => total + product.totalPrice, 0);
             cartData.totalCost = totalCost;
             await cartData.save();
     

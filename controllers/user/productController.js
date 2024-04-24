@@ -6,7 +6,17 @@ const Offer = require("../../models/offerdbModel");
 // all product list
 const allProductsListLoad = async (req, res) => {
     try {
-        const productsData = await Product.find({}).populate('offer');
+
+        var searchWord = '';
+        if(req.query.search){
+            searchWord = req.query.search;
+        }
+        
+        const productsData = await Product.find({
+                                            $or:[
+                                                {prdctName: {$regex: '.*'+searchWord+'.*', $options: 'i' }},
+                                            ]
+                                        }).populate('offer');
         
         const categoryData = await Category.find({});
         
@@ -22,10 +32,7 @@ const allProductsListLoad = async (req, res) => {
                         if(offer.status === true){
                                 await Product.updateOne({ _id: matchingProduct._id }, { offer: offerId });
 
-                        }else if (offer.status === false){
-                                await Product.updateOne({ _id: matchingProduct._id }, { offer: null });
                         }
-
                     }
                 }
             }
@@ -94,7 +101,6 @@ const filterProducts = async (req, res) => {
         } else {
 
             categoryData = await Product.find();
-
         }
         
         res.json({ success: true, data: categoryData });
@@ -105,7 +111,6 @@ const filterProducts = async (req, res) => {
     }
 }
 
-
 // product details load
 const productDetailsLoad = async (req, res) => {
 
@@ -114,7 +119,11 @@ const productDetailsLoad = async (req, res) => {
         const productId = req.query.productId;
 
         //for getting the product data with the particular id
-        const productDatabyId = await Product.findById({ _id: productId }).populate('categoryId');
+        const productDatabyId = await Product.findById({ _id: productId })                            
+                                            .populate([
+                                                { path: 'categoryId' },
+                                                { path: 'offer' }
+                                            ]);
 
         // for getting product images only without id 
         const productImagebyId = await Product.findById({ _id: productId },{prdctImage:1, _id:0});

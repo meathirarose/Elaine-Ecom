@@ -114,7 +114,11 @@
                                         <a href="#" id="btn-product-gallery" class="btn-product-gallery">
                                             <i class="icon-arrows"></i>
                                         </a>
+                                        <% if (productDatabyId.offer && productDatabyId.offer.status === true) { %>
+                                            <span class="product-label label-sale">Sale</span>
+                                        <% } %>
                                     </figure><!-- End .product-main-image -->
+                                    
 
                                     <div id="product-zoom-gallery" class="product-image-gallery">
                                         <% productImagesArray.forEach((item)=>{ %>
@@ -130,7 +134,6 @@
                         <div class="col-md-6">
                             <div class="product-details">
                                 <h1 class="product-title"><%= productDatabyId.prdctName %></h1><!-- End .product-title -->
-
                                 <div class="ratings-container">
                                     <div class="ratings">
                                         <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
@@ -139,13 +142,20 @@
                                 </div><!-- End .rating-container -->
 
                                 <div class="product-price">
-                                    ₹<%= productDatabyId.prdctPrice %>
+                                    <% if (productDatabyId.offer && productDatabyId.offer.status === true) { %>
+                                        <span class="new-price">₹<%= productDatabyId.prdctPrice - (productDatabyId.offer.offerPercentage * productDatabyId.prdctPrice)/100 %></span>
+                                        <span class="old-price">₹<%= productDatabyId.prdctPrice %></span>     
+                                    <% } else { %>
+                                        ₹<%= productDatabyId.prdctPrice %>                               
+                                    <% } %>
                                 </div><!-- End .product-price -->
                                 <br>
                                 <div class="product-content">
                                     <p><%= productDatabyId.prdctDescription %></p>
                                 </div><!-- End .product-content -->
                                 <br>
+                                
+
                                 <div class="product-details-action">
                                     <% if(productDatabyId.quantity<1) {%>
                                         <p class="h6 text-danger">Out of stock</p>
@@ -153,7 +163,7 @@
                                             <a href="#" class="btn-product btn-cart" onclick="addToCart('<%= productDatabyId._id %>')"><span>Add to cart</span></a>
                                             <% } %>
                                         <div class="details-action-wrapper">
-                                                                <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
+                                            <a href="#" class="btn-product btn-wishlist" onclick="addToWishlist('<%= productDatabyId._id %>')" title="Wishlist"><span>Add to Wishlist</span></a>
                                         </div><!-- End .details-action-wrapper -->
                                 </div><!-- End .product-details-action -->
 
@@ -167,12 +177,7 @@
                             </div><!-- End .product-details -->
                         </div><!-- End .col-md-6 -->
                     </div><!-- End .row -->
-                </div><!-- End .product-details-top -->
-
-                
-
-
-                
+                </div><!-- End .product-details-top -->                              
             </div><!-- End .container -->
         </div><!-- End .page-content -->
     </main><!-- End .main -->
@@ -307,50 +312,104 @@
 <!-- Main JS File -->
 <script src="/user/assets/js/main.js"></script>
 
-    <!--Sweet Alert  -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!--Sweet Alert  -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script>
-        function addToCart(productId) {
-            fetch(`/addProductsToCart?productId=${productId}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.message === "Item added to cart") {
-                        Swal.fire({
-                            title: "Success!",
-                            text: "Item added to cart",
-                            icon: "success",
-                            timer: 1000, 
-                            buttons: false, 
-                        });
-                    } else if (data.message === "Item is already in the cart") {
-                        Swal.fire({
-                            text: "This item is already in your cart",
-                            icon: "info",
-                            timer: 1000, 
-                            buttons: false, 
-                        });
-                    } else {
-                        Swal.fire({
-                            title: "Error!",
-                            text: "Out of Stock",
-                            icon: "error",
-                            timer: 1000, 
-                            buttons: false, 
-                        });
-                    }
-                })
-                .catch(error => {
+<script>
+    function addToCart(productId) {
+        fetch(`/addProductsToCart?productId=${productId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === "Item added to cart") {
                     Swal.fire({
-                        title: "Error!",
-                        text: "Something went wrong",
-                        icon: "error",
-                        timer: 800, 
-                        buttons: false, 
-                    });
-                });
-        }
+                                position: "bottom",
+                                text: 'Item added to cart',
+                                showConfirmButton: false,
+                                color: "#fff",
+                                background:"#000000",
+                                timer: 1000,
+                                width: 300,
+                            });
+                } else if (data.message === "Item is already in the cart") {
+                    Swal.fire({
+                                position: "bottom",
+                                text: 'This item is already in your cart',
+                                showConfirmButton: false,
+                                color: "#fff",
+                                background:"#000000",
+                                timer: 1000,
+                                width: 300,
+                            });
+                } else {
+                    Swal.fire({
+                                position: "bottom",
+                                text: data.message,
+                                showConfirmButton: false,
+                                color: "#fff",
+                                background:"#000000",
+                                timer: 1000,
+                                width: 300,
+                            });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                            position: "bottom",
+                            text: "Something went wrong",
+                            showConfirmButton: false,
+                            color: "#fff",
+                            background:"#000000",
+                            timer: 1000,
+                            width: 300,
+                        });
+            });
+    }
     </script>
+
+<script>
+
+    function addToWishlist(productId){
+        fetch(`/addToWishlist?productId=${productId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === "Item added to wishlist") {
+                Swal.fire({
+                            position: "bottom",
+                            text: "Item added to wishlist",
+                            showConfirmButton: false,
+                            color: "#fff",
+                            background:"#000000",
+                            timer: 1000,
+                            width: 300,
+                        });
+            }  else {
+                Swal.fire({
+                            position: "bottom",
+                            text: data.message,
+                            showConfirmButton: false,
+                            color: "#fff",
+                            background:"#000000",
+                            timer: 1000,
+                            width: 300,
+                        });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                        position: "bottom",
+                        text: "Something went wrong",
+                        showConfirmButton: false,
+                        color: "#fff",
+                        background:"#000000",
+                        timer: 1000,
+                        width: 300,
+                    });
+        });
+    }
+
+</script>
     
 
 <%-include("../layout/user/footer")-%>

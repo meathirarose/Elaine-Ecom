@@ -157,7 +157,7 @@
                                                 </div><!-- End .cart-product-quantity -->
                                             </td>
                                             
-                                            <td class="total-col">Rs.<%= product.updatedTotalPrice.toFixed(2) %></td>
+                                            <td class="total-col">Rs.<%= product.totalPrice.toFixed(2) %></td>
 
                                             <td class="remove-col"><button class="btn-remove"
                                                 data-product-id="<%= product.productId._id %>">
@@ -181,26 +181,22 @@
                                         <% if(cartData && cartData.products.length > 0) {%>
                                             <tr class="summary-subtotal">
                                                 <td>Subtotal:</td>
-                                                <td class="totalCost">Rs. <%= cartData.totalCost.toFixed(2) %></td>
+                                                <td class="totalCost">Rs. <%= (cartData.totalCost).toFixed(2) %></td>
                                             </tr><!-- End .summary-subtotal -->
-                                            <%}else{%>
-                                                <tr class="summary-subtotal">
-                                                    <td>Subtotal:</td>
-                                                    <td class="totalCost">Rs. 0.00</td>
-                                                </tr><!-- End .summary-subtotal -->
-                                           
+                                        <%}else{%>
+                                            <tr class="summary-subtotal">
+                                                <td>Subtotal:</td>
+                                                <td class="totalCost">Rs. 0.00</td>
+                                            </tr><!-- End .summary-subtotal -->
                                         <%}%>
+
                                         <tr class="summary-shipping">
                                             <td>Shipping:</td>
                                             <td>&nbsp;</td>
                                         </tr>
 
                                         <tr class="summary-shipping-row">
-                                            <td>
- 
-                                                    Free shipping
-   
-                                            </td>
+                                            <td>Free shipping</td>
                                             <td>Rs. 0.00</td>
                                         </tr><!-- End .summary-shipping-row -->
 
@@ -388,15 +384,17 @@
 
             const totalValue = element.closest('tr').querySelector(".total-col");
             totalValue.innerHTML = `Rs. ${data.updatedTotalPrice.toFixed(2)}`;
-            
+            console.log(totalValue);
             const subtotalElement = document.querySelector(".summary-subtotal .totalCost");
             if (subtotalElement) {
                 subtotalElement.textContent = `Rs. ${data.totalCost.toFixed(2)}`;
             }
+            console.log(subtotalElement);
             const totalElement = document.querySelector(".allTotal .total");
             if (totalElement) {
                 totalElement.textContent = `Rs. ${data.totalCost.toFixed(2)}`;
             }
+            console.log(totalElement);
         })
         .catch(error => console.error('Error:', error));
     }
