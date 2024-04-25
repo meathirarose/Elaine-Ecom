@@ -4,7 +4,6 @@ const Cart = require("../../models/cartdbModel");
 const Order = require("../../models/orderdbSchema");
 const Category = require("../../models/categorydbModel");
 const Coupon = require("../../models/coupondbModel");
-const Offer = require("../../models/offerdbModel");
 const Razorpay = require("razorpay");
 require("dotenv").config();
 
@@ -44,20 +43,21 @@ const checkoutLoad = async (req, res) => {
         let totalPriceSum = 0;
         if (cartData.products.length > 0) {
             cartData.products.forEach(cartProduct => {
-                if (cartProduct.productId && cartProduct.productId.offer.status === true) {
+                if (cartProduct.productId.offer && cartProduct.productId.offer.status === true) {
                     const offer = cartProduct.productId.offer.offerPercentage;
                     const productPrice = cartProduct.productId.prdctPrice;
                     const offerPrice = productPrice - (productPrice * offer)/100;
                     totalPriceSum+=offerPrice;
                     cartData.totalCost = totalPriceSum;
                 }else {
+
                     totalPriceSum+=cartProduct.productId.prdctPrice;
                     cartData.totalCost = totalPriceSum;
                 }
             });
         } 
         await cartData.save();
-
+        
         res.render("checkout", {userDataCheckout, cartData, couponExists, totalPriceSum});
 
     } catch (error) {
@@ -160,6 +160,7 @@ const placeOrder = async (req, res) => {
         }
 
         const cartData = await Cart.findOne({ userId: req.session.user_id }).populate('products.productId');
+        k
 
         const userData = await User.findOne({ _id: req.session.user_id }, {_id: 1, name: 1, email:1});
 

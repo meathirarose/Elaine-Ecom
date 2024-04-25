@@ -254,24 +254,50 @@ const myAccountLoad = async (req, res) => {
     try {
         const userId = req.session.user_id;
 
+        // for pagination
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 3; 
+        const skip = (page - 1) * limit;
+
         const userData = await User.findById(userId);
-        let orderData = await Order.find({ userId });
+        let orderData = await Order.find({ userId })
+            .populate('products.productId')
+            .sort({date: -1})
+            .skip(skip)
+            .limit(limit);
         
-        orderData = orderData.sort((a, b) => new Date(b.date) - new Date(a.date));
+        // display order
+        for (let i = 0; i < orderData.length; i++) {
+            const order = orderData[i];
 
-        const productDataPromises = orderData.map(async order => {
-            const products = order.products.map(async product => {
+            let totalPrice = 0;
+
+            for (const product of order.products) {
                 const productData = await Product.findById(product.productId);
-                return { ...product.toObject(), productData };
-            });
-            return Promise.all(products);
-        });
+                
+                product.productName = productData.prdctName;
+                product.productPrice = productData.prdctPrice;
 
-        const productsData = await Promise.all(productDataPromises);
-        
+                totalPrice += product.totalPrice;
+            }
+
+            order.totalAmount = totalPrice;
+        }
+
+        // for pagination
+        const totalOrders = await Order.countDocuments({ userId });
+        const totalPages = Math.ceil(totalOrders / limit);
+
         const couponData = await Coupon.find({});
-          
-        res.render("myAccount", { userData, orderData, productsData, couponData });
+
+        res.render("myAccount", { 
+            userData, 
+            orderData, 
+            couponData, 
+            currentPage: page, 
+            totalPages
+             
+        });
 
     } catch (error) {
         console.log(error.message);

@@ -9,7 +9,7 @@ const productSchema = mongoose.Schema({
 
     prdctDescription: {
         type: String,
-        default: " "
+        default: ""
     },
 
     prdctPrice: {
@@ -42,7 +42,8 @@ const productSchema = mongoose.Schema({
 
     offer: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Offer"
+        ref: "Offer",
+        default: null
     }
 
 });

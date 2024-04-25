@@ -12,12 +12,23 @@ const allProductsListLoad = async (req, res) => {
             searchWord = req.query.search;
         }
         
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 6; 
+        const skip = (page - 1) * limit;
+
         const productsData = await Product.find({
-                                            $or:[
-                                                {prdctName: {$regex: '.*'+searchWord+'.*', $options: 'i' }},
-                                            ]
-                                        }).populate('offer');
+            $or:[
+                {prdctName: {$regex: '.*'+searchWord+'.*', $options: 'i' }},
+            ]
+        }).populate('offer')
+        .skip(skip)
+        .limit(limit);
         
+        const totalCount = await Product.countDocuments({
+            $or:[
+                {prdctName: {$regex: '.*'+searchWord+'.*', $options: 'i' }},
+            ]
+        });
         const categoryData = await Category.find({});
         
         const offerData = await Offer.find({});
@@ -38,7 +49,22 @@ const allProductsListLoad = async (req, res) => {
             }
         }
 
-        res.render("products", { productsData: productsData, categoryData: categoryData });
+        const remainingProducts = await Product.find({
+            $or:[
+                {prdctName: {$regex: '.*'+searchWord+'.*', $options: 'i' }},
+            ]
+        }).skip(skip + limit).limit(1);
+
+        const hasNextPage = remainingProducts.length > 0;
+
+        res.render("products", { 
+            productsData: productsData, 
+            categoryData: categoryData,
+            totalCount: totalCount, 
+            currentPage: page, 
+            totalPages: Math.ceil(totalCount / limit),
+            hasNextPage: hasNextPage 
+        });
 
     } catch (error) {
         console.log(error.message);
@@ -139,8 +165,6 @@ const productDetailsLoad = async (req, res) => {
     }
 
 }
-
-
 
 module.exports = {
 

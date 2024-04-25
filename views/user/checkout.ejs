@@ -274,13 +274,21 @@
                                         </thead>
 
                                         <tbody>
-                                            <tr>
                                             <% cartData.products.forEach(product=> { %>
-
-                                                <td><a href="#"><%= product.productId.prdctName %></a></td>
-                                                <td>Rs. <%= product.totalPrice.toFixed(2) %></td>
-                                                
-                                            </tr>
+                                                <tr>
+                                                    
+                                                    <% if(product.productId.offer!==null){ %>
+                                                    <% if (product.productId.offer && product.productId.offer.status === true) { %>
+                                                        <td><a href="#"><%= product.productId.prdctName %></a></td>
+                                                        <td>Rs. <%= (product.productPrice * product.quantity).toFixed(2) %></td>
+                                                    <% } else if(!product.productId.offer && product.productId.offer.status === false){%>
+                                                        <td>Rs. <%= (product.productId.prdctPrice * product.quantity).toFixed(2) %></td>
+                                                    <% } %>
+                                                    <% }else if(product.productId.offer===null){%>
+                                                        <td><a href="#"><%= product.productId.prdctName %></a></td>
+                                                        <td>Rs. <%= (product.productId.prdctPrice * product.quantity).toFixed(2) %></td>
+                                                   <% } %>
+                                                </tr>
                                             <% });%>
                                             <% if(totalPriceSum > 0) {%>
                                             <tr class="summary-subtotal">

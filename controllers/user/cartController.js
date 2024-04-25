@@ -1,7 +1,5 @@
 const Product =require("../../models/productdbModel");
 const Cart = require("../../models/cartdbModel");
-const Offer = require("../../models/offerdbModel");
-
 
 // cart load
 const cartLoad = async (req, res) => {
