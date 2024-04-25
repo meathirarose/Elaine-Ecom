@@ -4,6 +4,7 @@ const Cart = require("../../models/cartdbModel");
 const Order = require("../../models/orderdbSchema");
 const Category = require("../../models/categorydbModel");
 const Coupon = require("../../models/coupondbModel");
+const Offer = require("../../models/offerdbModel");
 const Razorpay = require("razorpay");
 require("dotenv").config();
 
@@ -25,7 +26,7 @@ const checkoutLoad = async (req, res) => {
                 _id: req.session.user_id
             }
         );
-
+        
         const couponCode = req.session.couponCode;
         const couponData = await Coupon.find({});
 
@@ -41,22 +42,21 @@ const checkoutLoad = async (req, res) => {
                                         }
                                     });
         let totalPriceSum = 0;
-        if (cartData) {
+        if (cartData.products.length > 0) {
             cartData.products.forEach(cartProduct => {
-                if (cartProduct.productId && cartProduct.productId.offer) {
+                if (cartProduct.productId && cartProduct.productId.offer.status === true) {
                     const offer = cartProduct.productId.offer.offerPercentage;
                     const productPrice = cartProduct.productId.prdctPrice;
                     const offerPrice = productPrice - (productPrice * offer)/100;
                     totalPriceSum+=offerPrice;
-                    console.log('Offer for product with ID', productPrice);
-                    console.log('Offer details:', offer);
-                    console.log('Offer price:', offerPrice);
-                    console.log('Offer price:', totalPriceSum);
+                    cartData.totalCost = totalPriceSum;
                 }else {
                     totalPriceSum+=cartProduct.productId.prdctPrice;
+                    cartData.totalCost = totalPriceSum;
                 }
             });
         } 
+        await cartData.save();
 
         res.render("checkout", {userDataCheckout, cartData, couponExists, totalPriceSum});
 
@@ -190,9 +190,6 @@ const placeOrder = async (req, res) => {
         })
 
         await newOrder.save();
-        console.log('====================================================================================')
-        console.log(newOrder);
-        console.log('====================================================================================')
 
         if (coupon) {
             const couponData = await Coupon.findOne({ code: coupon });
