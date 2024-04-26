@@ -1,4 +1,20 @@
 <%-include("../layout/user/header")-%>
+<style>
+.account-details-box {
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    background: rgb(213, 210, 210);
+}
+.billing-address-box {
+    border: 1px solid #fff9f9;
+    border-radius: 10px;
+    padding: 20px 20px 20px 40px;
+    margin-bottom: 20px;
+    background: rgb(213, 210, 210);
+}
+</style>
 
     <div class="page-wrapper">
         <header class="header header-6">
@@ -229,7 +245,7 @@
 
                 <% if(!userData.address || userData.address.length===0) { %>
                     <div class="col-lg-6">
-                        <div class="card card-dashboard">
+                        <div class="card card-dashboard-address">
                             <div class="card-body">
                                 <h3 class="card-title">Billing Address</h3>
                                 <!-- End .card-title -->
@@ -242,10 +258,11 @@
                     <% } else { %>
                     <% userData.address.forEach(element=> { %>
                     <div class="col-lg-6">
-                        <div class="card card-dashboard" id="cardDashboard">
+                        <div class="card card-dashboard-address" id="cardDashboard">
                             <div class="card-body">
-                                <h3 class="card-title">Billing Address</h3>
+                                <h3 class="card-title pt-3 pb-3">Billing Address</h3>
                                 <!-- End .card-title -->
+                                <div class="billing-address-box">
                                 <p>
                                     <%= element.fullname %><br>
                                     <%= element.addressline %><br>
@@ -260,6 +277,7 @@
                                         Edit <i class="icon-edit"></i></button>&nbsp;&nbsp;
                                 <a href="#" class="remove-address btn btn-primary" data-address-id="<%= element._id %>">Delete</a>
                                 </p>
+                                </div>
                             </div><!-- End .card-body -->
                         </div><!-- End .card-dashboard -->
                     </div><!-- End .col-lg-6 -->
@@ -320,8 +338,8 @@
         <!-- ----------------------------------- end address form --------------------------------- -->
         <!-- --------------------------------- add new address button ----------------------------- -->
 
-                        <div class="col-lg-6">
-                            <button id="addNewAddressBtn" class="btn btn-primary showAddAddress">
+                        <div class="col-lg-6 ">
+                            <button id="addNewAddressBtn" class="btn btn-primary showAddAddress ">
                                 Add a new address <i class="icon-plus"></i>
                             </button>
                         </div>
@@ -373,41 +391,51 @@
         <!-- -------------------------------------- Account Details ---------------------------------------- -->
 
 
-                <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
+        <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
+            <div class="container-fluid">
+                <div class="row">
                     <div class="col-lg-6">
-                        <div class="card card-dashboard" id="cardDashboard">
+                        <div class="card card-dashboard-profile" id="cardDashboard">
                             <div class="card-body">
-                                <h3 class="card-title">Account Details</h3>
+                                <h3 class="card-title pt-3 pb-3">Account Details</h3>
                                 <!-- End .card-title -->
-                                <p>
-                                    <%= userData.name %><br>
-                                    <%= userData.email %><br>
-                                    <%= userData.mobile %><br>
-                                </p>
-                                <button type="submit" id="editProfile" class="btn btn-primary editProfile">Edit Profile</button>
+                                <div class="account-details-box">
+                                    <p>
+                                        <strong>Name:</strong> <%= userData.name %><br>
+                                        <strong>Email:</strong> <%= userData.email %><br>
+                                        <strong>Mobile:</strong> <%= userData.mobile %><br>
+                                    </p>
+                                    <button class="btn btn-primary edit-profile-btn" data-user-id="<%= userData._id %>">
+                                        Edit Profile
+                                    </button>
+                                </div><!-- End .account-details-box -->
                             </div><!-- End .card-body -->
                         </div><!-- End .card-dashboard -->
                     </div><!-- End .col-lg-6 -->
-                </div><!-- .End .tab-pane -->
-
+                </div><!-- End .row -->
+            </div><!-- End .container-fluid -->
+        </div><!-- .End .tab-pane -->
+        
+        
         <!-- ------------------------------------- end Account Details ---------------------------------------- -->
         <!-- ---------------------------------------- edit profile ----------------------------------------- -->
-        <div class="tab-pane fade" id="profile-edit" role="tabpanel" aria-labelledby="tab-profile-edit-link">
+
+        <div id="user-profile-edit<%=userData._id%>" class="editProfile" style="display: none;">
             <form action="/editProfile" id="editUserProfile" method="post">
 
                 <div class="col-sm-6">
                     <label>Name </label>
-                    <input type="password" name="name" class="form-control">
+                    <input type="text" name="name" value="<%= userData.name %>" class="form-control">
                 </div><!-- End .col-sm-6 -->
 
                 <div class="col-sm-6">
                     <label>Email id</label>
-		            <input type="password" name="email" class="form-control">
+		            <input type="email" name="email" value="<%= userData.email %>" class="form-control" readonly>
                 </div><!-- End .col-sm-6 -->
 
                 <div class="col-sm-6">
                     <label>Mobile Number</label>
-		            <input type="password" name="mobile" class="form-control mb-2">
+		            <input type="number" name="mobile" value="<%= userData.mobile %>" class="form-control mb-2">
                 </div><!-- End .col-sm-6 -->
 
                 <button type="submit" class="btn btn-outline-primary-2 m-3">
@@ -416,6 +444,7 @@
                 
             </form>
         </div>
+        
         <!-- ---------------------------------------- end Change password ------------------------------------- -->
         <!-- ---------------------------------------- coupons ------------------------------------- -->
         <div class="tab-pane fade" id="tab-coupon" role="tabpanel" aria-labelledby="tab-coupon-link">
@@ -638,6 +667,7 @@
 
     <!--Sweet Alert  -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- for adding address -->
     <script>
@@ -646,7 +676,8 @@
             $('.showAddAddress').click(function (e) {
                 e.preventDefault();
                 $('.addAddress').toggle(); 
-                $('.card-dashboard').hide(); 
+                $('.card-dashboard-address').hide(); 
+                $('.editProfile').hide();
             });
         });
 
@@ -674,7 +705,7 @@
         })
         .then(data => {
             if(data.message === "Address saved successfully"){
-                swal({
+                Swal.fire({
                     title: "Success!",
                     text: data.message,
                     icon: "success",
@@ -685,7 +716,7 @@
                     location.reload();
                 }, 1500);
             }else{
-                swal({
+                Swal.fire({
                     title: "Error!",
                     text: data.message,
                     icon: "error",
@@ -696,7 +727,7 @@
         })
         .catch(error => {
             var errorMessage = error.message || "Something went wrong";
-            swal({
+            Swal.fire({
                 title: "Error!",
                 text: errorMessage,
                 icon: "error",
@@ -717,8 +748,9 @@
 
             $(`#edit-address${id}`).click(function (e) {
                 e.preventDefault();
-                $('.card-dashboard').hide();
+                $('.card-dashboard-address').hide();
                 $('.showAddAddress').hide();
+                $('.editProfile').hide();
                 $(`#editAddress${id}`).show();
             });
 
@@ -754,18 +786,18 @@
             })
             .then(data => {
                 if(data.message === "Address updated successfully"){
-                swal({
-                    title: "Success!",
-                    text: data.message,
-                    icon: "success",
-                    timer: 1500,
-                    buttons: false
+                    Swal.fire({
+                        title: "Success!",
+                        text: data.message,
+                        icon: "success",
+                        timer: 1500,
+                        buttons: false
                 });
                 setTimeout(function() {
                     location.reload();
                 }, 1500);
             }else{
-                swal({
+                Swal.fire({
                     title: "Error!",
                     text: data.message,
                     icon: "error",
@@ -776,7 +808,7 @@
             })
             .catch(error => {
             var errorMessage = error.message || "Something went wrong";
-            swal({
+            Swal.fire({
                 title: "Error!",
                 text: errorMessage,
                 icon: "error",
@@ -798,7 +830,7 @@
                     const addressId = this.getAttribute('data-address-id');
                     const addressElement = document.querySelector(`[data-address-id="${addressId}"]`);
     
-                    swal({
+                    Swal.fire({
                         title: "Are you sure?",
                         text: "Once deleted, you will not be able to recover this address!",
                         icon: "warning",
@@ -835,6 +867,101 @@
     </script>
     
     <!-- end removing address -->
+    <!-- edit User Profile -->
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '.edit-profile-btn', function (e) {
+                e.preventDefault();
+                var userId = $(this).data('user-id'); 
+                $('.card-dashboard-profile').hide();
+                $(`#user-profile-edit${userId}`).show();
+            });
+        });
+    </script>
+
+    <script>
+        $('#editUserProfile').submit(function (e) {
+            e.preventDefault();
+
+            var formData = $(this).serialize(); 
+            console.log("helloooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+
+            fetch('/userProfile', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: formData 
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("helloooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+                if(data.message === "Enter a valid name.!"){
+                    Swal.fire({
+                                position: "bottom",
+                                text: 'Enter a valid name.!',
+                                showConfirmButton: false,
+                                color: "#fff",
+                                background:"#000000",
+                                timer: 500,
+                                width: 300,
+                            });
+                }else if(data.message === "Enter a valid mobile number.!"){
+                    Swal.fire({
+                                position: "bottom",
+                                text: 'Enter a valid mobile number.!',
+                                showConfirmButton: false,
+                                color: "#fff",
+                                background:"#000000",
+                                timer: 500,
+                                width: 300,
+                            });
+                }else if(data.message === "Profile details updated successfully.!"){
+                    Swal.fire({
+                                position: "bottom",
+                                text: 'Profile details updated successfully.!',
+                                showConfirmButton: false,
+                                color: "#fff",
+                                background:"#000000",
+                                timer: 1500,
+                                width: 300,
+                            });
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1500);
+                }else {
+                    Swal.fire({
+                                position: "bottom",
+                                text: data.message,
+                                showConfirmButton: false,
+                                color: "#fff",
+                                background:"#000000",
+                                timer: 500,
+                                width: 300,
+                            });
+                }
+            })
+            .catch(error => {
+                console.error('Error updating user profile:', error);
+                Swal.fire({
+                        position: "bottom",
+                        text: "Something went wrong",
+                        showConfirmButton: false,
+                        color: "#fff",
+                        background:"#000000",
+                        timer: 500,
+                        width: 300,
+                    });
+            });
+        });
+
+    </script>
+
     <script>
 
         $('#changePasswordForm').submit(function (e) {

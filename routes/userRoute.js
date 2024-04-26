@@ -107,6 +107,7 @@ user_route.get("/myAccount", authentication.isLogin, accessAuth.accessUser, user
 user_route.post("/saveAddress", userController.saveAddress);
 user_route.delete("/removeAddress", authentication.isLogin, accessAuth.accessUser, userController.removeAddress);
 user_route.put("/editAddress/:id", authentication.isLogin, accessAuth.accessUser, userController.editAddress);
+user_route.put("/userProfile", authentication.isLogin, accessAuth.accessUser, userController.editUserProfile);
 user_route.put("/changePassword", authentication.isLogin, accessAuth.accessUser, userController.changePassword);
 
 // user logout route

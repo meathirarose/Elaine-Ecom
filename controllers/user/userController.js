@@ -459,6 +459,40 @@ const removeAddress = async (req, res) => {
 
 }
 
+// edit user profile
+const editUserProfile = async (req, res) => {
+
+    try {
+        
+        const {name, mobile} = req.body;
+
+        if (!name && !/^[a-zA-Z][a-zA-Z\s]*$/.test(name)){
+            return res.json({message: "Enter a valid name.!"});
+        }
+        if(!mobile && !/^\d{10}$/.test(mobile)){
+            return res.json({message: "Enter a valid mobile number.!"});
+        }
+
+        await User.findByIdAndUpdate(
+            {
+                _id: req.session.user_id
+            },
+            {
+                $set:{
+                    "name": name,
+                    "mobile": mobile
+                }
+            });
+
+        return res.json({message: "Profile details updated successfully.!"});
+
+    } catch (error) {
+        console.log(error.message);
+        res.render("404");
+    }
+
+}
+
 // change password
 const changePassword = async (req, res) => {
 
@@ -537,6 +571,7 @@ module.exports = {
     saveAddress,
     editAddress,
     removeAddress,
+    editUserProfile,
     changePassword,  
     pageNotFound,
     userLogout
