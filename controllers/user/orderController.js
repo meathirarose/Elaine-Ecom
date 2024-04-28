@@ -160,7 +160,6 @@ const placeOrder = async (req, res) => {
         }
 
         const cartData = await Cart.findOne({ userId: req.session.user_id }).populate('products.productId');
-        k
 
         const userData = await User.findOne({ _id: req.session.user_id }, {_id: 1, name: 1, email:1});
 
@@ -378,7 +377,7 @@ const orderDetailsLoad = async (req, res) => {
         
             var address = user.address.find(address => address._id == addressId);
         }
-
+        
         let totalPriceSum = 0;
         totalPriceSum = orderData.totalCost + discount;
 
@@ -392,6 +391,59 @@ const orderDetailsLoad = async (req, res) => {
 
 }
 
+// cancel product
+const cancelProduct = async (req, res) => {
+
+    try {
+        
+        const {orderId, productId} = req.body;
+        
+        const orderData = await Order.findById({_id: orderId});
+        if (orderData && orderData.products && orderData.products.length > 0) {
+            const product = orderData.products.find(product => {
+                return String(product._id) === String(productId);
+            });
+            
+            if(product){
+
+                const {status} = product;
+
+                if(status === 'Order Placed' || status === 'Order Shipping'){
+                    product.status = 'Order Cancelled';
+                    await orderData.save();
+                    if(product.status === 'Order Cancelled'){
+                        const userData = await User.findById({_id: req.session.user_id});
+                        
+                        userData.wallet +=orderData.totalAmount;
+                        await userData.save();
+                        return res.json({message: "Your order has been cancelled and the Purchase Amount is added to your wallet"});
+                    }
+                    
+                }else if(status === 'Order Delivered'){
+                    return res.json({error: "Product cannot be cancelled because it is already delivered."});
+                }else{
+                    return res.json({error: "Product cannot be cancelled because it is already cancelled or in an invalid status."});
+                }
+
+            }else{
+                return res.json({error: "Corresponding product is not found in the order"});
+            }
+
+        }else{
+            return res.json({error: "No order found"});
+        }
+
+        
+
+
+    } catch (error) {
+        console.log(error.message);
+        res.render("404");
+    }
+
+}
+
+// order success
 const orderSuccessLoad = async (req, res) =>{
     try {
         
@@ -410,6 +462,6 @@ module.exports = {
     placeOrder,
     createRazorpayOrder,
     orderDetailsLoad,
+    cancelProduct,
     orderSuccessLoad
-
 }

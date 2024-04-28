@@ -133,12 +133,12 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders"
-                                        role="tab" aria-controls="tab-orders" aria-selected="false">Orders</a>
+                                        role="tab" aria-controls="tab-orders" aria-selected="false">My Orders</a>
                                 </li>
 
                                 <li class="nav-item">
                                     <a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address"
-                                        role="tab" aria-controls="tab-address" aria-selected="false">Adresses</a>
+                                        role="tab" aria-controls="tab-address" aria-selected="false">My Adresses</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="tab-account-link" data-toggle="tab" href="#tab-account"
@@ -391,10 +391,10 @@
         <!-- -------------------------------------- Account Details ---------------------------------------- -->
 
 
-        <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
+        <div class="tab-pane fade d-flex" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-12">
                         <div class="card card-dashboard-profile" id="cardDashboard">
                             <div class="card-body">
                                 <h3 class="card-title pt-3 pb-3">Account Details</h3>
@@ -407,6 +407,26 @@
                                     </p>
                                     <button class="btn btn-primary edit-profile-btn" data-user-id="<%= userData._id %>">
                                         Edit Profile
+                                    </button>
+                                </div><!-- End .account-details-box -->
+                            </div><!-- End .card-body -->
+                        </div><!-- End .card-dashboard -->
+                    </div><!-- End .col-lg-6 -->
+                </div><!-- End .row -->
+            </div><!-- End .container-fluid -->
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card card-dashboard-profile" id="cardDashboard">
+                            <div class="card-body">
+                                <h3 class="card-title pt-3 pb-3">Wallet</h3>
+                                <!-- End .card-title -->
+                                <div class="account-details-box">
+                                    <p>
+                                        <strong>Total Amount: &nbsp;&nbsp;Rs.<%= userData.wallet %></strong> <br>
+                                    </p>
+                                    <button class="btn btn-primary edit-profile-btn" data-user-id="<%= userData._id %>">
+                                        Transaction History
                                     </button>
                                 </div><!-- End .account-details-box -->
                             </div><!-- End .card-body -->
@@ -429,7 +449,7 @@
                 </div><!-- End .col-sm-6 -->
 
                 <div class="col-sm-6">
-                    <label>Email id</label>
+                    <label><span>Email id</span></label>
 		            <input type="email" name="email" value="<%= userData.email %>" class="form-control" readonly>
                 </div><!-- End .col-sm-6 -->
 
@@ -494,9 +514,9 @@
         <!-- ---------------------------------------- Change password ----------------------------------------- -->
         <div class="tab-pane fade" id="tab-change-password" role="tabpanel" aria-labelledby="tab-change-address-link">
             <form action="/changePassword" id="changePasswordForm" method="post">
-                <div>
+                <!-- <div>
                     <p class="text-danger" id="changePasswordId"></p>
-                </div>
+                </div> -->
                 <div class="col-sm-6">
                     <label>Current password </label>
                     <input type="password" name="currentPassword" class="form-control">
@@ -701,7 +721,7 @@
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            return response.json();
+        return response.json();
         })
         .then(data => {
             if(data.message === "Address saved successfully"){
@@ -884,7 +904,6 @@
             e.preventDefault();
 
             var formData = $(this).serialize(); 
-            console.log("helloooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
 
             fetch('/userProfile', {
                 method: 'PUT',
@@ -900,7 +919,6 @@
                 return response.json();
             })
             .then(data => {
-                console.log("helloooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
                 if(data.message === "Enter a valid name.!"){
                     Swal.fire({
                                 position: "bottom",
@@ -962,32 +980,80 @@
 
     </script>
 
+
     <script>
 
-        $('#changePasswordForm').submit(function (e) {
+        document.getElementById('changePasswordForm').addEventListener('submit', function (e) {
             e.preventDefault();
 
-            var formData = $(this).serialize();
+            var formData = new FormData(this);
 
-            $.ajax({
-                type: 'PUT',
-                url: '/changePassword',
-                data: formData,
-                success: function (response) {
-
-                    const changeId = document.getElementById("changePasswordId");
-                    changeId.innerHTML = response.message;
-
-                    $('#changePasswordForm')[0].reset();
-                    
-                    console.log('Password saved successfully:', response);
-                },
-                error: function (xhr, status, error) {
-
-                    console.error(error);
+            fetch('/changePassword', {
+                method: 'PUT',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
+                return response.json();
+            })
+            .then(data => {
+                // const changeId = document.getElementById('changePasswordId');
+                // changeId.innerHTML = data.message;
+
+                document.getElementById('changePasswordForm').reset();
+
+                if(data.message === 'New password cannot be the same as current password.'){
+                    Swal.fire({
+                        position: "bottom",
+                        text: "New password cannot be the same as current password.",
+                        showConfirmButton: false,
+                        color: "#fff",
+                        background:"#000000",
+                        timer: 1500,
+                        width: 300,
+                    });
+                }else if(data.message === 'Password changed successfully'){
+                    Swal.fire({
+                                position: "bottom",
+                                text: 'Password changed successfully',
+                                showConfirmButton: false,
+                                color: "#fff",
+                                background:"#000000",
+                                timer: 1500,
+                                width: 300,
+                            });
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1500);
+                }else {
+                    Swal.fire({
+                                position: "bottom",
+                                text: data.message,
+                                showConfirmButton: false,
+                                color: "#fff",
+                                background:"#000000",
+                                timer: 1500,
+                                width: 300,
+                            });
+                }
+
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                        position: "bottom",
+                        text: "Something went wrong",
+                        showConfirmButton: false,
+                        color: "#fff",
+                        background:"#000000",
+                        timer: 1500,
+                        width: 300,
+                    });
             });
         });
+
 
     </script>
 

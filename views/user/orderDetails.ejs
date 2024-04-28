@@ -35,6 +35,54 @@ font-size: 12px;
 .card-stepper {
 z-index: 0
 }
+
+/* Header */
+.header {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Order Details Section */
+.card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    max-width: 1000px; /* Adjust the max-width as needed */
+    margin: 0 auto; /* Center the card horizontally */
+    margin: 20px;
+    padding: 10px;
+}
+
+.card-body {
+    padding: 20px;
+
+}
+
+.card-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.cancel{
+    margin-left: -20px;
+}
+
+/* Overall Styling */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Roboto', sans-serif;
+    color: #333333;
+}
+
+p {
+    font-family: 'Roboto', sans-serif;
+    color: #666666;
+    line-height: 1.6;
+}
+.order-details{
+    font-family: 'Roboto', sans-serif;
+    color: #dc945a;
+}
+
 </style>
 
 <div class="page-wrapper">
@@ -140,14 +188,14 @@ z-index: 0
 
                 <section class=" gradient-custom">
                     <div class="container py-5 ">
-                      <div class="row d-flex justify-content-center align-items-center h-100">
+                      <div class="row d-flex justify-content-center align-items-center h-80">
                         
                         <div class="col-lg-12 col-xl-10">
                           <div class="card" style="border-radius: 10px;">
-                            
-                            <div class="card-body p-4">
-                              <div class="d-flex justify-content-between align-items-center mb-4">
-                                <p class="lead fw-normal mb-0" style="color: #dc945a;">Receipt</p>
+                            <div class="card-body p-2">
+                              <div class=" justify-content-between align-items-center mb-4">
+                                <h4 class="p-3">Thank you for your order.!</h4>
+                                <p class="lead fw-normal p-2" style="color: #dc945a;">Receipt</p>
                               </div>
                               <% orderData.forEach((order, orderIndex) => { %>
                                 <% order.products.forEach((product, productIndex) => { %>
@@ -173,6 +221,20 @@ z-index: 0
                                       <p class="text-muted mb-0 ">₹<%= product.totalPrice %></p>
                                     </div>
                                   </div>
+                                  <% if(product.status === 'Order Placed' || product.status === 'Order Shipped'){%>
+                                    <div class="col-6 col-lg-4 col-xl-2">
+                                        <div class="btn-wrap">
+                                            <a href="#" class="btn btn-outline-primary cancel btn-rounded text-danger" onclick="cancelProduct('<%= product._id %>', '<%= order._id %>')">Cancel</a>
+                                        </div><!-- End .btn-wrap -->
+                                    </div><!-- End .col-md-4 col-lg-2 -->
+                                  <%}else if(product.status === 'Order Delivered' ){%>
+                                    <div class="col-6 col-lg-4 col-xl-2">
+                                        <div class="btn-wrap">
+                                            <a href="#" class="btn btn-outline-primary cancel btn-rounded text-danger">Return</a>
+                                        </div><!-- End .btn-wrap -->
+                                    </div><!-- End .col-md-4 col-lg-2 -->
+                                  <%}%>
+                                  
                                   <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
                                   <div class="row d-flex align-items-center">
                                     <div class="col-md-2">
@@ -186,14 +248,15 @@ z-index: 0
                                                 <hr class="flex-fill track-line"><span class="dot"></span>
                                             <% } else if(product.status == "Order Shipped") { %>
                                                 <hr class="flex-fill track-line"><span class="dot"></span>
-
                                                 <hr class="flex-fill track-line "><span class="dot"></span>
                                             <% } else if(product.status == "Order Delivered") { %>
                                                 <hr class="flex-fill track-line"><span class="dot"></span>
-
                                                 <hr class="flex-fill track-line "><span class="dot"></span>
                                                 <hr class="flex-fill track-line"><span class="dot"></span>
-                                            <% } %>
+                                            <% } else if(product.status == 'Order Cancelled'){%>
+
+                                                <hr class="flex-fill track-line"><span class="dot"></span>
+                                            <%}%>
                                             <hr class="flex-fill track-line"><span class="d-flex justify-content-center align-items-center big-dot dot">
                                                 <i class="fa fa-check text-white"></i>
                                             </span>
@@ -236,7 +299,20 @@ z-index: 0
                                                     <span><%= order.date.toDateString() %></span>
                                                     <span>Order Delivered</span>
                                                 </div>
-                                            <% } %>
+                                            <% }else if(product.status == "Order Cancelled"){%>
+                                                <div class="d-flex flex-column small align-items-start">
+                                                    <span><%= order.date.toDateString() %></span>
+                                                    <span>Order placed</span>
+                                                </div>
+                                                <div class="d-flex flex-column small align-items-start">
+                                                    <!-- <span><%= order.date.toDateString() %></span>
+                                                    <span>Order placed</span> -->
+                                                </div>
+                                                <div class="d-flex flex-column small align-items-end">
+                                                    <!-- <span><%= Date.now() %></span> -->
+                                                    <span class="text-danger">Order Cancelled</span>
+                                                </div>
+                                            <%} %>
                                         </div>
                                     </div>
                                     
@@ -247,9 +323,9 @@ z-index: 0
                               
                               <% }); %>
                               <% }); %>
-                              <p class="font-weight-bolder">Order Details</p>
+                              <p class="font-weight-bolder order-details">Order Details</p>
                               <%if(discount) {%>
-                              <div class="d-flex justify-content-between pt-2">
+                              <div class="d-flex justify-content-between pt-2 ">
                                 <p class="fw-bold mb-0">Total Amount </p>
                                 <p class="text-muted mb-0"><span class="fw-bold me-4"></span> ₹<%= (orderData[0].totalAmount + discount).toFixed(2)  %></p>
                               </div>
@@ -441,5 +517,72 @@ z-index: 0
         <script src="/user/assets/js/main.js"></script>
         <script src="user/assets/js/demos/demo-6.js"></script>
         <script src="user/assets/js/demos/demo-16.js"></script>
+
+        <!-- sweet alert -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+
+            function cancelProduct(productId, orderId){
+
+                const requestBody = {
+                    orderId: orderId,
+                    productId: productId
+                }
+
+                fetch('cancelProduct',{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                })
+                .then(response => {
+                    if(!response.ok){
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if(data.message === "Your order has been cancelled and the Purchase Amount is added to your wallet"){
+                        Swal.fire({
+                                position: "bottom",
+                                text: 'Your order has been cancelled.!',
+                                showConfirmButton: false,
+                                color: "#fff",
+                                background:"#000000",
+                                timer: 1500,
+                                width: 300
+                        });
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1500);
+                    }else{
+                        Swal.fire({
+                            position: "bottom",
+                            text: data.error,
+                            showConfirmButton: false,
+                            color: "#fff",
+                            background:"#000000",
+                            timer: 1500,
+                            width: 300
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error cancelling product:', error);
+                    Swal.fire({
+                        position: "bottom",
+                        text: "Something went wrong",
+                        showConfirmButton: false,
+                        color: "#fff",
+                        background:"#000000",
+                        timer: 500,
+                        width: 300,
+                    });
+                })
+            }
+
+        </script>
 
     <%-include("../layout/user/footer")-%>

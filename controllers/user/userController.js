@@ -513,7 +513,6 @@ const changePassword = async (req, res) => {
                 const secPassword = await securePassword(confirmPassword);
                 await User.updateOne({_id: req.session.user_id}, {password: secPassword});
                 res.json({message: 'Password saved successfully'});
-                location.reload();
 
             }else{
 

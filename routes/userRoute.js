@@ -95,6 +95,7 @@ user_route.delete("/removeFromWishlist", authentication.isLogin, accessAuth.acce
 user_route.get("/checkout", authentication.isLogin, accessAuth.accessUser, orderController.checkoutLoad);
 user_route.post("/placeOrder", orderController.placeOrder);
 user_route.get("/orderDetails", authentication.isLogin, accessAuth.accessUser, orderController.orderDetailsLoad);
+user_route.post("/cancelProduct", orderController.cancelProduct);
 user_route.get("/orderSuccess", authentication.isLogin, accessAuth.accessUser, orderController.orderSuccessLoad);
 user_route.post("/razorpayOrder", orderController.createRazorpayOrder);
 user_route.post("/addCoupon", orderController.addCoupon);

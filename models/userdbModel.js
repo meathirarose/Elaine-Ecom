@@ -42,6 +42,11 @@ const userSchema = new mongoose.Schema({
         default: " "
     },
 
+    wallet: {
+        type: Number,
+        default: 0
+    },
+
     address: [
         {
             fullname:{
