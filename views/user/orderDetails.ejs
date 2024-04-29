@@ -364,7 +364,7 @@ p {
                   
                               <div class="d-flex justify-content-between mb-5">
                                 <p class="text-muted ml-5">
-                                    <a href="#" class="btn btn-primary">Download Invoice</a>                                 
+                                    <button onclick="downloadInvoice('<%= orderData[0]._id %>')" class="btn btn-primary">Download Invoice</button>
                                 </p>
                                 <p class="text-muted mb-0"><span class="fw-bold text-dark me-4">Delivery Charges:</span> ₹0.00</p>
                               </div>
@@ -523,6 +523,10 @@ p {
         <!-- sweet alert -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+        <!-- easy invoice -->
+        <script src="https://unpkg.com/easyinvoice/dist/easyinvoice.min.js"></script>
+
+
         <script>
 
             function cancelProduct(productId, orderId){
@@ -584,6 +588,39 @@ p {
                     });
                 })
             }
+
+        </script>
+        <script>
+            
+        function downloadInvoice(orderId) {
+            fetch('/generateInvoice', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ orderId }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'invoice.pdf';
+                document.body.appendChild(link);
+                link.click();
+                URL.revokeObjectURL(url);
+                document.body.removeChild(link);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
 
         </script>
 

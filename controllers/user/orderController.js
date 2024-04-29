@@ -6,6 +6,8 @@ const Category = require("../../models/categorydbModel");
 const Coupon = require("../../models/coupondbModel");
 const Razorpay = require("razorpay");
 require("dotenv").config();
+var easyinvoice = require('easyinvoice');
+const fs = require('fs');
 
 
 // razor pay instance
@@ -402,6 +404,76 @@ const orderDetailsLoad = async (req, res) => {
 
 }
 
+// generate invoice
+const generateInvoice = async (req, res) => {
+    try {
+        const { orderId } = req.body;
+        
+        const orderData = await Order.findOne({_id: orderId}).populate('userId').populate('products.productId');
+        console.log('====================================================================================')
+        console.log(orderData);
+        console.log('====================================================================================')
+        const orderDate = new Date(orderData.date);
+        const dueDateCalc = new Date(orderDate.getTime() + (15 * 24 * 60 * 60 * 1000));
+        const dueDate = dueDateCalc.toDateString();
+        
+        const products = [];
+
+        orderData.products.forEach((product) => {
+            products.push({
+                quantity: product.quantity ,
+                description: product.productId.name,
+                taxRate: 6, 
+                price: product.productPrice
+            });
+        });
+
+        const data = {
+            apiKey: "free",
+            mode: "development",
+            images: {
+                logo: "https://public.budgetinvoice.com/img/logo_en_original.png",
+            },
+            sender: {
+                company: "Elaine Ecom",
+                address: "New Delhi 123",
+                zip: "652348",
+                city: "New Delhi",
+                country: "India"
+            },
+            client: {
+                company: orderData.userName,
+                address: orderData.userId.address[0].addressline,
+                zip: orderData.userId.address[0].pincode,
+                city: orderData.userId.address[0].city,
+                country: "India"
+            },
+            information: {
+                number: orderData.orderId,
+                date: orderData.date.toDateString(),
+                dueDate: dueDate
+            },
+            products: products,
+            bottomNotice: "Kindly pay your invoice within 15 days.",
+            settings: {
+                currency: "INR"
+            }
+        };
+
+        const result = await easyinvoice.createInvoice(data);
+        const pdfBuffer = Buffer.from(result.pdf, 'base64');
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename="invoice.pdf"');
+        res.send(pdfBuffer);
+
+    } catch (error) {
+        console.log('Error:', error.message); 
+        res.status(500).send('Internal Server Error');
+    }
+};
+
+
 // cancel product
 const cancelProduct = async (req, res) => {
 
@@ -442,10 +514,7 @@ const cancelProduct = async (req, res) => {
 
         }else{
             return res.json({error: "No order found"});
-        }
-
-        
-
+        }       
 
     } catch (error) {
         console.log(error.message);
@@ -473,6 +542,7 @@ module.exports = {
     placeOrder,
     createRazorpayOrder,
     orderDetailsLoad,
+    generateInvoice,
     cancelProduct,
     orderSuccessLoad
 }
