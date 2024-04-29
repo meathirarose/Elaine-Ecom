@@ -116,33 +116,21 @@
                     <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
                         <div class="custom_select">
                             <select class="form-select select-nice">
-                                <option selected>All Categories</option>
-                                <option>Women's Clothing</option>
-                                <option>Men's Clothing</option>
-                                <option>Cellphones</option>
-                                <option>Computer & Office</option>
-                                <option>Consumer Electronics</option>
-                                <option>Jewelry & Accessories</option>
-                                <option>Home & Garden</option>
-                                <option>Luggage & Bags</option>
-                                <option>Shoes</option>
-                                <option>Mother & Kids</option>
+                                <option selected>Daily</option>
+                                <option>Weekly</option>
+                                <option>Monthly</option>
+                                <option>Yearly</option>
+                                <option>Custom Date</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-md-2 col-6">
+                        <label for="start-date">Start Date</label>
                         <input type="date" value="02.05.2021" class="form-control" />
                     </div>
                     <div class="col-md-2 col-6">
-                        <div class="custom_select">
-                            <select class="form-select select-nice">
-                                <option selected>Status</option>
-                                <option>All</option>
-                                <option>Paid</option>
-                                <option>Chargeback</option>
-                                <option>Refund</option>
-                            </select>
-                        </div>
+                        <label for="start-date">End Date</label>
+                        <input type="date" value="02.05.2021" class="form-control" />
                     </div>
                 </div>
             </header>
@@ -157,6 +145,7 @@
                                     <th class="align-middle" scope="col">Billing Name</th>
                                     <th class="align-middle" scope="col">Date</th>
                                     <th class="align-middle" scope="col">Total</th>
+                                    <th class="align-middle" scope="col">Quantity</th>
                                     <th class="align-middle" scope="col">Coupon Discount</th>
                                     <th class="align-middle" scope="col">Offer Discount</th>
                                     <th class="align-middle" scope="col">Payment Status</th>
@@ -172,8 +161,9 @@
                                         <td><%= order.userName %></td>
                                         <td><%= order.date.toLocaleDateString() %></td>
                                         <td>₹<%= order.totalAmount.toFixed(2) %></td>
+                                        <td><%= order.products.length %></td>
                                         <td>₹<%= order.couponDiscount.toFixed(2) %></td>
-                                        <td>₹ 0.00 </td>
+                                        <td>₹<%= order.offerDiscount %></td>
                                         <td>
                                             <span class="badge badge-pill badge-soft-success"><%= order.paymentStatus %></span>
                                         </td>

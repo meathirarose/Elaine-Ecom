@@ -40,18 +40,18 @@ const checkoutLoad = async (req, res) => {
                                             path: 'offer'
                                         }
                                     });
+        
         let totalPriceSum = 0;
         if (cartData.products.length > 0) {
             cartData.products.forEach(cartProduct => {
                 if (cartProduct.productId.offer && cartProduct.productId.offer.status === true) {
                     const offer = cartProduct.productId.offer.offerPercentage;
-                    const productPrice = cartProduct.productId.prdctPrice;
+                    const productPrice = cartProduct.productId.prdctPrice * cartProduct.quantity;
                     const offerPrice = productPrice - (productPrice * offer)/100;
                     totalPriceSum+=offerPrice;
                     cartData.totalCost = totalPriceSum;
                 }else {
-
-                    totalPriceSum+=cartProduct.productId.prdctPrice;
+                    totalPriceSum+=cartProduct.productId.prdctPrice * cartProduct.quantity;
                     cartData.totalCost = totalPriceSum;
                 }
             });
@@ -83,36 +83,40 @@ const addCoupon = async (req, res) => {
 
                 const usedCoupon = couponExists.usedCoupons.find(entry => entry.userId.equals(userId));
                 if (usedCoupon && usedCoupon.status === true) {
-                    return res.json({ message: "Coupon has already been used." });
-                }
+                    return res.json({ error: "Coupon has already been used." });
+                }else{
+                    const discount = couponExists.discount;
+                    
+                    const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
+                    
+                    let totalPriceSum = 0;
+                    cartData.products.forEach(product => {
+                        
+                        totalPriceSum += product.totalPrice;
+                        
+                    });
 
-                const discount = couponExists.discount;
-                
-                const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
+                    let totalCost = totalPriceSum;
+                    if(totalCost >= couponExists.minimumAmount){
+                        
+                        totalCost-=discount;
+                        
+                    }
+                    
+                    cartData.totalCost = totalCost;
+                    await cartData.save();
 
-                let totalPriceSum = 0;
-                cartData.products.forEach(product => {
-                    totalPriceSum += product.totalPrice;
-                });
+                    req.session.couponCode = couponCode;
 
-                let totalCost = totalPriceSum;
-                if(totalCost >= couponExists.minimumAmount){
-                    totalCost-=discount;
-                }
-                
-                cartData.totalCost = totalCost;
-                await cartData.save();
-
-                req.session.couponCode = couponCode;
-
-                res.json({message: "coupon added successfully", discount: discount});
+                    res.json({message: "coupon added successfully", discount: discount});
+                }               
 
             }else{
-                res.json({message: "coupon is not present"});
+                res.json({error: "coupon is not present"});
             }
             
         }else{
-            res.json({message: "currently no coupons are available"});
+            res.json({error: "currently no coupons are available"});
         }       
 
     } catch (error) {
@@ -146,13 +150,11 @@ const placeOrder = async (req, res) => {
     try {
         const { addressId, paymentMode } = req.body;
 
-        const coupon = req. session.couponCode;
+        const coupon = req.session.couponCode;
         let couponDiscount = 0;
-        if(coupon){
-            var couponData = await Coupon.findOne({code: coupon});
-            couponDiscount = couponData.discount;
-        }else{
-            couponDiscount = 0;
+        if (coupon) {
+            const couponData = await Coupon.findOne({ code: coupon });
+            couponDiscount = couponData ? couponData.discount : 0;
         }
 
         if (!addressId || !paymentMode) {
@@ -169,6 +171,8 @@ const placeOrder = async (req, res) => {
 
         const orderId = await generateOrderId();
 
+        const totalAmount = cartData.totalCost - couponDiscount; 
+
         const newOrder = new Order({
             userId: userData._id,
             orderId: orderId,
@@ -176,7 +180,7 @@ const placeOrder = async (req, res) => {
             userName: userData.name,
             email: userData.email,
             couponDiscount: couponDiscount,
-            totalAmount: cartData.totalCost,
+            totalAmount: totalAmount,
             date: new Date(),
             payment: paymentMode,
             products: cartData.products.map(product => ({
@@ -190,16 +194,7 @@ const placeOrder = async (req, res) => {
         })
 
         await newOrder.save();
-
-        if (coupon) {
-            const couponData = await Coupon.findOne({ code: coupon });
-
-            if (couponData && !couponData.usedCoupons.some(coupon => coupon.userId.equals(req.session.user_id))) {
-                newOrder.couponDiscount = couponData.discount;
-                couponData.usedCoupons.push({ userId: req.session.user_id, status: true });
-                await couponData.save();
-            }
-        }
+                                  
 
         for (const product of cartData.products) {
             await Product.updateOne(
@@ -216,6 +211,17 @@ const placeOrder = async (req, res) => {
 
         cartData.products = [];
         await cartData.save();
+
+        if (coupon) {
+            const couponData = await Coupon.findOne({ code: coupon });
+            if (couponData) {
+                const isCouponUsed = couponData.usedCoupons.some(coupon => coupon.userId.equals(req.session.user_id));
+                if (!isCouponUsed) {
+                    couponData.usedCoupons.push({ userId: req.session.user_id, status: true });
+                    await couponData.save();
+                }
+            }
+        }
 
         if(newOrder){
             newOrder.paymentStatus = 'Paid';
@@ -346,8 +352,13 @@ const orderDetailsLoad = async (req, res) => {
 
         const userId = req.session.user_id;
 
-        const cartData = await Cart.findOne({userId: req.session.user_id}).populate('products.productId');
-
+        const cartData = await Cart.findOne({ userId: req.session.user_id })
+                                    .populate({
+                                        path: 'products.productId',
+                                        populate: {
+                                            path: 'offer'
+                                        }
+                                    });
         if(req.session.couponCode){
             const couponData = await Coupon.findOne({code: req.session.couponCode});
             if(couponData){

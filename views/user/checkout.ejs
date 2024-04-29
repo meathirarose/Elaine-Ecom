@@ -301,7 +301,7 @@
                                                 <td>Rs. 0.00</td>
                                             </tr><!-- End .summary-subtotal -->
                                             <%}%>
-                                            <% if (!couponExists || couponExists.usedCoupons[0].status === true) { %>
+                                            <% if (!couponExists) { %>
                                                 <tr>
                                                     <td>Coupon Discount:</td>
                                                     <td id="coupon-discount">₹0.00</td>
@@ -316,7 +316,11 @@
                                             <% if(cartData.products && cartData.products.length > 0) {%>
                                             <tr class="summary-total">
                                                 <td>Total:</td>
-                                                <td>Rs. <%= cartData.totalCost.toFixed(2)  %></td>
+                                                <% if(couponExists) { %>
+                                                <td>Rs. <%= (cartData.totalCost - couponExists.discount).toFixed(2)  %></td>
+                                                <%}else{ %>
+                                                    <td>Rs. <%= cartData.totalCost.toFixed(2)  %></td>
+                                                <%} %>
                                             </tr><!-- End .summary-total -->
                                             <%}else{%>
                                             <tr class="summary-total">
@@ -803,33 +807,16 @@ $(document).ready(function () {
                     location.reload();
                 }, 1500);
                 }
-                if(data.message === "coupon is not present"){
+                else {
                     swal({
                         title: "Error",
-                        text: data.message,
+                        text: data.error,
                         icon: "error",
                         timer: 1500,
                         buttons: false
                     })
                 }
-                if(data.message === "Coupon has already been used."){
-                    swal({
-                        title: "Error",
-                        text: data.message,
-                        icon: "error",
-                        timer: 1500,
-                        buttons: false
-                    })
-                }
-                if(data.message === "currently no coupons are available"){
-                    swal({
-                        title: "Error",
-                        text: data.message,
-                        icon: "error",
-                        timer: 1500,
-                        buttons: false
-                    })
-                }
+                
             })
             .catch(error => {
                 console.error('Error applying coupon:', error);
