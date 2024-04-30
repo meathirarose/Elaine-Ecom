@@ -91,8 +91,8 @@ const homeLoad = async (req, res) => {
     }
 }
 
-// sales report
-const generateSalesReport = async (req, res) => {
+// sales report load
+const salesReportLoad = async (req, res) => {
 
     try {
 
@@ -127,6 +127,72 @@ const generateSalesReport = async (req, res) => {
 
 }
 
+const generateSalesReport = async (req, res) => {
+
+    try {
+        
+        const reportType = req.body.reportType;
+        let startDate, endDate;
+
+        switch(reportType){
+            
+            case 'daily': 
+                        startDate = new Date();
+                        startDate.setDate(startDate.getDate() - 1); 
+                        endDate = new Date();
+                        endDate.setDate(endDate.getDate() + 1); 
+                        break;
+
+            case 'weekly':
+                        startDate = new Date();
+                        startDate.setDate(startDate.getDate() - 8);
+                        endDate = new Date();
+                        endDate.setDate(endDate.getDate() + 1);
+                        break;
+            
+            case 'monthly':
+                        startDate = new Date();
+                        startDate.setDate(startDate.getMonth() + 1);
+                        endDate = new Date();
+                        endDate.setDate(endDate.getDate() + 1);
+                        break;
+
+            case 'yearly':
+                        const currentDate = new Date();
+                        const currentYear = currentDate.getFullYear();
+                        const previousYearStartDate = new Date(currentYear - 1, currentDate.getMonth(), currentDate.getDate());
+                        const currentYearStartDate = new Date(currentYear, currentDate.getMonth(), currentDate.getDate());
+                        startDate = previousYearStartDate;
+                        startDate.setDate(startDate.getDate() + 1); 
+                        endDate = currentYearStartDate;
+                        endDate.setDate(endDate.getDate() + 1);  
+                        break;           
+
+            case 'custom':
+                        startDate = new Date(req.body.startDate);
+                        startDate.setDate(startDate.getDate() - 1); 
+                        endDate = new Date(req.body.endDate);
+                        endDate.setDate(endDate.getDate() + 1);
+                        break;
+            default:
+                    return res.json({ success: false, message: 'Invalid report type' });
+
+        }
+
+        const query = {
+            date: { $gte: startDate, $lte: endDate }
+        };
+        
+        const orderData = await Order.find(query);
+
+        res.json({ success: true, orderData });
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
 
 //---------------------------------------------end-admin-login-and-verification--------------------------------------------//
 
@@ -148,6 +214,7 @@ module.exports = {
     adminLoad,
     verifyAdminLogin,
     homeLoad,
+    salesReportLoad,
     generateSalesReport,
     adminLogout
 

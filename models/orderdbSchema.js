@@ -26,10 +26,12 @@ const orderSchema = new mongoose.Schema({
 
     couponDiscount: {
         type: Number,
+        default: 0
     },
 
     offerDiscount: {
         type: Number,
+        default: 0
     },
 
     totalAmount:{

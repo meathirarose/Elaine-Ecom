@@ -40,9 +40,9 @@ const allProductsListLoad = async (req, res) => {
                     const matchingProducts = productsData.filter(product => product.prdctName === offerTypeName);
                     for (const matchingProduct of matchingProducts) {
                         const offerId = offer._id;
-                        if(offer.status === true){
+                        const currentDate = Date.now();
+                        if(offer.status === true && offer.validity >= currentDate){
                                 await Product.updateOne({ _id: matchingProduct._id }, { offer: offerId });
-
                         }
                     }
                 }

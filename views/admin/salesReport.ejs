@@ -103,9 +103,7 @@
         <div class="content-header">
             <div>
             </div>
-            <div>
-                <a href="#" class="btn btn-primary"><i class="text-muted material-icons md-post_add"></i>Create report</a>
-            </div>
+
         </div>
         <div class="row">
         </div>
@@ -115,29 +113,33 @@
                 <div class="row align-items-center">
                     <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
                         <div class="custom_select">
-                            <select class="form-select select-nice">
-                                <option selected>Daily</option>
-                                <option>Weekly</option>
-                                <option>Monthly</option>
-                                <option>Yearly</option>
-                                <option>Custom Date</option>
+                            <select id="reportTypeSelect" class="form-select select-nice" name="reportType">
+                                <option disabled selected>--choose option--</option>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="yearly">Yearly</option>
+                                <option value="custom">Custom Date</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-2 col-6">
+                    <div class="col-md-2 col-6 start-date-container" style="display: none;">
                         <label for="start-date">Start Date</label>
-                        <input type="date" value="02.05.2021" class="form-control" />
+                        <input type="date" name="start-date" class="form-control"/>
                     </div>
+                    <div class="col-md-2 col-6 end-date-container" style="display: none;">
+                        <label for="end-date">End Date</label>
+                        <input type="date" name="end-date" class="form-control"/>
+                    </div>                    
                     <div class="col-md-2 col-6">
-                        <label for="start-date">End Date</label>
-                        <input type="date" value="02.05.2021" class="form-control" />
+                        <a href="#" class="btn btn-primary" id="generateButton"><i class="text-muted material-icons"></i>Generate</a>
                     </div>
                 </div>
             </header>
             <div class="card-body">
                 <div class="table-responsive">
                     <div class="table-responsive">
-                        <table class="table align-middle table-nowrap mb-0">
+                        <table class="table align-middle table-nowrap mb-0" id="salesReportTable">
                             <thead class="table-light">
                                 <tr>
                                     <th>Sl No.</th>
@@ -179,6 +181,15 @@
                 </div>
                 <!-- table-responsive end// -->
             </div>
+
+        </div>
+        <div class="d-flex">
+            <div class="m-3">
+                <a href="#" class="btn btn-primary"><i class="text-muted material-icons md-post_add"></i>Download Pdf</a>
+            </div>
+            <div class="m-3">
+                <a href="#" class="btn btn-primary"><i class="text-muted material-icons md-post_add"></i>Download Excel</a>
+            </div>
         </div>
         <br><br>
         <div class="pagination-area mt-30 mb-50">
@@ -199,32 +210,90 @@
     <!-- content-main end// -->
 
 </main>
-<script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
-<script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
-<script src="assets/js/vendors/select2.min.js"></script>
-<script src="assets/js/vendors/perfect-scrollbar.js"></script>
-<script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
-<script src="assets/js/vendors/chart.js"></script>
+<script src="admin/assets/js/vendors/jquery-3.6.0.min.js"></script>
+<script src="admin/assets/js/vendors/bootstrap.bundle.min.js"></script>
+<script src="admin/assets/js/vendors/select2.min.js"></script>
+<script src="admin/assets/js/vendors/perfect-scrollbar.js"></script>
+<script src="admin/assets/js/vendors/jquery.fullscreen.min.js"></script>
+<script src="admin/assets/js/vendors/chart.js"></script>
 <!-- Main Script -->
-<script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
-<script src="assets/js/custom-chart.js" type="text/javascript"></script>
+<script src="admin/assets/js/main.js?v=1.1" type="text/javascript"></script>
+<script src="admin/assets/js/custom-chart.js" type="text/javascript"></script>
 
 <script>
-    function handleMenuItemClick(event) {
+    document.getElementById("reportTypeSelect").addEventListener("change", function() {
+        const selectedReportType = this.value; 
 
-        document.querySelectorAll('.menu-item').forEach(function(item) {
-            item.classList.remove('active');
-        });
-
-        event.currentTarget.closest('.menu-item').classList.add('active');
+        const startDateContainer = document.querySelector('.start-date-container');
+        const endDateContainer = document.querySelector('.end-date-container');
+        if(selectedReportType === "custom") {
+            startDateContainer.style.display = 'block';
+            endDateContainer.style.display = 'block';
+        } else {
+            startDateContainer.style.display = 'none';
+            endDateContainer.style.display = 'none';
         }
+    });
 
-        document.querySelectorAll('.menu-link').forEach(function(link) {
-            link.addEventListener('click', handleMenuItemClick);
+    document.getElementById('generateButton').addEventListener('click', function(event) {
+        event.preventDefault(); 
+
+        const selectedReportType = document.getElementById("reportTypeSelect").value;
+        const startDate = document.querySelector('input[name="start-date"]').value;
+        const endDate = document.querySelector('input[name="end-date"]').value;
+
+        fetch('/admin/salesReport', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                reportType: selectedReportType,
+                startDate: startDate,
+                endDate: endDate
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                displaySalesReport(data.orderData); 
+            } else {
+                console.error('Failed to generate sales report:', data.message);
+            }        })
+        .catch((error) => {
+            console.error('Error:', error);
         });
-        
-</script>
+    });
 
+    function displaySalesReport(orderData) {
+        const salesReportTableBody = document.querySelector('#salesReportTable tbody');
+
+        salesReportTableBody.innerHTML = '';
+
+        orderData.forEach((order, index) => {
+            const row = `
+            <tr>
+                <th>${index + 1}</th>
+                <td><a href="#" class="fw-bold">${order.orderId}</a></td>
+                <td>${order.userName}</td>
+                <td>${new Date(order.date).toLocaleDateString()}</td>
+                <td>₹${order.totalAmount.toFixed(2)}</td>
+                <td>${order.products.length}</td>
+                <td>₹${order.couponDiscount.toFixed(2)}</td>
+                <td>₹${order.offerDiscount}</td>
+                <td>
+                    <span class="badge badge-pill badge-soft-success">${order.paymentStatus}</span>
+                </td>
+                <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i>${order.payment}</td>
+                <td>
+                    <a href="/admin/orderDetails?orderId=${order._id}" class="btn btn-md rounded font-sm">View Details</a>
+                </td>
+            </tr>`;
+
+            salesReportTableBody.innerHTML += row;
+        });
+    }
+</script>
 
 
 <%-include("../layout/admin/footer")-%>
