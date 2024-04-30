@@ -103,9 +103,16 @@ const salesReportLoad = async (req, res) => {
 
         // total order amount
         let totalOrderAmount = 0;
-        orderData.forEach(total => 
-            totalOrderAmount += total.totalAmount
-        )
+        let grandTotal = 0;
+        let couponTotal = 0;
+        let offerTotal = 0;
+        orderData.forEach(total => {
+            totalOrderAmount += total.totalAmount;
+            grandTotal += totalOrderAmount;
+            couponTotal += total.couponDiscount;
+            offerTotal += total.offerDiscount;
+        });
+        console.log(offerTotal);
 
         // total order count
         const orderCount = orderData.length;
@@ -119,7 +126,16 @@ const salesReportLoad = async (req, res) => {
         const categoryData = await Category.find({is_listed: true});
         const categoryCount = categoryData.length;
 
-        res.render('salesReport', {orderData, totalOrderAmount, orderCount, productCount, categoryCount});
+        res.render('salesReport', {
+            orderData, 
+            totalOrderAmount, 
+            orderCount, 
+            productCount, 
+            categoryCount, 
+            grandTotal,
+            couponTotal,
+            offerTotal
+        });
 
     } catch (error) {
         console.log(error.message);
@@ -131,11 +147,12 @@ const generateSalesReport = async (req, res) => {
 
     try {
         
+
         const reportType = req.body.reportType;
         let startDate, endDate;
 
         switch(reportType){
-            
+
             case 'daily': 
                         startDate = new Date();
                         startDate.setDate(startDate.getDate() - 1); 

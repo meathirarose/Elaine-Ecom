@@ -410,9 +410,7 @@ const generateInvoice = async (req, res) => {
         const { orderId } = req.body;
         
         const orderData = await Order.findOne({_id: orderId}).populate('userId').populate('products.productId');
-        console.log('====================================================================================')
-        console.log(orderData);
-        console.log('====================================================================================')
+
         const orderDate = new Date(orderData.date);
         const dueDateCalc = new Date(orderDate.getTime() + (15 * 24 * 60 * 60 * 1000));
         const dueDate = dueDateCalc.toDateString();
