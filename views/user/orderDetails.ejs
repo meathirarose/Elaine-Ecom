@@ -365,6 +365,11 @@ p {
                                 <p class="text-muted ml-5">
                                     <button onclick="downloadInvoice('<%= orderData[0]._id %>')" class="btn btn-primary">Download Invoice</button>
                                 </p>
+                                <% if(orderData[0].paymentStatus === "Failed") {%>
+                                <p class="text-muted ml-5">
+                                    <button class="btn btn-primary" onclick="retryPayment('<%= orderData[0]._id %>')">Retry Payment</button>
+                                </p>
+                                <% } %>
                                 <p class="text-muted mb-0"><span class="fw-bold text-dark me-4">Delivery Charges:</span> ₹0.00</p>
                               </div>
                             </div>
@@ -525,6 +530,46 @@ p {
         <!-- easy invoice -->
         <script src="https://unpkg.com/easyinvoice/dist/easyinvoice.min.js"></script>
 
+        <script>
+
+            function retryPayment(orderId){
+        
+                fetch("/retryPayment",{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({orderId}),
+                })
+        
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success){
+                        window.location.href = '/checkout';
+                    }
+                    else {
+                        Swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title: "Payment retry failed. Please try again later.",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: "Something went wrong. Please try again later.",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                });
+            }
+        
+        </script>
 
         <script>
 

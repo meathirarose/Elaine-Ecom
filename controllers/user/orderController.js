@@ -272,7 +272,7 @@ const createRazorpayOrder = async (req, res) => {
         };
 
         const order = await razorpayInstance.orders.create(options);
-        
+        console.log(order);
         if(order){
 
             var newrazorpayOrder = new Order({
@@ -354,12 +354,12 @@ const verifyRazorPayment = async (req, res) => {
 
         if (hmacValue === signature) {
 
-            await Order.findByIdAndUpdate({_id: order},{paymentStatus: 'Paid'});
+            await Order.findByIdAndUpdate({_id: order}, { paymentStatus: 'Paid' });
             console.log('Payment verification successful.');
-            res.json({message: "Payment Success"});
+            res.json({ message: "Payment Success" });
 
         } else {
-            await Order.findByIdAndUpdate({_id: order},{paymentStatus: 'Failed'});
+
             console.log('Payment verification failed.');
             res.json({ error: 'Signature mismatch' });
 
@@ -372,6 +372,25 @@ const verifyRazorPayment = async (req, res) => {
     }
 };
 
+// failed payment
+const failedPayment = async (req, res) => {
+
+    try {
+        const { response, orderId } = req.body;
+        console.log(response, orderId);
+        // const { order_id, payment_id } = error.metadata; 
+        // console.log(order_id, payment_id);
+        const orderData = await Order.findByIdAndUpdate({_id: orderId},{paymentStatus: "Failed"});
+        console.log(orderData);
+        res.json({ success: true, message: 'Payment failed response handled successfully' });
+
+    } catch (error) {
+        console.log(error.message);
+        res.render("404");
+    }
+
+}
+
 // retry rezor pay payment
 const retryRazorPayment = async (req, res) => {
 
@@ -381,10 +400,7 @@ const retryRazorPayment = async (req, res) => {
         console.log(orderId,"oid");
 
         const orderData = await Order.findById(orderId);
-        console.log('====================================================================================')
-        console.log(orderData, "od");
-        console.log('====================================================================================')
-
+        
         if(orderData.paymentStatus === 'Failed'){
             res.json({ success: true, message: "Payment retry initiated" });
         }else {
@@ -615,6 +631,7 @@ module.exports = {
     placeOrder,
     createRazorpayOrder,
     verifyRazorPayment,
+    failedPayment,
     retryRazorPayment,
     orderDetailsLoad,
     generateInvoice,

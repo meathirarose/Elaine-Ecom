@@ -531,7 +531,7 @@ $(document).ready(function () {
         })
         .then(data => {
             if(data.message === "Address saved successfully"){
-                swal({
+                Swal.fire({
                     title: "Success!",
                     text: data.message,
                     icon: "success",
@@ -542,7 +542,7 @@ $(document).ready(function () {
                     location.reload();
                 }, 1500);
             }else{
-                swal({
+                Swal.fire({
                     title: "Error!",
                     text: data.message,
                     icon: "error",
@@ -553,7 +553,7 @@ $(document).ready(function () {
         })
         .catch(error => {
             var errorMessage = error.message || "Something went wrong";
-            swal({
+            Swal.fire({
                 title: "Error!",
                 text: errorMessage,
                 icon: "error",
@@ -612,18 +612,18 @@ $(document).ready(function () {
             })
             .then(data => {
                 if(data.message === "Address updated successfully"){
-                swal({
-                    title: "Success!",
-                    text: data.message,
-                    icon: "success",
-                    timer: 1500,
-                    buttons: false
-                });
+                    Swal.fire({
+                        title: "Success!",
+                        text: data.message,
+                        icon: "success",
+                        timer: 1500,
+                        buttons: false
+                    });
                 setTimeout(function() {
                     location.reload();
                 }, 1500);
             }else{
-                swal({
+                Swal.fire({
                     title: "Error!",
                     text: data.message,
                     icon: "error",
@@ -634,7 +634,7 @@ $(document).ready(function () {
             })
             .catch(error => {
             var errorMessage = error.message || "Something went wrong";
-            swal({
+            Swal.fire({
                 title: "Error!",
                 text: errorMessage,
                 icon: "error",
@@ -654,7 +654,7 @@ $(document).ready(function () {
         var paymentMode = $("input[name='paymentMode']:checked").val();
         
         if (!addressId) {
-            swal({
+            Swal.fire({
                 title: "Error!",
                 text: "Please select an address.",
                 icon: "error",
@@ -664,7 +664,7 @@ $(document).ready(function () {
             return;
         }
         if (!paymentMode) {
-            swal({
+            Swal.fire({
                 title: "Error!",
                 text: "Please select the payment mode.",
                 icon: "error",
@@ -700,9 +700,9 @@ $(document).ready(function () {
                 "name": "Elaine Ecom",
                 "description": "Order Transaction",
                 "order_id": data.order_id,
-                "handler": function (response){
-                    verifyPayment(response.razorpay_payment_id, response.razorpay_order_id, response.razorpay_signature, data.razor_id);
-                },
+                "handler": function (response) {
+                    verifyPayment(response.razorpay_payment_id, response.razorpay_order_id, response.razorpay_signature, data.razor_id, response.error.reason);
+                    },
                 "prefill": {
                     "contact": data.contact,
                     "name": data.name,
@@ -713,16 +713,22 @@ $(document).ready(function () {
                 }
             };
             var rzrPy = new Razorpay(options);
+            // order success
             rzrPy.on('payment.success', function (response) {
+
                 alert("Payment Succeeded");
+
             });
+            // failed orders
             rzrPy.on('payment.failed', function (response) {
-                alert("Payment Failed");
+
+                handleFailedPayment(response, data.razor_id);
+                        
             });
             rzrPy.open();
         })
         .catch(error => console.error('Error:', error));
-
+    // if the payment option is COD
         } else if(paymentMode === "COD"){
 
             fetch('/placeOrder', {
@@ -740,16 +746,17 @@ $(document).ready(function () {
             })
             .then(data => {
                 if(data.message === "Please add products to the cart"){
-                    swal({
+                    Swal.fire({
                         title: "Error",
                         text: data.message,
                         icon: "error",
                         timer: 1500,
                         buttons: false
                     })
+                    
                 }
                 if(data.message === "Sorry!, This product is out of Stock!"){
-                    swal({
+                    Swal.fire({
                         title: "Error",
                         text: data.message,
                         icon: "error",
@@ -766,7 +773,7 @@ $(document).ready(function () {
             })
             .catch(error => {
                 console.error('Error:', error);
-                swal({
+                Swal.fire({
                     title: "Error!",
                     text: "Something went wrong. Please try again later.",
                     icon: "error",
@@ -777,13 +784,14 @@ $(document).ready(function () {
         }
     });
 
-    function verifyPayment(paymentId, orderId, signature, order){
+    function verifyPayment(paymentId, orderId, signature, order, error, reason){
 
         const requestBody = {
             paymentId: paymentId,
             orderId: orderId,
             signature: signature,
-            order: order
+            order: order,
+            reason: reason
         };
 
         const options = {
@@ -808,7 +816,7 @@ $(document).ready(function () {
                 console.log(data);
                 retryPayment(data.order);
             }else{
-                swal.fire({
+                Swal.fire({
                     position: "center",
                     icon: "error",
                     title: "Payment failed",
@@ -819,7 +827,7 @@ $(document).ready(function () {
         })
         .catch(error => {
             console.error('Error:', error);
-            swal.fire({
+            Swal.fire({
                 position: "center",
                 icon: "error",
                 title: "Something went wrong. Please try again later.",
@@ -829,47 +837,38 @@ $(document).ready(function () {
         });
 
     }
-</script>
-<script>
 
-    function retryPayment(orderId){
-
-        fetch("/retryPayment",{
+    function handleFailedPayment(response, orderId){
+        const requestBody = {
+            response: response,
+            orderId: orderId
+        }
+        fetch('/handleFailedPayment', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({orderId}),
+            body: JSON.stringify(requestBody) 
         })
-
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(data => {
-            if(data.success){
-                window.location.reload();
-            }
-            else {
-                swal.fire({
-                    position: "center",
-                    icon: "error",
-                    title: "Payment retry failed. Please try again later.",
-                    showConfirmButton: false,
-                    timer: 1500,
-                });
-            }
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-            swal.fire({
-                position: "center",
-                icon: "error",
-                title: "Something went wrong. Please try again later.",
-                showConfirmButton: false,
-                timer: 1500,
-            });
-        });
-    }
+            console.log(response);
 
+            alert(response.error.description);
+
+            setTimeout(function() {
+            window.location.href = '/orderHistory';
+            },800);
+        })
+        .catch(error => console.error('Error:', error));
+    }
 </script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function(){
         const form = document.querySelector('#coupon-form');
@@ -889,7 +888,7 @@ $(document).ready(function () {
             .then(data => {   
                 if(data.message === "coupon added successfully"){
 
-                    swal({
+                    Swal.fire({
                         title: "Success!",
                         text: data.message,
                         icon: "success",
@@ -901,7 +900,7 @@ $(document).ready(function () {
                 }, 1500);
                 }
                 else {
-                    swal({
+                    Swal.fire({
                         title: "Error",
                         text: data.error,
                         icon: "error",
@@ -913,7 +912,7 @@ $(document).ready(function () {
             })
             .catch(error => {
                 console.error('Error applying coupon:', error);
-                swal({
+                Swal.fire({
                     title: "Error!",
                     text: "Something went wrong. Please try again later.",
                     icon: "error",
