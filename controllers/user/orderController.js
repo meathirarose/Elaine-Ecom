@@ -372,6 +372,31 @@ const verifyRazorPayment = async (req, res) => {
     }
 };
 
+// retry rezor pay payment
+const retryRazorPayment = async (req, res) => {
+
+    try {
+        
+        const {orderId} = req.body;
+        console.log(orderId,"oid");
+
+        const orderData = await Order.findById(orderId);
+        console.log('====================================================================================')
+        console.log(orderData, "od");
+        console.log('====================================================================================')
+
+        if(orderData.paymentStatus === 'Failed'){
+            res.json({ success: true, message: "Payment retry initiated" });
+        }else {
+            res.json({ success: false, error: "Payment status is not Failed" });
+        }
+
+    } catch (error) {
+        console.log(error.message);
+        res.render("404");
+    }
+
+}
 
 // const order details load
 const orderDetailsLoad = async (req, res) => {
@@ -561,6 +586,28 @@ const orderSuccessLoad = async (req, res) =>{
     }
 }
 
+// order history
+const orderHistoryLoad = async (req, res) => {
+
+    try {
+        const userId = req.session.user_id;
+
+        const orderData = await Order.find({ userId }).populate({
+            path: 'products.productId',
+            populate: {
+                path: 'categoryId'
+            }
+        }).sort({date:-1});
+
+        res.render("orderHistory", {orderData});
+
+    } catch (error) {
+        console.log(error.message);
+        res.render("404");
+    }
+
+}
+
 module.exports = {
 
     checkoutLoad,
@@ -568,8 +615,10 @@ module.exports = {
     placeOrder,
     createRazorpayOrder,
     verifyRazorPayment,
+    retryRazorPayment,
     orderDetailsLoad,
     generateInvoice,
     cancelProduct,
-    orderSuccessLoad
+    orderSuccessLoad,
+    orderHistoryLoad
 }

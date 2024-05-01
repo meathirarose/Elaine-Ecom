@@ -98,8 +98,10 @@ user_route.get("/orderDetails", authentication.isLogin, accessAuth.accessUser, o
 user_route.post("/generateInvoice", orderController.generateInvoice);
 user_route.post("/cancelProduct", orderController.cancelProduct);
 user_route.get("/orderSuccess", authentication.isLogin, accessAuth.accessUser, orderController.orderSuccessLoad);
+user_route.get("/orderHistory", authentication.isLogin, accessAuth.accessUser, orderController.orderHistoryLoad);
 user_route.post("/razorpayOrder", orderController.createRazorpayOrder);
 user_route.post("/verifyPayment", orderController.verifyRazorPayment);
+user_route.post("/retryPayment", orderController.retryRazorPayment);
 user_route.post("/addCoupon", orderController.addCoupon);
 
 // load contact us

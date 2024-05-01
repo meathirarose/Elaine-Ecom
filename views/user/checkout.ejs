@@ -759,7 +759,7 @@ $(document).ready(function () {
                 }
                 if(data.message === "Your order has been placed successfully."){
                 setTimeout(function() {
-                    window.location.href = '/orderSuccess';
+                    window.location.href = '/orderHistory';
                     });
                 }
                 
@@ -803,8 +803,11 @@ $(document).ready(function () {
         })
         .then(data => {
             if(data.message === 'Payment Success'){
-                window.location.href = '/orderSuccess';
+                window.location.href = '/orderHistory';
             }else if(data.error === 'Payment Failed'){
+                console.log(data);
+                retryPayment(data.order);
+            }else{
                 swal.fire({
                     position: "center",
                     icon: "error",
@@ -826,6 +829,46 @@ $(document).ready(function () {
         });
 
     }
+</script>
+<script>
+
+    function retryPayment(orderId){
+
+        fetch("/retryPayment",{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({orderId}),
+        })
+
+        .then(response => response.json())
+        .then(data => {
+            if(data.success){
+                window.location.reload();
+            }
+            else {
+                swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "Payment retry failed. Please try again later.",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            swal.fire({
+                position: "center",
+                icon: "error",
+                title: "Something went wrong. Please try again later.",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        });
+    }
+
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function(){
