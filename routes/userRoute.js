@@ -99,6 +99,7 @@ user_route.post("/generateInvoice", orderController.generateInvoice);
 user_route.post("/cancelProduct", orderController.cancelProduct);
 user_route.get("/orderSuccess", authentication.isLogin, accessAuth.accessUser, orderController.orderSuccessLoad);
 user_route.post("/razorpayOrder", orderController.createRazorpayOrder);
+user_route.post("/verifyPayment", orderController.verifyRazorPayment);
 user_route.post("/addCoupon", orderController.addCoupon);
 
 // load contact us

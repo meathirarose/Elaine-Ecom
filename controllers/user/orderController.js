@@ -7,8 +7,7 @@ const Coupon = require("../../models/coupondbModel");
 const Razorpay = require("razorpay");
 require("dotenv").config();
 var easyinvoice = require('easyinvoice');
-const fs = require('fs');
-
+const crypto = require("crypto");
 
 // razor pay instance
 var razorpayInstance = new Razorpay(
@@ -276,7 +275,7 @@ const createRazorpayOrder = async (req, res) => {
         
         if(order){
 
-            const newrazorpayOrder = new Order({
+            var newrazorpayOrder = new Order({
                 userId: userData._id,
                 orderId: orderId,
                 deliveryAddress: addressId,
@@ -329,6 +328,7 @@ const createRazorpayOrder = async (req, res) => {
             success: true,
             msg: "Order Created",
             order_id: order.id,
+            razor_id: newrazorpayOrder._id,
             amount: amount,
             key_id: process.env.RAZORPAY_KEY_ID,
             name: userData.name,
@@ -336,13 +336,41 @@ const createRazorpayOrder = async (req, res) => {
             contact: userData.mobile
         });
 
-
-
     } catch (error) {
         console.log(error.message);
         res.render("404");
     }
 }
+
+// verify the razor pay payment
+const verifyRazorPayment = async (req, res) => {
+    try {
+
+        const { paymentId, orderId, signature, order } = req.body;
+        
+        const hmac = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET);
+        hmac.update(orderId + '|' + paymentId);
+        const hmacValue = hmac.digest('hex');
+
+        if (hmacValue === signature) {
+
+            await Order.findByIdAndUpdate({_id: order},{paymentStatus: 'Paid'});
+            console.log('Payment verification successful.');
+            res.json({message: "Payment Success"});
+
+        } else {
+            await Order.findByIdAndUpdate({_id: order},{paymentStatus: 'Failed'});
+            console.log('Payment verification failed.');
+            res.json({ error: 'Signature mismatch' });
+
+        }
+    } catch (error) {
+
+        console.error('Error verifying payment:', error);
+        res.status(500).json({ success: false, error: 'Internal server error' });
+
+    }
+};
 
 
 // const order details load
@@ -539,6 +567,7 @@ module.exports = {
     addCoupon,
     placeOrder,
     createRazorpayOrder,
+    verifyRazorPayment,
     orderDetailsLoad,
     generateInvoice,
     cancelProduct,
