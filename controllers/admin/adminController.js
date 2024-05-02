@@ -156,9 +156,12 @@ const generateSalesReport = async (req, res) => {
             case 'daily': 
                         startDate = new Date();
                         startDate.setDate(startDate.getDate() - 1); 
-                        endDate = new Date();
+                        console.log(startDate, "sddddddddddddddddddddddd");
+                        endDate = new Date(startDate); 
                         endDate.setDate(endDate.getDate() + 1); 
+                        console.log(endDate,"eddddddddddddddddddddddd");
                         break;
+            
 
             case 'weekly':
                         startDate = new Date();
@@ -170,8 +173,10 @@ const generateSalesReport = async (req, res) => {
             case 'monthly':
                         startDate = new Date();
                         startDate.setDate(startDate.getMonth() + 1);
+                        console.log(startDate);
                         endDate = new Date();
                         endDate.setDate(endDate.getDate() + 1);
+                        console.log(endDate);
                         break;
 
             case 'yearly':

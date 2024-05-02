@@ -115,7 +115,7 @@
                                             <i class="icon-arrows"></i>
                                         </a>
                                         <% if (productDatabyId.offer && productDatabyId.offer.status === true) { %>
-                                            <span class="product-label label-sale">Sale</span>
+                                            <span class="product-label label-sale"><%= productDatabyId.offer.offerPercentage %>% OFF</span>
                                         <% } %>
                                     </figure><!-- End .product-main-image -->
                                     
@@ -144,7 +144,7 @@
                                 <div class="product-price">
                                     <% if (productDatabyId.offer && productDatabyId.offer.status === true) { %>
                                         <span class="new-price">₹<%= productDatabyId.prdctPrice - (productDatabyId.offer.offerPercentage * productDatabyId.prdctPrice)/100 %></span>
-                                        <span class="old-price">₹<%= productDatabyId.prdctPrice %></span>     
+                                        <span class="old-price"><s>₹<%= productDatabyId.prdctPrice %></s></span>     
                                     <% } else { %>
                                         ₹<%= productDatabyId.prdctPrice %>                               
                                     <% } %>

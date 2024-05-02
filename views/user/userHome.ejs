@@ -173,13 +173,12 @@
                             <% if(product.is_listed===true && product.prdctQuantity > 0){%>
                             <div class="product product-7 text-center">
                                 <figure class="product-media">
-                                    <a href="product.html">
-                                   
+                                    <a href="productDetails?productId=<%=product._id%>">
                                         <img src="/processed_images/<%= product.prdctImage[0] %>"
                                             alt="Product image" class="product-image">
                                     </a>
                                     <% if (product.offer && product.offer.status === true) { %>
-                                        <span class="product-label label-sale">Sale</span>
+                                        <span class="product-label label-sale"><%= product.offer.offerPercentage %>% OFF</span>
                                     <% } %>
 
                                     <div class="product-action-vertical">

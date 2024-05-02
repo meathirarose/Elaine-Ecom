@@ -307,10 +307,14 @@ const createRazorpayOrder = async (req, res) => {
             }   
 
             for (const product of cartData.products) {
+                console.log('====================================================================================')
+                console.log(product.quantity,"before");
+                console.log('====================================================================================')
                 await Product.updateOne(
                     { _id: product.productId },
                     { $inc: { prdctQuantity: -product.quantity } } 
                 );
+                console.log(product.quantity,"after");
             }
             
             cartData.products.map(product => {
@@ -345,7 +349,9 @@ const createRazorpayOrder = async (req, res) => {
 // verify the razor pay payment
 const verifyRazorPayment = async (req, res) => {
     try {
-
+        console.log('====================================================================================')
+        console.log("in the verify razor paymenttttttttttttttttttttttttttttttttttttttttttttttttttttttttt");
+        console.log('====================================================================================')
         const { paymentId, orderId, signature, order } = req.body;
         
         const hmac = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET);
@@ -353,7 +359,7 @@ const verifyRazorPayment = async (req, res) => {
         const hmacValue = hmac.digest('hex');
 
         if (hmacValue === signature) {
-
+            console.log("suuuuuuccccccccccccccccccceeeeeeeeeeeeeeeeeeeeeeesssssssssss");
             await Order.findByIdAndUpdate({_id: order}, { paymentStatus: 'Paid' });
             console.log('Payment verification successful.');
             res.json({ message: "Payment Success" });
@@ -549,7 +555,7 @@ const cancelProduct = async (req, res) => {
         const {orderId, productId} = req.body;
         
         const orderData = await Order.findById({_id: orderId});
-        if (orderData && orderData.products && orderData.products.length > 0) {
+        if (orderData.products && orderData.products.length > 0) {
             const product = orderData.products.find(product => {
                 return String(product._id) === String(productId);
             });

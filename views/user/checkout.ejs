@@ -340,6 +340,8 @@
                                             <label for="cashOnDelivery">Cash on Delivery</label><br>
                                             <input type="radio" id="razorPay" name="paymentMode" value="razor-pay" required>
                                             <label for="RazorPay">Razor Pay</label><br>
+                                            <input type="radio" id="wallet" name="paymentMode" value="wallet" required>
+                                            <label for="Wallet">Wallet</label><br>
                                         </div>
                        
                                     </div><!-- End .accordion -->
@@ -701,7 +703,7 @@ $(document).ready(function () {
                 "description": "Order Transaction",
                 "order_id": data.order_id,
                 "handler": function (response) {
-                    verifyPayment(response.razorpay_payment_id, response.razorpay_order_id, response.razorpay_signature, data.razor_id, response.error.reason);
+                    verifyPayment(response.razorpay_payment_id, response.razorpay_order_id, response.razorpay_signature, data.razor_id);
                     },
                 "prefill": {
                     "contact": data.contact,
@@ -784,14 +786,13 @@ $(document).ready(function () {
         }
     });
 
-    function verifyPayment(paymentId, orderId, signature, order, error, reason){
+    function verifyPayment(paymentId, orderId, signature, order, error){
 
         const requestBody = {
             paymentId: paymentId,
             orderId: orderId,
             signature: signature,
-            order: order,
-            reason: reason
+            order: order
         };
 
         const options = {
@@ -811,10 +812,7 @@ $(document).ready(function () {
         })
         .then(data => {
             if(data.message === 'Payment Success'){
-                window.location.href = '/orderHistory';
-            }else if(data.error === 'Payment Failed'){
-                console.log(data);
-                retryPayment(data.order);
+                window.location.href = '/orderHistory'; 
             }else{
                 Swal.fire({
                     position: "center",

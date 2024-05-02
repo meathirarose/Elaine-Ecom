@@ -152,7 +152,7 @@
                                                             alt="Product image" class="product-image">
                                                     </a>
                                                     <% if (product.offer && product.offer.status === true && product.offer.validity >= Date.now()) { %>
-                                                        <span class="product-label label-sale">Sale</span>
+                                                        <span class="product-label label-sale"><%= product.offer.offerPercentage %>% OFF</span>
                                                     <% } %>
                                                     <div class="product-action-vertical">
                                                         <a href="#"

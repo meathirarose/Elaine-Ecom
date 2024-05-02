@@ -367,7 +367,7 @@ p {
                                 </p>
                                 <% if(orderData[0].paymentStatus === "Failed") {%>
                                 <p class="text-muted ml-5">
-                                    <button class="btn btn-primary" onclick="retryPayment('<%= orderData[0]._id %>')">Retry Payment</button>
+                                    <button class="btn btn-primary" id="retryPayment" onclick="retryPayment('<%= orderData[0]._id %>')">Retry Payment</button>
                                 </p>
                                 <% } %>
                                 <p class="text-muted mb-0"><span class="fw-bold text-dark me-4">Delivery Charges:</span> ₹0.00</p>
@@ -545,7 +545,61 @@ p {
                 .then(response => response.json())
                 .then(data => {
                     if(data.success){
-                        window.location.href = '/checkout';
+                        window.location.href = '/orderHistory';
+                //      fetch('/razorpayOrder', {
+                //         method: 'POST',
+                //         headers: {
+                //             'Content-Type': 'application/json'
+                //         },
+                //         body: JSON.stringify({addressId, paymentMode})
+
+                //     })
+                //     .then(response => {
+                //         if (!response.ok) {
+                //             throw new Error('Network response was not ok');
+                //         }
+                //         return response.json();
+                //     })
+                //     .then(data => {
+                //         if (!data.success) {
+                //             throw new Error('Order creation failed: ' + data.msg);
+                //         }
+                //         var options = {
+                //             "key": data.key_id,
+                //             "amount": data.amount,
+                //             "currency": "INR",
+                //             "name": "Elaine Ecom",
+                //             "description": "Order Transaction",
+                //             "order_id": data.order_id,
+                //             "handler": function (response) {
+                //                 verifyPayment(response.razorpay_payment_id, response.razorpay_order_id, response.razorpay_signature, data.razor_id, response.error.reason);
+                //                 },
+                //             "prefill": {
+                //                 "contact": data.contact,
+                //                 "name": data.name,
+                //                 "email": data.email
+                //             },
+                //             "theme": {
+                //                 "color": "#2300a3"
+                //             }
+                //         };
+                //         var rzrPy = new Razorpay(options);
+                //         // order success
+                //         rzrPy.on('payment.success', function (response) {
+
+                //             alert("Payment Succeeded");
+
+                //         });
+                //         // failed orders
+                //         rzrPy.on('payment.failed', function (response) {
+
+                //             handleFailedPayment(response, data.razor_id);
+                                    
+                //         });
+                //         rzrPy.open();
+                //     })
+                //     .catch(error => console.error('Error:', error));
+                //     }
                     }
                     else {
                         Swal.fire({
