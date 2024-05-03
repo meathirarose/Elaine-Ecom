@@ -47,8 +47,21 @@ const userSchema = new mongoose.Schema({
         default: 0
     },
 
-    walletHistory: [{
-        
+    walletHistory: [
+        {
+        date:{
+            type: Date
+        },
+        amount: {
+            type: Number,
+            default: 0
+        },
+        description: {
+            type: String
+        },
+        status: {
+            type: String
+        }
     }],
 
     address: [

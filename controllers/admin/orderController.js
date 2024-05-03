@@ -48,15 +48,15 @@ const shippedStatusChange = async (req, res) => {
             return res.json({ error: 'Order not found' });
         }
 
-        const isDelivered = order.products.find(product => product.status === 'Order Delivered');
-        if (isDelivered) {
-            return res.json({ error: 'Cannot be Shipped. Order is already Delivered.' });
-        }
+        // const isDelivered = order.products.find(product => product.status === 'Order Delivered');
+        // if (isDelivered) {
+        //     return res.json({ error: 'Cannot be Shipped. Order is already Delivered.' });
+        // }
 
-        const isCancelled = order.products.find(product => product.status === 'Cancelled by ElaineEcom');
-        if (isCancelled) {
-            return res.json({ error: 'Cannot be Shipped. Order cancelled by ElaineEcom.' });
-        }
+        // const isCancelled = order.products.find(product => product.status === 'Cancelled by ElaineEcom');
+        // if (isCancelled) {
+        //     return res.json({ error: 'Cannot be Shipped. Order cancelled by ElaineEcom.' });
+        // }
 
         let productToUpdate = order.products.find(product => product.status === 'Order Placed');
 

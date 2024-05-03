@@ -121,53 +121,55 @@
                                 
                                 <tbody>
                                     
-                                    <tr>
-                                        <% if( !cartData || !productData || cartData.products.length <= 0 ){%> 
+                                <tr>
+                                    <% if( !cartData || !productData || cartData.products.length <= 0 ){%> 
 
-                                            <div class="container">
-                                                <div class="row">
-                                                    <div class="col" style="margin-left: 320px;">
-                                                        <p class="font-weight-bolder">Your cart is empty!</p><br><br>
-                                                    </div>
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col" style="margin-left: 320px;">
+                                                    <p class="font-weight-bolder">Your cart is empty!</p><br><br>
                                                 </div>
                                             </div>
-                                            
-                                        <%} else{%> 
-
-                                        <% cartData.products.forEach(product=> { %>
+                                        </div>
                                         
-                                            <td class="product-col ">
-                                                <div class="product">
-                                                    <figure class="product-media">
-                                                        <a href="#"><img src="/processed_images/<%= product.productId.prdctImage[0] %>"
-                                                        alt="Product image">
-                                                        </a>
-                                                    </figure>
-                                                    <a href="#">
-                                                        <%= product.productId.prdctName %>
-                                                    </a>
-                                                </div><!-- End .product -->
-                                            </td>
-                                            <td class="price-col">
-                                                Rs. <%= product.productId.prdctPrice %>
-                                            </td>
-                                            <td class="quantity-col">
-                                                <div class="cart-product-quantity">
-                                                    <input type="number" class="quantity" data-product-id="<%= product.productId._id %>" value="<%= product.quantity %>" min="1" max="5" step="1" data-decimals="0" onchange="updateCartItem(this)" required>
-                                                </div><!-- End .cart-product-quantity -->
-                                            </td>
-                                            
-                                            <td class="total-col">Rs.<%= product.totalPrice.toFixed(2) %></td>
+                                    <%} else{%> 
 
-                                            <td class="remove-col"><button class="btn-remove"
-                                                data-product-id="<%= product.productId._id %>">
-                                                <i class="icon-close"></i>
-                                            </button>
-                                            </td>
+                                    <% cartData.products.forEach(product=> { %>
+                                        
+                                    <td class="product-col ">
+                                        <div class="product">
+                                            <figure class="product-media">
+                                                <a href="#"><img src="/processed_images/<%= product.productId.prdctImage[0] %>"
+                                                alt="Product image">
+                                                </a>
+                                            </figure>
+                                            <a href="#">
+                                                <%= product.productId.prdctName %>
+                                            </a>
+                                        </div><!-- End .product -->
+                                    </td>
+                                    <td class="price-col">
+                                        Rs. <%= product.productId.prdctPrice %>
+                                    </td>
+                                    <td class="quantity-col">
+                                        <div class="cart-product-quantity">
+                                            <input type="number" class="quantity" data-product-id="<%= product.productId._id %>"  value="<%= product.quantity %>" min="1" 
+                                            max="<%= product.quantity >= product.productId.prdctQuantity ? product.productId.prdctQuantity : 5 %>"
+                                            step="1" data-decimals="0" onchange="updateCartItem(this)" required>
+                                        </div><!-- End .cart-product-quantity -->
+                                    </td>
+                                    
+                                    <td class="total-col">Rs.<%= product.totalPrice.toFixed(2) %></td>
+
+                                    <td class="remove-col"><button class="btn-remove"
+                                        data-product-id="<%= product.productId._id %>">
+                                        <i class="icon-close"></i>
+                                    </button>
+                                    </td>
                                             
                                     </tr>
                                     <% }); %>
-                                    <%} %>
+                                <%} %>
                                 </tbody>
                             </table><!-- End .table table-wishlist -->
                             
@@ -382,19 +384,41 @@
         .then(response => response.json())
         .then(data => {
 
+        if(data.success){
             const totalValue = element.closest('tr').querySelector(".total-col");
             totalValue.innerHTML = `Rs. ${data.updatedTotalPrice.toFixed(2)}`;
-            console.log(totalValue);
             const subtotalElement = document.querySelector(".summary-subtotal .totalCost");
+
             if (subtotalElement) {
                 subtotalElement.textContent = `Rs. ${data.totalCost.toFixed(2)}`;
             }
-            console.log(subtotalElement);
+
             const totalElement = document.querySelector(".allTotal .total");
             if (totalElement) {
                 totalElement.textContent = `Rs. ${data.totalCost.toFixed(2)}`;
             }
-            console.log(totalElement);
+        }else{
+            if (data.availableStock !== undefined) {
+            Swal.fire({
+                title: "Error",
+                text: `Maximum stock reached. Available stock: ${data.availableStock}`,
+                icon: "error",
+                timer: 1500,
+                buttons: false
+            });
+            element.value = data.availableStock;
+        } else {
+            Swal.fire({
+                title: "Error",
+                text: data.error,
+                icon: "error",
+                timer: 1500,
+                buttons: false
+            });
+        }
+        console.log(data);
+        }
+
         })
         .catch(error => console.error('Error:', error));
     }

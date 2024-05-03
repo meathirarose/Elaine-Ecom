@@ -307,14 +307,12 @@ const createRazorpayOrder = async (req, res) => {
             }   
 
             for (const product of cartData.products) {
-                console.log('====================================================================================')
-                console.log(product.quantity,"before");
-                console.log('====================================================================================')
+                
                 await Product.updateOne(
                     { _id: product.productId },
                     { $inc: { prdctQuantity: -product.quantity } } 
                 );
-                console.log(product.quantity,"after");
+
             }
             
             cartData.products.map(product => {
@@ -349,9 +347,7 @@ const createRazorpayOrder = async (req, res) => {
 // verify the razor pay payment
 const verifyRazorPayment = async (req, res) => {
     try {
-        console.log('====================================================================================')
-        console.log("in the verify razor paymenttttttttttttttttttttttttttttttttttttttttttttttttttttttttt");
-        console.log('====================================================================================')
+        
         const { paymentId, orderId, signature, order } = req.body;
         
         const hmac = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET);
@@ -359,7 +355,7 @@ const verifyRazorPayment = async (req, res) => {
         const hmacValue = hmac.digest('hex');
 
         if (hmacValue === signature) {
-            console.log("suuuuuuccccccccccccccccccceeeeeeeeeeeeeeeeeeeeeeesssssssssss");
+            
             await Order.findByIdAndUpdate({_id: order}, { paymentStatus: 'Paid' });
             console.log('Payment verification successful.');
             res.json({ message: "Payment Success" });
@@ -565,20 +561,38 @@ const cancelProduct = async (req, res) => {
                 const {status} = product;
 
                 if(status === 'Order Placed' || status === 'Order Shipping'){
+
                     product.status = 'Order Cancelled';
                     await orderData.save();
+
                     if(product.status === 'Order Cancelled'){
                         const userData = await User.findById({_id: req.session.user_id});
                         
-                        userData.wallet +=orderData.totalAmount;
+                        userData.wallet += product.totalPrice;
+                        userData.walletHistory.push({
+                            date: new Date(),
+                            amount: product.totalPrice,
+                            reason: 'Order Cancelletion Refund',
+                            status: 'in'
+                        })
                         await userData.save();
+
+                        await Product.updateOne(
+                            { _id: product.productId },
+                            { $inc: { prdctQuantity: +product.quantity } } 
+                        );
+
                         return res.json({message: "Your order has been cancelled and the Purchase Amount is added to your wallet"});
                     }
                     
                 }else if(status === 'Order Delivered'){
+
                     return res.json({error: "Product cannot be cancelled because it is already delivered."});
+
                 }else{
+
                     return res.json({error: "Product cannot be cancelled because it is already cancelled or in an invalid status."});
+
                 }
 
             }else{

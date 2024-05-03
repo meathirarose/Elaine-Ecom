@@ -161,11 +161,16 @@ const updateCartQuantity = async (req, res) => {
         await updatedCartData.save();
 
         const updatedProduct = updatedCartData.products.find(product => product.productId == productId);
+        const availableStock = productDataById.prdctQuantity; 
+        if(updatedProduct.quantity >= productDataById.prdctQuantity){
+            return res.json({error: "Quantity exceeds the stock", availableStock: availableStock});
+        }
         
         return res.json({ 
             success: true, 
             updatedTotalPrice: updatedProduct.totalPrice,
-            totalCost: totalCost 
+            totalCost: totalCost,
+            availableStock: availableStock 
         });
         
     } catch (error) {
