@@ -14,6 +14,8 @@
     margin-bottom: 20px;
     background: rgb(213, 210, 210);
 }
+.balance{font-size: 45px;color: rgb(128, 107, 0)}
+.revenue{font-size:14px;color:#147219;font-weight:500}
 </style>
 
     <div class="page-wrapper">
@@ -417,7 +419,7 @@
                                     <p>
                                         <strong>Total Amount: &nbsp;&nbsp;Rs.<%= userData.wallet %></strong> <br>
                                     </p>
-                                    <button class="btn btn-primary edit-profile-btn" >
+                                    <button class="btn btn-primary show-walletHistory-btn" data-user-id="<%= userData._id %>" >
                                         Transaction History
                                     </button>
                                 </div><!-- End .account-details-box -->
@@ -457,7 +459,52 @@
             </form>
         </div>
         
-        <!-- ---------------------------------------- end Change password ------------------------------------- -->
+        <!-- ---------------------------------------- end edit profile ------------------------------------- -->
+        <!-- --------------------------------------- Wallet Transaction History ------------------------------------- -->
+        <div id="user-wallet-history<%=userData._id%>" class="editProfile" style="display: none;">
+            <div class="container ">
+                <div class="row g-0">
+                    <div class="col-md-8">
+                        <div class="p-0 bg-white">
+                            <h6 class="account">Account Balance</h6>
+                            <span class="mt-0 mb-3 balance">₹<%= userData.wallet  %></span>
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-8 mt-2 border-right">
+                        <div class="bg-white">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="heading1">Wallet Transaction History</h6>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-borderless">
+                                    <thead>
+                                        <th>Description</th>
+                                        <th>Ammount</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                    </thead>
+                                    <tbody>
+                                        <% userData.walletHistory.forEach(wallet => { %>
+                                        <tr>
+                                            <td><%= wallet.reason %></td>
+                                            <td><%= wallet.amount %></td>
+                                            <td><%= wallet.date.toLocaleDateString() %></td>
+                                            <td><span style="color: #147219; font-weight: bolder;"><%= wallet.status %></span></td>
+                                        </tr>
+                                        <% }) %>
+                                    </tbody>  
+                                </table>       
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+        </div>
+        <!-- ------------------------------------- end Wallet Transaction History ----------------------------------- -->
         <!-- ---------------------------------------- coupons ------------------------------------- -->
         <div class="tab-pane fade" id="tab-coupon" role="tabpanel" aria-labelledby="tab-coupon-link">
             <div class="coupon-container">
@@ -749,7 +796,6 @@
         });
     });
 
-
     </script>
 
     <!-- end for adding address -->
@@ -972,6 +1018,16 @@
 
     </script>
 
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '.show-walletHistory-btn', function (e) {
+                e.preventDefault();
+                var userId = $(this).data('user-id'); 
+                $('.card-dashboard-profile').hide();
+                $(`#user-wallet-history${userId}`).show();
+            });
+        });
+    </script>
 
     <script>
 
