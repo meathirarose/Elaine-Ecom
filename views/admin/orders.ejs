@@ -9,6 +9,13 @@
 .content-main {
     padding-left: 10px; 
 }
+.even-row {
+    background-color: #f2f2f2; 
+}
+
+.odd-row {
+    background-color: #ffffff; 
+}
 
 
 </style>
@@ -141,34 +148,35 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <% sortedOrderData.forEach((order,index) => { %>
-                                    <% order.products.forEach((product) => { %>
-                                <tr>
-                                    <td><%= order.orderId %></td>
-                                    <td><b><%= order.userName %></b></td>
-                                    <td><%= order.email %></td>
-                                    <td><%= product.productName %></td>
-                                    <td>₹<%= product.totalPrice %></td>
-                                    <td><span class="badge rounded-pill alert-warning"><%= product.status %></span></td>
-                                    <td><%= order.date.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }) %></td>
-                                    <td class="text-end">
-                                        <a href="/admin/orderDetails?orderId=<%= order._id %>" class="btn btn-md rounded font-sm">Detail</a>
-                                        <div class="dropdown">
-                                            <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm">
-                                                <i class="material-icons md-more_horiz"></i>
-                                            </a>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#" onclick="handleShippedStatusChange('<%= order._id %>', 'Shipped')">Shipped</a>
-                                                <a class="dropdown-item" href="#" onclick="handleDeliveredStatusChange('<%= order._id %>', 'Delivered')">Delivered</a>
-                                                <a class="dropdown-item" href="#" onclick="handleOrderCancel('<%= order._id %>', '<%= product._id %>')">Cancel</a>
-                                            </div>
-                                        </div>
-                                        <!-- dropdown //end -->
-                                    </td>
-                                </tr>
+                                <% sortedOrderData.forEach((order, index) => { %>
+                                    <% order.products.forEach((product, productIndex) => { %>
+                                        <tr class="<%= index % 2 === 0 ? 'even-row' : 'odd-row' %>">
+                                            <td><%= order.orderId %></td>
+                                            <td><b><%= order.userName %></b></td>
+                                            <td><%= order.email %></td>
+                                            <td><%= product.productName %></td>
+                                            <td>₹<%= product.totalPrice %></td>
+                                            <td><span class="badge rounded-pill alert-warning"><%= product.status %></span></td>
+                                            <td><%= order.date.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }) %></td>
+                                            <td class="text-end">
+                                                <a href="/admin/orderDetails?orderId=<%= order._id %>" class="btn btn-md rounded font-sm">Detail</a>
+                                                <div class="dropdown">
+                                                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm">
+                                                        <i class="material-icons md-more_horiz"></i>
+                                                    </a>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" href="#" onclick="handleShippedStatusChange('<%= order._id %>', 'Shipped')">Shipped</a>
+                                                        <a class="dropdown-item" href="#" onclick="handleDeliveredStatusChange('<%= order._id %>', 'Delivered')">Delivered</a>
+                                                        <a class="dropdown-item" href="#" onclick="handleOrderCancel('<%= order._id %>', '<%= product._id %>')">Cancel</a>
+                                                    </div>
+                                                </div>
+                                                <!-- dropdown //end -->
+                                            </td>
+                                        </tr>
                                     <% }); %>
                                 <% }); %>
                             </tbody>
+                            
                         </table>
                     </div>
                     <!-- table-responsive //end -->

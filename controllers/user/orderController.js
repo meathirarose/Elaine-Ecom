@@ -8,7 +8,6 @@ const Razorpay = require("razorpay");
 require("dotenv").config();
 var easyinvoice = require('easyinvoice');
 const crypto = require("crypto");
-const { error } = require("console");
 
 // razor pay instance
 var razorpayInstance = new Razorpay(
@@ -42,10 +41,7 @@ const checkoutLoad = async (req, res) => {
                                             path: 'offer'
                                         }
                                     });
-        console.log('====================================================================================')
-        console.log(cartData,"checkout");
-        console.log('====================================================================================')
-        
+                
         let totalPriceSum = 0;
         if (cartData.products.length > 0) {
             cartData.products.forEach(cartProduct => {
@@ -164,10 +160,7 @@ const placeOrder = async (req, res) => {
             const couponData = await Coupon.findOne({ code: coupon });
             couponDiscount = couponData ? couponData.discount : 0;
         }
-        console.log('====================================================================================')
-        console.log(couponDiscount, "cd");
-        console.log('====================================================================================')
-
+        
         if (!addressId || !paymentMode) {
             throw new Error('Required data missing');
         }
@@ -198,9 +191,7 @@ const placeOrder = async (req, res) => {
                 }
             });
         } 
-        console.log('====================================================================================')
-        console.log(totalPriceSum, "ts");
-        console.log('====================================================================================')
+        
         const totalAmount = cartData.totalCost - couponDiscount; 
 
         const newOrder = new Order({
@@ -246,12 +237,8 @@ const placeOrder = async (req, res) => {
             const couponData = await Coupon.findOne({ code: coupon });
             if (couponData) {
                 const isCouponUsed = couponData.usedCoupons.some(coupon => coupon.userId.equals(req.session.user_id));
-                console.log(isCouponUsed," is coupon used------------------------------------------");
-                console.log("hellooooooo1---------------------------------------------");
                 if (!isCouponUsed) {
-                    console.log("helloooooo2------------------------------------------------");
                     couponData.usedCoupons.push({ userId: req.session.user_id, status: true });
-                    console.log(couponData, "coupondata----------------------------------------------------");
                     await couponData.save();
                 }
             }
@@ -285,9 +272,7 @@ const createRazorpayOrder = async (req, res) => {
             const couponData = await Coupon.findOne({ code: coupon });
             couponDiscount = couponData ? couponData.discount : 0;
         }
-        console.log('====================================================================================')
-        console.log(couponDiscount, "cd");
-        console.log('====================================================================================')
+        
         const cartData = await Cart.findOne({ userId: req.session.user_id })
                                     .populate({
                                         path: 'products.productId',
@@ -301,7 +286,7 @@ const createRazorpayOrder = async (req, res) => {
             return res.json({message: "Please add products to the cart"});
         }
 
-        const amount = cartData.totalCost * 100;
+        const amount = (cartData.totalCost + 60) * 100;
         const orderId = await generateOrderId();
 
         const options = {
@@ -349,19 +334,16 @@ const createRazorpayOrder = async (req, res) => {
                     totalPrice: product.totalPrice
                 }))
             })
-
+            console.log(newrazorpayOrder.totalAmount)
             await newrazorpayOrder.save();
 
             if (coupon) {
                 const couponData = await Coupon.findOne({ code: coupon });
                 if (couponData) {
                     const isCouponUsed = couponData.usedCoupons.some(coupon => coupon.userId.equals(req.session.user_id));
-                    console.log(isCouponUsed," is coupon used------------------------------------------");
-                    console.log("hellooooooo1---------------------------------------------");
+                    
                     if (!isCouponUsed) {
-                        console.log("helloooooo2------------------------------------------------");
                         couponData.usedCoupons.push({ userId: req.session.user_id, status: true });
-                        console.log(couponData, "coupondata----------------------------------------------------");
                         await couponData.save();
                     }
                 }
@@ -512,9 +494,7 @@ const createWalletOrder = async (req, res) => {
             const couponData = await Coupon.findOne({ code: coupon });
             couponDiscount = couponData ? couponData.discount : 0;
         }
-        console.log('====================================================================================')
-        console.log(couponDiscount, "cd");
-        console.log('====================================================================================')
+        
         // check if there is offer or not 
         let totalPriceSum = 0;
         if (cartData.products.length > 0) {
@@ -691,15 +671,18 @@ const generateInvoice = async (req, res) => {
         const products = [];
 
         orderData.products.forEach((product) => {
-            products.push({
-                quantity: product.quantity ,
-                description: product.productId.name,
-                taxRate: 0, 
-                price: product.productPrice
-            });
+            if(product.status !== 'Order Cancelled' && product.status !== 'Cancelled by ElaineEcom'){
+                products.push({
+                    quantity: product.quantity ,
+                    description: product.productId.prdctName,
+                    taxRate: 0, 
+                    price: product.productPrice
+                });
+            }
         });
 
-        const data = {
+        if(orderData.paymentStatus !== "Failed"){
+            const data = {
             apiKey: "free",
             mode: "development",
             images: {
@@ -730,13 +713,15 @@ const generateInvoice = async (req, res) => {
                 currency: "INR"
             }
         };
-
+        
         const result = await easyinvoice.createInvoice(data);
         const pdfBuffer = Buffer.from(result.pdf, 'base64');
 
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', 'attachment; filename="invoice.pdf"');
         res.send(pdfBuffer);
+    }
+
 
     } catch (error) {
         console.log('Error:', error.message); 
@@ -763,12 +748,11 @@ const cancelProduct = async (req, res) => {
                 const {status} = product;
 
                 if(status === 'Order Placed' || status === 'Order Shipping'){
-
                     product.status = 'Order Cancelled';
                     await orderData.save();
 
                     if(product.status === 'Order Cancelled'){
-                      
+
                       const walletHistoryEntry = {
                             date: new Date(),
                             amount: product.totalPrice,
@@ -782,7 +766,6 @@ const cancelProduct = async (req, res) => {
                                 $push: { walletHistory: walletHistoryEntry }
                             }
                         )
-                        await userData.save();
 
                         await Product.updateOne(
                             { _id: product.productId }, 

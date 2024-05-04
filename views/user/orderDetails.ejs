@@ -190,7 +190,7 @@ p {
                     <div class="container py-5 ">
                       <div class="row d-flex justify-content-center align-items-center h-80">
                         
-                        <div class="col-lg-12 col-xl-10">
+                        <div class="col-lg-12 col-xl-12">
                           <div class="card" style="border-radius: 10px;">
                             <div class="card-body p-2">
                               <div class=" justify-content-between align-items-center mb-4">
@@ -207,7 +207,7 @@ p {
                                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                                       <p class="text-muted mb-0"><%= productsData[orderIndex][productIndex].productData.prdctName %></p>
                                     </div>
-                                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                    <div class="col-md-1 text-center d-flex justify-content-center align-items-center">
                                       <p class="text-muted mb-0 "><%= productsData[orderIndex][productIndex].cateName %></p>
                                     </div>
                                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
@@ -216,6 +216,9 @@ p {
                                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                                       <p class="text-muted mb-0 ">Qty: <%= product.quantity %></p>
                                     </div>
+                                    <div class="col-md-1 text-center d-flex justify-content-center align-items-center">
+                                        <p class="text-muted mb-0 ">₹<%= product.productPrice.toFixed(2) %></p>
+                                      </div>
                                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                                       <p class="text-muted mb-0 ">₹<%= product.totalPrice.toFixed(2) %></p>
                                     </div>
@@ -260,13 +263,17 @@ p {
                                                 <i class="fa fa-check text-white"></i>
                                             </span>
                                         </div>
-                                        <div class="d-flex flex-row justify-content-between align-items-center">
-                                            <% if(product.status == "Order Placed") { %>
+                                        <% if (order.paymentStatus === 'Failed' || order.paymentStatus === 'Pending' ) { %>
+                                            <div class="d-flex flex-row justify-content-between align-items-center">
+
                                                 <div class="d-flex flex-column small align-items-start">
                                                     <span><%= order.date.toDateString() %></span>
-                                                    <span>Order placed</span>
-                                                    
+                                                    <span class="text-danger">Payment Failed</span>
                                                 </div>
+                                            </div>
+                                        <% }else{ %>
+                                        <div class="d-flex flex-row justify-content-between align-items-center">
+                                            <% if(product.status == "Order Placed") { %>
                                                 
                                             <% } else if(product.status == "Order Shipped") { %>
                                                 <div class="d-flex flex-column small align-items-start">
@@ -313,9 +320,8 @@ p {
                                                 </div>
                                             <%} %>
                                         </div>
+                                        <% } %>
                                     </div>
-                                    
-
                                   </div>
                                 </div>
                               </div>
@@ -330,7 +336,7 @@ p {
                               <%if(discount) {%>
                               <div class="d-flex justify-content-between pt-2 ">
                                 <p class="fw-bold mb-0">Total Amount </p>
-                                <p class="text-muted mb-0"><span class="fw-bold me-4">₹<%= (orderData[0].totalAmount + orderData[0].couponDiscount).toFixed(2)  %></span></p>
+                                <p class="text-muted mb-0"><span class="fw-bold me-4">₹<%= ((orderData[0].totalAmount - 60) + orderData[0].couponDiscount).toFixed(2)  %></span></p>
                               </div>
 
                               <div class="d-flex justify-content-between pt-1">
@@ -340,7 +346,7 @@ p {
                               <% }else{%>
                                 <div class="d-flex justify-content-between pt-2">
                                     <p class="fw-bold mb-0">Total Amount </p>
-                                        <p class="text-muted mb-0"><span class="fw-bold me-4">₹<%= orderData[0].totalAmount.toFixed(2) %></span></p>
+                                        <p class="text-muted mb-0"><span class="fw-bold me-4">₹<%= (orderData[0].totalAmount - 60).toFixed(2) %></span></p>
                                   </div>
     
                                   <div class="d-flex justify-content-between pt-1">
@@ -359,19 +365,19 @@ p {
                                   <p class="card-text">Phone:</span> <%= address.phone %></p>
                                 </div>
                               </div>
-                              
-                              
-                  
                               <div class="d-flex justify-content-between mb-5">
-                                <p class="text-muted ml-5">
-                                    <button onclick="downloadInvoice('<%= orderData[0]._id %>')" class="btn btn-primary">Download Invoice</button>
-                                </p>
+                                <% if (orderData[0].paymentStatus === 'Paid') { %>
+                                    <p class="text-muted ml-5">
+                                        <button onclick="downloadInvoice('<%= orderData[0]._id %>')" class="btn btn-primary">Download Invoice</button>
+                                    </p>
+                                <% } %>
+
                                 <% if(orderData[0].paymentStatus === "Failed") {%>
                                 <p class="text-muted ml-5">
                                     <button class="btn btn-primary" id="retryPayment" onclick="retryPayment('<%= orderData[0]._id %>')">Retry Payment</button>
                                 </p>
                                 <% } %>
-                                <p class="text-muted mb-0"><span class="fw-bold text-dark me-4">Delivery Charges:</span> ₹60.00</p>
+                                <p class="text-muted mb-0 text-end"><span class="fw-bold text-dark me-4">Delivery Charges:</span> ₹60.00</p>
                               </div>
                             </div>
                             
