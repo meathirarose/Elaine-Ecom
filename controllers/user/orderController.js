@@ -8,6 +8,7 @@ const Razorpay = require("razorpay");
 require("dotenv").config();
 var easyinvoice = require('easyinvoice');
 const crypto = require("crypto");
+const { error } = require("console");
 
 // razor pay instance
 var razorpayInstance = new Razorpay(
@@ -416,6 +417,126 @@ const retryRazorPayment = async (req, res) => {
 
 }
 
+// wallet pay
+const createWalletOrder = async (req, res) => {
+
+    try {
+        
+        const {paymentMode, addressId} = req.body;
+
+        if (!addressId || !paymentMode) {
+            throw new Error('Required data missing');
+        }
+
+        const coupon = req.session.couponCode;
+        let couponDiscount = 0;
+        if (coupon) {
+            const couponData = await Coupon.findOne({ code: coupon });
+            couponDiscount = couponData ? couponData.discount : 0;
+        }
+
+        const cartData = await Cart.findOne({ userId: req.session.user_id }).populate('products.productId');
+
+        const userData = await User.findOne({ _id: req.session.user_id }, {_id: 1, name: 1, email:1});
+
+        if(cartData.products.length === 0){
+            return res.json({error: "Please add products to the cart"});
+        }
+
+        const orderId = await generateOrderId();
+
+        const totalAmount = cartData.totalCost - couponDiscount;
+
+        const newOrder = new Order({
+            userId: userData._id,
+            orderId: orderId,
+            deliveryAddress: addressId,
+            userName: userData.name,
+            email: userData.email,
+            couponDiscount: couponDiscount,
+            totalAmount: totalAmount,
+            date: new Date(),
+            payment: paymentMode,
+            products: cartData.products.map(product => ({
+                productId: product.productId,
+                productName: product.productId.prdctName,
+                quantity: product.quantity,
+                productPrice: product.productPrice,
+                totalPrice: product.totalPrice
+              }))
+             
+        })
+
+        if (coupon) {
+            const couponData = await Coupon.findOne({ code: coupon });
+            if (couponData) {
+                const isCouponUsed = couponData.usedCoupons.some(coupon => coupon.userId.equals(req.session.user_id));
+                if (!isCouponUsed) {
+                    couponData.usedCoupons.push({ userId: req.session.user_id, status: true });
+                    await couponData.save();
+                }
+            }
+        }
+        console.log("hellooooooooooooooooooooooooooooooooooooooooooooooooooo1");
+        
+        for (const product of cartData.products) {
+            console.log(product.totalPrice, "pp");
+            const userInfo = await User.findOne({_id: req.session.user_id});
+            if(product.totalPrice <= userInfo.wallet){
+                console.log("hellooooooooooooooooooooooooooooooooooooooooooooooooooo2");
+                const walletHistoryEntry = {
+                    date: new Date(),
+                    amount: product.totalPrice,
+                    reason: 'Product Purchase',
+                    status: 'Debited'
+                };
+                await User.updateOne(
+                    { _id: req.session.user_id },
+                    {
+                        $inc: { wallet: -product.totalPrice },
+                        $push: { walletHistory: walletHistoryEntry }
+                    }
+                );
+
+                await userInfo.save();
+
+                if(newOrder){
+                    newOrder.paymentStatus = 'Paid';
+                    await newOrder.save();
+                }
+
+                for (const product of cartData.products) {
+                    await Product.updateOne(
+                        { _id: product.productId },
+                        { $inc: { prdctQuantity: -product.quantity } } 
+                    );
+                }
+                
+                cartData.products.map(product => {
+                    if(product.productId.prdctQuantity <= 0){
+                        return res.json({error: "This product is out of Stock!"});
+                    }
+                });
+
+                cartData.products = [];
+                await cartData.save();
+
+                res.json({ message: "Your order has been placed successfully." });
+            }else{
+                console.log("hellooooooooooooooooooooooooooooooooooooooooooooooooooo2");
+                return res.json({error: 'Insufficient Balance.'});
+            }
+
+        }
+        
+
+    } catch (error) {
+        console.log(error.message);
+        res.render("404");
+    }
+
+}
+
 // const order details load
 const orderDetailsLoad = async (req, res) => {
 
@@ -492,7 +613,7 @@ const generateInvoice = async (req, res) => {
             products.push({
                 quantity: product.quantity ,
                 description: product.productId.name,
-                taxRate: 6, 
+                taxRate: 0, 
                 price: product.productPrice
             });
         });
@@ -566,19 +687,24 @@ const cancelProduct = async (req, res) => {
                     await orderData.save();
 
                     if(product.status === 'Order Cancelled'){
-                        const userData = await User.findById({_id: req.session.user_id});
-                        
-                        userData.wallet += product.totalPrice;
-                        userData.walletHistory.push({
+                      
+                      const walletHistoryEntry = {
                             date: new Date(),
                             amount: product.totalPrice,
                             reason: 'Order Cancelletion Refund',
-                            status: 'in'
-                        })
+                            status: 'Credited'
+                        } 
+                        await User.updateOne(
+                            {_id: req.session.user_id},
+                            {
+                                $inc: { wallet: +product.totalPrice },
+                                $push: { walletHistory: walletHistoryEntry }
+                            }
+                        )
                         await userData.save();
 
                         await Product.updateOne(
-                            { _id: product.productId },
+                            { _id: product.productId }, 
                             { $inc: { prdctQuantity: +product.quantity } } 
                         );
 
@@ -650,6 +776,7 @@ module.exports = {
     addCoupon,
     placeOrder,
     createRazorpayOrder,
+    createWalletOrder,
     verifyRazorPayment,
     failedPayment,
     retryRazorPayment,

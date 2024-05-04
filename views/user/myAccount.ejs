@@ -14,7 +14,8 @@
     margin-bottom: 20px;
     background: rgb(213, 210, 210);
 }
-.balance{font-size: 45px;color: rgb(128, 107, 0)}
+.balance{font-size: 45px;color: rgb(164, 113, 11)}
+.balance1{font-size: 18px;}
 .revenue{font-size:14px;color:#147219;font-weight:500}
 </style>
 
@@ -396,8 +397,9 @@
         <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
             <div class="container-fluid">
                 <div class="row ">
-                    <div class="col-lg-6 ">
+                    <div class="col-lg-12 ">
                         <div class="card card-dashboard-profile  " id="cardDashboard">
+                            <div class="d-flex">
                             <div class="card-body">
                                 <h3 class="card-title pt-3 pb-3">Account Details</h3>
                                 <!-- End .card-title -->
@@ -417,13 +419,14 @@
                                 <!-- End .card-title -->
                                 <div class="account-details-box">
                                     <p>
-                                        <strong>Total Amount: &nbsp;&nbsp;Rs.<%= userData.wallet %></strong> <br>
+                                        <strong>Total Amount: &nbsp;&nbsp;Rs.<%= userData.wallet.toFixed(2) %></strong> <br>
                                     </p>
                                     <button class="btn btn-primary show-walletHistory-btn" data-user-id="<%= userData._id %>" >
                                         Transaction History
                                     </button>
                                 </div><!-- End .account-details-box -->
                             </div><!-- End .card-body -->
+                        </div>
                         </div><!-- End .card-dashboard -->
                     </div><!-- End .col-lg-6 -->
                 </div><!-- End .row -->
@@ -464,12 +467,34 @@
         <div id="user-wallet-history<%=userData._id%>" class="editProfile" style="display: none;">
             <div class="container ">
                 <div class="row g-0">
-                    <div class="col-md-8">
-                        <div class="p-0 bg-white">
-                            <h6 class="account">Account Balance</h6>
-                            <span class="mt-0 mb-3 balance">₹<%= userData.wallet  %></span>
-                        </div>
-                        
+                    <div class="col-md-8" >
+                        <div class="p-0 bg-white d-flex " >
+                            <div class="p-5">
+                                <h6 class="account">Account Balance</h6>
+                                <span class="mt-0 mb-3 balance">₹<%= userData.wallet.toFixed(2)  %></span>
+                            </div>
+                            <div class="p-5">
+                                <% let walletCredit = 0 %>
+                                <% userData.walletHistory.forEach(wallet => { %>
+                                    <% if (wallet.status === 'Credited') { %>
+                                        <% walletCredit += wallet.amount %>
+                                    <% } %>
+                                <% }) %>
+                                    <h6 class="account mt-1 text-success">Total Credited Amount</h6>
+                                    <span class="mt-1 font-weight-bolder text-success balance1">₹<%= walletCredit.toFixed(2)  %></span>
+                            </div>
+                            <div class="p-5">
+                                <% let walletDebit = 0 %>
+                                <% userData.walletHistory.forEach(wallet => { %>
+                                    <% if (wallet.status === 'Debited') { %>
+                                        <% walletDebit += wallet.amount %>
+                                        <% } %>
+                                <% }) %>
+                                <h6 class="account mt-1 text-danger">Total Debited Amount</h6>
+                                <span class="mt-1 balance1 font-weight-bolder text-danger">₹<%= walletDebit.toFixed(2)  %></span>
+                                    
+                            </div>
+                        </div>                      
                     </div>
                     <div class="col-md-8 mt-2 border-right">
                         <div class="bg-white">
@@ -489,9 +514,13 @@
                                         <% userData.walletHistory.forEach(wallet => { %>
                                         <tr>
                                             <td><%= wallet.reason %></td>
-                                            <td><%= wallet.amount %></td>
+                                            <td><%= wallet.amount.toFixed(2) %></td>
                                             <td><%= wallet.date.toLocaleDateString() %></td>
-                                            <td><span style="color: #147219; font-weight: bolder;"><%= wallet.status %></span></td>
+                                            <% if (wallet.status === 'Credited') { %>
+                                                <td><span style="color: #147219; font-weight: bolder;"><%= wallet.status %></span></td>
+                                            <% }else{ %>
+                                                <td><span style="color: #f70000; font-weight: bolder;"><%= wallet.status %></span></td>
+                                            <% } %>
                                         </tr>
                                         <% }) %>
                                     </tbody>  

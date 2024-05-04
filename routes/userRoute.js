@@ -94,12 +94,13 @@ user_route.delete("/removeFromWishlist", authentication.isLogin, accessAuth.acce
 // order routes
 user_route.get("/checkout", authentication.isLogin, accessAuth.accessUser, orderController.checkoutLoad);
 user_route.post("/placeOrder", orderController.placeOrder);
+user_route.post("/razorpayOrder", orderController.createRazorpayOrder);
+user_route.post("/walletOrder", orderController.createWalletOrder);
 user_route.get("/orderDetails", authentication.isLogin, accessAuth.accessUser, orderController.orderDetailsLoad);
 user_route.post("/generateInvoice", orderController.generateInvoice);
 user_route.post("/cancelProduct", orderController.cancelProduct);
 user_route.get("/orderSuccess", authentication.isLogin, accessAuth.accessUser, orderController.orderSuccessLoad);
 user_route.get("/orderHistory", authentication.isLogin, accessAuth.accessUser, orderController.orderHistoryLoad);
-user_route.post("/razorpayOrder", orderController.createRazorpayOrder);
 user_route.post("/verifyPayment", orderController.verifyRazorPayment);
 user_route.post("/retryPayment", orderController.retryRazorPayment);
 user_route.post("/handleFailedPayment", orderController.failedPayment);
