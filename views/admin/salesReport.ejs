@@ -164,7 +164,7 @@
                                         <td>₹<%= order.totalAmount.toFixed(2) %></td>
                                         <td><%= order.products.length %></td>
                                         <td>₹<%= order.couponDiscount.toFixed(2) %></td>
-                                        <td>₹<%= order.offerDiscount %></td>
+                                        <td>₹<%= order.offerDiscount.toFixed(2) %></td>
                                         <td>
                                             <span class="badge badge-pill badge-soft-success"><%= order.paymentStatus %></span>
                                         </td>
@@ -288,7 +288,7 @@
                 <td>₹${order.totalAmount.toFixed(2)}</td>
                 <td>${order.products.length}</td>
                 <td>₹${order.couponDiscount.toFixed(2)}</td>
-                <td>₹${order.offerDiscount}</td>
+                <td>₹${order.offerDiscount.toFixed(2)}</td>
                 <td>
                     <span class="badge badge-pill badge-soft-success">${order.paymentStatus}</span>
                 </td>
