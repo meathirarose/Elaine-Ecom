@@ -99,6 +99,7 @@ user_route.post("/walletOrder", orderController.createWalletOrder);
 user_route.get("/orderDetails", authentication.isLogin, accessAuth.accessUser, orderController.orderDetailsLoad);
 user_route.post("/generateInvoice", orderController.generateInvoice);
 user_route.post("/cancelProduct", orderController.cancelProduct);
+user_route.post("/returnProduct", orderController.handleReturnProduct);
 user_route.get("/orderSuccess", authentication.isLogin, accessAuth.accessUser, orderController.orderSuccessLoad);
 user_route.get("/orderHistory", authentication.isLogin, accessAuth.accessUser, orderController.orderHistoryLoad);
 user_route.post("/verifyPayment", orderController.verifyRazorPayment);

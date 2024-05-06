@@ -209,12 +209,12 @@
                                                 <span class="badge rounded-pill alert-success text-success"><%= product.status %></span>
                                             </td>
                                             <td><%= product.totalPrice.toFixed(2) %></td>
-                                            <td>Reason for return</td>
+                                            <td><%= product.returnReason %></td>
+                                            
                                             <td class="text-end">
-                                                <button class="btn btn-xs rounded font-sm " type="submit" >Approved</button>
-
-                                                <!-- dropdown //end -->
+                                                <button class="btn btn-xs rounded font-sm" type="button" onclick="approveReturn('<%= product._id %>', '<%= order._id %>')">Approved</button>
                                             </td>
+                                            
                                         </tr>
   
                                         <% }) %>
@@ -277,5 +277,41 @@
 <!--Sweet Alert  -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
+<script>
+    function approveReturn(productId, orderId) {
+        fetch('/admin/approveReturn', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ productId, orderId })
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error(response.statusText);
+            }
+        })
+        .then(data => {
+            Swal.fire({
+                title: 'Return Approved!',
+                text: data.message,
+                timer: 1500,
+                icon: 'success'
+            });
+            setTimeout(function() {
+                            location.reload();
+                        }, 1500);
+        })
+        .catch(error => {
+            Swal.fire({
+                title: 'Error!',
+                text: error.message || 'Failed to approve return.',
+                icon: 'error'
+            });
+        });
+    }
+</script>
 
 <%-include("../layout/admin/footer")-%>

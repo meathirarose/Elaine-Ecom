@@ -63,6 +63,7 @@ admin_route.get('/orderDetails', adminAuthentication.isAdminLogin, orderControll
 admin_route.post('/shippedStatusChange/:orderId', orderController.shippedStatusChange);
 admin_route.post('/deliveredStatusChange/:orderId', orderController.deliveredStatusChange);
 admin_route.post('/cancelledStatusChange/:orderId', orderController.cancelledStatusChange);
+admin_route.post('/approveReturn', orderController.approveReturnRequest);
 
 // coupon routes
 admin_route.get('/coupons', adminAuthentication.isAdminLogin, couponController.couponLoad);

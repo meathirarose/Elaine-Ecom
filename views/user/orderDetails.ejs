@@ -232,11 +232,16 @@ p {
                                   <%}else if(product.status === 'Order Delivered' ){%>
                                     <div class="col-6 col-lg-4 col-xl-2">
                                         <div class="btn-wrap">
-                                            <a href="#" class="btn btn-outline-primary cancel btn-rounded text-danger">Return</a>
+                                            <a href="#" class="btn btn-outline-primary cancel btn-rounded text-danger" onclick="returnProduct('<%= product._id %>', '<%= order._id %>')">Return</a>
+                                        </div><!-- End .btn-wrap -->
+                                    </div><!-- End .col-md-4 col-lg-2 -->
+                                  <%}else if(product.status === 'Return Requested' ){%>
+                                    <div class="col-6 col-lg-4 col-xl-2">
+                                        <div class="btn-wrap">
+                                            <p class="text-danger">Return Requested</p>
                                         </div><!-- End .btn-wrap -->
                                     </div><!-- End .col-md-4 col-lg-2 -->
                                   <%}%>
-                                  
                                   <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
                                   <div class="row d-flex align-items-center">
                                     <div class="col-md-2">
@@ -291,7 +296,7 @@ p {
                                                     <span><%= order.date.toDateString() %></span>
                                                     <span>Order Shipped</span>
                                                 </div>
-                                            <% } else if(product.status == "Order Delivered") { %>
+                                            <% } else if(product.status == "Order Delivered" || product.status === 'Return Requested') { %>
                                                 <div class="d-flex flex-column small align-items-start">
                                                     <span><%= order.date.toDateString() %></span>
                                                     <span>Order placed</span>
@@ -321,7 +326,8 @@ p {
                                                     <!-- <span><%= Date.now() %></span> -->
                                                     <span class="text-danger">Order Cancelled</span>
                                                 </div>
-                                            <%} %>
+                                            <%}%>
+
                                         </div>
                                         <% } %>
                                     </div>
@@ -741,6 +747,62 @@ p {
             }
 
         </script>
+
+    <script>
+        function returnProduct(productId, orderId) {
+            Swal.fire({
+                title: 'Reason for Return',
+                input: 'textarea',
+                inputLabel: 'Please provide a reason for return',
+                inputPlaceholder: 'Enter your reason here...',
+                inputAttributes: {
+                    autocapitalize: 'off'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'Submit',
+                showLoaderOnConfirm: true,
+                preConfirm: (reason) => {
+                    return fetch('/returnProduct', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({productId, orderId, reason })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .catch(error => {
+                        Swal.showValidationMessage(`Request failed: ${error}`);
+                    });
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (result.value && !result.value.error) {
+                        Swal.fire({
+                            title: 'Return Request Submitted!',
+                            text: 'Your return request has been submitted successfully.',
+                            icon: 'success'
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Return Request Failed!',
+                            text: result.value.error || 'An error occurred while processing your request.',
+                            icon: 'error'
+                        });
+                    }
+                }
+            })
+        }
+    </script>
+
+
+
+
         <script>
             
         function downloadInvoice(orderId) {

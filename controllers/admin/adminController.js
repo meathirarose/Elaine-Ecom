@@ -106,9 +106,9 @@ const homeLoad = async (req, res) => {
             { $sort: { totalSold: -1 }},
             { $limit: 10 } 
         ]);
-
         const productData = await Order.populate(topProducts, { path: "_id", model: "Product" });
-        const categoryIds = productData.map(product => product._id.categoryId);
+        const categoryIds = topProducts.map(product => product._id.categoryId);
+
         const topCategory = await Product.aggregate([
             { $match: { categoryId: { $in: categoryIds } } },
             { $lookup: { 
@@ -126,7 +126,6 @@ const homeLoad = async (req, res) => {
             { $sort: { totalSold: -1 }},
             { $limit: 10 }
         ]);
-
         
         res.render('adminHome', {
             orderDataDisplay, 

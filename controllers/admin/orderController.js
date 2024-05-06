@@ -164,12 +164,46 @@ const cancelledStatusChange = async (req, res) => {
     }
 };
 
+// approve return request
+const approveReturnRequest = async (req, res) => {
+    try {
+        const { productId, orderId } = req.body;
+
+        console.log(productId, orderId);
+        
+        const orderData = await Order.findById({_id: orderId});
+        if (orderData.products && orderData.products.length > 0) {
+            const product = orderData.products.find(product => {
+                return String(product._id) === String(productId);
+            });
+
+            if (product) {
+
+                product.status = "Return Approved";
+
+                await orderData.save();
+        
+                res.json({ message: 'Product approved successfully.' });
+            } else {
+                res.json({ error: 'Product not found in the order.' });
+            }
+        } else {
+            res.json({ error: 'Order not found.' });
+        }
+
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
 module.exports = {
 
     ordersLoad,
     orderDetails,
     shippedStatusChange,
     deliveredStatusChange,
-    cancelledStatusChange
+    cancelledStatusChange,
+    approveReturnRequest
     
 }

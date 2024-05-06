@@ -87,6 +87,8 @@ const verifyOtp = async (req, res) =>{
         if(otpData && otpData.otp === parseInt(otpNo)){
 
             await User.updateOne({email:req.session.email},{is_verified: 1});
+
+
             
             res.render("userLogin");
 

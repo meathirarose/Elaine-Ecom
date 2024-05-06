@@ -819,6 +819,41 @@ const cancelProduct = async (req, res) => {
 
 }
 
+// return product
+const handleReturnProduct = async (req, res) => {
+
+    try {
+        
+        const { productId, orderId, reason } = req.body;
+
+        const orderData = await Order.findById({_id: orderId});
+        if (orderData.products && orderData.products.length > 0) {
+            const product = orderData.products.find(product => {
+                return String(product._id) === String(productId);
+            });
+
+        if (product) {
+
+                product.status = "Return Requested";
+                product.returnReason = reason; 
+        
+                await orderData.save();
+        
+                res.json({ message: 'Product return requested successfully.' });
+            } else {
+                res.json({ error: 'Product not found in the order.' });
+            }
+        } else {
+            res.json({ error: 'Order not found.' });
+        }
+
+    } catch (error) {
+        console.log(error.message);
+        res.render("404");
+    }
+
+}
+
 // order success
 const orderSuccessLoad = async (req, res) =>{
     try {
@@ -866,6 +901,7 @@ module.exports = {
     orderDetailsLoad,
     generateInvoice,
     cancelProduct,
+    handleReturnProduct,
     orderSuccessLoad,
     orderHistoryLoad
 }
