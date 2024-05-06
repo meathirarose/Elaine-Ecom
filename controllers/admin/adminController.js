@@ -67,21 +67,15 @@ const homeLoad = async (req, res) => {
         const orderData = await Order.find({}).sort({date: -1});
 
         const monthlySales = new Array(12).fill(0); 
-        const yearlySales = {};
-
-        // monthly sales
+        const yearlySales = new Array(12).fill(0);
+        
+        // monthly sales & yearly sales
         orderData.forEach(order => {
-            const month = order.date.getMonth(); 
+            const month = order.date.getMonth();
             const totalAmount = order.totalAmount;
             monthlySales[month] += totalAmount;
-        });
-
-        // yearly sales
-        orderData.forEach(order => {
-            const year = order.date.getFullYear().toString(); 
-            const totalAmount = order.totalAmount;
-            if (!yearlySales[year]) yearlySales[year] = 0;
-            yearlySales[year] += totalAmount;
+        
+            yearlySales[month] += totalAmount;
         });
 
         // total order amount

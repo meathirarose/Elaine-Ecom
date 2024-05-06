@@ -144,7 +144,7 @@
                                 <tr>
                                     <th>Sl No.</th>
                                     <th class="align-middle" scope="col">Order ID</th>
-                                    <th class="align-middle" scope="col">Billing Name</th>
+                                    <th class="align-middle" scope="col">Product Name</th>
                                     <th class="align-middle" scope="col">Date</th>
                                     <th class="align-middle" scope="col">Total</th>
                                     <th class="align-middle" scope="col">Quantity</th>
@@ -155,16 +155,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <% orderData.forEach((order,index) => { %>
-                                    <% order.products.forEach((product) => { %>
+                                <% orderData.forEach((order) => { %>
+                                    <% order.products.forEach((product,index) => { %>
                                         <% if (product.status === 'Order Delivered') { %>
                                             <tr>
                                                 <th><%= index + 1 %></th>
                                                 <td><a href="#" class="fw-bold"><%= order.orderId %></a></td>
-                                                <td><%= order.userName %></td>
+                                                <td><%= product.productName %></td>
                                                 <td><%= order.date.toLocaleDateString() %></td>
-                                                <td>₹<%= order.totalAmount.toFixed(2) %></td>
-                                                <td><%= order.products.length %></td>
+                                                <td>₹<%= product.productPrice.toFixed(2) %></td>
+                                                
+                                                <td><%= product.quantity %></td>
                                                 <td>₹<%= order.couponDiscount.toFixed(2) %></td>
                                                 <td>₹<%= order.offerDiscount.toFixed(2) %></td>
                                                 <td>

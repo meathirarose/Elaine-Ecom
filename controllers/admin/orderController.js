@@ -52,7 +52,8 @@ const orderDetails = async (req, res) => {
 // changing order status - shipping
 const shippedStatusChange = async (req, res) => {
     try {
-        const orderId = req.params.orderId;
+        const {orderId} = req.params;
+        const {productId} = req.body;
 
         const order = await Order.findOne({ _id: orderId });
 
@@ -60,26 +61,29 @@ const shippedStatusChange = async (req, res) => {
             return res.json({ error: 'Order not found' });
         }
 
-        // const isDelivered = order.products.find(product => product.status === 'Order Delivered');
-        // if (isDelivered) {
-        //     return res.json({ error: 'Cannot be Shipped. Order is already Delivered.' });
-        // }
-
-        // const isCancelled = order.products.find(product => product.status === 'Cancelled by ElaineEcom');
-        // if (isCancelled) {
-        //     return res.json({ error: 'Cannot be Shipped. Order cancelled by ElaineEcom.' });
-        // }
-
-        let productToUpdate = order.products.find(product => product.status === 'Order Placed');
+        const productToUpdate = order.products.find(product => product._id.toString() === productId); 
 
         if (!productToUpdate) {
-            return res.json({ error: 'Product is not Placed yet.!' });
+            return res.json({ error: 'Product not found in the order' });
         }
 
+        if (productToUpdate.status === 'Order Shipped') {
+            return res.json({ error: 'Product is already Shipped' });
+        }
+
+        if(productToUpdate.status === 'Order Delivered'){
+            return res.json({ error: 'Product is already Delivered' });
+        }
+
+        if(productToUpdate.status === 'Cancelled by ElaineEcom'){
+            return res.json({ error: 'Product is already Cancelled by ElaineEcom' });
+        }
+        
         productToUpdate.status = 'Order Shipped';
         await order.save();
 
         return res.json({ message: 'Order status updated to Shipped successfully' });
+
     } catch (error) {
         console.log(error.message);
         return res.json({ error: 'An error occurred while updating the order status' });
@@ -91,7 +95,8 @@ const shippedStatusChange = async (req, res) => {
 // changing order status - delivered
 const deliveredStatusChange = async (req, res) => {
     try {
-        const orderId = req.params.orderId;
+        const {orderId} = req.params;
+        const {productId} = req.body;
 
         const order = await Order.findOne({ _id: orderId });
 
@@ -99,18 +104,22 @@ const deliveredStatusChange = async (req, res) => {
             return res.json({ error: 'Order not found' });
         }
 
-        let productToUpdate = null;
-        for (const product of order.products) {
-            if (product.status === 'Cancelled by ElaineEcom') {
-                return res.json({ error: 'Cannot be Delivered. Order cancelled by ElaineEcom.!' });
-            }
-            if (product.status === 'Order Shipped') {
-                productToUpdate = product;
-            }
-        }
+        const productToUpdate = order.products.find(product => product._id.toString() === productId); 
 
         if (!productToUpdate) {
-            return res.json({ error: 'Product is not Shipped yet.!' });
+            return res.json({ error: 'Product not found in the order' });
+        }
+
+        if (productToUpdate.status === 'Order Placed') {
+            return res.json({ error: 'Product is not Shipped yet' });
+        }
+
+        if(productToUpdate.status === 'Order Delivered'){
+            return res.json({ error: 'Product is already Delivered' });
+        }
+
+        if(productToUpdate.status === 'Cancelled by ElaineEcom'){
+            return res.json({ error: 'Product is already Cancelled by ElaineEcom' });
         }
 
         productToUpdate.status = 'Order Delivered';

@@ -118,7 +118,7 @@
                         <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
                         <div class="text">
                             <h6 class="mb-1 card-title">Revenue</h6>
-                            <span>₹<%= totalOrderAmount %></span>
+                            <span>₹<%= totalOrderAmount.toFixed(2) %></span>
                             <span class="text-sm"> Shipping fees are not included </span>
                         </div>
                     </article>
@@ -154,11 +154,6 @@
                 <div class="card mb-4">
                     <article class="card-body">
                         <h5 class="card-title">Sale statistics</h5>
-                        <label for="timePeriod">Time Period:</label>
-                        <select name="timePeriod" id="timePeriod">
-                            <option value="monthly">Monthly</option>
-                            <option value="yearly">Yearly</option>
-                        </select>
                         <canvas id="myChart" height="200"></canvas>
                     </article>
                 </div>
@@ -334,36 +329,37 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                datasets: [{
-                    label: 'Monthly Sales',
-                    data: <%= JSON.stringify(monthlySales) %>,
-                    backgroundColor: 'rgba(44, 120, 220, 0.2)',
-                    borderColor: 'rgba(44, 120, 220)',
-                    fill: false
-                }, {
-                    label: 'Yearly Sales',
-                    data: <%= JSON.stringify(Object.values(yearlySales)) %>,
-                    backgroundColor: 'rgba(4, 209, 130, 0.2)',
-                    borderColor: 'rgb(4, 209, 130)',
-                    fill: false
-                }]
-            },
-            options: {
-                plugins: {
-                    legend: {
-                        labels: {
-                            usePointStyle: true
-                        }
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [{
+                label: 'Monthly Sales',
+                data: <%= JSON.stringify(monthlySales) %>,
+                backgroundColor: 'rgba(44, 120, 220, 0.2)',
+                borderColor: 'rgba(44, 120, 220)',
+                fill: false
+            }, {
+                label: 'Yearly Sales',
+                data: <%= JSON.stringify(Object.values(yearlySales)) %>,
+                backgroundColor: 'rgba(4, 209, 130, 0.2)',
+                borderColor: 'rgb(4, 209, 130)',
+                fill: false
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    labels: {
+                        usePointStyle: true
                     }
                 }
             }
-        });
+        }
     });
+});
+
 </script>
 
 <%-include("../layout/admin/footer")-%>
