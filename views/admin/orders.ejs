@@ -155,7 +155,7 @@
                                             <td><b><%= order.userName %></b></td>
                                             <td><%= order.email %></td>
                                             <td><%= product.productName %></td>
-                                            <td>₹<%= product.totalPrice %></td>
+                                            <td>₹<%= product.totalPrice.toFixed(2) %></td>
                                             <td><span class="badge rounded-pill alert-warning"><%= product.status %></span></td>
                                             <td><%= order.date.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }) %></td>
                                             <td class="text-end">
@@ -188,13 +188,16 @@
             <div class="pagination-area mt-15 mb-50">
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-start">
-                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                        <li class="page-item"><a class="page-link" href="#">02</a></li>
-                        <li class="page-item"><a class="page-link" href="#">03</a></li>
-                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                        <li class="page-item"><a class="page-link" href="#">16</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
+                        <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                            <a class="page-link" href="/admin/orders?page=<%= currentPage - 1 %>"> << </a>
+                        </li>
+                        <% for(let i = 1; i <= totalPages; i++) { %>
+                            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                <a class="page-link" href="/admin/orders?page=<%= i %>"><%= i %></a>
+                            </li>
+                        <% } %>
+                        <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                            <a class="page-link" href="/admin/orders?page=<%= currentPage + 1 %>"> >> </a>
                         </li>
                     </ul>
                 </nav>

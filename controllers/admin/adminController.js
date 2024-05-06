@@ -1,6 +1,7 @@
 const User = require("../../models/userdbModel");
 const Order = require("../../models/orderdbSchema");
 const Category = require("../../models/categorydbModel");
+const Product = require("../../models/productdbModel");
 const bcrypt = require("bcrypt");
 
 //-----------------------------------------------admin-login-and-verification----------------------------------------------//
@@ -61,10 +62,27 @@ const homeLoad = async (req, res) => {
 
     try {
 
-        const orderData = await Order.find({});
+        const orderDataDisplay = await Order.find({}).sort({date: -1}).limit(10);
 
-        // sorting orders
-        orderData.sort((a,b) => b.date - a.date);
+        const orderData = await Order.find({}).sort({date: -1});
+
+        const monthlySales = new Array(12).fill(0); 
+        const yearlySales = {};
+
+        // monthly sales
+        orderData.forEach(order => {
+            const month = order.date.getMonth(); 
+            const totalAmount = order.totalAmount;
+            monthlySales[month] += totalAmount;
+        });
+
+        // yearly sales
+        orderData.forEach(order => {
+            const year = order.date.getFullYear().toString(); 
+            const totalAmount = order.totalAmount;
+            if (!yearlySales[year]) yearlySales[year] = 0;
+            yearlySales[year] += totalAmount;
+        });
 
         // total order amount
         let totalOrderAmount = 0;
@@ -81,10 +99,53 @@ const homeLoad = async (req, res) => {
             productCount+= order.products.length
         )
 
-        const categoryData = await Category.find({is_listed: true});
-        const categoryCount = categoryData.length;
+        const category = await Category.find({is_listed: true});
+        const categoryCount = category.length;
 
-        res.render('adminHome', {orderData, totalOrderAmount, orderCount, productCount, categoryCount});
+        const topProducts = await Order.aggregate([
+            { $unwind: "$products" },
+            { $group: {
+                _id: "$products.productId",
+                productName: { $first: "$products.productName" },
+                totalSold: { $sum: 1 }
+            }},
+            { $sort: { totalSold: -1 }},
+            { $limit: 10 } 
+        ]);
+
+        const productData = await Order.populate(topProducts, { path: "_id", model: "Product" });
+        const categoryIds = productData.map(product => product._id.categoryId);
+        const topCategory = await Product.aggregate([
+            { $match: { categoryId: { $in: categoryIds } } },
+            { $lookup: { 
+                from: "categories", 
+                localField: "categoryId",
+                foreignField: "_id",
+                as: "category"
+            }},
+            { $unwind: "$category" }, 
+            { $group: {
+                _id: "$categoryId",
+                cateName: { $first: "$category.cateName" }, 
+                totalSold: { $sum: 1 }
+            }},
+            { $sort: { totalSold: -1 }},
+            { $limit: 10 }
+        ]);
+
+        
+        res.render('adminHome', {
+            orderDataDisplay, 
+            totalOrderAmount, 
+            orderCount, 
+            productCount, 
+            categoryCount, 
+            topProducts,
+            productData,
+            topCategory,
+            monthlySales,
+            yearlySales
+        });
 
     } catch (error) {
         console.log(error.message);
@@ -96,23 +157,22 @@ const salesReportLoad = async (req, res) => {
 
     try {
 
-        const orderData = await Order.find({});
-
-        // sorting orders
-        orderData.sort((a,b) => b.date - a.date);
+        const orderData = await Order.find({}).sort({date: -1});
 
         // total order amount
         let totalOrderAmount = 0;
         let grandTotal = 0;
         let couponTotal = 0;
         let offerTotal = 0;
-        orderData.forEach(total => {
-            totalOrderAmount += total.totalAmount;
-            grandTotal += totalOrderAmount;
-            couponTotal += total.couponDiscount;
-            offerTotal += total.offerDiscount;
+        orderData.forEach(order => {
+            const allDelivered = order.products.every(product => product.status === 'Order Delivered');
+            if (allDelivered) {
+                totalOrderAmount += order.totalAmount;
+                grandTotal += order.totalAmount; 
+                couponTotal += order.couponDiscount;
+                offerTotal += order.offerDiscount;
+            }
         });
-        console.log(offerTotal);
 
         // total order count
         const orderCount = orderData.length;

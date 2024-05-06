@@ -215,7 +215,7 @@
                                     </div><!-- End .product-cat -->
                                     <h3 class="product-title"><a href="#"><%= product.productId.prdctName %></a></h3><!-- End .product-title -->
                                     <div class="product-content" style="display: inline-block;">
-                                        <span style="font-weight: 500;">Total Amount :</span> ₹<%= order.totalAmount %> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                        <span style="font-weight: 500;">Total Amount :</span> ₹<%= order.totalAmount.toFixed(2) %> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                                         <span style="font-weight: 500;">Items :</span> <%= order.products.length %>
                                     </div>
                                     <% if (order.products.length > 1) { %>

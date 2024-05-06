@@ -18,7 +18,6 @@ const cartLoad = async (req, res) => {
                 const product = productData.find((product) => product._id.equals(cartProduct.productId._id));
                 const offer = product.offer;
                 if (offer && offer.status === true) {
-
                     const offerPrice = product.prdctPrice - (offer.offerPercentage * product.prdctPrice) / 100;
                     cartProduct.productPrice = offerPrice;
                     cartProduct.totalPrice = cartProduct.quantity * offerPrice;
@@ -120,6 +119,10 @@ const updateCartQuantity = async (req, res) => {
     try {
         const productId = req.params.productId;
         const { quantity } = req.body;
+
+        if (quantity >= 5) {
+            return res.json({ error: "You can buy at most 5 items." });
+        }
 
         const productDataById = await Product.findById(productId).populate('offer');
 

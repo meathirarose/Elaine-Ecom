@@ -156,20 +156,24 @@
                             </thead>
                             <tbody>
                                 <% orderData.forEach((order,index) => { %>
-                                    <tr>
-                                        <th><%= index + 1 %></th>
-                                        <td><a href="#" class="fw-bold"><%= order.orderId %></a></td>
-                                        <td><%= order.userName %></td>
-                                        <td><%= order.date.toLocaleDateString() %></td>
-                                        <td>₹<%= order.totalAmount.toFixed(2) %></td>
-                                        <td><%= order.products.length %></td>
-                                        <td>₹<%= order.couponDiscount.toFixed(2) %></td>
-                                        <td>₹<%= order.offerDiscount.toFixed(2) %></td>
-                                        <td>
-                                            <span class="badge badge-pill badge-soft-success"><%= order.paymentStatus %></span>
-                                        </td>
-                                        <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i><%= order.payment %></td>
-                                    </tr>
+                                    <% order.products.forEach((product) => { %>
+                                        <% if (product.status === 'Order Delivered') { %>
+                                            <tr>
+                                                <th><%= index + 1 %></th>
+                                                <td><a href="#" class="fw-bold"><%= order.orderId %></a></td>
+                                                <td><%= order.userName %></td>
+                                                <td><%= order.date.toLocaleDateString() %></td>
+                                                <td>₹<%= order.totalAmount.toFixed(2) %></td>
+                                                <td><%= order.products.length %></td>
+                                                <td>₹<%= order.couponDiscount.toFixed(2) %></td>
+                                                <td>₹<%= order.offerDiscount.toFixed(2) %></td>
+                                                <td>
+                                                    <span class="badge badge-pill badge-soft-success"><%= order.paymentStatus %></span>
+                                                </td>
+                                                <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i><%= order.payment %></td>
+                                            </tr>
+                                        <% } %>
+                                    <% }) %>
                                 <% }) %>
                             </tbody>
 

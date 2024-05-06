@@ -3,20 +3,32 @@ const Order = require("../../models/orderdbSchema");
 
 // orders load
 const ordersLoad = async (req, res) => {
-
     try {
 
-        const orderData = await Order.find({});
+        const page = parseInt(req.query.page) || 1; 
+        const pageSize = 4; 
+        const skip = (page - 1) * pageSize;
 
-        const sortedOrderData = orderData.sort((a,b) => b.date - a.date);
+        const totalOrders = await Order.countDocuments();
+        const totalPages = Math.ceil(totalOrders / pageSize);
 
-        res.render("orders", {sortedOrderData});
+        const sortedOrderData = await Order.find({})
+            .sort({ date: -1 })
+            .skip(skip)
+            .limit(pageSize);
+
+
+        res.render("orders", { 
+            sortedOrderData, 
+            totalPages, 
+            currentPage: page 
+        });
 
     } catch (error) {
         console.log(error.message);
     }
-
 }
+
 
 // order details load
 const orderDetails = async (req, res) => {
@@ -115,8 +127,8 @@ const deliveredStatusChange = async (req, res) => {
 // changing order status - cancelled
 const cancelledStatusChange = async (req, res) => {
     try {
-        const orderId = req.params.orderId;
-        const productId = req.body.productId;
+        const {orderId} = req.params;
+        const {productId} = req.body;
 
         const order = await Order.findOne({ _id: orderId });
 
@@ -150,5 +162,5 @@ module.exports = {
     shippedStatusChange,
     deliveredStatusChange,
     cancelledStatusChange
-
+    
 }

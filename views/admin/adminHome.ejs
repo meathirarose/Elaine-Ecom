@@ -1,6 +1,11 @@
 
 <%-include("../layout/admin/header")-%>
-
+<style>
+    .product{
+        width: 500px;
+        margin-left: 20px;
+    }
+</style>
 <div class="screen-overlay"></div>
 <aside class="navbar-aside" id="offcanvas_aside">
     <div class="aside-top">
@@ -105,9 +110,6 @@
                 <h2 class="content-title card-title">Dashboard</h2>
                 <p>Whole data about Elaine Ecom is here..!</p>
             </div>
-            <div>
-                <a href="#" class="btn btn-primary"><i class="text-muted material-icons md-post_add"></i>Create report</a>
-            </div>
         </div>
         <div class="row">
             <div class="col-lg-3">
@@ -152,32 +154,22 @@
                 <div class="card mb-4">
                     <article class="card-body">
                         <h5 class="card-title">Sale statistics</h5>
-                        <canvas id="myChart" height="120px"></canvas>
+                        <label for="timePeriod">Time Period:</label>
+                        <select name="timePeriod" id="timePeriod">
+                            <option value="monthly">Monthly</option>
+                            <option value="yearly">Yearly</option>
+                        </select>
+                        <canvas id="myChart" height="200"></canvas>
                     </article>
                 </div>
-                
             </div>
         </div>
+        
         <div class="card mb-4">
             <header class="card-header">
                 <h4 class="card-title">Latest orders</h4>
                 <div class="row align-items-center">
                     <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
-
-                    </div>
-                    <div class="col-md-2 col-6">
-                        <input type="date" value="02.05.2021" class="form-control" />
-                    </div>
-                    <div class="col-md-2 col-6">
-                        <div class="custom_select">
-                            <select class="form-select select-nice">
-                                <option selected>Status</option>
-                                <option>All</option>
-                                <option>Paid</option>
-                                <option>Chargeback</option>
-                                <option>Refund</option>
-                            </select>
-                        </div>
                     </div>
                 </div>
             </header>
@@ -198,7 +190,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <% orderData.forEach((order,index) => { %>
+                                <% orderDataDisplay.forEach((order,index) => { %>
                                     <tr>
                                         <th><%= index + 1 %></th>
                                         <td><a href="#" class="fw-bold"><%= order.orderId %></a></td>
@@ -221,7 +213,82 @@
                 <!-- table-responsive end// -->
             </div>
         </div>
+
         <br><br>
+        <div class="d-flex">
+
+        <div class="card mb-4 product">
+            <header class="card-header">
+                <h4 class="card-title">Top 10 Best Selling Products</h4>
+                <div class="row align-items-center">
+                    <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
+                    </div>
+                </div>
+            </header>
+            <div class="card-body ">
+                <div class="table-responsive ">
+                    <div class="table-responsive">
+                        <table class="table align-middle table-nowrap mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Sl No.</th>
+                                    <th class="align-middle" scope="col">Product Name</th>
+                                    <th>Total Sold</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% topProducts.forEach((product,index) => { %>
+                                    <tr>
+                                        <th><%= index + 1 %></th>
+                                        <td><%= product.productName %></td>
+                                        <td><%= product.totalSold %></td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- table-responsive end// -->
+            </div>
+        </div>
+        <div class="card mb-4 product">
+            <header class="card-header">
+                <h4 class="card-title">Top Best Selling Categories</h4>
+                <div class="row align-items-center">
+                    <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
+
+                    </div>
+
+                </div>
+            </header>
+            <div class="card-body ">
+                <div class="table-responsive ">
+                    <div class="table-responsive">
+                        <table class="table align-middle table-nowrap mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Sl No.</th>
+                                    <th class="align-middle" scope="col">Category Name</th>
+                                    <th>Total Sold</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% topCategory.forEach((category,index) => { %>
+                                    <tr>
+                                        <th><%= index + 1 %></th>
+                                        <td><%= category.cateName %></td>
+                                        <td><%= category.totalSold %></td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- table-responsive end// -->
+            </div>
+        </div>
+        </div>
+
         <div class="pagination-area mt-30 mb-50">
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-start">
@@ -265,7 +332,38 @@
         });
         
 </script>
-
-
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Monthly Sales',
+                    data: <%= JSON.stringify(monthlySales) %>,
+                    backgroundColor: 'rgba(44, 120, 220, 0.2)',
+                    borderColor: 'rgba(44, 120, 220)',
+                    fill: false
+                }, {
+                    label: 'Yearly Sales',
+                    data: <%= JSON.stringify(Object.values(yearlySales)) %>,
+                    backgroundColor: 'rgba(4, 209, 130, 0.2)',
+                    borderColor: 'rgb(4, 209, 130)',
+                    fill: false
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        labels: {
+                            usePointStyle: true
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
 
 <%-include("../layout/admin/footer")-%>

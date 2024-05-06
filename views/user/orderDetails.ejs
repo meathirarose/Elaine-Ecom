@@ -271,10 +271,13 @@ p {
                                                     <span class="text-danger">Payment Failed</span>
                                                 </div>
                                             </div>
-                                        <% }else{ %>
+                                        <% }else if(order.paymentStatus === 'Paid'){ %>
                                         <div class="d-flex flex-row justify-content-between align-items-center">
                                             <% if(product.status == "Order Placed") { %>
-                                                
+                                                <div class="d-flex flex-column small align-items-start">
+                                                    <span><%= order.date.toDateString() %></span>
+                                                    <span>Order placed</span>
+                                                </div>
                                             <% } else if(product.status == "Order Shipped") { %>
                                                 <div class="d-flex flex-column small align-items-start">
                                                     <span><%= order.date.toDateString() %></span>
@@ -373,10 +376,13 @@ p {
                                 <% } %>
 
                                 <% if(orderData[0].paymentStatus === "Failed") {%>
-                                <p class="text-muted ml-5">
-                                    <button class="btn btn-primary" id="retryPayment" onclick="retryPayment('<%= orderData[0]._id %>')">Retry Payment</button>
-                                </p>
+                                    <p class="text-muted ml-5">
+                                        <button class="btn btn-primary" onclick="retryPayment('<%= orderData[0]._id %>')">Retry Payment</button>
+                                    </p>
+
+                                    <p class="text-muted ml-5 mt-2 "><span class="font-weight-bolder text-danger">Please note: The "Retry Payment" option is available for 12 hours after the order placement.</span></p>
                                 <% } %>
+                                
                                 <p class="text-muted mb-0 text-end"><span class="fw-bold text-dark me-4">Delivery Charges:</span> ₹60.00</p>
                               </div>
                             </div>
@@ -537,78 +543,59 @@ p {
         <!-- easy invoice -->
         <script src="https://unpkg.com/easyinvoice/dist/easyinvoice.min.js"></script>
 
-        <script>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
-            function retryPayment(orderId){
-        
-                fetch("/retryPayment",{
+        <script>
+            function retryPayment(orderId) {
+                fetch("/retryPayment", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({orderId}),
+                    body: JSON.stringify({ orderId }),
                 })
-        
-                .then(response => response.json())
-                .then(data => {
-                    if(data.success){
-                        window.location.href = '/orderHistory';
-                //      fetch('/razorpayOrder', {
-                //         method: 'POST',
-                //         headers: {
-                //             'Content-Type': 'application/json'
-                //         },
-                //         body: JSON.stringify({addressId, paymentMode})
-
-                //     })
-                //     .then(response => {
-                //         if (!response.ok) {
-                //             throw new Error('Network response was not ok');
-                //         }
-                //         return response.json();
-                //     })
-                //     .then(data => {
-                //         if (!data.success) {
-                //             throw new Error('Order creation failed: ' + data.msg);
-                //         }
-                //         var options = {
-                //             "key": data.key_id,
-                //             "amount": data.amount,
-                //             "currency": "INR",
-                //             "name": "Elaine Ecom",
-                //             "description": "Order Transaction",
-                //             "order_id": data.order_id,
-                //             "handler": function (response) {
-                //                 verifyPayment(response.razorpay_payment_id, response.razorpay_order_id, response.razorpay_signature, data.razor_id, response.error.reason);
-                //                 },
-                //             "prefill": {
-                //                 "contact": data.contact,
-                //                 "name": data.name,
-                //                 "email": data.email
-                //             },
-                //             "theme": {
-                //                 "color": "#2300a3"
-                //             }
-                //         };
-                //         var rzrPy = new Razorpay(options);
-                //         // order success
-                //         rzrPy.on('payment.success', function (response) {
-
-                //             alert("Payment Succeeded");
-
-                //         });
-                //         // failed orders
-                //         rzrPy.on('payment.failed', function (response) {
-
-                //             handleFailedPayment(response, data.razor_id);
-                                    
-                //         });
-                //         rzrPy.open();
-                //     })
-                //     .catch(error => console.error('Error:', error));
-                //     }
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
                     }
-                    else {
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data);
+                    if (data.success) {
+                        var options = {
+                            "key": data.KEY_ID,
+                            "amount": data.amount,
+                            "currency": 'INR',
+                            "name": 'Elaine Ecom',
+                            "description": 'Test Transaction',
+                            "order_id": data.order.id,
+                            "handler": function (response) {
+                                alert('Payment Success');
+
+                                console.log('ready', response.razorpay_signature);
+                                console.log(response.razorpay_payment_id);
+
+                                window.location.reload();
+                            },
+                            "prefill": {
+                                "contact": 8908765434,
+                                "name": 'Athira Rose',
+                                "email": 'meathirarosejohn@gmail.com'
+                            }
+                        };
+                        console.log(options);
+                        var rzrPy = new Razorpay(options);
+                        // order success
+                        rzrPy.on('payment.success', function (response) {
+                            alert("Payment Succeeded");
+                        });
+                        // failed orders
+                        rzrPy.on('payment.failed', function (response) {
+                            alert("Payment Failed");
+                        });
+                        rzrPy.open();
+                    } else {
                         Swal.fire({
                             position: "center",
                             icon: "error",
@@ -618,7 +605,7 @@ p {
                         });
                     }
                 })
-                .catch((error) => {
+                .catch(error => {
                     console.error("Error:", error);
                     Swal.fire({
                         position: "center",
@@ -630,7 +617,66 @@ p {
                 });
             }
         
+            function verifyPayment(paymentId, orderId, signature, order, error){
+        
+                const requestBody = {
+                    paymentId: paymentId,
+                    orderId: orderId,
+                    signature: signature,
+                    order: order
+                };
+        
+                const options = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                }
+        
+                fetch("/verifyPayment", options)
+                .then(response => {
+                    if(!response.ok){
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if(data.message === 'Payment Success'){
+                        Swal.fire({
+                            title: "Success",
+                            text: "Your order has been placed successfully.",
+                            icon: "success",
+                            timer: 1500,
+                            buttons: false
+                        })
+                        setTimeout(function() {
+                            window.location.href = '/orderHistory';
+                        }, 500);            
+                    } else {
+                        Swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title: "Payment failed",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: "Something went wrong. Please try again later.",
+                        showConfirmButton: false,
+                        timer: 1500,
+                    });
+                });
+        
+            }
         </script>
+        
 
         <script>
 

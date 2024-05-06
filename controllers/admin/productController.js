@@ -7,18 +7,30 @@ const path = require('path');
 
 // product list load
 const productListLoad = async (req, res) => {
-
     try {
 
-        const prdctData = await Product.find().populate('categoryId');
+        const page = parseInt(req.query.page) || 1; 
+        const pageSize = 6; 
+        const skip = (page - 1) * pageSize;
+
+        const totalProducts = await Product.countDocuments();
+        const totalPages = Math.ceil(totalProducts / pageSize);
+
+        const prdctData = await Product.find().populate('categoryId').skip(skip).limit(pageSize);
         const cateData = await Category.find({});
-        res.render("productsList", { prdctData, cateData });
+
+        res.render("productsList", { 
+            prdctData, 
+            cateData, 
+            totalPages, 
+            currentPage: page 
+        });
 
     } catch (error) {
         console.log(error.message);
     }
-
 }
+
 
 // Multer configuration for uploading original images
 const originalStorage = multer.diskStorage({

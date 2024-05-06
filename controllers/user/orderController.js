@@ -58,8 +58,6 @@ const checkoutLoad = async (req, res) => {
             });
         } 
 
-        console.log(totalPriceSum, "totalPriceSum");
-
         await cartData.save();
         
         res.render("checkout", {userDataCheckout, cartData, couponExists, totalPriceSum});
@@ -322,7 +320,6 @@ const createRazorpayOrder = async (req, res) => {
                 email: userData.email,
                 couponDiscount: couponDiscount,
                 offerDiscount: totalPriceSum,
-                offerDiscount: totalPriceSum,
                 totalAmount: totalAmount + 60,
                 date: new Date(),
                 payment: paymentMode,
@@ -334,7 +331,6 @@ const createRazorpayOrder = async (req, res) => {
                     totalPrice: product.totalPrice
                 }))
             })
-            console.log(newrazorpayOrder.totalAmount)
             await newrazorpayOrder.save();
 
             if (coupon) {
@@ -422,11 +418,11 @@ const failedPayment = async (req, res) => {
 
     try {
         const { response, orderId } = req.body;
-        console.log(response, orderId);
+        console.log(response, orderId, "res and oid");
         // const { order_id, payment_id } = error.metadata; 
         // console.log(order_id, payment_id);
         const orderData = await Order.findByIdAndUpdate({_id: orderId},{paymentStatus: "Failed"});
-        console.log(orderData);
+        console.log(orderData, "od");
         res.json({ success: true, message: 'Payment failed response handled successfully' });
 
     } catch (error) {
@@ -438,26 +434,49 @@ const failedPayment = async (req, res) => {
 
 // retry rezor pay payment
 const retryRazorPayment = async (req, res) => {
-
     try {
-        
-        const {orderId} = req.body;
-        console.log(orderId,"oid");
+        const KEY_ID = process.env.RAZORPAY_KEY_ID;
+        const SECRET_KEY = process.env.RAZORPAY_KEY_SECRET;
+        const { orderId } = req.body;
 
         const orderData = await Order.findById(orderId);
-        
-        if(orderData.paymentStatus === 'Failed'){
-            res.json({ success: true, message: "Payment retry initiated" });
-        }else {
-            res.json({ success: false, error: "Payment status is not Failed" });
-        }
 
+        const currentTime = new Date();
+        const orderCreationTime = orderData.date;
+        const timeDifferenceInHours = Math.abs(currentTime - orderCreationTime) / (60 * 60 * 1000);
+
+        if (orderData.paymentStatus === 'Failed' && timeDifferenceInHours <= 12) {
+            
+            var razorpayRetryInstance = new Razorpay(
+                {
+                    key_id: KEY_ID, 
+                    key_secret: SECRET_KEY 
+                }
+            )
+
+            const order = await razorpayRetryInstance.orders.create({
+                amount: orderData.totalAmount*100,
+                currency: "INR",
+                receipt: "receipt#1",
+                notes: {
+                    key1: "value3",
+                    key2: "value2"
+                }
+            });
+
+            await Order.findByIdAndUpdate(orderId, { paymentStatus: 'Paid' });
+
+            res.json({ success: true, message: "Payment retry initiated and status updated to 'Paid'" ,order});
+        } else {
+            res.json({ success: false, error: "Payment status is not 'Failed'" });
+        }
     } catch (error) {
         console.log(error.message);
-        res.render("404");
+        res.status(500).json({ success: false, error: "Internal server error" });
     }
-
 }
+
+
 
 // wallet pay
 const createWalletOrder = async (req, res) => {

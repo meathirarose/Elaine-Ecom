@@ -151,14 +151,22 @@
                                     <td class="price-col">
                                         Rs. <%= product.productId.prdctPrice %>
                                     </td>
+                                    <% if (product.quantity === product.productId.prdctQuantity) { %>
+                                        <td class="quantity-col">
+                                            <div class="cart-product-quantity">
+                                                <input type="number" class="quantity" data-product-id="<%= product.productId._id %>"  value="<%= product.quantity %>" min="1" 
+                                                max="<%= product.productId.prdctQuantity%>"
+                                                step="1" data-decimals="0" onchange="updateCartItem(this)" required>
+                                            </div><!-- End .cart-product-quantity -->
+                                        </td>
+                                    <% }else{ %>
                                     <td class="quantity-col">
                                         <div class="cart-product-quantity">
                                             <input type="number" class="quantity" data-product-id="<%= product.productId._id %>"  value="<%= product.quantity %>" min="1" 
-                                            max="<%= product.quantity >= product.productId.prdctQuantity ? product.productId.prdctQuantity : 5 %>"
-                                            step="1" data-decimals="0" onchange="updateCartItem(this)" required>
+                                            max="5" step="1" data-decimals="0" onchange="updateCartItem(this)" required>
                                         </div><!-- End .cart-product-quantity -->
                                     </td>
-                                    
+                                    <% } %>
                                     <td class="total-col">Rs.<%= product.totalPrice.toFixed(2) %></td>
 
                                     <td class="remove-col"><button class="btn-remove"
