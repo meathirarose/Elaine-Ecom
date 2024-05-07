@@ -66,6 +66,7 @@ user_route.get("/failure", authentication.isLogin, userController.failureGoogleL
 // user routes
 user_route.get("/userSignup", authentication.isLogout, userController.userSignupLoad);
 user_route.post("/userSignup", userController.verifySignup);
+user_route.post("/generateReferralId", userController.generateReferralId);
 user_route.get("/userHome", authentication.isLogin, accessAuth.accessUser, userController.userHomeLoad);
 
 // otp routes

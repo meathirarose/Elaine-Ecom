@@ -203,7 +203,7 @@
                                                     
                                                 </a>
                                             </td>
-                                            <td>₹<%= product.productId.prdctPrice%></td>
+                                            <td>₹<%= product.productPrice%></td>
                                             <td><%= product.quantity %></td>
                                             <td>
                                                 <span class="badge rounded-pill alert-success text-success"><%= product.status %></span>
@@ -227,8 +227,12 @@
                                                         <dd>₹<%= orderData[0].totalAmount.toFixed(2) %></dd>
                                                     </dl>
                                                     <dl class="dlist">
+                                                        <dt>Coupon Discount:</dt>
+                                                        <dd>₹60.00</dd>
+                                                    </dl>
+                                                    <dl class="dlist">
                                                         <dt>Shipping cost:</dt>
-                                                        <dd>₹00.00</dd>
+                                                        <dd>₹60.00</dd>
                                                     </dl>
                                                     <dl class="dlist">
                                                         <dt>Grand total:</dt>

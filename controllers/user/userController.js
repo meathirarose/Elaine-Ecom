@@ -215,6 +215,28 @@ const failureGoogleLogin = async (req, res) =>{
     }
 }
 
+// generate referral link
+const generateReferralId = async (req, res) => {
+
+    try {
+        
+        const userId = req.session.user_id;
+
+        const baseURL = 'http://localhost:3000/userSignup';
+        const referralCode = generateReferralCode(userId); 
+        const referralLink = baseURL+ '?ref' +referralCode;
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+// generating refferal code
+function generateReferralCode(userId) {
+    return userId + '_' + Math.random().toString(36).substring(2, 8);
+}
+
 // home load
 const userHomeLoad = async (req, res) => {
     try {
@@ -565,6 +587,7 @@ module.exports = {
     verifySignup,
     successGoogleLogin,
     failureGoogleLogin,
+    generateReferralId,
     userHomeLoad,
     contactUsLoad,
     myAccountLoad,

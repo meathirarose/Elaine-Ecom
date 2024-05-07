@@ -42,6 +42,10 @@ const userSchema = new mongoose.Schema({
         default: " "
     },
 
+    referrelId: {
+        type: String
+    },
+
     wallet: {
         type: Number,
         default: 0

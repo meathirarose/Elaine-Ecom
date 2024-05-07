@@ -668,7 +668,6 @@ const orderDetailsLoad = async (req, res) => {
 
         res.render("orderDetails",{ cartData, orderData, productsData, address, totalPriceSum, discount });
 
-
     } catch (error) {
         console.log(error.message);
         res.render("404");
@@ -690,7 +689,7 @@ const generateInvoice = async (req, res) => {
         const products = [];
 
         orderData.products.forEach((product) => {
-            if(product.status !== 'Order Cancelled' && product.status !== 'Cancelled by ElaineEcom'){
+            if(product.status !== 'Order Cancelled' && product.status !== 'Cancelled by ElaineEcom' && product.status === 'Order Delivered'){
                 products.push({
                     quantity: product.quantity ,
                     description: product.productId.prdctName,
@@ -698,6 +697,12 @@ const generateInvoice = async (req, res) => {
                     price: product.productPrice
                 });
             }
+        });
+
+        products.push({
+            description: 'Delivery Charge',
+            taxRate: 0,
+            price: 60 
         });
 
         if(orderData.paymentStatus !== "Failed"){

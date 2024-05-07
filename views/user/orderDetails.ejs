@@ -196,22 +196,27 @@ p {
                               <div class=" justify-content-between align-items-center mb-4">
                                 <p class="lead fw-normal p-2" style="color: #dc945a;">Receipt</p>
                               </div>
-                              <% orderData.forEach((order, orderIndex) => { %>
-                                <% order.products.forEach((product, productIndex) => { %>
+                              <% let deliveredStatus = 0 %>
+                                <% orderData[0].products.forEach((product, productIndex) => { 
+                                    if(product.status !== 'Order Delivered'){
+                                        deliveredStatus = 1;
+                                    }
+                                    %>
+                                    
                               <div class="card shadow-0 border mb-4">
                                 <div class="card-body">
                                   <div class="row">
                                     <div class="col-md-2 my-3">
-                                        <img src="/processed_images/<%= productsData[orderIndex][productIndex].productData.prdctImage[0] %>" alt="Product image">
+                                        <img src="/processed_images/<%= productsData[0][productIndex].productData.prdctImage[0] %>" alt="Product image">
                                     </div>
                                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                      <p class="text-muted mb-0"><%= productsData[orderIndex][productIndex].productData.prdctName %></p>
+                                      <p class="text-muted mb-0"><%= productsData[0][productIndex].productData.prdctName %></p>
                                     </div>
                                     <div class="col-md-1 text-center d-flex justify-content-center align-items-center">
-                                      <p class="text-muted mb-0 "><%= productsData[orderIndex][productIndex].cateName %></p>
+                                      <p class="text-muted mb-0 "><%= productsData[0][productIndex].cateName %></p>
                                     </div>
                                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                                      <p class="text-muted mb-0 "><%= order.date.toDateString() %></p>
+                                      <p class="text-muted mb-0 "><%= orderData[0].date.toDateString() %></p>
                                     </div>
                                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                                       <p class="text-muted mb-0 ">Qty: <%= product.quantity %></p>
@@ -226,13 +231,13 @@ p {
                                   <% if(product.status === 'Order Placed' || product.status === 'Order Shipped'){%>
                                     <div class="col-6 col-lg-4 col-xl-2">
                                         <div class="btn-wrap">
-                                            <a href="#" class="btn btn-outline-primary cancel btn-rounded text-danger" onclick="cancelProduct('<%= product._id %>', '<%= order._id %>')">Cancel</a>
+                                            <a href="#" class="btn btn-outline-primary cancel btn-rounded text-danger" onclick="cancelProduct('<%= product._id %>', '<%= orderData[0]._id %>')">Cancel</a>
                                         </div><!-- End .btn-wrap -->
                                     </div><!-- End .col-md-4 col-lg-2 -->
                                   <%}else if(product.status === 'Order Delivered' ){%>
                                     <div class="col-6 col-lg-4 col-xl-2">
                                         <div class="btn-wrap">
-                                            <a href="#" class="btn btn-outline-primary cancel btn-rounded text-danger" onclick="returnProduct('<%= product._id %>', '<%= order._id %>')">Return</a>
+                                            <a href="#" class="btn btn-outline-primary cancel btn-rounded text-danger" onclick="returnProduct('<%= product._id %>', '<%= orderData[0]._id %>')">Return</a>
                                         </div><!-- End .btn-wrap -->
                                     </div><!-- End .col-md-4 col-lg-2 -->
                                   <%}else if(product.status === 'Return Requested' ){%>
@@ -268,58 +273,58 @@ p {
                                                 <i class="fa fa-check text-white"></i>
                                             </span>
                                         </div>
-                                        <% if (order.paymentStatus === 'Failed' || order.paymentStatus === 'Pending' ) { %>
+                                        <% if (orderData[0].paymentStatus === 'Failed' || orderData[0].paymentStatus === 'Pending' ) { %>
                                             <div class="d-flex flex-row justify-content-between align-items-center">
 
                                                 <div class="d-flex flex-column small align-items-start">
-                                                    <span><%= order.date.toDateString() %></span>
+                                                    <span><%= orderData[0].date.toDateString() %></span>
                                                     <span class="text-danger">Payment Failed</span>
                                                 </div>
                                             </div>
-                                        <% }else if(order.paymentStatus === 'Paid'){ %>
+                                        <% }else if(orderData[0].paymentStatus === 'Paid'){ %>
                                         <div class="d-flex flex-row justify-content-between align-items-center">
                                             <% if(product.status == "Order Placed") { %>
                                                 <div class="d-flex flex-column small align-items-start">
-                                                    <span><%= order.date.toDateString() %></span>
+                                                    <span><%= orderData[0].date.toDateString() %></span>
                                                     <span>Order placed</span>
                                                 </div>
                                             <% } else if(product.status == "Order Shipped") { %>
                                                 <div class="d-flex flex-column small align-items-start">
-                                                    <span><%= order.date.toDateString() %></span>
+                                                    <span><%= orderData[0].date.toDateString() %></span>
                                                     <span>Order placed</span>
                                                 </div>
                                                  <div class="d-flex flex-column small align-items-start">
-                                                    <span><%= order.date.toDateString() %></span>
+                                                    <span><%= orderData[0].date.toDateString() %></span>
                                                     <span>Order placed</span>
                                                 </div>
                                                 <div class="d-flex flex-column small justify-content-center align-items-center">
-                                                    <span><%= order.date.toDateString() %></span>
+                                                    <span><%= orderData[0].date.toDateString() %></span>
                                                     <span>Order Shipped</span>
                                                 </div>
                                             <% } else if(product.status == "Order Delivered" || product.status === 'Return Requested') { %>
                                                 <div class="d-flex flex-column small align-items-start">
-                                                    <span><%= order.date.toDateString() %></span>
+                                                    <span><%= orderData[0].date.toDateString() %></span>
                                                     <span>Order placed</span>
                                                 </div>
                                                 <div class="d-flex flex-column small align-items-start">
-                                                    <span><%= order.date.toDateString() %></span>
+                                                    <span><%= orderData[0].date.toDateString() %></span>
                                                     <span>Order placed</span>
                                                 </div>
                                                 <div class="d-flex flex-column small justify-content-center align-items-center">
-                                                    <span><%= order.date.toDateString() %></span>
+                                                    <span><%= orderData[0].date.toDateString() %></span>
                                                     <span>Order Shipped</span>
                                                 </div>
                                                 <div class="d-flex flex-column small align-items-end">
-                                                    <span><%= order.date.toDateString() %></span>
+                                                    <span><%= orderData[0].date.toDateString() %></span>
                                                     <span>Order Delivered</span>
                                                 </div>
                                             <% }else if(product.status == "Order Cancelled"){%>
                                                 <div class="d-flex flex-column small align-items-start">
-                                                    <span><%= order.date.toDateString() %></span>
+                                                    <span><%= orderData[0].date.toDateString() %></span>
                                                     <span>Order placed</span>
                                                 </div>
                                                 <div class="d-flex flex-column small align-items-start">
-                                                    <!-- <span><%= order.date.toDateString() %></span>
+                                                    <!-- <span><%= orderData[0].date.toDateString() %></span>
                                                     <span>Order placed</span> -->
                                                 </div>
                                                 <div class="d-flex flex-column small align-items-end">
@@ -335,7 +340,6 @@ p {
                                 </div>
                               </div>
                               
-                              <% }); %>
                               <% }); %>
                               <p class="font-weight-bolder order-details">Order Details</p>
                               <div class="d-flex justify-content-between pt-2">
@@ -375,7 +379,7 @@ p {
                                 </div>
                               </div>
                               <div class="d-flex justify-content-between mb-5">
-                                <% if (orderData[0].paymentStatus === 'Paid') { %>
+                                <% if (orderData[0].paymentStatus === 'Paid' && deliveredStatus === 0) { %>
                                     <p class="text-muted ml-5">
                                         <button onclick="downloadInvoice('<%= orderData[0]._id %>')" class="btn btn-primary">Download Invoice</button>
                                     </p>
