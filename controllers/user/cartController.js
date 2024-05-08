@@ -172,7 +172,7 @@ const updateCartQuantity = async (req, res) => {
         return res.json({ 
             success: true, 
             updatedTotalPrice: updatedProduct.totalPrice,
-            totalCost: totalCost,
+            totalCost: totalCost+60,
             availableStock: availableStock 
         });
         

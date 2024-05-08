@@ -362,7 +362,6 @@ const createRazorpayOrder = async (req, res) => {
             
             cartData.products = [];
             await cartData.save();
-
         }
 
         res.json({
@@ -418,11 +417,9 @@ const failedPayment = async (req, res) => {
 
     try {
         const { response, orderId } = req.body;
-        console.log(response, orderId, "res and oid");
-        // const { order_id, payment_id } = error.metadata; 
-        // console.log(order_id, payment_id);
-        const orderData = await Order.findByIdAndUpdate({_id: orderId},{paymentStatus: "Failed"});
-        console.log(orderData, "od");
+
+        await Order.findByIdAndUpdate({_id: orderId},{paymentStatus: "Failed"});
+        
         res.json({ success: true, message: 'Payment failed response handled successfully' });
 
     } catch (error) {
@@ -700,6 +697,7 @@ const generateInvoice = async (req, res) => {
         });
 
         products.push({
+            quantity: 0,
             description: 'Delivery Charge',
             taxRate: 0,
             price: 60 

@@ -200,20 +200,10 @@
                                             </tr><!-- End .summary-subtotal -->
                                         <%}%>
 
-                                        <tr class="summary-shipping">
-                                            <td>Shipping:</td>
-                                            <td>&nbsp;</td>
-                                        </tr>
-
-                                        <tr class="summary-shipping-row">
-                                            <td>Free shipping</td>
-                                            <td>Rs. 0.00</td>
-                                        </tr><!-- End .summary-shipping-row -->
-
                                         <% if(cartData && cartData.products.length > 0) {%>
                                             <tr class="allTotal">
                                                 <td>Total:</td>
-                                                <td class="total">Rs. <%= cartData.totalCost.toFixed(2) %></td>
+                                                <td class="total">Rs. <%= (cartData.totalCost).toFixed(2) %></td>
                                             </tr><!-- End .summary-subtotal -->
                                             <%}else{%>
                                                 <tr class="summary-subtotal">

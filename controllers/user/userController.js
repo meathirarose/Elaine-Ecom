@@ -280,8 +280,16 @@ const myAccountLoad = async (req, res) => {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 3; 
         const skip = (page - 1) * limit;
-
+        const walletPage = parseInt(req.query.walletPage) || 1;
+        const walletLimit = parseInt(req.query.limit) || 5; 
+        const walletSkip = (walletPage - 1) * walletLimit;
+        
         const userData = await User.findById(userId);
+
+        const sortedUserWalletData = userData.walletHistory.sort((a, b) => b.date - a.date);
+
+        const walletHistory = sortedUserWalletData.slice(walletSkip, walletSkip + walletLimit);
+
         let orderData = await Order.find({ userId })
             .populate('products.productId')
             .sort({date: -1})
@@ -310,15 +318,20 @@ const myAccountLoad = async (req, res) => {
         const totalOrders = await Order.countDocuments({ userId });
         const totalPages = Math.ceil(totalOrders / limit);
 
+        const totalWalletPages = Math.ceil(sortedUserWalletData.length / limit);
+
         const couponData = await Coupon.find({});
 
         res.render("myAccount", { 
             userData, 
+            sortedUserWalletData,
+            walletHistory,
             orderData, 
             couponData, 
             currentPage: page, 
-            totalPages
-             
+            currentWalletPage: walletPage,
+            totalPages,
+            totalWalletPages
         });
 
     } catch (error) {

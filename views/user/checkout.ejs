@@ -312,14 +312,18 @@
                                                     <td id="coupon-discount">₹<%= couponExists.discount.toFixed(2)%></td>
                                                 </tr> 
                                             <%} %>
+                                            <tr>
+                                                <td>Delivery Charge</td>
+                                                <td id="coupon-discount">₹60.00</td>
+                                            </tr>
                                           
                                             <% if(cartData.products && cartData.products.length > 0) {%>
                                             <tr class="summary-total">
                                                 <td>Total:</td>
                                                 <% if(couponExists) { %>
-                                                <td class="total">Rs. <%= (cartData.totalCost - couponExists.discount).toFixed(2)  %></td>
+                                                <td class="total">Rs. <%= ((cartData.totalCost - couponExists.discount)+60).toFixed(2)  %></td>
                                                 <%}else{ %>
-                                                    <td class="total">Rs. <%= cartData.totalCost.toFixed(2)  %></td>
+                                                    <td class="total">Rs. <%= (cartData.totalCost+60).toFixed(2)  %></td>
                                                 <%} %>
                                             </tr><!-- End .summary-total -->
                                             <%}else{%>
@@ -697,7 +701,7 @@ $(document).ready(function () {
             }
             var options = {
                 "key": data.key_id,
-                "amount": data.amount,
+                "amount": data.amount+60,
                 "currency": "INR",
                 "name": "Elaine Ecom",
                 "description": "Order Transaction",

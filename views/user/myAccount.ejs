@@ -538,7 +538,7 @@
                                         <th>Status</th>
                                     </thead>
                                     <tbody>
-                                        <% userData.walletHistory.forEach(wallet => { %>
+                                        <% walletHistory.forEach(wallet => { %>
                                         <tr>
                                             <td><%= wallet.reason %></td>
                                             <td><%= wallet.amount.toFixed(2) %></td>
@@ -557,8 +557,31 @@
                     </div>
                     
                 </div>
+                
             </div>
-
+            <% if (totalWalletPages > 1) { %>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item <%= currentWalletPage === 1 ? 'disabled' : '' %>">
+                            <a class="page-link" href="/myAccount?walletPage=<%= currentWalletPage - 1 %>" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                        <% for (let i = 1; i <= totalWalletPages; i++) { %>
+                            <li class="page-item <%= currentWalletPage === i ? 'active' : '' %>">
+                                <a class="page-link" href="/myAccount?walletPage=<%= i %>"><%= i %></a>
+                            </li>
+                        <% } %>
+                        <li class="page-item <%= currentWalletPage === totalWalletPages ? 'disabled' : '' %>">
+                            <a class="page-link" href="/myAccount?walletPage=<%= currentWalletPage + 1 %>" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            <% } %>
         </div>
         <!-- ------------------------------------- end Wallet Transaction History ----------------------------------- -->
         <!-- ---------------------------------------- coupons ------------------------------------- -->
@@ -791,6 +814,7 @@
                 e.preventDefault();
                 $('.addAddress').toggle(); 
                 $('.card-dashboard-address').hide(); 
+                $('#user-wallet-history').hide();
                 $('.editProfile').hide();
             });
         });
@@ -864,6 +888,7 @@
                 $('.card-dashboard-address').hide();
                 $('.showAddAddress').hide();
                 $('.editProfile').hide();
+                $('#user-wallet-history').hide();
                 $(`#editAddress${id}`).show();
             });
 
@@ -987,6 +1012,7 @@
                 e.preventDefault();
                 var userId = $(this).data('user-id'); 
                 $('.card-dashboard-profile').hide();
+                $('#user-wallet-history').hide();
                 $(`#user-profile-edit${userId}`).show();
             });
         });
