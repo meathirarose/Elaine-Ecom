@@ -284,17 +284,6 @@ const createRazorpayOrder = async (req, res) => {
             return res.json({message: "Please add products to the cart"});
         }
 
-        const amount = (cartData.totalCost + 60) * 100;
-        const orderId = await generateOrderId();
-
-        const options = {
-            amount: amount,
-            currency: "INR",
-            receipt: process.env.AUTHENTICATION_EMAIL
-        };
-
-        const order = await razorpayInstance.orders.create(options);
-
         // check if there is offer or not 
         let totalPriceSum = 0;
         if (cartData.products.length > 0) {
@@ -307,8 +296,19 @@ const createRazorpayOrder = async (req, res) => {
                 }
             });
         } 
-
+        // total amount of the order - checking if the coupon is available or not
         const totalAmount = cartData.totalCost - couponDiscount;
+
+        const amount = (totalAmount + 60) * 100;
+        const orderId = await generateOrderId();
+
+        const options = {
+            amount: amount,
+            currency: "INR",
+            receipt: process.env.AUTHENTICATION_EMAIL
+        };
+
+        const order = await razorpayInstance.orders.create(options);
 
         if(order){
 
@@ -417,9 +417,8 @@ const failedPayment = async (req, res) => {
 
     try {
         const { response, orderId } = req.body;
-
-        await Order.findByIdAndUpdate({_id: orderId},{paymentStatus: "Failed"});
         
+        await Order.findByIdAndUpdate({_id: orderId},{paymentStatus: "Failed"});
         res.json({ success: true, message: 'Payment failed response handled successfully' });
 
     } catch (error) {
@@ -875,14 +874,29 @@ const orderHistoryLoad = async (req, res) => {
     try {
         const userId = req.session.user_id;
 
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 3;
+        const skip = (page - 1) * limit;
+
         const orderData = await Order.find({ userId }).populate({
             path: 'products.productId',
             populate: {
                 path: 'categoryId'
             }
-        }).sort({date:-1});
+        }).sort({date:-1})
+        .skip(skip)
+        .limit(limit);
 
-        res.render("orderHistory", {orderData});
+        
+        // for pagination
+        const totalOrders = await Order.countDocuments({ userId });
+        const totalPages = Math.ceil(totalOrders / limit);
+
+        res.render("orderHistory", {
+            orderData: orderData,
+            currentPage: page,
+            totalPages: totalPages
+        });
 
     } catch (error) {
         console.log(error.message);

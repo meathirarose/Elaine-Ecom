@@ -146,8 +146,9 @@
                                     <th class="align-middle" scope="col">Order ID</th>
                                     <th class="align-middle" scope="col">Product Name</th>
                                     <th class="align-middle" scope="col">Date</th>
-                                    <th class="align-middle" scope="col">Total</th>
+                                    <th class="align-middle" scope="col">Product Price</th>
                                     <th class="align-middle" scope="col">Quantity</th>
+                                    <th class="align-middle" scope="col">Total</th>
                                     <th class="align-middle" scope="col">Coupon Discount</th>
                                     <th class="align-middle" scope="col">Offer Discount</th>
                                     <th class="align-middle" scope="col">Payment Status</th>
@@ -155,9 +156,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <% orderData.forEach((order) => { %>
-                                    <% order.products.forEach((product,index) => { %>
+                                <% let flag = 1 %>
+                                <% orderData.forEach((order,index) => { %>
+                                    <% order.products.forEach((product) => { %>
                                         <% if (product.status === 'Order Delivered') { %>
+                                            <% flag = 0 %>
                                             <tr>
                                                 <th><%= index + 1 %></th>
                                                 <td><a href="#" class="fw-bold"><%= order.orderId %></a></td>
@@ -166,8 +169,16 @@
                                                 <td>₹<%= product.productPrice.toFixed(2) %></td>
                                                 
                                                 <td><%= product.quantity %></td>
+                                                <td><%= product.totalPrice %></td>
                                                 <td>₹<%= order.couponDiscount.toFixed(2) %></td>
-                                                <td>₹<%= order.offerDiscount.toFixed(2) %></td>
+                                                <% if (product.productId.offer && product.productId.offer.status === true) { %>
+                                                    <% let offer = product.productId.offer.offerPercentage %>
+                                                    <% let productPrice = product.productId.prdctPrice * product.quantity  %>
+                                                    <% let offerPrice = (productPrice * offer)/100; %>
+                                                    <td>₹<%= offerPrice.toFixed(2) %></td>
+                                                <% }else{%>
+                                                    <td>₹00.00 %></td>
+                                                <%} %> 
                                                 <td>
                                                     <span class="badge badge-pill badge-soft-success"><%= order.paymentStatus %></span>
                                                 </td>
@@ -179,12 +190,13 @@
                             </tbody>
 
                         </table>
-                        <div class="text-end mt-1 p-4">
-                            <p class="m-0"><span class="fw-bold">Grand Total:</span> &nbsp; ₹ <%= grandTotal.toFixed(2) %></p>
-                            <p class="m-0"><span class="fw-bold">Total Coupon Discount:</span> &nbsp;&nbsp;&nbsp; ₹ <%= couponTotal.toFixed(2) %></p>
-                            <p class="m-0"><span class="fw-bold">Total Offer Discount:</span> &nbsp;&nbsp;&nbsp;&nbsp; ₹ <%= offerTotal.toFixed(2) %></p>
-                        </div>
-                                               
+                        <% if (flag === 0) { %>
+                            <div class="text-end mt-1 p-4">
+                                <p class="m-0"><span class="fw-bold">Grand Total:</span> &nbsp; ₹ <%= grandTotal.toFixed(2) %></p>
+                                <p class="m-0"><span class="fw-bold">Total Coupon Discount:</span> &nbsp;&nbsp;&nbsp; ₹ <%= couponTotal.toFixed(2) %></p>
+                                <p class="m-0"><span class="fw-bold">Total Offer Discount:</span> &nbsp;&nbsp;&nbsp;&nbsp; ₹ <%= offerTotal.toFixed(2) %></p>
+                            </div>
+                        <% } %>               
                     </div>
                 </div>
                 <!-- table-responsive end// -->

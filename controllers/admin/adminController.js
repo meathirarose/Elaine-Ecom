@@ -74,7 +74,6 @@ const homeLoad = async (req, res) => {
             const month = order.date.getMonth();
             const totalAmount = order.totalAmount;
             monthlySales[month] += totalAmount;
-        
             yearlySales[month] += totalAmount;
         });
 
@@ -150,22 +149,35 @@ const salesReportLoad = async (req, res) => {
 
     try {
 
-        const orderData = await Order.find({}).sort({date: -1});
-
+        const orderData = await Order.find({}).sort({ date: -1 }).populate({
+            path: 'products.productId',
+            populate: {
+                path: 'offer',
+                model: 'Offer'
+            }
+        });
+        
         // total order amount
         let totalOrderAmount = 0;
         let grandTotal = 0;
         let couponTotal = 0;
         let offerTotal = 0;
         orderData.forEach(order => {
-            const allDelivered = order.products.every(product => product.status === 'Order Delivered');
-            if (allDelivered) {
-                totalOrderAmount += order.totalAmount;
-                grandTotal += order.totalAmount; 
-                couponTotal += order.couponDiscount;
-                offerTotal += order.offerDiscount;
-            }
-        });
+            order.products.forEach(product => {
+                const anyDelivered = order.products.some(product => product.status === 'Order Delivered');
+                if (anyDelivered) {
+                    totalOrderAmount += order.totalAmount;
+                    grandTotal += product.totalPrice; 
+                    couponTotal += order.couponDiscount;
+                    if(product.productId.offer && product.productId.offer.status === true){
+                        const offer = product.productId.offer.offerPercentage;
+                        const productPrice = product.productId.prdctPrice * product.quantity;
+                        const offerPrice = (productPrice * offer)/100;
+                        offerTotal+=offerPrice;       
+                    }
+                }
+            })
+        });       
 
         // total order count
         const orderCount = orderData.length;
