@@ -1,4 +1,5 @@
 const Order = require("../../models/orderdbSchema");
+const moment = require("moment");
 
 
 // orders load
@@ -38,10 +39,18 @@ const orderDetails = async (req, res) => {
         const orderId = req.query.orderId;
         const orderData = await Order.find({_id: orderId }).populate([
             {path: 'userId'},
-            {path: 'products.productId'}
+            {path: 'products.productId', 
+                populate: {
+                    path: 'offer'
+                }
+            }
         ]);
 
-        res.render("orderDetails", {orderData: orderData});
+        const formattedDate = moment(orderData[0].date).format('MM DD YYYY HH:mm:ss');
+        res.render("orderDetails", {
+            orderData: orderData,
+            date: formattedDate
+        });
 
     } catch (error) {
         console.log(error.message);

@@ -88,8 +88,26 @@ const verifyOtp = async (req, res) =>{
 
             await User.updateOne({email:req.session.email},{is_verified: 1});
 
+            const userId = await User.findOne({referralCode: req.session.referralCode});
 
-            
+            if(userId){
+                await User.findOneAndUpdate(
+                    {_id: userId._id},
+                    {
+                        $inc: {wallet: 501},
+                        $push: {walletHistory: { date: new Date(), amount: 501, reason: "Referral Amount", status: "Credited"}}
+                    }
+                )
+            }
+
+            await User.updateOne(
+                {email: req.session.email},
+                {
+                    $inc: {wallet: 201},
+                    $push: { walletHistory: {date: new Date(), amount: 201, reason: "Welcome bonus", status: "Credited"}}
+                }
+            )
+         
             res.render("userLogin");
 
         }else{

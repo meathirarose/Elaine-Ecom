@@ -115,7 +115,7 @@
                 <header class="card-header">
                     <div class="row align-items-center">
                         <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
-                            <span> <i class="material-icons md-calendar_today"></i> <b><%= orderData[0].date %></b> </span> <br />
+                            <span> <i class="material-icons md-calendar_today"></i> <b><%= date %></b> </span> <br />
                             <small class="text-muted">Order ID:&nbsp;&nbsp; <%= orderData[0].orderId %></small>
                         </div>
                     </div>
@@ -212,7 +212,7 @@
                                             <td><%= product.returnReason %></td>
                                             
                                             <td class="text-end">
-                                                <button class="btn btn-xs rounded font-sm" type="button" onclick="approveReturn('<%= product._id %>', '<%= order._id %>')">Approved</button>
+                                                <button class="btn btn-xs rounded font-sm" type="button" onclick="approveReturn('<%= product._id %>', '<%= order._id %>')">Approve</button>
                                             </td>
                                             
                                         </tr>
@@ -222,13 +222,31 @@
                                         <tr>
                                             <td colspan="7">
                                                 <article class="float-end">
+                                                    <% if(orderData[0].couponDiscount){%>
+                                                        <dl class="dlist">
+                                                            <dt>Coupon Discount:</dt>
+                                                            <dd>₹<%= orderData[0].couponDiscount.toFixed(2) %></dd>
+                                                        </dl>
+                                                    <%}else{ %>
+                                                        <dl class="dlist">
+                                                            <dt>Coupon Discount:</dt>
+                                                            <dd>₹00.00</dd>
+                                                        </dl>
+                                                    <%} %>
+                                                    <% if(orderData[0].offerDiscount){%>
+                                                        <dl class="dlist">
+                                                            <dt>Offer Discount:</dt>
+                                                            <dd>₹<%= orderData[0].offerDiscount.toFixed(2) %></dd>
+                                                        </dl>
+                                                    <%}else{ %>
+                                                        <dl class="dlist">
+                                                            <dt>Offer Discount:</dt>
+                                                            <dd>₹00.00</dd>
+                                                        </dl>
+                                                    <%} %>
                                                     <dl class="dlist">
                                                         <dt>Subtotal:</dt>
-                                                        <dd>₹<%= orderData[0].totalAmount.toFixed(2) %></dd>
-                                                    </dl>
-                                                    <dl class="dlist">
-                                                        <dt>Coupon Discount:</dt>
-                                                        <dd>₹60.00</dd>
+                                                        <dd>₹<%= (orderData[0].totalAmount-60).toFixed(2) %></dd>
                                                     </dl>
                                                     <dl class="dlist">
                                                         <dt>Shipping cost:</dt>

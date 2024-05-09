@@ -4,7 +4,8 @@ const Order = require("../../models/orderdbSchema");
 const Coupon = require("../../models/coupondbModel");
 const Category = require("../../models/categorydbModel");
 const bcrypt = require("bcrypt");
-const otpController = require("../../auth/otpMailVerify")
+const otpController = require("../../auth/otpMailVerify");
+let referralCodeGenerator = require('referral-code-generator')
 
 // hashing password
 const securePassword = async (password) => {
@@ -49,6 +50,7 @@ const verifyLogin = async (req, res) => {
     try {
         const email = req.body.email;
         const password = req.body.password;
+        
         const userData = await User.findOne({ email: email });
 
         if (userData ) {
@@ -142,6 +144,8 @@ const verifySignup = async (req, res) => {
                             req.session.email = req.body.email;
                             req.session.name = userData.name;
 
+                            req.session.referralCode = req.query.ref;
+
                             res.redirect("/verifyOtp");
 
                         } else {
@@ -224,7 +228,20 @@ const generateReferralId = async (req, res) => {
 
         const baseURL = 'http://localhost:3000/userSignup';
         const referralCode = generateReferralCode(userId); 
-        const referralLink = baseURL+ '?ref' +referralCode;
+        const referralLink = `${baseURL}?ref=${referralCode}`;
+
+        req.session.referralCode = referralCode;
+
+        await User.updateOne(
+            { _id: userId }, 
+            { $set: { referralCode: referralCode } }, 
+            { upsert: true } 
+        );
+
+        return res.json({
+            success: true, 
+            referralLink: referralLink
+        });
 
     } catch (error) {
         console.log(error.message);
@@ -276,6 +293,8 @@ const myAccountLoad = async (req, res) => {
     try {
         const userId = req.session.user_id;
 
+        const userData = await User.findById(userId);
+
         // for pagination
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 3; 
@@ -284,8 +303,6 @@ const myAccountLoad = async (req, res) => {
         const walletLimit = parseInt(req.query.limit) || 5; 
         const walletSkip = (walletPage - 1) * walletLimit;
         
-        const userData = await User.findById(userId);
-
         const sortedUserWalletData = userData.walletHistory.sort((a, b) => b.date - a.date);
 
         const walletHistory = sortedUserWalletData.slice(walletSkip, walletSkip + walletLimit);
@@ -418,8 +435,7 @@ const editAddress = async (req, res) => {
             state,
             email,
             pincode,
-            phone
-            
+            phone    
         } = req.body;
 
         if(!/^[a-zA-Z][a-zA-Z\s]*$/.test(fullname)){
@@ -527,7 +543,6 @@ const editUserProfile = async (req, res) => {
     }
 
 }
-
 
 // change password
 const changePassword = async (req, res) => {

@@ -5,7 +5,7 @@
     border-radius: 10px;
     padding: 20px;
     margin-bottom: 20px;
-    background: rgb(213, 210, 210);
+    background: rgb(233, 227, 227);
 }
 .billing-address-box {
     border: 1px solid #fff9f9;
@@ -424,11 +424,11 @@
         <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
             <div class="container-fluid">
                 <div class="row ">
-                    <div class="col-lg-12 ">
+                    <div class="col-lg-12">
                         <div class="card card-dashboard-profile  " id="cardDashboard">
                             <div class="d-flex">
                             <div class="card-body">
-                                <h3 class="card-title pt-3 pb-3">Account Details</h3>
+                                <h3 class="card-title pt-2 pb-2">Account Details</h3>
                                 <!-- End .card-title -->
                                 <div class="account-details-box">
                                     <p>
@@ -442,7 +442,7 @@
                                 </div><!-- End .account-details-box -->
                             </div><!-- End .card-body -->
                             <div class="card-body">
-                                <h3 class="card-title pt-3 pb-3">Wallet</h3>
+                                <h3 class="card-title pt-2 pb-2">Wallet</h3>
                                 <!-- End .card-title -->
                                 <div class="account-details-box">
                                     <p>
@@ -454,12 +454,43 @@
                                 </div><!-- End .account-details-box -->
                             </div><!-- End .card-body -->
                         </div>
-                        </div><!-- End .card-dashboard -->
                     </div><!-- End .col-lg-6 -->
+                            <div class="card-body">
+                                <h3 class="card-title pt-2 pb-2">Referral Link</h3>
+                                <!-- End .card-title -->
+                                <div class="account-details-box">
+                                    <p>
+                                        <strong>Do you want to create a referral link?</strong> <br>
+                                    </p>
+                                    <button class="btn btn-primary show-referral-code-btn" data-user-id="<%= userData._id %>" >
+                                        Generate referral link
+                                    </button>
+                                </div><!-- End .account-details-box -->
+                            </div><!-- End .card-body -->
+                        
+                        </div><!-- End .card-dashboard -->
+                   
                 </div><!-- End .row -->
             </div><!-- End .container-fluid -->
         </div><!-- .End .tab-pane -->
         
+        
+        <!-- referral link modal -->
+        <div class="modal fade" id="referralModal" tabindex="-1" aria-labelledby="referralModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content m-2 p-3 rounded">
+                    <div class="modal-header rounded">
+                        <h5 class="modal-title" id="referralModalLabel">Referral Link</h5>
+                        <button type="button" class="btn-remove" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="icon-close"></i>
+                        </button>          
+                    </div>
+                    <div class="modal-body">
+                        <p id="referralLink" class="p-1 m-2"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
         
         <!-- ------------------------------------- end Account Details ---------------------------------------- -->
         <!-- ---------------------------------------- edit profile ----------------------------------------- -->
@@ -541,7 +572,7 @@
                                         <% walletHistory.forEach(wallet => { %>
                                         <tr>
                                             <td><%= wallet.reason %></td>
-                                            <td><%= wallet.amount.toFixed(2) %></td>
+                                            <td>₹<%= wallet.amount.toFixed(2) %></td>
                                             <td><%= wallet.date.toLocaleDateString() %></td>
                                             <% if (wallet.status === 'Credited') { %>
                                                 <td><span style="color: #147219; font-weight: bolder;"><%= wallet.status %></span></td>
@@ -801,6 +832,9 @@
     <script src="/user/assets/js/demos/demo-6.js"></script>
     <script src="/user/assets/js/demos/demo-16.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
 
     <!--Sweet Alert  -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -1109,6 +1143,52 @@
             });
         });
     </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const showReferralCodeBtn = document.querySelector('.show-referral-code-btn');
+        const referralModal = document.getElementById('referralModal');
+        const referralLink = document.getElementById('referralLink');
+        const closeModalBtn = document.querySelector('.btn-remove');
+        const copyBtn = document.querySelector('.copy-btn');
+
+        showReferralCodeBtn.addEventListener('click', function () {
+            const userId = this.getAttribute('data-user-id');
+            generateReferralLink(userId);
+        });
+
+        function generateReferralLink(userId) {
+            fetch('/generateReferralId', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ userId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    referralLink.textContent = data.referralLink;
+                    const modal = new bootstrap.Modal(referralModal);
+                    modal.show();
+                } else {
+                    console.error('Failed to generate referral link:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+         closeModalBtn.addEventListener('click', function () {
+            const modal = bootstrap.Modal.getInstance(referralModal);
+            modal.hide();
+        });
+    });
+
+</script>
+
+
 
     <script>
 

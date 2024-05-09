@@ -142,7 +142,8 @@
                                     <th scope="col">Email</th>
                                     <th scope="col">Product Name</th>
                                     <th scope="col">Total</th>
-                                    <th scope="col">Status</th>
+                                    <th scope="col">Order Status</th>
+                                    <th scope="col">Payment Status</th>
                                     <th scope="col">Order Placed Date</th>
                                     <th scope="col" class="text-end">Change Status</th>
                                 </tr>
@@ -157,6 +158,7 @@
                                             <td><%= product.productName %></td>
                                             <td>₹<%= product.totalPrice.toFixed(2) %></td>
                                             <td><span class="badge rounded-pill alert-warning"><%= product.status %></span></td>
+                                            <td><span class="badge rounded-pill alert-warning"><%= order.paymentStatus %></span></td>
                                             <td><%= order.date.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }) %></td>
                                             <td class="text-end">
                                                 <a href="/admin/orderDetails?orderId=<%= order._id %>" class="btn btn-md rounded font-sm">Detail</a>

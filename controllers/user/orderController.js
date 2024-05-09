@@ -179,8 +179,10 @@ const placeOrder = async (req, res) => {
         const orderId = await generateOrderId();
         // check if there is offer or not 
         let totalPriceSum = 0;
+        let quantity = 0;
         if (cartData.products.length > 0) {
             cartData.products.forEach(cartProduct => {
+                quantity = cartProduct.productId.prdctQuantity;
                 if (cartProduct.productId.offer && cartProduct.productId.offer.status === true) {
                     const offer = cartProduct.productId.offer.offerPercentage;
                     const productPrice = cartProduct.productId.prdctPrice * cartProduct.quantity;
@@ -192,29 +194,31 @@ const placeOrder = async (req, res) => {
         
         const totalAmount = cartData.totalCost - couponDiscount; 
 
-        const newOrder = new Order({
-            userId: userData._id,
-            orderId: orderId,
-            deliveryAddress: addressId,
-            userName: userData.name,
-            email: userData.email,
-            couponDiscount: couponDiscount,
-            offerDiscount: totalPriceSum,
-            totalAmount: totalAmount + 60,
-            date: new Date(),
-            payment: paymentMode,
-            products: cartData.products.map(product => ({
-                productId: product.productId,
-                productName: product.productId.prdctName,
-                quantity: product.quantity,
-                productPrice: product.productPrice,
-                totalPrice: product.totalPrice
-              }))
-             
-        })
-
-        await newOrder.save(); 
-
+        if(quantity> 0){
+            const newOrder = new Order({
+                userId: userData._id,
+                orderId: orderId,
+                deliveryAddress: addressId,
+                userName: userData.name,
+                email: userData.email,
+                couponDiscount: couponDiscount,
+                offerDiscount: totalPriceSum,
+                totalAmount: totalAmount + 60,
+                date: new Date(),
+                payment: paymentMode,
+                products: cartData.products.map(product => ({
+                    productId: product.productId,
+                    productName: product.productId.prdctName,
+                    quantity: product.quantity,
+                    productPrice: product.productPrice,
+                    totalPrice: product.totalPrice
+                  }))
+            })
+            await newOrder.save(); 
+        }else{
+            return res.json({message: "This product is out of Stock!"})
+        }
+        
         for (const product of cartData.products) {
             await Product.updateOne(
                 { _id: product.productId },
