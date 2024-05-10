@@ -751,25 +751,6 @@ $(document).ready(function () {
                 return response.json();
             })
             .then(data => {
-                if(data.message === "Please add products to the cart"){
-                    Swal.fire({
-                        title: "Error",
-                        text: data.message,
-                        icon: "error",
-                        timer: 1500,
-                        buttons: false
-                    })
-                    
-                }
-                if(data.message === "Sorry!, This product is out of Stock!"){
-                    Swal.fire({
-                        title: "Error",
-                        text: data.message,
-                        icon: "error",
-                        timer: 1500,
-                        buttons: false
-                    })
-                }
                 if(data.message === "Your order has been placed successfully."){
                     Swal.fire({
                         title: "Success",
@@ -781,6 +762,14 @@ $(document).ready(function () {
                 setTimeout(function() {
                     window.location.href = '/orderHistory';
                     },500);
+                }else{
+                    Swal.fire({
+                        title: "Error",
+                        text: data.error,
+                        icon: "error",
+                        timer: 1500,
+                        buttons: false
+                    })
                 }
                 
             })

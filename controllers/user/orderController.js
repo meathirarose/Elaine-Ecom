@@ -173,7 +173,7 @@ const placeOrder = async (req, res) => {
         const userData = await User.findOne({ _id: req.session.user_id }, {_id: 1, name: 1, email:1});
 
         if(cartData.products.length === 0){
-            return res.json({message: "Please add products to the cart"});
+            return res.json({error: "Please add products to the cart"});
         }
 
         const orderId = await generateOrderId();
@@ -195,7 +195,7 @@ const placeOrder = async (req, res) => {
         const totalAmount = cartData.totalCost - couponDiscount; 
 
         if(quantity> 0){
-            const newOrder = new Order({
+            var newOrder = new Order({
                 userId: userData._id,
                 orderId: orderId,
                 deliveryAddress: addressId,
@@ -216,9 +216,9 @@ const placeOrder = async (req, res) => {
             })
             await newOrder.save(); 
         }else{
-            return res.json({message: "This product is out of Stock!"})
+            return res.json({error: "Out of Stock!"})
         }
-        
+
         for (const product of cartData.products) {
             await Product.updateOne(
                 { _id: product.productId },
@@ -228,7 +228,7 @@ const placeOrder = async (req, res) => {
         
         cartData.products.map(product => {
             if(product.productId.prdctQuantity <= 0){
-                return res.json({message: "This product is out of Stock!"});
+                return res.json({error: "This product is out of Stock!"});
             }
         });
 
@@ -285,13 +285,15 @@ const createRazorpayOrder = async (req, res) => {
         const userData = await User.findOne({ _id: req.session.user_id }, { _id: 1, name: 1, email: 1, mobile: 1 });
 
         if(cartData.products.length === 0){
-            return res.json({message: "Please add products to the cart"});
+            return res.json({error: "Please add products to the cart"});
         }
 
         // check if there is offer or not 
         let totalPriceSum = 0;
+        let quantity = 0;
         if (cartData.products.length > 0) {
             cartData.products.forEach(cartProduct => {
+                quantity = cartProduct.productId.prdctQuantity;
                 if (cartProduct.productId.offer && cartProduct.productId.offer.status === true) {
                     const offer = cartProduct.productId.offer.offerPercentage;
                     const productPrice = cartProduct.productId.prdctPrice * cartProduct.quantity;
@@ -299,6 +301,8 @@ const createRazorpayOrder = async (req, res) => {
                     totalPriceSum+=offerPrice;
                 }
             });
+        }else{
+            return res.json({error: "Out of Stock!"})
         } 
         // total amount of the order - checking if the coupon is available or not
         const totalAmount = cartData.totalCost - couponDiscount;
@@ -314,7 +318,7 @@ const createRazorpayOrder = async (req, res) => {
 
         const order = await razorpayInstance.orders.create(options);
 
-        if(order){
+        if(order && quantity>0){
 
             var newrazorpayOrder = new Order({
                 userId: userData._id,
@@ -360,12 +364,14 @@ const createRazorpayOrder = async (req, res) => {
             
             cartData.products.map(product => {
                 if(product.productId.prdctQuantity <= 0){
-                    return res.json({message: "This product is out of Stock!"});
+                    return res.json({error: "This product is out of Stock!"});
                 }
             });
             
             cartData.products = [];
             await cartData.save();
+        }else{
+            return res.json({error: "Out of Stock!"});
         }
 
         res.json({
@@ -516,8 +522,10 @@ const createWalletOrder = async (req, res) => {
         
         // check if there is offer or not 
         let totalPriceSum = 0;
+        let quantity = 0;
         if (cartData.products.length > 0) {
             cartData.products.forEach(cartProduct => {
+                quantity = cartProduct.productId.prdctQuantity;
                 if (cartProduct.productId.offer && cartProduct.productId.offer.status === true) {
                     const offer = cartProduct.productId.offer.offerPercentage;
                     const productPrice = cartProduct.productId.prdctPrice * cartProduct.quantity;
@@ -529,26 +537,31 @@ const createWalletOrder = async (req, res) => {
 
         const totalAmount = cartData.totalCost - couponDiscount;
         // new wallet order
-        const newOrder = new Order({
-            userId: userData._id,
-            orderId: orderId,
-            deliveryAddress: addressId,
-            userName: userData.name,
-            email: userData.email,
-            couponDiscount: couponDiscount,
-            offerDiscount: totalPriceSum,
-            totalAmount: totalAmount + 60,
-            date: new Date(),
-            payment: paymentMode,
-            products: cartData.products.map(product => ({
-                productId: product.productId,
-                productName: product.productId.prdctName,
-                quantity: product.quantity,
-                productPrice: product.productPrice,
-                totalPrice: product.totalPrice
-              }))
-             
-        })
+        if(quantity>0){
+            var newOrder = new Order({
+                userId: userData._id,
+                orderId: orderId,
+                deliveryAddress: addressId,
+                userName: userData.name,
+                email: userData.email,
+                couponDiscount: couponDiscount,
+                offerDiscount: totalPriceSum,
+                totalAmount: totalAmount + 60,
+                date: new Date(),
+                payment: paymentMode,
+                products: cartData.products.map(product => ({
+                    productId: product.productId,
+                    productName: product.productId.prdctName,
+                    quantity: product.quantity,
+                    productPrice: product.productPrice,
+                    totalPrice: product.totalPrice
+                  }))
+                 
+            })
+        }else{
+            return res.json({error: "Out of Stock!"});
+        }
+        
         // check the total amount based on the coupon discount exists or not
         const couponOrNot = couponDiscount ? totalAmount: cartData.totalCost;
 
