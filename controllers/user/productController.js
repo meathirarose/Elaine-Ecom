@@ -1,6 +1,7 @@
 const Product = require("../../models/productdbModel");
 const Category = require("../../models/categorydbModel");
 const Offer = require("../../models/offerdbModel");
+const Cart = require("../../models/cartdbModel");
 
 
 // all product list
@@ -56,6 +57,10 @@ const allProductsListLoad = async (req, res) => {
         }).skip(skip + limit).limit(1);
 
         const hasNextPage = remainingProducts.length > 0;
+        
+        // cart products length
+        const cartData = await Cart.find({});
+        const cartLength = cartData && cartData.length > 0 ? cartData[0].products.length : 0;       
 
         res.render("products", { 
             productsData: productsData, 
@@ -63,7 +68,8 @@ const allProductsListLoad = async (req, res) => {
             totalCount: totalCount, 
             currentPage: page, 
             totalPages: Math.ceil(totalCount / limit),
-            hasNextPage: hasNextPage 
+            hasNextPage: hasNextPage,
+            cartLength: cartLength
         });
 
     } catch (error) {

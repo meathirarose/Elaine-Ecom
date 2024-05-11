@@ -2,7 +2,7 @@ const User = require("../../models/userdbModel");
 const Product =require("../../models/productdbModel");
 const Order = require("../../models/orderdbSchema");
 const Coupon = require("../../models/coupondbModel");
-const Category = require("../../models/categorydbModel");
+const Cart = require("../../models/cartdbModel");
 const bcrypt = require("bcrypt");
 const otpController = require("../../auth/otpMailVerify");
 let referralCodeGenerator = require('referral-code-generator')
@@ -264,7 +264,15 @@ const userHomeLoad = async (req, res) => {
                                 { path: 'offer' }
                             ]);
         const sortedProductData = productData.sort((a,b) => b.createdOn - a.createdOn);
-        res.render("userHome", {productData: sortedProductData});
+
+        // cart products length
+        const cartData = await Cart.find({});        
+        const cartLength = cartData && cartData.length > 0 ? cartData[0].products.length : 0;
+
+        res.render("userHome", {
+            productData: sortedProductData,
+            cartLength: cartLength
+        });
 
     } catch (error) {
         console.log(error.message);
