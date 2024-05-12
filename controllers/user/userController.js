@@ -226,7 +226,7 @@ const generateReferralId = async (req, res) => {
         
         const userId = req.session.user_id;
 
-        const baseURL = 'http://localhost:3000/userSignup';
+        const baseURL = process.env.REFERRAL_LINK;
         const referralCode = generateReferralCode(userId); 
         const referralLink = `${baseURL}?ref=${referralCode}`;
 
