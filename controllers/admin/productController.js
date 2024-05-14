@@ -182,6 +182,9 @@ const listProduct = async (req, res) => {
     try {
 
         const prdctId = req.params.prdctId;
+        console.log('====================================================================================')
+        console.log(prdctId);
+        console.log('====================================================================================')
         await Product.findByIdAndUpdate(prdctId, { is_listed: false });
         res.redirect("/admin/productsList");
 
