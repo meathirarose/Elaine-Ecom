@@ -9,7 +9,7 @@ const categoryLoad = async (req, res) => {
         res.render("addCategory", { cateData });
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 }
 
@@ -24,7 +24,7 @@ const listCategory = async (req, res) => {
         res.redirect("/admin/addCategory");
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 
 }
@@ -38,7 +38,7 @@ const unlistCategory = async (req, res) => {
         res.redirect("/admin/addCategory");
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 }
 
@@ -84,7 +84,7 @@ const addCategory = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 
 }
@@ -104,7 +104,7 @@ const editCategory = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 }
 
@@ -141,7 +141,7 @@ const updateCategory = async (req, res) => {
         res.redirect("/admin/addCategory");
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 
 }

@@ -12,7 +12,7 @@ const offerLoad = async (req, res) => {
         res.render("offers", {offerData: offerData});
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 
 }
@@ -34,7 +34,7 @@ const changeOfferStatus = async (req, res) =>{
         res.json({success: true});
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 }
 
@@ -46,7 +46,7 @@ const addOfferLoad = async (req, res) => {
         res.render("addOffer");
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 
 }
@@ -60,7 +60,7 @@ const getProducts = async (req, res) => {
         res.json({ products });
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 }
 
@@ -73,7 +73,7 @@ const getCategories = async (req, res) => {
         res.json({ categories });
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 }
 
@@ -128,8 +128,7 @@ const addOffer = async (req, res) => {
         return res.json({message: " success"})
 
     } catch (error) {
-        console.log(error.message);
-        res.json({ error: "An error occurred while adding the offer" });
+        res.render("404error");
     }
 }
 
@@ -151,7 +150,7 @@ const deleteOffer = async (req, res) => {
         res.json({ message: "Offer deleted successfully" });
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 
 }

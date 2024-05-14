@@ -32,7 +32,14 @@ const adminRoute = require("./routes/adminRoute");
 app.use('/admin',adminRoute.admin_route);
 
 app.get('*', (req,res) => {
-    res.redirect("/pageNotFound");
+    const isAdminRoute = req.originalUrl.startsWith('/admin');
+    if (isAdminRoute) {
+        // Redirect to admin 404 error page
+        return res.redirect("/admin/404error");
+    } else {
+        // Redirect to user 404 error page
+        return res.redirect("/pageNotFound");
+    }
 });
 
 app.listen(PORT, ()=>{

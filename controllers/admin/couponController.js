@@ -11,7 +11,7 @@ const couponLoad = async (req, res) =>{
         res.render("coupons",{couponData: couponData});
         
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 
 }
@@ -24,7 +24,7 @@ const addCouponLoad = async (req, res) => {
         res.render("addCoupon");
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 
 }
@@ -80,7 +80,7 @@ const addCoupons = async (req, res) =>{
         res.redirect("coupons");
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 
 }
@@ -103,7 +103,7 @@ const deleteCoupon = async (req, res) => {
         res.json({ message: "Coupon deleted successfully" });
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 
 }

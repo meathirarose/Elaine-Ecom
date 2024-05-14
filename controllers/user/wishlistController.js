@@ -8,10 +8,7 @@ const wishlistLoad = async (req, res) => {
     try {
 
         const wishlistData = await Wishlist.findOne({userId: req.session.user_id}).populate('products.productId');
-        console.log('====================================================================================')
-        console.log(wishlistData);
-        console.log('====================================================================================')
-
+        
         const productData = await Product.find({});
 
         if(!wishlistData || !productData){

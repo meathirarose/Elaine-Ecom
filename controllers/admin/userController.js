@@ -8,7 +8,7 @@ const customerListLoad = async (req, res) => {
         res.render("customerList", { userData });
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 
 }
@@ -23,7 +23,7 @@ const blockUser = async (req, res) => {
         res.redirect("/admin/customerList");
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 }
 
@@ -36,7 +36,7 @@ const unblockUser = async (req, res) => {
         res.redirect("/admin/customerList");
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 }
 

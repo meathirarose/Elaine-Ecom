@@ -26,7 +26,7 @@ const ordersLoad = async (req, res) => {
         });
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 }
 
@@ -53,7 +53,7 @@ const orderDetails = async (req, res) => {
         });
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 
 }
@@ -94,8 +94,7 @@ const shippedStatusChange = async (req, res) => {
         return res.json({ message: 'Order status updated to Shipped successfully' });
 
     } catch (error) {
-        console.log(error.message);
-        return res.json({ error: 'An error occurred while updating the order status' });
+        res.render("404error");
     }
 };
 
@@ -136,8 +135,7 @@ const deliveredStatusChange = async (req, res) => {
 
         return res.json({ message: 'Order status updated to Delivered successfully' });
     } catch (error) {
-        console.log(error.message);
-        return res.json({ error: 'An error occurred while updating the order status' });
+        res.render("404error");
     }
 };
 
@@ -169,7 +167,7 @@ const cancelledStatusChange = async (req, res) => {
 
         return res.json({ message: 'Order status updated to Cancelled successfully' });
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 };
 
@@ -201,8 +199,7 @@ const approveReturnRequest = async (req, res) => {
         }
 
     } catch (error) {
-        console.error(error.message);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.render("404error");
     }
 };
 

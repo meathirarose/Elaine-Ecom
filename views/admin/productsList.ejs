@@ -148,14 +148,14 @@
                                             <td class="text-center"><%= prdct.prdctQuantity %></td>
                                             <td class="text-center"><%= prdct.categoryId.cateName %></td>
                                             <td>
-                                                <% if(prdct.is_listed === false) { %>
-                                                <span class="badge rounded-pill alert-danger ">Unlisted</span>
+                                                <% if(prdct.is_listed === true) { %>
+                                                <span class="badge rounded-pill alert-success ">Listed</span>
                                                 <% } else { %>
-                                                <span class="badge rounded-pill alert-success">Listed</span>
+                                                <span class="badge rounded-pill alert-danger">Unlisted</span>
                                                 <% } %>
                                             </td>
                                             <td class="text-end" >
-                                                <% if(prdct.is_listed === false) { %>
+                                                <% if(prdct.is_listed === true) { %>
                                                 <button class="btn btn-md rounded font-sm " type="submit" >
                                                     <a href="/admin/listProduct/<%=prdct._id%>" data-status="unblock" class="text-white">Listed</a>
                                                 </button>
@@ -201,14 +201,14 @@
             </section>
             <!-- content-main end// -->
            
-        </main>
-        <script src="/admin/assets/js/vendors/jquery-3.6.0.min.js"></script>
-        <script src="/admin/assets/js/vendors/bootstrap.bundle.min.js"></script>
-        <script src="/admin/assets/js/vendors/select2.min.js"></script>
-        <script src="/admin/assets/js/vendors/perfect-scrollbar.js"></script>
-        <script src="/admin/assets/js/vendors/jquery.fullscreen.min.js"></script>
-        <!-- Main Script -->
-        <script src="/admin/assets/js/main.js" type="text/javascript"></script>
+    </main>
+    <script src="/admin/assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/admin/assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/admin/assets/js/vendors/select2.min.js"></script>
+    <script src="/admin/assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/admin/assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="/admin/assets/js/main.js" type="text/javascript"></script>
 
 
 

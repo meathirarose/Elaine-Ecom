@@ -88,9 +88,8 @@ admin_route.get('/unblockUser/:userId', adminAuthentication.isAdminLogin, userCo
 // admin logout
 admin_route.get('/adminLogout', adminAuthentication.isAdminLogin, adminController.adminLogout);
 
-admin_route.get('*', (req,res) => {
-    res.redirect("/admin");
-});
+// page not found
+admin_route.get('/404error', adminAuthentication.isAdminLogin, adminController.errorPage);
 
 
 module.exports = {

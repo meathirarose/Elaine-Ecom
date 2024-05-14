@@ -13,7 +13,7 @@ const adminLoad = async (req, res) => {
         res.render('adminLogin');
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 }
 
@@ -52,7 +52,7 @@ const verifyAdminLogin = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 
 }
@@ -140,7 +140,7 @@ const homeLoad = async (req, res) => {
         });
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 }
 
@@ -203,7 +203,7 @@ const salesReportLoad = async (req, res) => {
         });
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 
 }
@@ -271,7 +271,7 @@ const generateSalesReport = async (req, res) => {
         res.json({ success: true, orderData });
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 
 }
@@ -292,6 +292,18 @@ const adminLogout = async (req, res) => {
 
 }
 
+const errorPage = async (req, res) => {
+
+    try {
+        
+        res.render("404error");
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
 module.exports = {
 
     adminLoad,
@@ -299,6 +311,7 @@ module.exports = {
     homeLoad,
     salesReportLoad,
     generateSalesReport,
-    adminLogout
+    adminLogout,
+    errorPage
 
 }

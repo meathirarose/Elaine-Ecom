@@ -16,7 +16,7 @@ const productListLoad = async (req, res) => {
         const totalProducts = await Product.countDocuments();
         const totalPages = Math.ceil(totalProducts / pageSize);
 
-        const prdctData = await Product.find().populate('categoryId').skip(skip).limit(pageSize);
+        const prdctData = await Product.find().populate('categoryId').sort({createdOn: -1}).skip(skip).limit(pageSize);
         const cateData = await Category.find({});
 
         res.render("productsList", { 
@@ -27,7 +27,7 @@ const productListLoad = async (req, res) => {
         });
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 }
 
@@ -92,7 +92,7 @@ const processImage = async (imagePath, outputFolder) => {
         
         return { filename: filename, processedFilename: outputFilename, processedPath: outputPath };
     } catch (error) {
-        throw new Error(`Error processing image: ${error.message}`);
+        res.render("404error");
     }
 };
 
@@ -172,7 +172,7 @@ const addProduct = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 };
 
@@ -182,14 +182,11 @@ const listProduct = async (req, res) => {
     try {
 
         const prdctId = req.params.prdctId;
-        console.log('====================================================================================')
-        console.log(prdctId);
-        console.log('====================================================================================')
         await Product.findByIdAndUpdate(prdctId, { is_listed: false });
         res.redirect("/admin/productsList");
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 
 }
@@ -200,11 +197,13 @@ const unlistProduct = async (req, res) => {
     try {
 
         const prdctId = req.params.prdctId;
+        
         await Product.findByIdAndUpdate(prdctId, { is_listed: true });
+
         res.redirect("/admin/productsList");
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 
 }
@@ -219,7 +218,7 @@ const addProductLoad = async (req, res) => {
         res.render("addProduct", { prdctData, cateData });
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 
 }
@@ -249,7 +248,7 @@ const editProduct = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 }
 
@@ -334,7 +333,7 @@ const updateProduct = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 }
 
@@ -354,7 +353,7 @@ const deleteProductImage = async (req, res) =>{
         res.json({ message: "Image deleted successfully" });
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 }
 
@@ -394,7 +393,7 @@ const editProductImages = async (req, res) =>{
 
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404error");
     }
 
 }
