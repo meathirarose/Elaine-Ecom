@@ -267,8 +267,8 @@ const userHomeLoad = async (req, res) => {
 
         // cart products length
         const cartData = await Cart.find({});        
-        const cartLength = cartData && cartData.length > 0 ? cartData[0].products.length : 0;
-
+        const cartLength = cartData && cartData.length > 0 ? cartData.products.length : 0;
+        
         res.render("userHome", {
             productData: sortedProductData,
             cartLength: cartLength
