@@ -63,7 +63,6 @@ const checkoutLoad = async (req, res) => {
         res.render("checkout", {userDataCheckout, cartData, couponExists, totalPriceSum});
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 
@@ -122,7 +121,6 @@ const addCoupon = async (req, res) => {
         }       
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 
@@ -254,7 +252,6 @@ const placeOrder = async (req, res) => {
         res.json({ message: "Your order has been placed successfully." });
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 }
@@ -387,7 +384,6 @@ const createRazorpayOrder = async (req, res) => {
         });
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 }
@@ -416,8 +412,7 @@ const verifyRazorPayment = async (req, res) => {
         }
     } catch (error) {
 
-        console.error('Error verifying payment:', error);
-        res.status(500).json({ success: false, error: 'Internal server error' });
+        res.render("404");
 
     }
 };
@@ -432,7 +427,6 @@ const failedPayment = async (req, res) => {
         res.json({ success: true, message: 'Payment failed response handled successfully' });
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 
@@ -477,8 +471,7 @@ const retryRazorPayment = async (req, res) => {
             res.json({ success: false, error: "Payment status is not 'Failed'" });
         }
     } catch (error) {
-        console.log(error.message);
-        res.status(500).json({ success: false, error: "Internal server error" });
+        res.render("404");
     }
 }
 
@@ -624,7 +617,6 @@ const createWalletOrder = async (req, res) => {
         
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 
@@ -682,7 +674,6 @@ const orderDetailsLoad = async (req, res) => {
         res.render("orderDetails",{ cartData, orderData, productsData, address, totalPriceSum, discount });
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 
@@ -762,7 +753,6 @@ const generateInvoice = async (req, res) => {
 
 
     } catch (error) {
-        console.log('Error:', error.message); 
         res.status(500).send('Internal Server Error');
     }
 };
@@ -832,7 +822,6 @@ const cancelProduct = async (req, res) => {
         }       
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 
@@ -850,7 +839,7 @@ const handleReturnProduct = async (req, res) => {
             const product = orderData.products.find(product => {
                 return String(product._id) === String(productId);
             });
-
+ 
         if (product) {
 
                 product.status = "Return Requested";
@@ -867,7 +856,6 @@ const handleReturnProduct = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 
@@ -880,7 +868,6 @@ const orderSuccessLoad = async (req, res) =>{
         res.render("orderSuccess");
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 }
@@ -916,7 +903,6 @@ const orderHistoryLoad = async (req, res) => {
         });
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 

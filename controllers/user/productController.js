@@ -73,7 +73,6 @@ const allProductsListLoad = async (req, res) => {
         });
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 }
@@ -113,7 +112,6 @@ const sortProducts = async (req, res) => {
         res.json({success: true, data: sortedData});
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 
@@ -138,10 +136,60 @@ const filterProducts = async (req, res) => {
         res.json({ success: true, data: categoryData });
         
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 }
+
+// const sortFilterSearchProducts = async (req, res) => {
+//     try {
+//         const sortOption = req.body.sortby;
+//         const selectedCategories = req.body.categories;
+//         const searchWord = req.body.search;
+
+//         let query = {};
+
+//         if (selectedCategories && selectedCategories.length > 0) {
+//             query = { ...query, categoryId: { $in: selectedCategories } };
+//         }
+
+//         let sortQuery = {};
+//         switch (sortOption) {
+//             case 'priceLowToHigh':
+//                 sortQuery = { prdctPrice: 1 };
+//                 break;
+//             case 'priceHighToLow':
+//                 sortQuery = { prdctPrice: -1 };
+//                 break;
+//             case 'newArrivals':
+//                 sortQuery = { createdOn: -1 };
+//                 break;
+//             case 'nameAZ':
+//                 sortQuery = { prdctName: 1 };
+//                 break;
+//             case 'nameZA':
+//                 sortQuery = { prdctName: -1 };
+//                 break;
+//             default:
+//                 res.json({ success: false, message: 'Invalid sort option' });
+//                 return;
+//         }
+
+//         if (searchWord) {
+//             query = {
+//                 ...query,
+//                 prdctName: { $regex: '.*' + searchWord + '.*', $options: 'i' }
+//             };
+//         }
+
+//         const sortedFilteredProducts = await Product.find(query).sort(sortQuery);
+
+//         res.json({ success: true, data: sortedFilteredProducts });
+
+//     } catch (error) {
+//         console.log(error.message);
+//         res.render("404");
+//     }
+// }
 
 // product details load
 const productDetailsLoad = async (req, res) => {
@@ -166,7 +214,6 @@ const productDetailsLoad = async (req, res) => {
         res.render("productDetails", {productDatabyId, productImagebyId, productImagesArray});
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 

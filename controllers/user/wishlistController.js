@@ -17,7 +17,6 @@ const wishlistLoad = async (req, res) => {
             res.render("wishlist" ,{wishlistData:wishlistData, productData:productData});
         }
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 
@@ -73,7 +72,6 @@ const addToWishlist = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 
@@ -97,7 +95,6 @@ const deleteWishlistItem = async (req, res) => {
         res.json({ message: "Product removed from wishlist successfully" });
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 };

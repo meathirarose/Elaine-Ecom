@@ -5,7 +5,6 @@ const Coupon = require("../../models/coupondbModel");
 const Cart = require("../../models/cartdbModel");
 const bcrypt = require("bcrypt");
 const otpController = require("../../auth/otpMailVerify");
-let referralCodeGenerator = require('referral-code-generator')
 
 // hashing password
 const securePassword = async (password) => {
@@ -16,7 +15,6 @@ const securePassword = async (password) => {
         return passwordHash;
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 }
@@ -28,7 +26,6 @@ const userLoadPage = async (req, res) => {
         res.render("userLoadPage");
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 }
@@ -40,7 +37,6 @@ const userLoginLoad = async (req, res) => {
         res.render("userLogin");
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 }
@@ -77,7 +73,6 @@ const verifyLogin = async (req, res) => {
             res.render("userLogin", { message: "Incorrect mail and passeword" });
         }
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 }
@@ -90,7 +85,6 @@ const userSignupLoad = async (req, res) => {
         res.render("userSignup");
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 }
@@ -164,7 +158,6 @@ const verifySignup = async (req, res) => {
 
         }
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 }
@@ -203,7 +196,6 @@ const successGoogleLogin = async (req, res) =>{
         }     
         
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 }
@@ -215,7 +207,7 @@ const failureGoogleLogin = async (req, res) =>{
         res.render("userLogin", {message: "Some error occured..!"});
         
     } catch (error) {
-        console.log(error.message);
+        res.render("404");
     }
 }
 
@@ -244,7 +236,7 @@ const generateReferralId = async (req, res) => {
         });
 
     } catch (error) {
-        console.log(error.message);
+        res.render("404");
     }
 
 }
@@ -275,7 +267,6 @@ const userHomeLoad = async (req, res) => {
         });
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 }
@@ -289,7 +280,6 @@ const contactUsLoad = async (req, res) => {
         res.render("contactUs");
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 
@@ -360,7 +350,6 @@ const myAccountLoad = async (req, res) => {
         });
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 };
@@ -424,7 +413,6 @@ const saveAddress = async (req, res) => {
         return res.json({ message: 'Address saved successfully' });
         
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 }
@@ -488,7 +476,6 @@ const editAddress = async (req, res) => {
             return res.json({ message: 'Address updated successfully' });
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 }
@@ -512,7 +499,6 @@ const removeAddress = async (req, res) => {
 
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 
@@ -546,7 +532,6 @@ const editUserProfile = async (req, res) => {
         return res.json({message: "Profile details updated successfully.!"});
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 
@@ -581,7 +566,6 @@ const changePassword = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 

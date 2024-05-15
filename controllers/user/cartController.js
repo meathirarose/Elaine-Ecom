@@ -36,7 +36,6 @@ const cartLoad = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 
@@ -108,7 +107,6 @@ const addProductsToCart = async (req, res) => {
             return res.json({ message: "Item added to cart" });
         }
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 }
@@ -177,7 +175,6 @@ const updateCartQuantity = async (req, res) => {
         });
         
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 }
@@ -207,7 +204,6 @@ const deleteCartItem = async (req, res) => {
 
         res.json({ success: true, totalCost: totalCost });
     } catch (error) {
-        console.log(error.message);
         res.render("404");
     }
 };
