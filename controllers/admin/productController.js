@@ -96,8 +96,6 @@ const processImage = async (imagePath, outputFolder) => {
     }
 };
 
-
-
 // Adding products
 const addProduct = async (req, res) => {
     try {
@@ -105,8 +103,7 @@ const addProduct = async (req, res) => {
 
         const prdctName = req.body.prdctName.trim();
         const prdctDescription = req.body.prdctDescription.trim();
-        const prdctPrice = req.body.prdctPrice;
-        const prdctQuantity = req.body.prdctQuantity;
+        const {prdctPrice, prdctQuantity} = req.body;
         const imgFiles = req.files;
         const cateName = req.body.cateId;
         const createdOn = Date.now();
