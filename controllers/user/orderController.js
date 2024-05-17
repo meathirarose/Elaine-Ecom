@@ -421,7 +421,7 @@ const verifyRazorPayment = async (req, res) => {
 const failedPayment = async (req, res) => {
 
     try {
-        const { response, orderId } = req.body;
+        const { orderId } = req.body;
         
         await Order.findByIdAndUpdate({_id: orderId},{paymentStatus: "Failed"});
         res.json({ success: true, message: 'Payment failed response handled successfully' });
@@ -474,8 +474,6 @@ const retryRazorPayment = async (req, res) => {
         res.render("404");
     }
 }
-
-
 
 // wallet pay
 const createWalletOrder = async (req, res) => {
@@ -614,7 +612,6 @@ const createWalletOrder = async (req, res) => {
         }else{
             return res.json({error: 'Insufficient Balance.'});
         }
-        
 
     } catch (error) {
         res.render("404");
