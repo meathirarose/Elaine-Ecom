@@ -596,11 +596,11 @@ p {
                 };
                 console.log(options);
                 var rzrPy = new Razorpay(options);
-                // order success
+                // for order success
                 rzrPy.on('payment.success', function (response) {
                     alert("Payment Succeeded");
                 });
-                // failed orders
+                // for failed orders
                 rzrPy.on('payment.failed', function (response) {
                     alert("Payment Failed");
                 });
