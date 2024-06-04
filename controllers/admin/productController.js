@@ -379,7 +379,7 @@ const editProductImages = async (req, res) =>{
             prdctImage.push(processedFilename);
 
         }
-
+        // update the product image
         await Product.updateOne(
             {_id: prdctId},
             { $push: 
